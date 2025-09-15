@@ -1,103 +1,207 @@
-import Image from "next/image";
+import Header from '@/components/layout/Header';
+import Footer from '@/components/layout/Footer';
+import HeroSection from '@/components/home/HeroSection';
+import ServicesSection from '@/components/home/ServicesSection';
+import PortfolioSection from '@/components/home/PortfolioSection';
+import TestimonialsSection from '@/components/home/TestimonialsSection';
+import ContactSection from '@/components/home/ContactSection';
+import InstagramFeed from '@/components/social/InstagramFeed';
+import { getRecentArticles } from '@/data/blog';
 
 export default function Home() {
   return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
-
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
+    <div className="min-h-screen">
+      {/* Header */}
+      <Header />
+      
+      {/* Main Content */}
+      <main>
+        {/* Hero Section */}
+        <HeroSection />
+        
+        {/* Company Introduction - CV. Nara Exhibition Indonesia */}
+        <section id="about" className="section-padding bg-white">
+          <div className="container mx-auto px-6 text-center">
+            <div className="max-w-4xl mx-auto animate-fade-in">
+              <h2 className="heading-2 mb-6">
+                CV. Nara Exhibition Indonesia
+              </h2>
+              <p className="body-large text-gray-600 mb-8">
+                Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
+                mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
+                komprehensif. Dengan 4 subsidiary yang saling melengkapi, kami memberikan 
+                layanan end-to-end untuk kesuksesan setiap project Anda.
+              </p>
+              <div className="grid md:grid-cols-4 gap-6 mt-12">
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">🏢</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-navy-900 mb-2">MICE Services</h3>
+                  <p className="text-gray-600">Meeting, Incentive, Convention, Exhibition</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">🎪</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-navy-900 mb-2">Event Production</h3>
+                  <p className="text-gray-600">Corporate events dan brand activation</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">🎨</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-navy-900 mb-2">Creative Services</h3>
+                  <p className="text-gray-600">Branding dan solusi kreatif melalui subsidiaries</p>
+                </div>
+                <div className="text-center">
+                  <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                    <span className="text-2xl">🔧</span>
+                  </div>
+                  <h3 className="text-xl font-semibold text-navy-900 mb-2">Equipment & Furniture</h3>
+                  <p className="text-gray-600">Rental equipment dan custom furniture</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        
+        {/* Services Section */}
+        <ServicesSection />
+        
+        {/* Portfolio Section */}
+        <PortfolioSection />
+        
+        {/* Testimonials Section */}
+        <TestimonialsSection />
+        
+        {/* Latest Updates - Blog/News Integration */}
+        <section className="section-padding bg-white">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="heading-2 mb-6">Latest Updates</h2>
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
+                Berita terbaru, insights industri, dan stories dari project-project terbaru kami.
+              </p>
+            </div>
+            
+            <div className="grid lg:grid-cols-3 gap-8">
+              {/* Blog Articles */}
+              <div className="lg:col-span-2">
+                <div className="grid md:grid-cols-2 gap-6">
+                  {getRecentArticles(4).map((article, index) => (
+                    <article key={article.id} className="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
+                      <div className="h-40 bg-gray-200 flex items-center justify-center">
+                        <div className="text-orange-500 text-4xl font-bold opacity-20">{index + 1}</div>
+                      </div>
+                      <div className="p-6">
+                        <div className="text-sm text-orange-500 font-medium mb-2 capitalize">
+                          {article.category.replace('-', ' ')}
+                        </div>
+                        <h3 className="text-lg font-bold text-navy-900 mb-3 line-clamp-2">
+                          {article.title}
+                        </h3>
+                        <p className="text-gray-600 mb-4 line-clamp-2 text-sm">
+                          {article.excerpt}
+                        </p>
+                        <a 
+                          href={`/blog/${article.slug}`}
+                          className="text-orange-500 hover:text-orange-600 font-medium transition-colors text-sm"
+                        >
+                          Baca Selengkapnya →
+                        </a>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </div>
+              
+              {/* Instagram Feed */}
+              <div className="lg:col-span-1">
+                <div className="bg-gray-50 rounded-2xl p-6">
+                  <InstagramFeed 
+                    username="skywork.id"
+                    displayName="Skywork.id"
+                    limit={4}
+                    showHeader={true}
+                    className=""
+                  />
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center mt-12">
+              <a href="/blog" className="bg-navy-900 hover:bg-navy-800 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block">
+                Lihat Semua Artikel
+              </a>
+            </div>
+          </div>
+        </section>
+        
+        {/* Multi-Channel Contact CTA */}
+        <section className="section-padding bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
+          <div className="container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+                Siap Memulai Project Anda?
+              </h2>
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto">
+                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
+                mewujudkan visi kreatif Anda menjadi kenyataan.
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+              <a href="/contact" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
+                <div className="w-16 h-16 bg-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <span className="text-white text-2xl">📧</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Email</h3>
+                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+              </a>
+              
+              <a href="https://wa.me/62xxx" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
+                <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <span className="text-white text-2xl">💬</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
+                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+              </a>
+              
+              <a href="https://instagram.com/narvex.id" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
+                <div className="w-16 h-16 bg-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <span className="text-white text-2xl">📱</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
+                <p className="text-gray-300 text-sm">@narvex.id</p>
+              </a>
+              
+              <a href="tel:+62xxx" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
+                <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <span className="text-white text-2xl">📞</span>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
+                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+              </a>
+            </div>
+            
+            <div className="text-center">
+              <a href="/contact" className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4">
+                Konsultasi Gratis
+              </a>
+              <a href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-navy-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block">
+                Lihat Portfolio
+              </a>
+            </div>
+          </div>
+        </section>
+        
+        {/* Contact Section */}
+        <ContactSection />
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      
+      {/* Footer */}
+      <Footer />
     </div>
   );
 }
