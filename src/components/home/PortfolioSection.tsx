@@ -27,7 +27,7 @@ const defaultProjects: Project[] = [
     id: 1,
     title: 'Brand Identity Skywork',
     category: 'branding',
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20professional%20brand%20identity%20design%20logo%20skywork%20company%20navy%20blue%20orange%20colors%20clean%20minimalist&image_size=landscape_4_3',
+    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center',
     description: 'Comprehensive brand identity design untuk Skywork Events dengan fokus pada profesionalisme dan kreativitas.',
     tags: ['Logo Design', 'Brand Guidelines', 'Visual Identity'],
     client: 'Skywork Events'
@@ -36,7 +36,7 @@ const defaultProjects: Project[] = [
     id: 2,
     title: 'Wedding Event Production',
     category: 'events',
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=elegant%20wedding%20event%20setup%20decoration%20stage%20design%20romantic%20lighting%20flowers%20luxury&image_size=landscape_4_3',
+    image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop&crop=center',
     description: 'Event production untuk pernikahan mewah dengan konsep elegant dan romantic yang tak terlupakan.',
     tags: ['Event Planning', 'Stage Design', 'Decoration'],
     client: 'Private Client'
@@ -45,7 +45,7 @@ const defaultProjects: Project[] = [
     id: 3,
     title: 'Digital Campaign Gutama',
     category: 'digital',
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=digital%20marketing%20campaign%20social%20media%20content%20modern%20graphics%20education%20learning%20platform&image_size=landscape_4_3',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center',
     description: 'Kampanye digital marketing untuk Gutama Learning yang meningkatkan engagement hingga 300%.',
     tags: ['Social Media', 'Content Creation', 'Digital Strategy'],
     client: 'Gutama Learning'
@@ -54,7 +54,7 @@ const defaultProjects: Project[] = [
     id: 4,
     title: 'Creative Sky Branding',
     category: 'branding',
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=creative%20agency%20branding%20design%20colorful%20modern%20logo%20business%20cards%20stationery%20design&image_size=landscape_4_3',
+    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop&crop=center',
     description: 'Rebranding lengkap untuk Creative Sky dengan pendekatan fresh dan modern.',
     tags: ['Rebranding', 'Logo Design', 'Marketing Materials'],
     client: 'Creative Sky'
@@ -63,7 +63,7 @@ const defaultProjects: Project[] = [
     id: 5,
     title: 'Corporate Event Evervow',
     category: 'events',
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=corporate%20event%20setup%20professional%20conference%20stage%20lighting%20modern%20business%20meeting&image_size=landscape_4_3',
+    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop&crop=center',
     description: 'Event production untuk corporate gathering Evervow dengan tema professional dan engaging.',
     tags: ['Corporate Event', 'Audio Visual', 'Event Management'],
     client: 'Evervow'
@@ -72,7 +72,7 @@ const defaultProjects: Project[] = [
     id: 6,
     title: 'Social Media Strategy',
     category: 'digital',
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=social%20media%20strategy%20content%20calendar%20instagram%20posts%20modern%20design%20engagement&image_size=landscape_4_3',
+    image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&h=600&fit=crop&crop=center',
     description: 'Strategi social media comprehensive untuk meningkatkan brand awareness dan engagement.',
     tags: ['Social Media', 'Content Strategy', 'Brand Awareness'],
     client: 'Multiple Clients'
@@ -124,7 +124,7 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({
                 onClick={() => setActiveFilter(filter.key)}
                 className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
                   activeFilter === filter.key
-                    ? 'bg-orange-500 text-white shadow-lg transform scale-105'
+                    ? 'bg-gold-500 text-white shadow-lg transform scale-105'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
                 }`}
               >
@@ -155,13 +155,13 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({
                 </div>
                 
                 {/* Overlay */}
-                <div className="absolute inset-0 bg-gradient-to-t from-navy-900/90 via-navy-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                   <div className="p-6 text-white w-full">
                     <h3 className="text-xl font-bold mb-2">{project.title}</h3>
                     <p className="text-gray-200 text-sm mb-3 line-clamp-2">{project.description}</p>
                     <div className="flex flex-wrap gap-2 mb-3">
                       {project.tags.slice(0, 2).map((tag, idx) => (
-                        <span key={idx} className="bg-orange-500 px-3 py-1 rounded-full text-xs font-medium">
+                        <span key={idx} className="bg-gold-500 px-3 py-1 rounded-full text-xs font-medium">
                           {tag}
                         </span>
                       ))}

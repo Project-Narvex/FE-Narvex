@@ -19,24 +19,24 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     const variants = {
       primary: `
-        bg-orange-500 text-white hover:bg-orange-600
+        bg-blue-500 text-white hover:bg-blue-600
         transform hover:-translate-y-0.5 hover:shadow-lg
-        focus:ring-orange-300
+        focus:ring-blue-300
       `,
       secondary: `
-        bg-navy-900 text-white hover:bg-navy-800
+        bg-gold-500 text-white hover:bg-gold-600
         transform hover:-translate-y-0.5 hover:shadow-lg
-        focus:ring-navy-300
+        focus:ring-gold-300
       `,
       outline: `
-        bg-transparent text-navy-900 border-2 border-navy-900
-        hover:bg-navy-900 hover:text-white
-        focus:ring-navy-300
+        bg-transparent text-blue-500 border-2 border-blue-500
+        hover:bg-blue-500 hover:text-white
+        focus:ring-blue-300
       `,
       ghost: `
-        bg-transparent text-orange-500 border-2 border-transparent
-        hover:bg-orange-50 hover:border-orange-200
-        focus:ring-orange-300
+        bg-transparent text-gold-500 border-2 border-transparent
+        hover:bg-gold-50 hover:border-gold-200
+        focus:ring-gold-300
       `
     };
 

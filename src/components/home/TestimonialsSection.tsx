@@ -34,7 +34,7 @@ const defaultTestimonials: Testimonial[] = [
     name: 'Sarah Johnson',
     company: 'Skywork Events',
     position: 'Event Director',
-    avatar: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20woman%20portrait%20business%20headshot%20smiling%20confident%20modern%20office&image_size=square',
+    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
     quote: 'Narvex berhasil mengubah visi kami menjadi event yang luar biasa. Tim mereka sangat profesional, kreatif, dan detail-oriented. Hasil akhirnya melebihi ekspektasi kami.',
     rating: 5,
     project: 'Corporate Event Production'
@@ -44,7 +44,7 @@ const defaultTestimonials: Testimonial[] = [
     name: 'Ahmad Gutama',
     company: 'Gutama Learning',
     position: 'Marketing Manager',
-    avatar: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=professional%20man%20portrait%20business%20headshot%20smiling%20confident%20modern%20office&image_size=square',
+    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
     quote: 'Strategi digital marketing dari Narvex meningkatkan engagement kami hingga 300% dalam 6 bulan. ROI yang luar biasa! Highly recommended untuk semua bisnis.',
     rating: 5,
     project: 'Digital Marketing Campaign'
@@ -54,7 +54,7 @@ const defaultTestimonials: Testimonial[] = [
     name: 'Maria Creative',
     company: 'Creative Sky',
     position: 'Creative Director',
-    avatar: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=creative%20woman%20portrait%20designer%20artistic%20modern%20studio%20smiling&image_size=square',
+    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
     quote: 'Rebranding yang dilakukan Narvex memberikan fresh perspective untuk brand kami. Proses kolaborasinya sangat smooth dan hasilnya beyond expectations.',
     rating: 5,
     project: 'Brand Identity Design'
@@ -64,7 +64,7 @@ const defaultTestimonials: Testimonial[] = [
     name: 'David Wilson',
     company: 'Evervow',
     position: 'CEO',
-    avatar: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=executive%20man%20portrait%20CEO%20business%20suit%20professional%20confident&image_size=square',
+    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
     quote: 'Partnership dengan Narvex adalah salah satu keputusan terbaik untuk company kami. Mereka tidak hanya deliver hasil yang excellent, tapi juga memberikan strategic insights.',
     rating: 5,
     project: 'Comprehensive Branding'
@@ -74,19 +74,19 @@ const defaultTestimonials: Testimonial[] = [
 const defaultClients: Client[] = [
   {
     name: 'Skywork Events',
-    logo: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=skywork%20events%20logo%20modern%20minimalist%20professional%20company%20branding&image_size=square'
+    logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200&h=200&fit=crop&crop=center'
   },
   {
     name: 'Gutama Learning',
-    logo: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=gutama%20learning%20education%20logo%20modern%20book%20knowledge%20symbol&image_size=square'
+    logo: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=200&fit=crop&crop=center'
   },
   {
     name: 'Creative Sky',
-    logo: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=creative%20sky%20agency%20logo%20colorful%20modern%20design%20creative&image_size=square'
+    logo: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=200&fit=crop&crop=center'
   },
   {
     name: 'Evervow',
-    logo: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=evervow%20wedding%20logo%20elegant%20romantic%20modern%20branding&image_size=square'
+    logo: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=200&h=200&fit=crop&crop=center'
   }
 ];
 
@@ -101,14 +101,14 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       <Star
         key={index}
         className={`w-5 h-5 ${
-          index < rating ? 'text-orange-400 fill-current' : 'text-gray-300'
+          index < rating ? 'text-gold-400 fill-current' : 'text-gray-300'
         }`}
       />
     ));
   };
 
   return (
-    <section id="testimonials" className="section-padding bg-navy-900">
+    <section id="testimonials" className="section-padding bg-blue-900">
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
@@ -151,9 +151,9 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                   />
                 </div>
                 <div>
-                  <h4 className="font-bold text-navy-900 text-lg">{testimonial.name}</h4>
+                  <h4 className="font-bold text-blue-900 text-lg">{testimonial.name}</h4>
                   <p className="text-gray-600 text-sm">{testimonial.position}</p>
-                  <p className="text-orange-500 text-sm font-medium">{testimonial.company}</p>
+                  <p className="text-gold-500 text-sm font-medium">{testimonial.company}</p>
                   {testimonial.project && (
                     <p className="text-gray-500 text-xs mt-1">{testimonial.project}</p>
                   )}
@@ -190,19 +190,19 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">98%</div>
+            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">98%</div>
             <div className="text-gray-300">Client Satisfaction</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">50+</div>
+            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">50+</div>
             <div className="text-gray-300">Projects Delivered</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">25+</div>
+            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">25+</div>
             <div className="text-gray-300">Happy Clients</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-orange-400 mb-2">3+</div>
+            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">3+</div>
             <div className="text-gray-300">Years Experience</div>
           </div>
         </div>

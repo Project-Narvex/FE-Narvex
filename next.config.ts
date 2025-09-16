@@ -5,9 +5,9 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: 'https',
-        hostname: 'trae-api-sg.mchost.guru',
+        hostname: 'images.unsplash.com',
         port: '',
-        pathname: '/api/ide/v1/text_to_image**',
+        pathname: '/**',
       },
     ],
   },

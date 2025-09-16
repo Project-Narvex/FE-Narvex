@@ -44,25 +44,25 @@ const ContactSection: React.FC<ContactSectionProps> = ({
 
   const contactInfo = [
     {
-      icon: <MapPin className="w-6 h-6 text-orange-500" />,
+      icon: <MapPin className="w-6 h-6 text-gold-500" />,
       label: 'Alamat',
       value: 'Jakarta, Indonesia',
       description: 'Lokasi kantor pusat kami'
     },
     {
-      icon: <Phone className="w-6 h-6 text-orange-500" />,
+      icon: <Phone className="w-6 h-6 text-gold-500" />,
       label: 'Telepon',
       value: '+62 xxx xxxx xxxx',
       description: 'Hubungi kami langsung'
     },
     {
-      icon: <Mail className="w-6 h-6 text-orange-500" />,
+      icon: <Mail className="w-6 h-6 text-gold-500" />,
       label: 'Email',
       value: 'narvex.ind@gmail.com',
       description: 'Kirim email untuk inquiry'
     },
     {
-      icon: <Instagram className="w-6 h-6 text-orange-500" />,
+      icon: <Instagram className="w-6 h-6 text-gold-500" />,
       label: 'Instagram',
       value: '@narvex.id',
       description: 'Follow untuk update terbaru'
@@ -182,8 +182,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                     placeholder="Nama Lengkap"
                     value={formData.name}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 ${
-                      errors.name ? 'border-red-500' : 'border-gray-300 focus:border-orange-500'
+                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
+          errors.name ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
                     }`}
                   />
                   {errors.name && (
@@ -198,8 +198,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                     placeholder="Email"
                     value={formData.email}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 ${
-                      errors.email ? 'border-red-500' : 'border-gray-300 focus:border-orange-500'
+                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
+          errors.email ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
                     }`}
                   />
                   {errors.email && (
@@ -216,8 +216,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                     placeholder="Nomor Telepon"
                     value={formData.phone}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 ${
-                      errors.phone ? 'border-red-500' : 'border-gray-300 focus:border-orange-500'
+                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
+          errors.phone ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
                     }`}
                   />
                   {errors.phone && (
@@ -230,8 +230,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                     name="service"
                     value={formData.service}
                     onChange={handleInputChange}
-                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 ${
-                      errors.service ? 'border-red-500' : 'border-gray-300 focus:border-orange-500'
+                    className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
+          errors.service ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
                     }`}
                   >
                     {services.map((service) => (
@@ -253,8 +253,8 @@ const ContactSection: React.FC<ContactSectionProps> = ({
                   placeholder="Ceritakan project Anda..."
                   value={formData.message}
                   onChange={handleInputChange}
-                  className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-orange-300 resize-none ${
-                    errors.message ? 'border-red-500' : 'border-gray-300 focus:border-orange-500'
+                  className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 resize-none ${
+          errors.message ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
                   }`}
                 ></textarea>
                 {errors.message && (
@@ -291,11 +291,11 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
                   <div key={index} className="flex items-start">
-                    <div className="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
+                    <div className="w-12 h-12 bg-gold-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                       {info.icon}
                     </div>
                     <div>
-                      <p className="font-semibold text-navy-900 text-lg">{info.label}</p>
+                      <p className="font-semibold text-blue-900 text-lg">{info.label}</p>
                       <p className="text-gray-700 font-medium">{info.value}</p>
                       <p className="text-gray-500 text-sm">{info.description}</p>
                     </div>

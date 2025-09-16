@@ -2,41 +2,41 @@
 @import "tailwindcss";
 
 :root {
-  /* Navy Blue - Primary Brand Color */
-  --navy-50: #f0f4f8;
-  --navy-100: #d9e2ec;
-  --navy-200: #bcccdc;
-  --navy-300: #9fb3c8;
-  --navy-400: #829ab1;
-  --navy-500: #627d98;
-  --navy-600: #486581;
-  --navy-700: #334e68;
-  --navy-800: #243b53;
-  --navy-900: #1a365d;
+  /* Primary Blue - Main Brand Color (Company Logo Color) */
+  --blue-50: #f0f4f8;
+  --blue-100: #d9e2ec;
+  --blue-200: #bcccdc;
+  --blue-300: #9fb3c8;
+  --blue-400: #829ab1;
+  --blue-500: #6382b4; /* Primary Brand Color - Company Logo */
+  --blue-600: #546f9a;
+  --blue-700: #455c80;
+  --blue-800: #364966;
+  --blue-900: #27364d;
 
-  /* Orange - Accent Color */
-  --orange-50: #fffaf0;
-  --orange-100: #feebc8;
-  --orange-200: #fbd38d;
-  --orange-300: #f6ad55;
-  --orange-400: #ed8936;
-  --orange-500: #dd6b20;
-  --orange-600: #c05621;
-  --orange-700: #9c4221;
-  --orange-800: #7b341e;
-  --orange-900: #652b19;
+  /* Secondary Gold - Accent Color (Company Logo Color) */
+  --gold-50: #faf9f7;
+  --gold-100: #f1ede3;
+  --gold-200: #e8dcc9;
+  --gold-300: #e0caaf;
+  --gold-400: #d7b895;
+  --gold-500: #dbc48a; /* Secondary Gold - Company Logo */
+  --gold-600: #c9a76f;
+  --gold-700: #b78a54;
+  --gold-800: #a56d39;
+  --gold-900: #93501e;
 
   /* Gray Scale */
-  --gray-50: #f7fafc;
-  --gray-100: #edf2f7;
-  --gray-200: #e2e8f0;
-  --gray-300: #cbd5e0;
-  --gray-400: #a0aec0;
-  --gray-500: #718096;
-  --gray-600: #4a5568;
-  --gray-700: #2d3748;
-  --gray-800: #1a202c;
-  --gray-900: #171923;
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6B7280; /* Supporting Gray */
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
 
   /* Pure Colors */
   --white: #ffffff;
@@ -44,17 +44,17 @@
 
   /* Semantic Colors */
   --success-50: #f0fff4;
-  --success-500: #38a169;
-  --success-600: #2f855a;
-  --warning-50: #fffbeb;
-  --warning-500: #ed8936;
-  --warning-600: #dd6b20;
-  --error-50: #fed7d7;
-  --error-500: #e53e3e;
-  --error-600: #c53030;
-  --info-50: #ebf8ff;
-  --info-500: #3182ce;
-  --info-600: #2c5282;
+  --success-500: #10b981;
+  --success-600: #059669;
+  --warning-50: #fff7ed;
+  --warning-500: #f59e0b;
+  --warning-600: #d97706;
+  --error-50: #fef2f2;
+  --error-500: #ef4444;
+  --error-600: #dc2626;
+  --info-50: #eff6ff;
+  --info-500: #6382b4;
+  --info-600: #546f9a;
 
   /* Typography */
   --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
@@ -114,14 +114,16 @@
   --space-56: 14rem;
   --space-64: 16rem;
 
-  /* Shadows */
-  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
-  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
-  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
-  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
-  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
-  --shadow-orange: 0 10px 30px rgba(237, 137, 54, 0.2);
-  --shadow-navy: 0 10px 30px rgba(26, 54, 93, 0.2);
+  /* Shadows - Enhanced for more depth */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.2);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.35);
+  --shadow-gold: 0 10px 30px rgba(219, 196, 138, 0.3);
+  --shadow-blue: 0 10px 30px rgba(99, 130, 180, 0.3);
+  --shadow-glow-blue: 0 0 20px rgba(99, 130, 180, 0.4);
+  --shadow-glow-gold: 0 0 20px rgba(219, 196, 138, 0.4);
 
   /* Transition Durations */
   --duration-fast: 0.15s;
@@ -135,26 +137,26 @@
 }
 
 @theme inline {
-  --color-navy-50: var(--navy-50);
-  --color-navy-100: var(--navy-100);
-  --color-navy-200: var(--navy-200);
-  --color-navy-300: var(--navy-300);
-  --color-navy-400: var(--navy-400);
-  --color-navy-500: var(--navy-500);
-  --color-navy-600: var(--navy-600);
-  --color-navy-700: var(--navy-700);
-  --color-navy-800: var(--navy-800);
-  --color-navy-900: var(--navy-900);
-  --color-orange-50: var(--orange-50);
-  --color-orange-100: var(--orange-100);
-  --color-orange-200: var(--orange-200);
-  --color-orange-300: var(--orange-300);
-  --color-orange-400: var(--orange-400);
-  --color-orange-500: var(--orange-500);
-  --color-orange-600: var(--orange-600);
-  --color-orange-700: var(--orange-700);
-  --color-orange-800: var(--orange-800);
-  --color-orange-900: var(--orange-900);
+  --color-blue-50: var(--blue-50);
+  --color-blue-100: var(--blue-100);
+  --color-blue-200: var(--blue-200);
+  --color-blue-300: var(--blue-300);
+  --color-blue-400: var(--blue-400);
+  --color-blue-500: var(--blue-500);
+  --color-blue-600: var(--blue-600);
+  --color-blue-700: var(--blue-700);
+  --color-blue-800: var(--blue-800);
+  --color-blue-900: var(--blue-900);
+  --color-gold-50: var(--gold-50);
+  --color-gold-100: var(--gold-100);
+  --color-gold-200: var(--gold-200);
+  --color-gold-300: var(--gold-300);
+  --color-gold-400: var(--gold-400);
+  --color-gold-500: var(--gold-500);
+  --color-gold-600: var(--gold-600);
+  --color-gold-700: var(--gold-700);
+  --color-gold-800: var(--gold-800);
+  --color-gold-900: var(--gold-900);
   --font-sans: var(--font-primary);
   --font-mono: var(--font-mono);
 }
@@ -172,7 +174,7 @@ body {
   font-size: var(--text-6xl);
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .heading-2 {
@@ -180,7 +182,7 @@ body {
   font-size: var(--text-5xl);
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .heading-3 {
@@ -188,7 +190,7 @@ body {
   font-size: var(--text-4xl);
   font-weight: var(--font-semibold);
   line-height: var(--leading-snug);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .heading-4 {
@@ -196,7 +198,7 @@ body {
   font-size: var(--text-3xl);
   font-weight: var(--font-semibold);
   line-height: var(--leading-snug);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .body-large {
@@ -224,7 +226,7 @@ body {
 }
 
 .text-accent {
-  color: var(--orange-500);
+  color: var(--gold-500);
 }
 
 .text-muted {
@@ -233,6 +235,27 @@ body {
 
 .text-inverse {
   color: var(--white);
+}
+
+/* Gradient Classes */
+.gradient-primary {
+  background: linear-gradient(135deg, var(--blue-600) 0%, var(--blue-500) 100%);
+}
+
+.gradient-secondary {
+  background: linear-gradient(135deg, var(--gold-600) 0%, var(--gold-500) 100%);
+}
+
+.gradient-hero {
+  background: linear-gradient(135deg, var(--blue-900) 0%, var(--blue-600) 50%, var(--gold-500) 100%);
+}
+
+.gradient-vibrant {
+  background: linear-gradient(45deg, var(--blue-500) 0%, var(--gold-500) 100%);
+}
+
+.gradient-overlay {
+  background: linear-gradient(180deg, transparent 0%, rgba(30, 41, 59, 0.8) 100%);
 }
 
 /* Animation Classes */
@@ -263,6 +286,35 @@ body {
   animation: scaleIn 0.3s ease-out;
 }
 
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+.animate-pulse-hover:hover {
+  animation: pulse 1s ease-in-out infinite;
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 5px rgba(99, 130, 180, 0.3); }
+  50% { box-shadow: 0 0 20px rgba(99, 130, 180, 0.6); }
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite;
+}
+
+@keyframes bounce-in {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.05); }
+  70% { transform: scale(0.9); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-bounce-in {
+  animation: bounce-in 0.6s ease-out;
+}
+
 /* Utility Classes */
 .container {
   max-width: 1200px;
@@ -287,4 +339,133 @@ body {
 
 .button-padding {
   padding: var(--space-4) var(--space-8);
+}
+
+/* Button Styles */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-primary);
+  font-weight: var(--font-semibold);
+  text-decoration: none;
+  border: none;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  font-size: var(--text-base);
+  padding: var(--space-4) var(--space-8);
+}
+
+.btn-primary {
+  background-color: var(--blue-500);
+  color: var(--white);
+}
+
+.btn-primary:hover {
+  background-color: var(--blue-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-blue);
+}
+
+.btn-secondary {
+  background-color: var(--gold-500);
+  color: var(--white);
+}
+
+.btn-secondary:hover {
+  background-color: var(--gold-600);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-glow-gold);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--blue-500);
+  border: 2px solid var(--blue-500);
+}
+
+.btn-outline:hover {
+  background-color: var(--blue-500);
+  color: var(--white);
+}
+
+.btn-ghost {
+  background-color: transparent;
+  color: var(--gold-500);
+  border: 2px solid transparent;
+}
+
+.btn-ghost:hover {
+  background-color: var(--gold-50);
+  border-color: var(--gold-200);
+}
+
+/* Card Styles */
+.card {
+  background-color: var(--white);
+  border-radius: 1rem;
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+}
+
+.card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+}
+
+.service-card {
+  padding: var(--space-8);
+  text-align: center;
+  border: 1px solid var(--gray-200);
+}
+
+.service-card:hover {
+  border-color: var(--gold-400);
+  box-shadow: var(--shadow-gold);
+  transform: translateY(-4px);
+}
+
+/* Form Styles */
+.form-input {
+  width: 100%;
+  padding: var(--space-4);
+  border: 2px solid var(--gray-300);
+  border-radius: 0.5rem;
+  font-family: var(--font-secondary);
+  font-size: var(--text-base);
+  transition: border-color 0.2s ease-in-out;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--blue-500);
+  box-shadow: 0 0 0 3px rgba(99, 130, 180, 0.2);
+}
+
+.form-input::placeholder {
+  color: var(--gray-500);
+}
+
+.form-label {
+  display: block;
+  font-family: var(--font-primary);
+  font-weight: var(--font-medium);
+  color: var(--blue-900);
+  margin-bottom: var(--space-2);
+}
+
+.form-group {
+  margin-bottom: var(--space-6);
+}
+
+.form-input.error {
+  border-color: var(--error-500);
+}
+
+.form-error {
+  color: var(--error-500);
+  font-size: var(--text-sm);
+  margin-top: var(--space-1);
 }

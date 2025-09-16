@@ -1,83 +1,68 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { Building2, Calendar, Package, Hammer, Zap } from 'lucide-react';
+import { Palette, Calendar, Smartphone, Users } from 'lucide-react';
 
 export default function ServicesPage() {
   const services = [
     {
-      icon: Building2,
-      title: "MICE Services",
-      subtitle: "Meeting, Incentive, Convention, Exhibition",
-      description: "Layanan komprehensif untuk kebutuhan MICE dengan standar internasional dan teknologi terdepan.",
+      icon: Palette,
+      title: "Creative Design & Branding",
+      subtitle: "Brand Identity, Graphic Design, Visual Communication",
+      description: "Layanan komprehensif untuk membangun brand identity yang kuat dan memorable melalui strategi kreatif yang tepat sasaran.",
       features: [
-        "Meeting & Conference Management",
-        "Incentive Travel Programs",
-        "Convention Planning & Execution",
-        "Exhibition Design & Management",
-        "Venue Selection & Management",
-        "Audio Visual Solutions"
+        "Brand Identity Development",
+        "Logo Design & Brand Guidelines",
+        "Marketing Materials Design",
+        "Packaging Design",
+        "Visual Communication",
+        "Brand Strategy & Positioning"
       ],
       color: "bg-blue-500"
     },
     {
       icon: Calendar,
-      title: "Event Organization",
-      subtitle: "Corporate Events, Seminars, Exhibitions",
-      description: "Penyelenggaraan event corporate yang profesional dari konsep hingga eksekusi dengan detail yang sempurna.",
+      title: "Event Production",
+      subtitle: "Corporate Events, Product Launches, Conferences",
+      description: "Event production yang memorable dan impactful dengan eksekusi yang sempurna dari perencanaan hingga pelaksanaan.",
       features: [
-        "Corporate Event Planning",
-        "Seminar & Workshop Organization",
-        "Product Launch Events",
-        "Team Building Activities",
-        "Gala Dinner & Award Ceremonies",
-        "Trade Show Management"
-      ],
-      color: "bg-green-500"
-    },
-    {
-      icon: Package,
-      title: "Equipment Rental",
-      subtitle: "Complete MICE Equipment Catalog",
-      description: "Penyewaan peralatan MICE lengkap dengan kualitas terbaik dan dukungan teknis profesional.",
-      features: [
+        "Event Planning & Coordination",
+        "Stage Design & Decoration",
+        "Event Management",
         "Audio Visual Equipment",
-        "Lighting Systems",
-        "Stage & Backdrop",
-        "Furniture & Seating",
-        "Registration Systems",
-        "Technical Support"
+        "Live Streaming & Documentation",
+        "Vendor Coordination"
       ],
-      color: "bg-purple-500"
+      color: "bg-gold-500"
     },
     {
-      icon: Hammer,
-      title: "Furniture Production",
-      subtitle: "Custom Wooden Furniture untuk Events",
-      description: "Produksi furniture kayu custom berkualitas tinggi untuk kebutuhan event dan exhibition yang unik.",
+      icon: Smartphone,
+      title: "Digital Marketing",
+      subtitle: "Social Media, SEO, Digital Advertising, Website Development",
+      description: "Strategi digital marketing yang efektif dan terukur untuk mengoptimalkan digital presence dan mencapai target audience.",
       features: [
-        "Custom Exhibition Booth",
-        "Event Furniture Design",
-        "Wooden Display Systems",
-        "Reception Counters",
-        "Modular Furniture",
-        "Installation Services"
+        "Social Media Management",
+        "Search Engine Optimization (SEO)",
+        "Google Ads & Facebook Ads",
+        "Content Marketing & Copywriting",
+        "Website Development",
+        "Digital Strategy & Analytics"
       ],
-      color: "bg-orange-500"
+      color: "#6382b4"
     },
     {
-      icon: Zap,
-      title: "Integrated Solutions",
-      subtitle: "Cross-Subsidiary Service Combinations",
-      description: "Solusi terintegrasi yang menggabungkan semua layanan subsidiaries untuk hasil yang optimal.",
+      icon: Users,
+      title: "Brand Consultation",
+      subtitle: "Strategic Planning, Brand Positioning, Competitive Analysis",
+      description: "Konsultasi strategis untuk membantu klien membangun brand yang kuat dengan positioning yang tepat di pasar.",
       features: [
-        "End-to-End Event Solutions",
-        "Multi-Service Packages",
-        "Creative & Technical Integration",
-        "One-Stop Event Management",
-        "Coordinated Team Approach",
-        "Comprehensive Project Management"
+        "Brand Positioning Strategy",
+        "Competitive Analysis",
+        "Market Research & Insights",
+        "Brand Messaging Development",
+        "Creative Strategy Planning",
+        "Brand Performance Evaluation"
       ],
-      color: "bg-red-500"
+      color: "bg-gold-600"
     }
   ];
 
@@ -87,14 +72,14 @@ export default function ServicesPage() {
       
       <main>
         {/* Hero Section */}
-        <section className="section-padding bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
+        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Layanan <span className="text-orange-400">Kami</span>
+                Layanan <span className="text-gold-400">Kami</span>
               </h1>
               <p className="text-xl text-gray-300 mb-8">
-                Solusi komprehensif untuk semua kebutuhan MICE, event production, dan layanan kreatif Anda
+                Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda
               </p>
             </div>
           </div>
@@ -106,7 +91,7 @@ export default function ServicesPage() {
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6">Portfolio Layanan Lengkap</h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto">
-                Dari MICE services hingga furniture production, kami menyediakan solusi terintegrasi 
+                Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi 
                 untuk kesuksesan setiap project Anda.
               </p>
             </div>
@@ -124,8 +109,8 @@ export default function ServicesPage() {
                           <IconComponent className="w-8 h-8 text-white" />
                         </div>
                         <div>
-                          <h3 className="text-3xl font-bold text-navy-900">{service.title}</h3>
-                          <p className="text-orange-500 font-medium">{service.subtitle}</p>
+                          <h3 className="text-3xl font-bold text-blue-900">{service.title}</h3>
+                          <p className="text-gold-500 font-medium">{service.subtitle}</p>
                         </div>
                       </div>
                       
@@ -136,14 +121,14 @@ export default function ServicesPage() {
                       <div className="grid md:grid-cols-2 gap-4">
                         {service.features.map((feature, idx) => (
                           <div key={idx} className="flex items-center">
-                            <div className="w-2 h-2 bg-orange-400 rounded-full mr-3 flex-shrink-0"></div>
+                            <div className="w-2 h-2 bg-gold-400 rounded-full mr-3 flex-shrink-0"></div>
                             <span className="text-gray-700">{feature}</span>
                           </div>
                         ))}
                       </div>
                       
                       <div className="mt-8">
-                        <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-3 rounded-lg font-semibold transition-colors">
+                        <button className="text-white px-8 py-3 rounded-lg font-semibold transition-colors hover:opacity-90" style={{backgroundColor: '#dbc48a'}}>
                           Pelajari Lebih Lanjut
                         </button>
                       </div>
@@ -170,61 +155,61 @@ export default function ServicesPage() {
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6">Mengapa Memilih Narvex?</h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto">
-                Pengalaman, profesionalisme, dan komitmen untuk memberikan hasil terbaik dalam setiap project.
+                Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya
               </p>
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{backgroundColor: '#f5f1e8'}}>
                   <span className="text-3xl">🏆</span>
                 </div>
-                <h3 className="text-xl font-bold text-navy-900 mb-3">Berpengalaman</h3>
-                <p className="text-gray-600">Lebih dari 3 tahun pengalaman dalam industri MICE dan event production</p>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
+                <p className="text-gray-600">Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing</p>
               </div>
               
               <div className="text-center">
-                <div className="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">⚡</span>
                 </div>
-                <h3 className="text-xl font-bold text-navy-900 mb-3">Responsif</h3>
-                <p className="text-gray-600">Tim yang responsif dan siap memberikan solusi cepat untuk setiap kebutuhan</p>
+                <h3 className="text-xl font-bold text-blue-900 mb-3">Tim Profesional</h3>
+                <p className="text-gray-600">Tim ahli yang berpengalaman dan berdedikasi tinggi</p>
               </div>
               
               <div className="text-center">
-                <div className="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">🎯</span>
                 </div>
-                <h3 className="text-xl font-bold text-navy-900 mb-3">Terintegrasi</h3>
-                <p className="text-gray-600">Layanan terintegrasi dari berbagai subsidiaries untuk solusi menyeluruh</p>
+                <h3 className="text-xl font-bold mb-3" style={{color: '#6382b4'}}>Tepat Waktu</h3>
+                <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
               </div>
               
               <div className="text-center">
-                <div className="w-20 h-20 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">💎</span>
                 </div>
-                <h3 className="text-xl font-bold text-navy-900 mb-3">Berkualitas</h3>
-                <p className="text-gray-600">Komitmen pada kualitas tinggi dalam setiap aspek layanan dan produk</p>
+                <h3 className="text-xl font-bold mb-3" style={{color: '#6382b4'}}>Kualitas Terjamin</h3>
+                <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
               </div>
             </div>
           </div>
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-navy-900">
+        <section className="section-padding bg-blue-900">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
                 Siap Memulai Project Anda?
               </h2>
               <p className="text-xl text-gray-300 mb-8">
-                Konsultasikan kebutuhan MICE dan event production Anda dengan tim ahli kami.
+                Hubungi kami sekarang untuk konsultasi gratis dan dapatkan solusi terbaik untuk kebutuhan Anda
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                <button className="bg-gold-500 hover:bg-gold-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
                   Konsultasi Gratis
                 </button>
-                <button className="border-2 border-white text-white hover:bg-white hover:text-navy-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
                   Lihat Portfolio
                 </button>
               </div>

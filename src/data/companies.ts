@@ -44,7 +44,7 @@ export const companies: Company[] = [
     ],
     established: '2020',
     location: 'Jakarta, Indonesia',
-    color: 'bg-navy-900',
+    color: 'bg-blue-900',
     isParent: true
   },
   {

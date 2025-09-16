@@ -58,11 +58,11 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
 
   if (variant === 'minimal') {
     return (
-      <footer className="bg-navy-900 text-white py-8">
+      <footer className="bg-blue-900 text-white py-8">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-navy-700 to-orange-500 rounded-lg flex items-center justify-center">
+              <div className="w-8 h-8 bg-gradient-to-br from-blue-700 to-gold-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-sm">N</span>
               </div>
               <span className="text-xl font-bold">Narvex</span>
@@ -77,14 +77,14 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
   }
 
   return (
-    <footer className="bg-navy-900 text-white">
+    <footer className="bg-blue-900 text-white">
       {/* Main Footer Content */}
       <div className="container mx-auto px-6 py-16">
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-navy-700 to-orange-500 rounded-lg flex items-center justify-center">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-700 to-gold-500 rounded-lg flex items-center justify-center">
                 <span className="text-white font-bold text-xl">N</span>
               </div>
               <span className="text-2xl font-bold">Narvex</span>
@@ -97,14 +97,14 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
                 href="https://instagram.com/narvex.id"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors"
+                className="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center hover:bg-gold-600 transition-colors"
                 aria-label="Follow us on Instagram"
               >
                 <Instagram className="w-5 h-5" />
               </a>
               <a
                 href="mailto:narvex.ind@gmail.com"
-                className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors"
+                className="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center hover:bg-gold-600 transition-colors"
                 aria-label="Send us an email"
               >
                 <Mail className="w-5 h-5" />
@@ -120,7 +120,7 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
                 <li key={link.href}>
                   <button
                     onClick={() => scrollToSection(link.href)}
-                    className="text-gray-300 hover:text-orange-400 transition-colors"
+                    className="text-gray-300 hover:text-gold-400 transition-colors"
                   >
                     {link.label}
                   </button>
@@ -135,7 +135,7 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
             <ul className="space-y-3">
               {services.map((service) => (
                 <li key={service}>
-                  <span className="text-gray-300 hover:text-orange-400 transition-colors cursor-pointer">
+                  <span className="text-gray-300 hover:text-gold-400 transition-colors cursor-pointer">
                     {service}
                   </span>
                 </li>
@@ -149,7 +149,7 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
             <ul className="space-y-4">
               {contactInfo.map((info, index) => (
                 <li key={index} className="flex items-center space-x-3">
-                  <div className="text-orange-400 flex-shrink-0">
+                  <div className="text-gold-400 flex-shrink-0">
                     {info.icon}
                   </div>
                   <span className="text-gray-300 text-sm">{info.text}</span>
@@ -170,7 +170,7 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-orange-500"
+                className="flex-1 px-4 py-3 rounded-lg bg-gray-800 border border-gray-600 text-white placeholder-gray-400 focus:outline-none focus:border-gold-500"
               />
               <Button variant="primary" className="sm:px-8">
                 Subscribe
@@ -188,15 +188,15 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
               © {currentYear} Narvex. All rights reserved. Made with ❤️ in Indonesia.
             </p>
             <div className="flex items-center space-x-6">
-              <Link href="/privacy" className="text-gray-400 hover:text-orange-400 text-sm transition-colors">
+              <Link href="/privacy" className="text-gray-400 hover:text-gold-400 text-sm transition-colors">
                 Privacy Policy
               </Link>
-              <Link href="/terms" className="text-gray-400 hover:text-orange-400 text-sm transition-colors">
+              <Link href="/terms" className="text-gray-400 hover:text-gold-400 text-sm transition-colors">
                 Terms of Service
               </Link>
               <button
                 onClick={scrollToTop}
-                className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center hover:bg-orange-600 transition-colors group"
+                className="w-10 h-10 bg-gold-500 rounded-lg flex items-center justify-center hover:bg-gold-600 transition-colors group"
                 aria-label="Scroll to top"
               >
                 <ArrowUp className="w-5 h-5 group-hover:-translate-y-1 transition-transform" />

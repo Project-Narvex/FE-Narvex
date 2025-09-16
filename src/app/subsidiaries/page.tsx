@@ -123,11 +123,11 @@ export default function SubsidiariesPage() {
       
       <main>
         {/* Hero Section */}
-        <section className="section-padding bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
+        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Subsidiaries <span className="text-orange-400">Kami</span>
+                Subsidiaries <span className="text-gold-400">Kami</span>
               </h1>
               <p className="text-xl text-gray-300 mb-8">
                 Ekosistem perusahaan yang terintegrasi untuk memberikan solusi kreatif dan layanan terbaik
@@ -157,13 +157,13 @@ export default function SubsidiariesPage() {
                       <div className={`w-24 h-24 ${subsidiary.color} rounded-3xl flex items-center justify-center mx-auto mb-6`}>
                         <IconComponent className="w-12 h-12 text-white" />
                       </div>
-                      <h3 className="text-4xl font-bold text-navy-900 mb-3">{subsidiary.name}</h3>
-                      <p className="text-xl text-orange-500 font-medium mb-4">{subsidiary.tagline}</p>
+                      <h3 className="text-4xl font-bold text-blue-900 mb-3">{subsidiary.name}</h3>
+            <p className="text-xl text-gold-500 font-medium mb-4">{subsidiary.tagline}</p>
                       <p className="text-lg text-gray-600 max-w-2xl mx-auto">{subsidiary.description}</p>
                       
                       {subsidiary.notice && (
-                        <div className="mt-6 bg-orange-50 border border-orange-200 rounded-lg p-4 max-w-2xl mx-auto">
-                          <p className="text-orange-700 text-sm">
+                        <div className="mt-6 bg-gold-50 border border-gold-200 rounded-lg p-4 max-w-2xl mx-auto">
+              <p className="text-gold-700 text-sm">
                             <strong>Notice:</strong> {subsidiary.notice}
                           </p>
                         </div>
@@ -173,11 +173,11 @@ export default function SubsidiariesPage() {
                     <div className="grid lg:grid-cols-3 gap-8">
                       {/* Services */}
                       <div className="bg-gray-50 rounded-2xl p-8">
-                        <h4 className="text-2xl font-bold text-navy-900 mb-6">Layanan</h4>
+                        <h4 className="text-2xl font-bold text-blue-900 mb-6">Layanan</h4>
                         <div className="space-y-3">
                           {subsidiary.services.map((service, idx) => (
                             <div key={idx} className="flex items-center">
-                              <div className="w-2 h-2 bg-orange-400 rounded-full mr-3 flex-shrink-0"></div>
+                              <div className="w-2 h-2 bg-gold-400 rounded-full mr-3 flex-shrink-0"></div>
                               <span className="text-gray-700">{service}</span>
                             </div>
                           ))}
@@ -186,12 +186,12 @@ export default function SubsidiariesPage() {
                       
                       {/* Portfolio */}
                       <div className="bg-gray-50 rounded-2xl p-8">
-                        <h4 className="text-2xl font-bold text-navy-900 mb-6">Portfolio Highlights</h4>
+                        <h4 className="text-2xl font-bold text-blue-900 mb-6">Portfolio Highlights</h4>
                         <div className="space-y-4">
                           {subsidiary.portfolio.map((project, idx) => (
                             <div key={idx} className="bg-white rounded-lg p-4">
-                              <h5 className="font-semibold text-navy-900 mb-1">{project.title}</h5>
-                              <span className="text-sm text-orange-500">{project.category}</span>
+                              <h5 className="font-semibold text-blue-900 mb-1">{project.title}</h5>
+                          <span className="text-sm text-gold-500">{project.category}</span>
                             </div>
                           ))}
                         </div>
@@ -220,7 +220,7 @@ export default function SubsidiariesPage() {
                           </div>
                           
                           <div className="mt-6">
-                            <h5 className="font-semibold text-navy-900 mb-3">Major Clients</h5>
+                            <h5 className="font-semibold text-blue-900 mb-3">Major Clients</h5>
                             <div className="grid grid-cols-2 gap-2">
                               {subsidiary.clients.map((client, idx) => (
                                 <div key={idx} className="bg-white rounded px-3 py-2 text-center text-sm text-gray-600">
@@ -272,34 +272,34 @@ export default function SubsidiariesPage() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🔄</span>
+                <div className="w-16 h-16 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🤝</span>
                 </div>
-                <h3 className="text-xl font-semibold text-navy-900 mb-2">Sinergi</h3>
+                <h3 className="text-xl font-semibold text-blue-900 mb-2">Sinergi</h3>
                 <p className="text-gray-600">Kolaborasi antar subsidiary untuk hasil optimal</p>
               </div>
               
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">⚡</span>
                 </div>
-                <h3 className="text-xl font-semibold text-navy-900 mb-2">Efisiensi</h3>
+                <h3 className="text-xl font-semibold text-blue-900 mb-2">Efisiensi</h3>
                 <p className="text-gray-600">Proses yang lebih cepat dengan koordinasi internal</p>
               </div>
               
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                <div className="w-16 h-16 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
                   <span className="text-2xl">🎯</span>
                 </div>
-                <h3 className="text-xl font-semibold text-navy-900 mb-2">Spesialisasi</h3>
+                <h3 className="text-xl font-semibold text-blue-900 mb-2">Spesialisasi</h3>
                 <p className="text-gray-600">Keahlian khusus di setiap bidang layanan</p>
               </div>
               
               <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
-                  <span className="text-2xl">🤝</span>
+                <div className="w-16 h-16 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <span className="text-2xl">🏢</span>
                 </div>
-                <h3 className="text-xl font-semibold text-navy-900 mb-2">One-Stop</h3>
+                <h3 className="text-xl font-semibold text-blue-900 mb-2">One-Stop</h3>
                 <p className="text-gray-600">Solusi lengkap dari satu ekosistem perusahaan</p>
               </div>
             </div>
@@ -307,7 +307,7 @@ export default function SubsidiariesPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding bg-navy-900">
+        <section className="section-padding" style={{backgroundColor: '#6382b4'}}>
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -318,10 +318,10 @@ export default function SubsidiariesPage() {
                 untuk solusi terintegrasi.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="bg-orange-500 hover:bg-orange-600 text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                <button className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:opacity-90" style={{backgroundColor: '#dbc48a'}}>
                   Konsultasi Gratis
                 </button>
-                <button className="border-2 border-white text-white hover:bg-white hover:text-navy-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
+                <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">
                   Lihat Portfolio Lengkap
                 </button>
               </div>

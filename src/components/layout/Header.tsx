@@ -58,12 +58,12 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-            <div className="w-10 h-10 bg-gradient-to-br from-navy-900 to-orange-500 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-900 to-gold-500 rounded-lg flex items-center justify-center">
               <span className="text-white font-bold text-xl">N</span>
             </div>
             <span className={cn(
               'text-2xl font-bold transition-colors',
-              isScrolled ? 'text-navy-900' : 'text-white'
+              isScrolled ? 'text-blue-900' : 'text-white'
             )}>
               Narvex
             </span>
@@ -77,7 +77,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                   key={item.href}
                   onClick={() => handleNavigation(item.href)}
                   className={cn(
-                    'font-medium transition-colors hover:text-orange-500',
+                    'font-medium transition-colors hover:text-gold-500',
                     isScrolled ? 'text-gray-700' : 'text-white'
                   )}
                 >
@@ -88,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                   key={item.href}
                   href={item.href}
                   className={cn(
-                    'font-medium transition-colors hover:text-orange-500',
+                    'font-medium transition-colors hover:text-gold-500',
                     isScrolled ? 'text-gray-700' : 'text-white'
                   )}
                 >
@@ -139,7 +139,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                   <button
                     key={item.href}
                     onClick={() => handleNavigation(item.href)}
-                    className="text-left font-medium text-gray-700 hover:text-orange-500 transition-colors px-4 py-2"
+                    className="text-left font-medium text-gray-700 hover:text-gold-500 transition-colors px-4 py-2"
                   >
                     {item.label}
                   </button>
@@ -148,7 +148,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                     key={item.href}
                     href={item.href}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-left font-medium text-gray-700 hover:text-orange-500 transition-colors px-4 py-2 block"
+                    className="text-left font-medium text-gray-700 hover:text-gold-500 transition-colors px-4 py-2 block"
                   >
                     {item.label}
                   </Link>

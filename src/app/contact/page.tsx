@@ -3,11 +3,10 @@
 import { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
-import { MapPin, Phone, Mail, Clock, Send, Building2, Users, MessageSquare, MessageCircle, Instagram, ExternalLink } from 'lucide-react';
-import SocialMediaGrid from '@/components/social/SocialMediaGrid';
+import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
 
 export default function ContactPage() {
-  const [selectedCompany, setSelectedCompany] = useState('narvex');
+  const [selectedCompany, setSelectedCompany] = useState('branding');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -19,116 +18,82 @@ export default function ContactPage() {
     timeline: ''
   });
   
-  const companies = [
+  const services = [
     {
-      id: 'narvex',
-      name: 'Narvex (CV. Nara Exhibition Indonesia)',
-      description: 'MICE Services, Event Organization, Equipment Rental, Furniture Production',
+      id: 'branding',
+      name: 'Creative Design & Branding',
+      description: 'Identitas visual yang kuat dan memorable untuk brand Anda',
       services: [
-        'MICE Services',
-        'Event Organization', 
-        'Equipment Rental',
-        'Furniture Production',
-        'Integrated Solutions'
+        'Brand Strategy & Identity',
+        'Logo & Visual Design',
+        'Brand Guidelines',
+        'Marketing Collaterals',
+        'Brand Consultation'
       ],
       contact: {
         phone: '+62 xxx xxxx xxxx',
-        email: 'narvex.ind@gmail.com',
+        email: 'creative@narvex.id',
         whatsapp: '+62 xxx xxxx xxxx'
-      },
-      color: 'bg-navy-900'
-    },
-    {
-      id: 'skywork',
-      name: 'Skywork.id',
-      description: 'Creative Design & Branding - "Bekerja dengan Seni"',
-      services: [
-        'Brand Identity Design',
-        'Logo & Visual Identity',
-        'Print Design',
-        'Digital Design',
-        'Creative Consultation'
-      ],
-      contact: {
-        phone: '+62 xxx xxxx xxxx',
-        email: 'hello@skywork.id',
-        whatsapp: '+62 xxx xxxx xxxx'
-      },
-      social: {
-        instagram: '@skywork.id',
-        website: 'skywork.id'
       },
       color: 'bg-blue-500'
     },
     {
-      id: 'gutama',
-      name: 'Gutama Learning',
-      description: 'Educational Programs & Professional Training',
+      id: 'event',
+      name: 'Event Production',
+      description: 'Produksi event berkualitas tinggi dari konsep hingga eksekusi',
       services: [
-        'Professional Training',
-        'Corporate Training',
-        'Online Courses',
-        'Workshop & Seminar',
-        'Certification Programs'
+        'Event Planning & Management',
+        'Stage & Set Design',
+        'Audio Visual Production',
+        'Live Streaming',
+        'Event Coordination'
       ],
       contact: {
         phone: '+62 xxx xxxx xxxx',
-        email: 'info@gutamalearning.com',
+        email: 'event@narvex.id',
         whatsapp: '+62 xxx xxxx xxxx'
       },
-      social: {
-        instagram: '@gutamalearning',
-        website: 'gutamalearning.com'
-      },
-      color: 'bg-green-500'
+      color: 'bg-gold-500'
     },
     {
-      id: 'creativework',
-      name: 'CreativeWork',
-      description: 'Creative Solutions for Modern Business',
+      id: 'digital',
+      name: 'Digital Marketing',
+      description: 'Strategi digital marketing yang efektif dan terukur',
       services: [
-        'Creative Strategy',
-        'Brand Development',
-        'Creative Campaign',
+        'Social Media Strategy',
         'Content Creation',
-        'Innovation Consultation'
+        'Influencer Marketing',
+        'Performance Advertising',
+        'Digital Analytics'
       ],
       contact: {
         phone: '+62 xxx xxxx xxxx',
-        email: 'hello@creativework.id',
+        email: 'digital@narvex.id',
         whatsapp: '+62 xxx xxxx xxxx'
       },
-      social: {
-        instagram: '@creativesky.id',
-        website: 'creativework.id'
-      },
-      color: 'bg-purple-500'
+      color: 'bg-blue-600'
     },
     {
-      id: 'evervow',
-      name: 'Evervow.wo',
-      description: 'Wedding Planning & Production',
+      id: 'consultation',
+      name: 'Brand Consultation',
+      description: 'Konsultasi strategis untuk pengembangan dan transformasi brand',
       services: [
-        'Wedding Planning',
-        'Wedding Decoration',
-        'Venue Selection',
-        'Photography & Videography',
-        'Wedding Consultation'
+        'Brand Audit & Research',
+        'Market Analysis',
+        'Brand Strategy Development',
+        'Implementation Support',
+        'Performance Monitoring'
       ],
       contact: {
         phone: '+62 xxx xxxx xxxx',
-        email: 'hello@evervow.wo',
+        email: 'consultation@narvex.id',
         whatsapp: '+62 xxx xxxx xxxx'
       },
-      social: {
-        instagram: '@evervow.wo',
-        website: 'evervow.wo'
-      },
-      color: 'bg-pink-500'
+      color: 'bg-gold-600'
     }
   ];
   
-  const selectedCompanyData = companies.find(c => c.id === selectedCompany);
+  const selectedCompanyData = services.find(c => c.id === selectedCompany);
   
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     setFormData({
@@ -149,14 +114,14 @@ export default function ContactPage() {
       
       <main>
         {/* Hero Section */}
-        <section className="section-padding bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
+        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Hubungi <span className="text-orange-400">Kami</span>
+                Hubungi <span style={{color: '#dbc48a'}}>Kami</span>
               </h1>
               <p className="text-xl text-gray-300 mb-8">
-                Siap membantu mewujudkan project impian Anda dengan layanan terbaik dari ekosistem Narvex
+                Siap membantu mewujudkan project impian Anda dengan layanan creative services terbaik dari Narvex
               </p>
             </div>
           </div>
@@ -166,34 +131,38 @@ export default function ContactPage() {
         <section className="py-12 bg-white border-b">
           <div className="container mx-auto px-6">
             <div className="text-center mb-8">
-              <h2 className="text-3xl font-bold text-navy-900 mb-4">Pilih Perusahaan yang Tepat</h2>
-              <p className="text-gray-600">Setiap perusahaan memiliki keahlian khusus untuk kebutuhan Anda</p>
+              <h2 className="text-3xl font-bold mb-4" style={{color: '#27364d'}}>Pilih Layanan yang Tepat</h2>
+              <p className="text-gray-600">Setiap layanan memiliki keahlian khusus untuk kebutuhan project Anda</p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {companies.map((company) => (
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {services.map((service) => (
                 <button
-                  key={company.id}
-                  onClick={() => setSelectedCompany(company.id)}
+                  key={service.id}
+                  onClick={() => setSelectedCompany(service.id)}
                   className={`text-left p-6 rounded-2xl border-2 transition-all ${
-                    selectedCompany === company.id
-                      ? 'border-orange-500 bg-orange-50'
+                    selectedCompany === service.id
+                      ? 'bg-white'
                       : 'border-gray-200 hover:border-gray-300 bg-white'
                   }`}
+                  style={{
+                    borderColor: selectedCompany === service.id ? '#dbc48a' : undefined,
+                    backgroundColor: selectedCompany === service.id ? '#f5f1e8' : undefined
+                  }}
                 >
-                  <div className={`w-12 h-12 ${company.color} rounded-xl flex items-center justify-center mb-4`}>
-                    <span className="text-white text-xl">🏢</span>
+                  <div className={`w-12 h-12 ${service.color} rounded-xl flex items-center justify-center mb-4`}>
+                    <span className="text-white text-xl">🎯</span>
                   </div>
-                  <h3 className="text-lg font-bold text-navy-900 mb-2">{company.name}</h3>
-                  <p className="text-gray-600 text-sm mb-3">{company.description}</p>
+                  <h3 className="text-lg font-bold mb-2" style={{color: '#27364d'}}>{service.name}</h3>
+                  <p className="text-gray-600 text-sm mb-3">{service.description}</p>
                   <div className="flex flex-wrap gap-1">
-                    {company.services.slice(0, 2).map((service, idx) => (
+                    {service.services.slice(0, 2).map((item, idx) => (
                       <span key={idx} className="bg-gray-100 text-gray-600 px-2 py-1 rounded text-xs">
-                        {service}
+                        {item}
                       </span>
                     ))}
-                    {company.services.length > 2 && (
-                      <span className="text-gray-400 text-xs">+{company.services.length - 2} more</span>
+                    {service.services.length > 2 && (
+                      <span className="text-gray-400 text-xs">+{service.services.length - 2} more</span>
                     )}
                   </div>
                 </button>
@@ -209,18 +178,18 @@ export default function ContactPage() {
               {/* Contact Form */}
               <div className="bg-white rounded-2xl p-8 shadow-lg">
                 <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-navy-900 mb-2">
-                    Kirim Pesan ke {selectedCompanyData?.name}
+                  <h3 className="text-2xl font-bold text-blue-900 mb-2">
+                    Konsultasi {selectedCompanyData?.name}
                   </h3>
                   <p className="text-gray-600">
-                    Form akan diteruskan langsung ke tim {selectedCompanyData?.name} untuk respon yang cepat.
+                    Form akan diteruskan langsung ke tim spesialis {selectedCompanyData?.name} untuk konsultasi yang tepat.
                   </p>
                 </div>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-navy-900 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{color: '#27364d'}}>
                         Nama Lengkap *
                       </label>
                       <input
@@ -229,13 +198,13 @@ export default function ContactPage() {
                         value={formData.name}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition-colors focus:border-[#dbc48a]"
                         placeholder="Masukkan nama lengkap"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-navy-900 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{color: '#27364d'}}>
                         Email *
                       </label>
                       <input
@@ -244,7 +213,7 @@ export default function ContactPage() {
                         value={formData.email}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#dbc48a] focus:outline-none transition-colors"
                         placeholder="email@example.com"
                       />
                     </div>
@@ -252,7 +221,7 @@ export default function ContactPage() {
                   
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-navy-900 mb-2">
+                      <label className="block text-sm font-medium mb-2" style={{color: '#27364d'}}>
                         Nomor Telepon *
                       </label>
                       <input
@@ -261,13 +230,13 @@ export default function ContactPage() {
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#dbc48a] focus:outline-none transition-colors"
                         placeholder="+62 xxx xxxx xxxx"
                       />
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-navy-900 mb-2">
+                      <label className="block text-sm font-medium text-blue-900 mb-2">
                         Nama Perusahaan
                       </label>
                       <input
@@ -275,7 +244,7 @@ export default function ContactPage() {
                         name="company"
                         value={formData.company}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#dbc48a] focus:outline-none transition-colors"
                         placeholder="Nama perusahaan (opsional)"
                       />
                     </div>
@@ -283,7 +252,7 @@ export default function ContactPage() {
                   
                   <div className="grid md:grid-cols-2 gap-6">
                     <div>
-                      <label className="block text-sm font-medium text-navy-900 mb-2">
+                      <label className="block text-sm font-medium text-blue-900 mb-2">
                         Layanan yang Dibutuhkan *
                       </label>
                       <select
@@ -291,7 +260,7 @@ export default function ContactPage() {
                         value={formData.service}
                         onChange={handleInputChange}
                         required
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#dbc48a] focus:outline-none transition-colors"
                       >
                         <option value="">Pilih layanan</option>
                         {selectedCompanyData?.services.map((service) => (
@@ -303,14 +272,14 @@ export default function ContactPage() {
                     </div>
                     
                     <div>
-                      <label className="block text-sm font-medium text-navy-900 mb-2">
+                      <label className="block text-sm font-medium text-blue-900 mb-2">
                         Budget Range
                       </label>
                       <select
                         name="budget"
                         value={formData.budget}
                         onChange={handleInputChange}
-                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#dbc48a] focus:outline-none transition-colors"
                       >
                         <option value="">Pilih budget range</option>
                         <option value="under-10m">&lt; 10 Juta</option>
@@ -324,14 +293,14 @@ export default function ContactPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-navy-900 mb-2">
+                    <label className="block text-sm font-medium text-blue-900 mb-2">
                       Timeline Project
                     </label>
                     <select
                       name="timeline"
                       value={formData.timeline}
                       onChange={handleInputChange}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-gold-500 focus:outline-none transition-colors"
                     >
                       <option value="">Pilih timeline</option>
                       <option value="urgent">Urgent (&lt; 1 minggu)</option>
@@ -343,7 +312,7 @@ export default function ContactPage() {
                   </div>
                   
                   <div>
-                    <label className="block text-sm font-medium text-navy-900 mb-2">
+                    <label className="block text-sm font-medium text-blue-900 mb-2">
                       Detail Project *
                     </label>
                     <textarea
@@ -352,14 +321,15 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       rows={5}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-orange-500 focus:outline-none transition-colors resize-none"
+                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:border-[#dbc48a] focus:outline-none transition-colors resize-none"
                       placeholder="Ceritakan detail project Anda, tujuan, target audience, dan ekspektasi hasil..."
                     ></textarea>
                   </div>
                   
                   <button
                     type="submit"
-                    className="w-full bg-orange-500 hover:bg-orange-600 text-white py-4 rounded-lg text-lg font-semibold transition-colors inline-flex items-center justify-center"
+                    className="w-full text-white py-4 rounded-lg text-lg font-semibold transition-colors inline-flex items-center justify-center hover:opacity-90"
+                    style={{backgroundColor: '#dbc48a'}}
                   >
                     <Send className="w-5 h-5 mr-2" />
                     Kirim Pesan
@@ -379,19 +349,19 @@ export default function ContactPage() {
                     <span className="text-white text-2xl">🏢</span>
                   </div>
                   
-                  <h3 className="text-2xl font-bold text-navy-900 mb-3">
+                  <h3 className="text-2xl font-bold mb-3" style={{color: '#27364d'}}>
                     {selectedCompanyData?.name}
                   </h3>
                   <p className="text-gray-600 mb-6">{selectedCompanyData?.description}</p>
                   
                   <div className="space-y-4">
                     <div className="flex items-center">
-                      <Phone className="w-5 h-5 text-orange-500 mr-3" />
+                      <Phone className="w-5 h-5 mr-3" style={{color: '#dbc48a'}} />
                       <span className="text-gray-700">{selectedCompanyData?.contact.phone}</span>
                     </div>
                     
                     <div className="flex items-center">
-                      <Mail className="w-5 h-5 text-orange-500 mr-3" />
+                      <Mail className="w-5 h-5 mr-3" style={{color: '#dbc48a'}} />
                       <span className="text-gray-700">{selectedCompanyData?.contact.email}</span>
                     </div>
                     
@@ -399,28 +369,14 @@ export default function ContactPage() {
                       <MessageCircle className="w-5 h-5 text-green-500 mr-3" />
                       <span className="text-gray-700">WhatsApp: {selectedCompanyData?.contact.whatsapp}</span>
                     </div>
-                    
-                    {selectedCompanyData?.social && (
-                      <>
-                        <div className="flex items-center">
-                          <Instagram className="w-5 h-5 text-pink-500 mr-3" />
-                          <span className="text-gray-700">{selectedCompanyData.social.instagram}</span>
-                        </div>
-                        
-                        <div className="flex items-center">
-                          <ExternalLink className="w-5 h-5 text-blue-500 mr-3" />
-                          <span className="text-gray-700">{selectedCompanyData.social.website}</span>
-                        </div>
-                      </>
-                    )}
                   </div>
                   
                   <div className="mt-6 pt-6 border-t border-gray-200">
-                    <h4 className="font-semibold text-navy-900 mb-3">Layanan Tersedia:</h4>
+                    <h4 className="font-semibold mb-3" style={{color: '#27364d'}}>Layanan Tersedia:</h4>
                     <div className="space-y-2">
                       {selectedCompanyData?.services.map((service, idx) => (
                         <div key={idx} className="flex items-center">
-                          <div className="w-2 h-2 bg-orange-400 rounded-full mr-3"></div>
+                          <div className="w-2 h-2 rounded-full mr-3" style={{backgroundColor: '#dbc48a'}}></div>
                           <span className="text-gray-700 text-sm">{service}</span>
                         </div>
                       ))}
@@ -430,22 +386,22 @@ export default function ContactPage() {
                 
                 {/* Office Location */}
                 <div className="bg-white rounded-2xl p-8 shadow-lg">
-                  <h3 className="text-2xl font-bold text-navy-900 mb-6">Lokasi Kantor</h3>
+                  <h3 className="text-2xl font-bold mb-6" style={{color: '#27364d'}}>Lokasi Kantor</h3>
                   
                   <div className="space-y-4 mb-6">
                     <div className="flex items-start">
-                      <MapPin className="w-5 h-5 text-orange-500 mr-3 mt-1" />
+                      <MapPin className="w-5 h-5 mr-3 mt-1" style={{color: '#dbc48a'}} />
                       <div>
-                        <p className="font-semibold text-navy-900">Alamat Kantor</p>
+                        <p className="font-semibold" style={{color: '#27364d'}}>Alamat Kantor</p>
                         <p className="text-gray-600">Jakarta, Indonesia</p>
                         <p className="text-gray-600 text-sm">Alamat lengkap akan diberikan setelah konfirmasi meeting</p>
                       </div>
                     </div>
                     
                     <div className="flex items-center">
-                      <Clock className="w-5 h-5 text-orange-500 mr-3" />
+                      <Clock className="w-5 h-5 text-gold-500 mr-3" />
                       <div>
-                        <p className="font-semibold text-navy-900">Jam Operasional</p>
+                        <p className="font-semibold text-blue-900">Jam Operasional</p>
                         <p className="text-gray-600">Senin - Jumat: 09:00 - 18:00</p>
                         <p className="text-gray-600">Sabtu: 09:00 - 15:00</p>
                       </div>
@@ -463,12 +419,12 @@ export default function ContactPage() {
                 </div>
                 
                 {/* Live Chat */}
-                <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-8 text-white">
+                <div className="bg-gradient-to-r from-gold-500 to-gold-600 rounded-2xl p-8 text-white">
                   <h3 className="text-2xl font-bold mb-4">Butuh Respon Cepat?</h3>
                   <p className="mb-6">Tim customer support kami siap membantu Anda secara real-time.</p>
                   
                   <div className="space-y-3">
-                    <button className="w-full bg-white text-orange-500 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center justify-center">
+                    <button className="w-full bg-white text-gold-500 py-3 rounded-lg font-semibold hover:bg-gray-50 transition-colors inline-flex items-center justify-center">
                       <MessageCircle className="w-5 h-5 mr-2" />
                       Live Chat
                     </button>
@@ -484,45 +440,38 @@ export default function ContactPage() {
           </div>
         </section>
 
-        {/* All Companies Contact */}
+        {/* All Services Contact */}
         <section className="section-padding bg-white">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6">Kontak Semua Perusahaan</h2>
+              <h2 className="heading-2 mb-6">Kontak Semua Layanan</h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto">
-                Akses langsung ke semua perusahaan dalam ekosistem Narvex untuk kebutuhan yang spesifik.
+                Akses langsung ke semua layanan creative services Narvex untuk kebutuhan yang spesifik.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {companies.map((company) => (
-                <div key={company.id} className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
-                  <div className={`w-12 h-12 ${company.color} rounded-xl flex items-center justify-center mb-4`}>
-                    <span className="text-white text-xl">🏢</span>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+              {services.map((service) => (
+                <div key={service.id} className="bg-gray-50 rounded-2xl p-6 hover:shadow-lg transition-shadow">
+                  <div className={`w-12 h-12 ${service.color} rounded-xl flex items-center justify-center mb-4`}>
+                    <span className="text-white text-xl">🎯</span>
                   </div>
                   
-                  <h3 className="text-xl font-bold text-navy-900 mb-2">{company.name}</h3>
-                  <p className="text-gray-600 text-sm mb-4">{company.description}</p>
+                  <h3 className="text-xl font-bold text-blue-900 mb-2">{service.name}</h3>
+                  <p className="text-gray-600 text-sm mb-4">{service.description}</p>
                   
                   <div className="space-y-2 text-sm">
                     <div className="flex items-center">
                       <Mail className="w-4 h-4 text-gray-400 mr-2" />
-                      <span className="text-gray-600">{company.contact.email}</span>
+                      <span className="text-gray-600">{service.contact.email}</span>
                     </div>
-                    
-                    {company.social && (
-                      <div className="flex items-center">
-                        <Instagram className="w-4 h-4 text-pink-500 mr-2" />
-                        <span className="text-gray-600">{company.social.instagram}</span>
-                      </div>
-                    )}
                   </div>
                   
                   <button 
-                    onClick={() => setSelectedCompany(company.id)}
-                    className={`w-full mt-4 ${company.color} hover:opacity-90 text-white py-2 rounded-lg text-sm font-medium transition-opacity`}
+                    onClick={() => setSelectedCompany(service.id)}
+                    className={`w-full mt-4 ${service.color} hover:opacity-90 text-white py-2 rounded-lg text-sm font-medium transition-opacity`}
                   >
-                    Hubungi {company.name.split(' ')[0]}
+                    Konsultasi {service.name.split(' ')[0]}
                   </button>
                 </div>
               ))}

@@ -125,11 +125,11 @@ export default function BlogPage() {
       
       <main>
         {/* Hero Section */}
-        <section className="section-padding bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900">
+        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto animate-fade-in">
               <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-                Blog & <span className="text-orange-400">News Center</span>
+                Blog & <span className="text-gold-400">News Center</span>
               </h1>
               <p className="text-xl text-gray-300 mb-8">
                 Insights, updates, dan stories dari dunia MICE, event production, dan industri kreatif
@@ -143,7 +143,7 @@ export default function BlogPage() {
                   placeholder="Cari artikel..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:border-orange-500 focus:outline-none"
+                  className="w-full pl-12 pr-4 py-3 rounded-lg border border-gray-300 focus:border-gold-500 focus:outline-none"
                 />
               </div>
             </div>
@@ -183,7 +183,7 @@ export default function BlogPage() {
                       <span>{article.readTime} read</span>
                     </div>
                     
-                    <h3 className="text-xl font-bold text-navy-900 mb-3 line-clamp-2">
+                    <h3 className="text-xl font-bold text-blue-900 mb-3 line-clamp-2">
                       {article.title}
                     </h3>
                     
@@ -193,13 +193,13 @@ export default function BlogPage() {
                     
                     <div className="flex flex-wrap gap-2 mb-4">
                       {article.tags.slice(0, 3).map((tag, idx) => (
-                        <span key={idx} className="bg-orange-100 text-orange-700 px-2 py-1 rounded text-xs">
+                        <span key={idx} className="bg-gold-100 text-gold-700 px-2 py-1 rounded text-xs">
                           {tag}
                         </span>
                       ))}
                     </div>
                     
-                    <button className="text-orange-500 hover:text-orange-600 font-medium inline-flex items-center transition-colors">
+                    <button className="text-gold-500 hover:text-gold-600 font-medium inline-flex items-center transition-colors">
                       Baca Selengkapnya
                       <ArrowRight className="w-4 h-4 ml-2" />
                     </button>
@@ -217,7 +217,7 @@ export default function BlogPage() {
               {/* Sidebar - Categories */}
               <div className="lg:col-span-1">
                 <div className="bg-white rounded-2xl p-6 shadow-lg sticky top-6">
-                  <h3 className="text-xl font-bold text-navy-900 mb-6">Kategori</h3>
+                  <h3 className="text-xl font-bold text-blue-900 mb-6">Kategori</h3>
                   
                   <div className="space-y-2">
                     {categories.map((category) => (
@@ -226,14 +226,14 @@ export default function BlogPage() {
                         onClick={() => setActiveCategory(category.id)}
                         className={`w-full text-left px-4 py-3 rounded-lg transition-colors ${
                           activeCategory === category.id
-                            ? 'bg-orange-500 text-white'
+                            ? 'bg-gold-500 text-white'
                             : 'hover:bg-gray-100 text-gray-700'
                         }`}
                       >
                         <div className="flex justify-between items-center">
                           <span>{category.name}</span>
                           <span className={`text-sm ${
-                            activeCategory === category.id ? 'text-orange-200' : 'text-gray-400'
+                            activeCategory === category.id ? 'text-gold-200' : 'text-gray-400'
                           }`}>
                             {category.count}
                           </span>
@@ -243,10 +243,10 @@ export default function BlogPage() {
                   </div>
                   
                   <div className="mt-8 pt-6 border-t border-gray-200">
-                    <h4 className="font-semibold text-navy-900 mb-4">Tags Populer</h4>
+                    <h4 className="font-semibold text-blue-900 mb-4">Tags Populer</h4>
                     <div className="flex flex-wrap gap-2">
                       {['MICE', 'Event Planning', 'Creative Design', 'Case Study', 'Industry Trends'].map((tag) => (
-                        <span key={tag} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm hover:bg-orange-100 hover:text-orange-700 cursor-pointer transition-colors">
+                        <span key={tag} className="bg-gray-100 text-gray-600 px-3 py-1 rounded-full text-sm hover:bg-gold-100 hover:text-gold-700 cursor-pointer transition-colors">
                           {tag}
                         </span>
                       ))}
@@ -258,7 +258,7 @@ export default function BlogPage() {
               {/* Main Content - Articles */}
               <div className="lg:col-span-3">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-bold text-navy-900 mb-2">
+                  <h3 className="text-2xl font-bold text-blue-900 mb-2">
                     {activeCategory === 'all' ? 'Semua Artikel' : categories.find(c => c.id === activeCategory)?.name}
                   </h3>
                   <p className="text-gray-600">
@@ -297,7 +297,7 @@ export default function BlogPage() {
                             </div>
                           </div>
                           
-                          <h3 className="text-xl font-bold text-navy-900 mb-3 hover:text-orange-500 cursor-pointer transition-colors">
+                          <h3 className="text-xl font-bold text-blue-900 mb-3 hover:text-gold-500 cursor-pointer transition-colors">
                             {article.title}
                           </h3>
                           
@@ -313,7 +313,7 @@ export default function BlogPage() {
                             ))}
                           </div>
                           
-                          <button className="text-orange-500 hover:text-orange-600 font-medium inline-flex items-center transition-colors">
+                          <button className="text-gold-500 hover:text-gold-600 font-medium inline-flex items-center transition-colors">
                             Baca Selengkapnya
                             <ArrowRight className="w-4 h-4 ml-2" />
                           </button>
@@ -329,7 +329,7 @@ export default function BlogPage() {
                     <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
                       Previous
                     </button>
-                    <button className="px-4 py-2 bg-orange-500 text-white rounded-lg">
+                    <button className="px-4 py-2 bg-gold-500 text-white rounded-lg">
                       1
                     </button>
                     <button className="px-4 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
@@ -349,7 +349,7 @@ export default function BlogPage() {
         </section>
 
         {/* Newsletter Subscription */}
-        <section className="section-padding bg-navy-900">
+        <section className="section-padding bg-blue-900">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-2xl mx-auto">
               <h2 className="text-4xl font-bold text-white mb-6">
@@ -363,9 +363,9 @@ export default function BlogPage() {
                 <input
                   type="email"
                   placeholder="Email address"
-                  className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-orange-500 focus:outline-none"
+                  className="flex-1 px-4 py-3 rounded-lg border border-gray-300 focus:border-gold-500 focus:outline-none"
                 />
-                <button className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
+                <button className="bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-lg font-semibold transition-colors">
                   Subscribe
                 </button>
               </div>
