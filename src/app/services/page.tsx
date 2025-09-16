@@ -47,7 +47,7 @@ export default function ServicesPage() {
         "Website Development",
         "Digital Strategy & Analytics"
       ],
-      color: "#6382b4"
+      color: "bg-blue-500"
     },
     {
       icon: Users,
@@ -128,7 +128,7 @@ export default function ServicesPage() {
                       </div>
                       
                       <div className="mt-8">
-                        <button className="text-white px-8 py-3 rounded-lg font-semibold transition-colors hover:opacity-90" style={{backgroundColor: '#dbc48a'}}>
+                        <button className="bg-gold-primary text-white px-8 py-3 rounded-lg font-semibold transition-colors hover:opacity-90">
                           Pelajari Lebih Lanjut
                         </button>
                       </div>
@@ -161,7 +161,7 @@ export default function ServicesPage() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center">
-                <div className="w-20 h-20 rounded-2xl flex items-center justify-center mx-auto mb-6" style={{backgroundColor: '#f5f1e8'}}>
+                <div className="w-20 h-20 bg-gold-light rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">🏆</span>
                 </div>
                 <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
@@ -180,7 +180,7 @@ export default function ServicesPage() {
                 <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">🎯</span>
                 </div>
-                <h3 className="text-xl font-bold mb-3" style={{color: '#6382b4'}}>Tepat Waktu</h3>
+                <h3 className="text-xl font-bold text-blue-primary mb-3">Tepat Waktu</h3>
                 <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
               </div>
               
@@ -188,7 +188,7 @@ export default function ServicesPage() {
                 <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
                   <span className="text-3xl">💎</span>
                 </div>
-                <h3 className="text-xl font-bold mb-3" style={{color: '#6382b4'}}>Kualitas Terjamin</h3>
+                <h3 className="text-xl font-bold text-blue-primary mb-3">Kualitas Terjamin</h3>
                 <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
               </div>
             </div>

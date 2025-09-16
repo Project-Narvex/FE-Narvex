@@ -58,9 +58,9 @@ export default function AboutPage() {
                     </div>
                   </div>
                   <div className="flex items-start">
-                    <div className="w-4 h-4 rounded-full mt-2 mr-4 flex-shrink-0" style={{backgroundColor: '#dbc48a'}}></div>
+                    <div className="w-4 h-4 bg-gold-500 rounded-full mt-2 mr-4 flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-semibold mb-2" style={{color: '#6382b4'}}>Inovasi</h4>
+                      <h4 className="font-semibold text-blue-900 mb-2">Inovasi</h4>
                       <p className="text-gray-600">Kami selalu mengikuti perkembangan tren dan teknologi terbaru.</p>
                     </div>
                   </div>
@@ -69,7 +69,7 @@ export default function AboutPage() {
               <div className="bg-gray-100 rounded-2xl p-8">
                 <div className="text-center">
                   <div className="text-4xl mb-4">🎨</div>
-                  <h4 className="text-2xl font-bold mb-4" style={{color: '#6382b4'}}>Narvex Creative Services</h4>
+                  <h4 className="text-2xl font-bold text-blue-900 mb-4">Narvex Creative Services</h4>
                   <p className="text-gray-600 mb-6">
                     Perusahaan creative services yang mengkhususkan diri dalam branding, event production, dan digital marketing.
                   </p>

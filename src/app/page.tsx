@@ -34,31 +34,31 @@ export default function Home() {
               </p>
               <div className="grid md:grid-cols-4 gap-6 mt-12">
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#f0f4f8'}}>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-blue-50">
                     <span className="text-2xl">🎨</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{color: '#27364d'}}>Creative Design & Branding</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Creative Design & Branding</h3>
                   <p className="text-gray-600">Brand identity, graphic design, dan visual communication</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#f5f1e8'}}>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gold-50">
                     <span className="text-2xl">🎪</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{color: '#27364d'}}>Event Production</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Event Production</h3>
                   <p className="text-gray-600">Event planning, design, dan technical support</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#f0f4f8'}}>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-blue-50">
                     <span className="text-2xl">📱</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{color: '#27364d'}}>Digital Marketing</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Digital Marketing</h3>
                   <p className="text-gray-600">Social media, SEO, digital advertising, dan website development</p>
                 </div>
                 <div className="text-center">
-                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4" style={{backgroundColor: '#f5f1e8'}}>
+                  <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gold-50">
                     <span className="text-2xl">💼</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2" style={{color: '#27364d'}}>Brand Consultation</h3>
+                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Brand Consultation</h3>
                   <p className="text-gray-600">Strategic planning dan brand positioning</p>
                 </div>
               </div>
@@ -92,13 +92,13 @@ export default function Home() {
                   {getRecentArticles(4).map((article, index) => (
                     <article key={article.id} className="bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
                       <div className="h-40 bg-gray-200 flex items-center justify-center">
-                        <div className="text-4xl font-bold opacity-20" style={{color: '#dbc48a'}}>{index + 1}</div>
+                        <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
                       </div>
                       <div className="p-6">
-                        <div className="text-sm font-medium mb-2 capitalize" style={{color: '#dbc48a'}}>
+                        <div className="text-sm font-medium mb-2 capitalize text-gold-500">
                           {article.category.replace('-', ' ')}
                         </div>
-                        <h3 className="text-lg font-bold mb-3 line-clamp-2" style={{color: '#27364d'}}>
+                        <h3 className="text-lg font-bold mb-3 line-clamp-2 text-blue-900">
                           {article.title}
                         </h3>
                         <p className="text-gray-600 mb-4 line-clamp-2 text-sm">
@@ -106,7 +106,7 @@ export default function Home() {
                         </p>
                         <a 
                           href={`/blog/${article.slug}`}
-                          className="font-medium transition-colors text-sm hover:opacity-80" style={{color: '#dbc48a'}}
+                          className="font-medium transition-colors text-sm hover:opacity-80 text-gold-500"
                         >
                           Baca Selengkapnya →
                         </a>
@@ -131,7 +131,7 @@ export default function Home() {
             </div>
             
             <div className="text-center mt-12">
-              <a href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90" style={{backgroundColor: '#27364d'}}>
+              <a href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 bg-blue-900">
                 Lihat Semua Artikel
               </a>
             </div>
@@ -139,7 +139,7 @@ export default function Home() {
         </section>
         
         {/* Multi-Channel Contact CTA */}
-        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
+        <section className="section-padding bg-blue-900">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -153,7 +153,7 @@ export default function Home() {
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               <a href="/contact" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
-                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform" style={{backgroundColor: '#dbc48a'}}>
+                <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <span className="text-white text-2xl">📧</span>
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
@@ -186,7 +186,7 @@ export default function Home() {
             </div>
             
             <div className="text-center">
-              <a href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90" style={{backgroundColor: '#dbc48a'}}>
+              <a href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500">
                 Konsultasi Gratis
               </a>
               <a href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block">

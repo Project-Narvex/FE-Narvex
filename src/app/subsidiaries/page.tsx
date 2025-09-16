@@ -307,7 +307,7 @@ export default function SubsidiariesPage() {
         </section>
 
         {/* CTA Section */}
-        <section className="section-padding" style={{backgroundColor: '#6382b4'}}>
+        <section className="section-padding bg-blue-500">
           <div className="container mx-auto px-6 text-center">
             <div className="max-w-4xl mx-auto">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
@@ -318,7 +318,7 @@ export default function SubsidiariesPage() {
                 untuk solusi terintegrasi.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <button className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:opacity-90" style={{backgroundColor: '#dbc48a'}}>
+                <button className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors hover:opacity-90 bg-gold-500">
                   Konsultasi Gratis
                 </button>
                 <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-lg text-lg font-semibold transition-colors">

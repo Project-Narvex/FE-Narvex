@@ -30,9 +30,9 @@ const HeroSection: React.FC<HeroSectionProps> = ({
         {/* Overlay Pattern */}
         <div className="absolute inset-0 opacity-20">
           <div className="absolute top-0 left-0 w-full h-full">
-            <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse" style={{backgroundColor: '#dbc48a'}}></div>
-            <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000" style={{backgroundColor: '#6382b4'}}></div>
-            <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000" style={{backgroundColor: '#dbc48a'}}></div>
+            <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse bg-gold-500"></div>
+            <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000 bg-blue-500"></div>
+            <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500"></div>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 animate-fade-in">
               <span className="block">Creative Solutions</span>
               <span className="block">for</span>
-              <span className="block" style={{color: '#dbc48a'}}>Your Brand</span>
+              <span className="block text-gold-500">Your Brand</span>
             </h1>
             
             <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0 animate-fade-in animation-delay-300">
@@ -77,15 +77,15 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 mt-16 animate-fade-in animation-delay-900">
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold mb-2" style={{color: '#dbc48a'}}>50+</div>
+                <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">50+</div>
                 <div className="text-gray-300 text-sm md:text-base">Projects Completed</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold mb-2" style={{color: '#dbc48a'}}>25+</div>
+                <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">25+</div>
                 <div className="text-gray-300 text-sm md:text-base">Happy Clients</div>
               </div>
               <div className="text-center">
-                <div className="text-3xl md:text-4xl font-bold mb-2" style={{color: '#dbc48a'}}>3+</div>
+                <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">3+</div>
                 <div className="text-gray-300 text-sm md:text-base">Years Experience</div>
               </div>
             </div>
@@ -96,7 +96,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
             <div className="grid grid-cols-2 gap-4 animate-fade-in animation-delay-1200">
               <div className="space-y-4">
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 animate-bounce-in">
-                  <div className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center shadow-lg" style={{backgroundColor: '#dbc48a'}}>
+                  <div className="w-12 h-12 bg-gold-500 rounded-lg mb-4 flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-xl">🎨</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Creative Design</h3>
@@ -104,7 +104,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
                 
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 animate-bounce-in">
-                  <div className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center shadow-lg" style={{backgroundColor: '#6382b4'}}>
+                  <div className="w-12 h-12 bg-blue-900 rounded-lg mb-4 flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-xl">📱</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Digital Marketing</h3>
@@ -114,7 +114,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               
               <div className="space-y-4 transform translate-y-12">
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 animate-bounce-in">
-                  <div className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center shadow-lg" style={{backgroundColor: '#dbc48a'}}>
+                  <div className="w-12 h-12 bg-gold-500 rounded-lg mb-4 flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-xl">🎪</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Event Production</h3>
@@ -122,7 +122,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 </div>
                 
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 animate-bounce-in">
-                  <div className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center shadow-lg" style={{backgroundColor: '#6382b4'}}>
+                  <div className="w-12 h-12 bg-blue-900 rounded-lg mb-4 flex items-center justify-center shadow-lg">
                     <span className="text-white font-bold text-xl">⭐</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Consultation</h3>

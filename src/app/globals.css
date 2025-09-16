@@ -469,3 +469,17 @@ body {
   font-size: var(--text-sm);
   margin-top: var(--space-1);
 }
+
+/* Background Color Utilities */
+.bg-gold-primary {
+  background-color: var(--gold-500);
+}
+
+.bg-gold-light {
+  background-color: #f5f1e8;
+}
+
+/* Text Color Utilities */
+.text-blue-primary {
+  color: var(--blue-500);
+}
