@@ -470,6 +470,62 @@ body {
   margin-top: var(--space-1);
 }
 
+/* Leaflet Map Styles */
+.leaflet-container {
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-lg);
+}
+
+.leaflet-popup-content {
+  margin: 1rem;
+  font-family: var(--font-secondary);
+  color: var(--gray-700);
+}
+
+.leaflet-popup-tip {
+  background: var(--white);
+}
+
+.leaflet-control-zoom {
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: var(--shadow-md);
+}
+
+.leaflet-control-zoom a {
+  background-color: var(--white);
+  color: var(--blue-500);
+  border: none;
+  font-weight: var(--font-semibold);
+  transition: all 0.2s ease-in-out;
+}
+
+.leaflet-control-zoom a:hover {
+  background-color: var(--blue-50);
+  color: var(--blue-600);
+}
+
+/* Carousel Styles */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.leaflet-control-attribution {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 0.25rem;
+  font-size: var(--text-xs);
+}
+
 /* Background Color Utilities */
 .bg-gold-primary {
   background-color: var(--gold-500);

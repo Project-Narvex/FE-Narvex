@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import MapComponent from '@/components/ui/MapComponent';
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle } from 'lucide-react';
 
 export default function ContactPage() {
@@ -408,14 +409,8 @@ export default function ContactPage() {
                     </div>
                   </div>
                   
-                  {/* Google Maps Placeholder */}
-                  <div className="bg-gray-200 rounded-lg h-48 flex items-center justify-center">
-                    <div className="text-center text-gray-500">
-                      <MapPin className="w-12 h-12 mx-auto mb-2" />
-                      <p>Google Maps Integration</p>
-                      <p className="text-sm">Interactive map akan ditampilkan di sini</p>
-                    </div>
-                  </div>
+                  {/* Interactive Map */}
+                  <MapComponent height="h-48" className="shadow-sm" />
                 </div>
                 
                 {/* Live Chat */}

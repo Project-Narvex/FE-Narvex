@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { Card } from '../ui/Card';
 import Button from '../ui/Button';
+import MapComponent from '../ui/MapComponent';
 import { MapPin, Phone, Mail, Instagram, Send, CheckCircle } from 'lucide-react';
 
 interface ContactFormData {
@@ -304,14 +305,10 @@ const ContactSection: React.FC<ContactSectionProps> = ({
               </div>
             </Card>
             
-            {/* Map Placeholder */}
-            <Card className="h-64 flex items-center justify-center bg-gray-100">
-              <div className="text-center">
-                <MapPin className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium">Google Maps</p>
-                <p className="text-gray-500 text-sm">Lokasi kantor akan ditampilkan di sini</p>
-              </div>
-            </Card>
+            {/* Interactive Map */}
+            <div className="rounded-lg overflow-hidden shadow-lg">
+              <MapComponent height="h-64" className="w-full" />
+            </div>
           </div>
         </div>
       </div>

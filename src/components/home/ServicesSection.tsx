@@ -74,7 +74,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
             <Card
               key={service.id}
               variant="service"
-              className={`group animate-bounce-in hover:shadow-2xl`}
+              className={`group animate-bounce-in hover:shadow-2xl flex flex-col h-full`}
               style={{ animationDelay: `${index * 200}ms` }}
             >
               {/* Icon */}
@@ -85,32 +85,34 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
               </div>
               
               {/* Content */}
-              <h3 className="text-2xl font-bold mb-4 transition-colors" style={{color: '#6382b4'}}>
-                {service.title}
-              </h3>
-              
-              <p className="text-gray-600 mb-6 leading-relaxed">
-                {service.description}
-              </p>
-              
-              {/* Features List */}
-              <ul className="space-y-3 mb-6">
-                {service.features.map((feature, idx) => (
-                  <li key={idx} className="flex items-center text-gray-700 animate-fade-in" style={{ animationDelay: `${(index * 200) + (idx * 100)}ms` }}>
-                    <div className="w-3 h-3 rounded-full mr-3 transition-colors shadow-sm" style={{backgroundColor: '#dbc48a'}}></div>
-                    <span className="text-sm font-medium group-hover:text-blue-900 transition-colors">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-              
-              {/* CTA Button */}
-              <button 
-                onClick={scrollToContact}
-                className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50" style={{color: '#dbc48a'}}
-              >
-                Pelajari Lebih Lanjut
-                <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
-              </button>
+              <div className="flex-1 flex flex-col">
+                <h3 className="text-2xl font-bold mb-4 transition-colors" style={{color: '#6382b4'}}>
+                  {service.title}
+                </h3>
+                
+                <p className="text-gray-600 mb-6 leading-relaxed text-justify">
+                  {service.description}
+                </p>
+                
+                {/* Features List */}
+                <ul className="space-y-3 mb-6 flex-1">
+                  {service.features.map((feature, idx) => (
+                    <li key={idx} className="flex items-center text-gray-700 animate-fade-in" style={{ animationDelay: `${(index * 200) + (idx * 100)}ms` }}>
+                      <div className="w-3 h-3 rounded-full mr-3 transition-colors shadow-sm" style={{backgroundColor: '#dbc48a'}}></div>
+                      <span className="text-sm font-medium group-hover:text-blue-900 transition-colors">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                {/* CTA Button */}
+                <button 
+                  onClick={scrollToContact}
+                  className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50 mt-auto" style={{color: '#dbc48a'}}
+                >
+                  Pelajari Lebih Lanjut
+                  <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                </button>
+              </div>
             </Card>
           ))}
         </div>

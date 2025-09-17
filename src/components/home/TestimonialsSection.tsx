@@ -4,6 +4,7 @@ import React from 'react';
 import { Card } from '../ui/Card';
 import { Star } from 'lucide-react';
 import Image from 'next/image';
+import ClientCarousel from '../ui/ClientCarousel';
 
 interface Testimonial {
   id: string;
@@ -72,21 +73,97 @@ const defaultTestimonials: Testimonial[] = [
 ];
 
 const defaultClients: Client[] = [
+  // Row 1: Government & Financial Institutions
   {
-    name: 'Skywork Events',
-    logo: 'https://images.unsplash.com/photo-1599305445671-ac291c95aaa9?w=200&h=200&fit=crop&crop=center'
+    name: 'Bank Indonesia',
+    logo: '/logos/BI.png'
   },
   {
-    name: 'Gutama Learning',
-    logo: 'https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=200&h=200&fit=crop&crop=center'
+    name: 'Kominfo',
+    logo: '/logos/Kominfo.png'
   },
   {
-    name: 'Creative Sky',
-    logo: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=200&h=200&fit=crop&crop=center'
+    name: 'Kementerian Perhubungan RI',
+    logo: '/logos/Mentri_perhubungan.png'
   },
   {
-    name: 'Evervow',
-    logo: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=200&h=200&fit=crop&crop=center'
+    name: 'DPR RI',
+    logo: '/logos/DPR.png'
+  },
+  {
+    name: 'Polri',
+    logo: '/logos/Polri.png'
+  },
+  // Row 2: Educational & Government Institutions
+  {
+    name: 'DPM-PTSP',
+    logo: '/logos/DPMPTSP.png'
+  },
+  {
+    name: 'Basarnas',
+    logo: '/logos/Basarnas.png'
+  },
+  {
+    name: 'Universitas Airlangga',
+    logo: '/logos/Unair.png'
+  },
+  {
+    name: 'SD Muhammadiyah Taman',
+    logo: '/logos/SDMTaman.png'
+  },
+  {
+    name: 'SMAN 2',
+    logo: '/logos/SMAN2.png'
+  },
+  {
+    name: 'Madiun',
+    logo: '/logos/Madiun.png'
+  },
+  // Row 3: Corporate Brands
+  {
+    name: 'Puma',
+    logo: '/logos/Puma.png'
+  },
+  {
+    name: 'Campina',
+    logo: '/logos/Campina.png'
+  },
+  {
+    name: 'Erajaya',
+    logo: '/logos/Erajaya.png'
+  },
+  {
+    name: 'Erafone',
+    logo: '/logos/Erafone.png'
+  },
+  {
+    name: 'Badanamu',
+    logo: '/logos/Badanamu.png'
+  },
+  // Row 4: Corporate & Commercial Brands
+  {
+    name: 'Jaya',
+    logo: '/logos/Jaya.png'
+  },
+  {
+    name: 'RCH',
+    logo: '/logos/RCH.png'
+  },
+  {
+    name: 'Plaza Surabaya',
+    logo: '/logos/PlazaSBY.png'
+  },
+  {
+    name: 'DGW',
+    logo: '/logos/DGW.png'
+  },
+  {
+    name: 'SAW Tour',
+    logo: '/logos/SAWTour.png'
+  },
+  {
+    name: 'J99',
+    logo: '/logos/J99.png'
   }
 ];
 
@@ -101,8 +178,9 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       <Star
         key={index}
         className={`w-5 h-5 ${
-          index < rating ? 'text-gold-400 fill-current' : 'text-gray-300'
+          index < rating ? 'fill-current' : 'text-gray-300'
         }`}
+        style={index < rating ? {color: 'var(--gold-500)'} : undefined}
       />
     ));
   };
@@ -112,10 +190,10 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
       <div className="container mx-auto px-6">
         {/* Section Header */}
         <div className="text-center mb-16 animate-fade-in">
-          <h2 className="heading-2 text-white mb-6">
+          <h2 className="text-5xl font-bold leading-tight mb-6" style={{color: 'var(--white)', fontFamily: 'var(--font-primary)'}}>
             {title}
           </h2>
-          <p className="body-large max-w-3xl mx-auto text-gray-300">
+          <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto" style={{color: 'var(--white)', fontFamily: 'var(--font-secondary)'}}>
             {subtitle}
           </p>
         </div>
@@ -151,9 +229,9 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
                   />
                 </div>
                 <div>
-                  <h4 className="font-bold text-blue-900 text-lg">{testimonial.name}</h4>
+                  <h4 className="font-bold text-lg" style={{color: 'var(--blue-900)'}}>{testimonial.name}</h4>
                   <p className="text-gray-600 text-sm">{testimonial.position}</p>
-                  <p className="text-gold-500 text-sm font-medium">{testimonial.company}</p>
+                  <p className="text-sm font-medium" style={{color: 'var(--gold-500)'}}>{testimonial.company}</p>
                   {testimonial.project && (
                     <p className="text-gray-500 text-xs mt-1">{testimonial.project}</p>
                   )}
@@ -163,46 +241,30 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
           ))}
         </div>
         
-        {/* Client Logos */}
+        {/* Client Logos Carousel */}
         <div className="animate-fade-in animation-delay-600">
-          <p className="text-center text-gray-300 mb-8 text-lg">
+          <p className="text-center mb-8 text-lg" style={{color: 'var(--white)'}}>
             Dipercaya oleh:
           </p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 items-center justify-items-center">
-            {clients.map((client, index) => (
-              <div
-                key={client.name}
-                className={`relative w-24 h-24 opacity-60 hover:opacity-100 transition-opacity duration-300 animate-fade-in`}
-                style={{ animationDelay: `${(index + 4) * 150}ms` }}
-              >
-                <Image
-                  src={client.logo}
-                  alt={`${client.name} logo`}
-                  fill
-                  className="object-contain filter brightness-0 invert"
-                  sizes="96px"
-                />
-              </div>
-            ))}
-          </div>
+          <ClientCarousel clients={clients} autoScroll={true} scrollSpeed={25} />
         </div>
         
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">98%</div>
+            <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>98%</div>
             <div className="text-gray-300">Client Satisfaction</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">50+</div>
+            <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>50+</div>
             <div className="text-gray-300">Projects Delivered</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">25+</div>
+            <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>25+</div>
             <div className="text-gray-300">Happy Clients</div>
           </div>
           <div className="text-center">
-            <div className="text-4xl md:text-5xl font-bold text-gold-400 mb-2">3+</div>
+            <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>3+</div>
             <div className="text-gray-300">Years Experience</div>
           </div>
         </div>

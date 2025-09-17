@@ -33,33 +33,33 @@ export default function Home() {
                 layanan end-to-end untuk kesuksesan setiap project Anda.
               </p>
               <div className="grid md:grid-cols-4 gap-6 mt-12">
-                <div className="text-center">
+                <div className="text-center flex flex-col h-full min-h-[200px]">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-blue-50">
                     <span className="text-2xl">🎨</span>
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-blue-900">Creative Design & Branding</h3>
-                  <p className="text-gray-600">Brand identity, graphic design, dan visual communication</p>
+                  <p className="text-gray-600 flex-1">Brand identity, graphic design, dan visual communication</p>
                 </div>
-                <div className="text-center">
+                <div className="text-center flex flex-col h-full min-h-[200px]">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gold-50">
                     <span className="text-2xl">🎪</span>
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-blue-900">Event Production</h3>
-                  <p className="text-gray-600">Event planning, design, dan technical support</p>
+                  <p className="text-gray-600 flex-1">Event planning, design, dan technical support</p>
                 </div>
-                <div className="text-center">
+                <div className="text-center flex flex-col h-full min-h-[200px]">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-blue-50">
                     <span className="text-2xl">📱</span>
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-blue-900">Digital Marketing</h3>
-                  <p className="text-gray-600">Social media, SEO, digital advertising, dan website development</p>
+                  <p className="text-gray-600 flex-1">Social media, SEO, digital advertising, dan website development</p>
                 </div>
-                <div className="text-center">
+                <div className="text-center flex flex-col h-full min-h-[200px]">
                   <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gold-50">
                     <span className="text-2xl">💼</span>
                   </div>
                   <h3 className="text-xl font-semibold mb-2 text-blue-900">Brand Consultation</h3>
-                  <p className="text-gray-600">Strategic planning dan brand positioning</p>
+                  <p className="text-gray-600 flex-1">Strategic planning dan brand positioning</p>
                 </div>
               </div>
             </div>

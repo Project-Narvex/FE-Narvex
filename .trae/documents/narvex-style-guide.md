@@ -7,47 +7,47 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
 
 ### 2.1 Primary Colors
 ```css
-/* Navy Blue - Primary Brand Color */
---navy-50: #f0f4f8;
---navy-100: #d9e2ec;
---navy-200: #bcccdc;
---navy-300: #9fb3c8;
---navy-400: #829ab1;
---navy-500: #627d98;
---navy-600: #486581;
---navy-700: #334e68;
---navy-800: #243b53;
---navy-900: #1a365d; /* Primary */
+/* Primary Blue - Main Brand Color */
+--blue-50: #eff6ff;
+--blue-100: #dbeafe;
+--blue-200: #bfdbfe;
+--blue-300: #93c5fd;
+--blue-400: #60a5fa;
+--blue-500: #4A90E2; /* Primary Brand Color */
+--blue-600: #2563eb;
+--blue-700: #1d4ed8;
+--blue-800: #1e40af;
+--blue-900: #1e3a8a;
 
-/* Orange - Accent Color */
---orange-50: #fffaf0;
---orange-100: #feebc8;
---orange-200: #fbd38d;
---orange-300: #f6ad55;
---orange-400: #ed8936; /* Primary Accent */
---orange-500: #dd6b20;
---orange-600: #c05621;
---orange-700: #9c4221;
---orange-800: #7b341e;
---orange-900: #652b19;
+/* Secondary Gold - Accent Color */
+--gold-50: #fefce8;
+--gold-100: #fef9c3;
+--gold-200: #fef08a;
+--gold-300: #fde047;
+--gold-400: #facc15;
+--gold-500: #D4AF37; /* Secondary Gold */
+--gold-600: #ca8a04;
+--gold-700: #a16207;
+--gold-800: #854d0e;
+--gold-900: #713f12;
 ```
 
 ### 2.2 Neutral Colors
 ```css
 /* Gray Scale */
---gray-50: #f7fafc;
---gray-100: #edf2f7;
---gray-200: #e2e8f0;
---gray-300: #cbd5e0;
---gray-400: #a0aec0;
---gray-500: #718096;
---gray-600: #4a5568;
---gray-700: #2d3748;
---gray-800: #1a202c;
---gray-900: #171923;
+--gray-50: #f9fafb;
+--gray-100: #f3f4f6;
+--gray-200: #e5e7eb;
+--gray-300: #d1d5db;
+--gray-400: #9ca3af;
+--gray-500: #6B7280; /* Supporting Gray */
+--gray-600: #4b5563;
+--gray-700: #374151;
+--gray-800: #1f2937;
+--gray-900: #111827;
 
 /* Pure Colors */
---white: #ffffff;
+--white: #FFFFFF; /* Supporting White */
 --black: #000000;
 ```
 
@@ -59,9 +59,9 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
 --success-600: #2f855a;
 
 /* Warning */
---warning-50: #fffbeb;
---warning-500: #ed8936;
---warning-600: #dd6b20;
+--warning-50: #fefce8;
+--warning-500: #D4AF37;
+--warning-600: #ca8a04;
 
 /* Error */
 --error-50: #fed7d7;
@@ -69,9 +69,9 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
 --error-600: #c53030;
 
 /* Info */
---info-50: #ebf8ff;
---info-500: #3182ce;
---info-600: #2c5282;
+--info-50: #eff6ff;
+--info-500: #4A90E2;
+--info-600: #2563eb;
 ```
 
 ## 3. Typography
@@ -132,7 +132,7 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
   font-size: var(--text-6xl);
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .heading-2 {
@@ -140,7 +140,7 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
   font-size: var(--text-5xl);
   font-weight: var(--font-bold);
   line-height: var(--leading-tight);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .heading-3 {
@@ -148,7 +148,7 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
   font-size: var(--text-4xl);
   font-weight: var(--font-semibold);
   line-height: var(--leading-snug);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 .heading-4 {
@@ -156,7 +156,7 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
   font-size: var(--text-3xl);
   font-weight: var(--font-semibold);
   line-height: var(--leading-snug);
-  color: var(--navy-900);
+  color: var(--blue-900);
 }
 
 /* Body Text Styles */
@@ -186,7 +186,7 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
 
 /* Special Text Styles */
 .text-accent {
-  color: var(--orange-500);
+  color: var(--gold-500);
 }
 
 .text-muted {
@@ -276,50 +276,50 @@ Narvex adalah perusahaan creative services yang mengkhususkan diri dalam brandin
 
 /* Primary Button */
 .btn-primary {
-  background-color: var(--orange-500);
+  background-color: var(--blue-500);
   color: var(--white);
 }
 
 .btn-primary:hover {
-  background-color: var(--orange-600);
+  background-color: var(--blue-600);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(237, 137, 54, 0.3);
+  box-shadow: 0 4px 12px rgba(74, 144, 226, 0.3);
 }
 
 /* Secondary Button */
 .btn-secondary {
-  background-color: var(--navy-900);
+  background-color: var(--gold-500);
   color: var(--white);
 }
 
 .btn-secondary:hover {
-  background-color: var(--navy-800);
+  background-color: var(--gold-600);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(26, 54, 93, 0.3);
+  box-shadow: 0 4px 12px rgba(212, 175, 55, 0.3);
 }
 
 /* Outline Button */
 .btn-outline {
   background-color: transparent;
-  color: var(--navy-900);
-  border: 2px solid var(--navy-900);
+  color: var(--blue-500);
+  border: 2px solid var(--blue-500);
 }
 
 .btn-outline:hover {
-  background-color: var(--navy-900);
+  background-color: var(--blue-500);
   color: var(--white);
 }
 
 /* Ghost Button */
 .btn-ghost {
   background-color: transparent;
-  color: var(--orange-500);
+  color: var(--gold-500);
   border: 2px solid transparent;
 }
 
 .btn-ghost:hover {
-  background-color: var(--orange-50);
-  border-color: var(--orange-200);
+  background-color: var(--gold-50);
+  border-color: var(--gold-200);
 }
 
 /* Button Sizes */
