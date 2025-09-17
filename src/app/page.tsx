@@ -154,31 +154,31 @@ export default function Home() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
               <a href="/contact" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <span className="text-white text-2xl">📧</span>
+                  <img src="/icons/email.png" alt="Email" className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
                 <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
               </a>
               
               <a href="https://wa.me/62xxx" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
-                <div className="w-16 h-16 bg-green-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <span className="text-white text-2xl">💬</span>
+                <div className="w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <img src="/icons/whatsapp.png" alt="WhatsApp" className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
                 <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
               </a>
               
               <a href="https://instagram.com/narvex.id" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
-                <div className="w-16 h-16 bg-pink-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <span className="text-white text-2xl">📱</span>
+                <div className="w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <img src="/icons/instagram.png" alt="Instagram" className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
                 <p className="text-gray-300 text-sm">@narvex.id</p>
               </a>
               
               <a href="tel:+62xxx" className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group">
-                <div className="w-16 h-16 bg-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <span className="text-white text-2xl">📞</span>
+                <div className="w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <img src="/icons/phone.png" alt="Phone" className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
                 <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>

@@ -87,18 +87,10 @@ const defaultClients: Client[] = [
     logo: '/logos/Mentri_perhubungan.png'
   },
   {
-    name: 'DPR RI',
-    logo: '/logos/DPR.png'
-  },
-  {
-    name: 'Polri',
-    logo: '/logos/Polri.png'
+    name: 'Upscaled',
+    logo: '/logos/Upscaled.png'
   },
   // Row 2: Educational & Government Institutions
-  {
-    name: 'DPM-PTSP',
-    logo: '/logos/DPMPTSP.png'
-  },
   {
     name: 'Basarnas',
     logo: '/logos/Basarnas.png'
