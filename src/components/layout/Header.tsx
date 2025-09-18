@@ -55,11 +55,11 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
           : 'bg-transparent'
       )}
     >
-      <div className="container mx-auto px-6">
+      <div className="container mx-auto px-4 md:px-6">
         <div className="flex items-center justify-between h-20">
           {/* Logo */}
           <Link href="/" className="flex items-center">
-            <div className="relative w-28 h-28">
+            <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28">
               <Image
                 src="/narvex-logo.png"
                 alt="Narvex Logo"
@@ -71,7 +71,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center lg:space-x-8 md:space-x-4">
             {navItems.map((item) => (
               item.href.startsWith('#') ? (
                 <button
@@ -101,11 +101,12 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
           </nav>
 
           {/* CTA Button */}
-          <div className="hidden md:block">
+          <div className="hidden lg:block ml-4">
             <Link href="/contact" prefetch={false}>
             <Button
-              variant="primary"
+              variant="secondary"
               size="normal"
+              className="text-sm lg:text-base px-4 py-2 lg:px-6 lg:py-3"
             >
               Get Started
             </Button>
@@ -114,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2"
+            className="lg:hidden p-2"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle mobile menu"
           >
@@ -134,7 +135,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
 
         {/* Mobile Navigation */}
         {isMobileMenuOpen && (
-          <div className="md:hidden bg-white border-t border-gray-200 py-4">
+          <div className="lg:hidden bg-white border-t border-gray-200 py-4">
             <nav className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 item.href.startsWith('#') ? (
