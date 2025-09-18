@@ -88,6 +88,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                 <Link
                   key={item.href}
                   href={item.href}
+                  prefetch={false}
                   className={cn(
                     'font-medium transition-colors hover:text-gold-500',
                     isScrolled ? 'text-gray-700' : 'text-white'
@@ -101,14 +102,14 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
 
           {/* CTA Button */}
           <div className="hidden md:block">
-            <Link href="/contact">
-              <Button
-                variant="primary"
-                size="normal"
-              >
-                Get Started
-              </Button>
-            </Link>
+            <Link href="/contact" prefetch={false}>
+            <Button
+              variant="primary"
+              size="normal"
+            >
+              Get Started
+            </Button>
+          </Link>
           </div>
 
           {/* Mobile Menu Button */}
@@ -148,6 +149,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                   <Link
                     key={item.href}
                     href={item.href}
+                    prefetch={false}
                     onClick={() => setIsMobileMenuOpen(false)}
                     className="text-left font-medium text-gray-700 hover:text-gold-500 transition-colors px-4 py-2 block"
                   >
@@ -156,7 +158,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                 )
               ))}
               <div className="px-4 pt-2">
-                <Link href="/contact">
+                <Link href="/contact" prefetch={false}>
                   <Button
                     variant="primary"
                     size="normal"

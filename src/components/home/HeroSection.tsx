@@ -97,7 +97,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               <div className="space-y-4">
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 scroll-animate-scale" data-stagger="0">
                   <div className="w-12 h-12 bg-gold-500 rounded-lg mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">🎨</span>
+                    <span className="text-white font-bold text-xl">&#127912;</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Creative Design</h3>
                   <p className="text-gray-200 text-sm">Branding & Visual Identity</p>
@@ -105,7 +105,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 scroll-animate-scale" data-stagger="150">
                   <div className="w-12 h-12 bg-blue-900 rounded-lg mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">📱</span>
+                    <span className="text-white font-bold text-xl">&#128241;</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Digital Marketing</h3>
                   <p className="text-gray-200 text-sm">Social Media & SEO</p>
@@ -115,7 +115,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
               <div className="space-y-4 transform translate-y-12">
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 scroll-animate-scale" data-stagger="300">
                   <div className="w-12 h-12 bg-gold-500 rounded-lg mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">🎪</span>
+                    <span className="text-white font-bold text-xl">&#127914;</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Event Production</h3>
                   <p className="text-gray-200 text-sm">Planning & Coordination</p>
@@ -123,7 +123,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
                 
                 <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300 scroll-animate-scale" data-stagger="450">
                   <div className="w-12 h-12 bg-blue-900 rounded-lg mb-4 flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">⭐</span>
+                    <span className="text-white font-bold text-xl">&#11088;</span>
                   </div>
                   <h3 className="text-white font-semibold mb-2">Consultation</h3>
                   <p className="text-gray-200 text-sm">Strategy & Planning</p>

@@ -40,7 +40,7 @@ export const getAllData = async () => {
 };
 
 // Search utilities across all data
-export const globalSearch = (query: string) => {
+export const globalSearch = () => {
   // This would be implemented with actual search logic
   // For now, returning empty structure
   const results = {

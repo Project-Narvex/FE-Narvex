@@ -17,7 +17,7 @@ interface StrapiResponse<T> {
 
 interface StrapiEntity {
   id: number;
-  attributes: Record<string, any>;
+  attributes: Record<string, unknown>;
 }
 
 class StrapiAPI {
@@ -59,7 +59,7 @@ class StrapiAPI {
   // Companies
   async getCompanies(params?: {
     populate?: string[];
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
     sort?: string[];
     pagination?: { page: number; pageSize: number };
   }) {
@@ -73,7 +73,7 @@ class StrapiAPI {
     
     if (params?.filters) {
       Object.entries(params.filters).forEach(([key, value]) => {
-        searchParams.append(`filters[${key}]`, value);
+        searchParams.append(`filters[${key}]`, String(value));
       });
     }
     
@@ -99,7 +99,7 @@ class StrapiAPI {
   // Projects
   async getProjects(params?: {
     populate?: string[];
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
     sort?: string[];
     pagination?: { page: number; pageSize: number };
   }) {
@@ -113,7 +113,7 @@ class StrapiAPI {
     
     if (params?.filters) {
       Object.entries(params.filters).forEach(([key, value]) => {
-        searchParams.append(`filters[${key}]`, value);
+        searchParams.append(`filters[${key}]`, String(value));
       });
     }
     
@@ -143,7 +143,7 @@ class StrapiAPI {
   // Blog Articles
   async getBlogArticles(params?: {
     populate?: string[];
-    filters?: Record<string, any>;
+    filters?: Record<string, unknown>;
     sort?: string[];
     pagination?: { page: number; pageSize: number };
   }) {
@@ -157,7 +157,7 @@ class StrapiAPI {
     
     if (params?.filters) {
       Object.entries(params.filters).forEach(([key, value]) => {
-        searchParams.append(`filters[${key}]`, value);
+        searchParams.append(`filters[${key}]`, String(value));
       });
     }
     
@@ -210,7 +210,7 @@ export interface Company {
   name: string;
   tagline: string;
   description: string;
-  logo?: any;
+  logo?: unknown;
   website?: string;
   email: string;
   phone: string;
@@ -238,7 +238,7 @@ export interface Project {
   description: string;
   longDescription?: string;
   services: string[];
-  images?: any[];
+  images?: unknown[];
   tags: string[];
   results?: Record<string, string>;
   featured: boolean;
@@ -262,7 +262,7 @@ export interface BlogArticle {
   readTime: string;
   tags: string[];
   featured: boolean;
-  featuredImage?: any;
+  featuredImage?: unknown;
   views: number;
   likes: number;
   seo?: {

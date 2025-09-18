@@ -10,6 +10,10 @@ const nextConfig = {
       },
     ],
   },
+  experimental: {
+    // Optimize package imports
+    optimizePackageImports: ['lucide-react'],
+  },
 };
 
 module.exports = nextConfig;

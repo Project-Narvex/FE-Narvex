@@ -143,8 +143,8 @@ const InstagramFeedExample: React.FC = () => {
               <div>
                 <h4 className="font-medium text-gray-700 mb-2">Content Type Selection:</h4>
                 <ul className="text-sm text-gray-600 space-y-1">
-                  <li>• Radio: "Embed Single Post" / "Show User Feed"</li>
-                  <li>• Mode: "embed" / "feed" / "auto"</li>
+                  <li>• Radio: &quot;Embed Single Post&quot; / &quot;Show User Feed&quot;</li>
+                  <li>• Mode: &quot;embed&quot; / &quot;feed&quot; / &quot;auto&quot;</li>
                 </ul>
               </div>
               <div>
@@ -162,7 +162,7 @@ const InstagramFeedExample: React.FC = () => {
             </div>
             <div className="mt-4 p-4 bg-white rounded border-l-4 border-blue-400">
               <p className="text-sm text-gray-700">
-                <strong>Pro Tip:</strong> Use conditional field visibility in your CMS - show Instagram URL field only when "Embed" is selected, and username/display name fields only when "Feed" is selected.
+                <strong>Pro Tip:</strong> Use conditional field visibility in your CMS - show Instagram URL field only when &quot;Embed&quot; is selected, and username/display name fields only when &quot;Feed&quot; is selected.
               </p>
             </div>
           </div>

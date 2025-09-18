@@ -162,7 +162,7 @@ export default function ServicesPage() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               <div className="text-center">
                 <div className="w-20 h-20 bg-gold-light rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">🏆</span>
+                  <span className="text-3xl">&#127942;</span>
                 </div>
                 <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
                 <p className="text-gray-600">Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing</p>
@@ -170,7 +170,7 @@ export default function ServicesPage() {
               
               <div className="text-center">
                 <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">⚡</span>
+                  <span className="text-3xl">&#9889;</span>
                 </div>
                 <h3 className="text-xl font-bold text-blue-900 mb-3">Tim Profesional</h3>
                 <p className="text-gray-600">Tim ahli yang berpengalaman dan berdedikasi tinggi</p>
@@ -178,7 +178,7 @@ export default function ServicesPage() {
               
               <div className="text-center">
                 <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">🎯</span>
+                  <span className="text-3xl">&#127919;</span>
                 </div>
                 <h3 className="text-xl font-bold text-blue-primary mb-3">Tepat Waktu</h3>
                 <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
@@ -186,7 +186,7 @@ export default function ServicesPage() {
               
               <div className="text-center">
                 <div className="w-20 h-20 bg-gold-100 rounded-2xl flex items-center justify-center mx-auto mb-6">
-                  <span className="text-3xl">💎</span>
+                  <span className="text-3xl">&#128142;</span>
                 </div>
                 <h3 className="text-xl font-bold text-blue-primary mb-3">Kualitas Terjamin</h3>
                 <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
