@@ -105,14 +105,14 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({
   };
 
   return (
-    <section id="portfolio" className="section-padding bg-white">
+    <section id="portfolio" className="section-padding bg-white scroll-snap-section">
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="heading-2 mb-6">
+        <div className="text-center mb-16 scroll-animate">
+          <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">
             {title}
           </h2>
-          <p className="body-large max-w-3xl mx-auto text-gray-600 mb-8">
+          <p className="body-large max-w-3xl mx-auto text-gray-600 mb-8 scroll-animate animate-stagger-2">
             {subtitle}
           </p>
           
@@ -140,8 +140,8 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({
             <Card
               key={project.id}
               variant="portfolio"
-              className={`group cursor-pointer animate-fade-in`}
-              style={{ animationDelay: `${index * 150}ms` }}
+              className={`group cursor-pointer scroll-animate-scale`}
+              data-stagger={index * 150}
             >
               <div className="relative overflow-hidden rounded-2xl">
                 <div className="relative w-full h-64">
@@ -178,7 +178,7 @@ const PortfolioSection: React.FC<PortfolioSectionProps> = ({
         </div>
         
         {/* Bottom CTA */}
-        <div className="text-center animate-fade-in animation-delay-600">
+        <div className="text-center scroll-animate animate-stagger-4">
           <p className="body-large mb-8 text-gray-600">
             Tertarik dengan hasil kerja kami? Mari diskusikan project Anda dan wujudkan visi kreatif bersama.
           </p>

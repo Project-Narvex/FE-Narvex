@@ -139,7 +139,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
 
   if (isSubmitted) {
     return (
-      <section id="contact" className="section-padding bg-gray-50">
+      <section id="contact" className="section-padding bg-gray-50 scroll-snap-section">
         <div className="container mx-auto px-6">
           <div className="max-w-2xl mx-auto text-center">
             <Card className="p-12">
@@ -162,19 +162,19 @@ const ContactSection: React.FC<ContactSectionProps> = ({
   }
 
   return (
-    <section id="contact" className="section-padding bg-gray-50">
+    <section id="contact" className="section-padding bg-gray-50 scroll-snap-section">
       <div className="container mx-auto px-6">
         <div className="grid lg:grid-cols-2 gap-12">
           {/* Contact Form */}
-          <div className="animate-fade-in">
-            <h2 className="heading-2 mb-6">
+          <div className="scroll-animate">
+            <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">
               {title}
             </h2>
-            <p className="body-large text-gray-600 mb-8">
+            <p className="body-large text-gray-600 mb-8 scroll-animate animate-stagger-2">
               {subtitle}
             </p>
             
-            <form onSubmit={handleSubmit} className="space-y-6">
+            <form onSubmit={handleSubmit} className="space-y-6 scroll-animate animate-stagger-3">
               <div className="grid md:grid-cols-2 gap-6">
                 <div>
                   <input
@@ -286,12 +286,12 @@ const ContactSection: React.FC<ContactSectionProps> = ({
           </div>
           
           {/* Contact Info & Map */}
-          <div className="animate-fade-in animation-delay-300">
-            <Card className="p-8 mb-8">
-              <h3 className="heading-4 mb-6">Hubungi Kami</h3>
+          <div className="scroll-animate-right">
+            <Card className="p-8 mb-8 scroll-animate animate-stagger-4">
+              <h3 className="heading-4 mb-6 scroll-animate animate-stagger-5">Hubungi Kami</h3>
               <div className="space-y-6">
                 {contactInfo.map((info, index) => (
-                  <div key={index} className="flex items-start">
+                  <div key={index} className="flex items-start scroll-animate animate-stagger-6" data-stagger={index * 100}>
                     <div className="w-12 h-12 bg-gold-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                       {info.icon}
                     </div>
@@ -306,7 +306,7 @@ const ContactSection: React.FC<ContactSectionProps> = ({
             </Card>
             
             {/* Interactive Map */}
-            <div className="rounded-lg overflow-hidden shadow-lg">
+            <div className="rounded-lg overflow-hidden shadow-lg scroll-animate animate-stagger-7">
               <MapComponent height="h-64" className="w-full" />
             </div>
           </div>

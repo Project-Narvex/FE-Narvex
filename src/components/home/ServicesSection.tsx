@@ -56,14 +56,14 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
   };
 
   return (
-    <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50">
+    <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 scroll-snap-section">
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="heading-2 mb-6" style={{color: '#6382b4'}}>
+        <div className="text-center mb-16 scroll-animate">
+          <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1" style={{color: '#6382b4'}}>
             {title}
           </h2>
-          <p className="body-large max-w-3xl mx-auto text-gray-700">
+          <p className="body-large max-w-3xl mx-auto text-gray-700 scroll-animate animate-stagger-2">
             {subtitle}
           </p>
         </div>
@@ -74,8 +74,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
             <Card
               key={service.id}
               variant="service"
-              className={`group animate-bounce-in hover:shadow-2xl flex flex-col h-full`}
-              style={{ animationDelay: `${index * 200}ms` }}
+              className={`group scroll-animate-scale hover:shadow-2xl flex flex-col h-full`}
+              data-stagger={index * 150}
             >
               {/* Icon */}
               <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
@@ -97,7 +97,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
                 {/* Features List */}
                 <ul className="space-y-3 mb-6 flex-1">
                   {service.features.map((feature, idx) => (
-                    <li key={idx} className="flex items-center text-gray-700 animate-fade-in" style={{ animationDelay: `${(index * 200) + (idx * 100)}ms` }}>
+                    <li key={idx} className="flex items-center text-gray-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
                       <div className="w-3 h-3 rounded-full mr-3 transition-colors shadow-sm" style={{backgroundColor: '#dbc48a'}}></div>
                       <span className="text-sm font-medium group-hover:text-blue-900 transition-colors">{feature}</span>
                     </li>
@@ -118,7 +118,7 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
         </div>
         
         {/* Bottom CTA */}
-        <div className="text-center animate-fade-in animation-delay-600">
+        <div className="text-center scroll-animate animate-stagger-4">
           <p className="body-large mb-8 text-gray-600">
             Siap untuk mengembangkan bisnis Anda? Mari diskusikan project impian Anda bersama tim ahli kami.
           </p>

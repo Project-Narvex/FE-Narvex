@@ -178,14 +178,14 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
   };
 
   return (
-    <section id="testimonials" className="section-padding bg-blue-900">
+    <section id="testimonials" className="section-padding bg-blue-900 scroll-snap-section">
       <div className="container mx-auto px-6">
         {/* Section Header */}
-        <div className="text-center mb-16 animate-fade-in">
-          <h2 className="text-5xl font-bold leading-tight mb-6" style={{color: 'var(--white)', fontFamily: 'var(--font-primary)'}}>
+        <div className="text-center mb-16 scroll-animate">
+          <h2 className="text-5xl font-bold leading-tight mb-6 scroll-animate animate-stagger-1" style={{color: 'var(--white)', fontFamily: 'var(--font-primary)'}}>
             {title}
           </h2>
-          <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto" style={{color: 'var(--white)', fontFamily: 'var(--font-secondary)'}}>
+          <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto scroll-animate animate-stagger-2" style={{color: 'var(--white)', fontFamily: 'var(--font-secondary)'}}>
             {subtitle}
           </p>
         </div>
@@ -195,8 +195,8 @@ const TestimonialsSection: React.FC<TestimonialsSectionProps> = ({
           {testimonials.map((testimonial, index) => (
             <Card
               key={testimonial.id}
-              className={`bg-white p-8 animate-fade-in`}
-              style={{ animationDelay: `${index * 200}ms` }}
+              className={`bg-white p-8 scroll-animate-scale`}
+              data-stagger={index * 200}
               hover={false}
             >
               {/* Rating */}
