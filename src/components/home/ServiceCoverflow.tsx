@@ -10,28 +10,24 @@ import 'swiper/css/navigation';
 
 const services = [
   {
-    icon: '🎨',
+    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20creative%20design%20workspace%20with%20tools%20palette%20brushes%20computer%20vibrant%20colors&image_size=landscape_4_3',
     title: 'Creative Design',
-    subtitle: 'Branding & Visual Identity',
-    bg: 'bg-gold-500'
+    subtitle: 'Branding & Visual Identity'
   },
   {
-    icon: '📱',
+    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=digital%20marketing%20dashboard%20analytics%20social%20media%20graphs%20smartphone%20modern%20office&image_size=landscape_4_3',
     title: 'Digital Marketing',
-    subtitle: 'Social Media & SEO',
-    bg: 'bg-blue-900'
+    subtitle: 'Social Media & SEO'
   },
   {
-    icon: '🎬',
+    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=event%20production%20stage%20lighting%20camera%20equipment%20concert%20venue%20professional&image_size=landscape_4_3',
     title: 'Event Production',
-    subtitle: 'Planning & Coordination',
-    bg: 'bg-gold-500'
+    subtitle: 'Planning & Coordination'
   },
   {
-    icon: '⭐',
+    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=business%20consultation%20meeting%20room%20strategy%20charts%20professional%20office%20planning&image_size=landscape_4_3',
     title: 'Consultation',
-    subtitle: 'Strategy & Planning',
-    bg: 'bg-blue-900'
+    subtitle: 'Strategy & Planning'
   }
 ];
 
@@ -58,12 +54,22 @@ const ServiceCoverflow = () => {
       >
         {services.map((service, index) => (
           <SwiperSlide key={index} style={{ width: '300px' }}>
-            <div className="bg-white/15 backdrop-blur-sm rounded-2xl p-6 border border-white/30 hover:bg-white/20 transition-all duration-300">
-              <div className={`w-12 h-12 ${service.bg} rounded-lg mb-4 flex items-center justify-center`}>
-                <span className="text-white font-bold text-xl">{service.icon}</span>
+            <div 
+              className="relative rounded-2xl overflow-hidden h-80 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+              style={{
+                backgroundImage: `url(${service.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            >
+              {/* Dark overlay for text readability */}
+              <div className="absolute inset-0 bg-black/40 hover:bg-black/30 transition-all duration-300"></div>
+              
+              {/* Text content */}
+              <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
+                <h3 className="font-semibold text-lg mb-2 drop-shadow-lg">{service.title}</h3>
+                <p className="text-gray-200 text-sm drop-shadow-md">{service.subtitle}</p>
               </div>
-              <h3 className="text-white font-semibold mb-2">{service.title}</h3>
-              <p className="text-gray-200 text-sm">{service.subtitle}</p>
             </div>
           </SwiperSlide>
         ))}
