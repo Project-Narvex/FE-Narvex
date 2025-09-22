@@ -529,20 +529,24 @@ export default function Home() {
           <div className="relative z-depth-3 container mx-auto px-6 transform-3d">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Text Content */}
-              <div className="text-center lg:text-left depth-layer-2" data-mouse-parallax="0.1">
-                <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 text-depth-lg" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
-                  <span className="block transform-3d" data-tilt="8">Creative Solutions</span>
-                  <span className="block transform-3d" data-tilt="6">for</span>
-                  <span className="block text-gold-500 transform-3d" data-tilt="10">Your Brand</span>
+              <div className="text-center lg:text-left depth-layer-2 px-4 sm:px-6 lg:px-0" data-mouse-parallax="0.1">
+                <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-depth-lg leading-tight md:leading-tight lg:leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+                  <span className="block transform-3d break-words" data-tilt="8">Indonesia's Premier</span>
+                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
+                  <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
                 </h1>
                 
-                <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+                <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
                   CV. Nara Exhibition Indonesia
+                </p>
+                
+                <p className="text-lg md:text-xl text-gold-300 mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" data-element="trust-badge" data-text-animation="fade-in" data-delay="0.6" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+                  Trusted by Government & Fortune 500 Companies
                 </p>
                 
                 <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
                   <Button
-                    variant="primary"
+                    variant="secondary"
                     size="large"
                     onClick={() => scrollToSection('#portfolio')}
                     className="group animate-glow hover-depth shadow-depth-3 backdrop-blur-sm"
@@ -556,7 +560,7 @@ export default function Home() {
                     variant="outline"
                     size="large"
                     onClick={() => scrollToSection('#contact')}
-                    className="border-white text-white hover:bg-white hover:text-[#6382b4] group animate-pulse-hover hover-depth-subtle glass-morphism"
+                    className="border-white text-white hover:bg-white hover:text-white group animate-pulse-hover hover-depth-subtle glass-morphism"
                     data-tilt="5"
                   >
                     <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
