@@ -79,11 +79,7 @@ const ClientCarousel: React.FC<ClientCarouselProps> = ({
     <div className="relative overflow-hidden">
       <div
         ref={scrollRef}
-        className="flex gap-8 overflow-x-hidden scrollbar-hide"
-        style={{
-          scrollBehavior: 'auto',
-          WebkitOverflowScrolling: 'touch'
-        }}
+        className="flex gap-8 overflow-x-hidden scrollbar-hide client-carousel-container"
       >
         {duplicatedClients.map((client, index) => (
           <div
@@ -93,11 +89,7 @@ const ClientCarousel: React.FC<ClientCarouselProps> = ({
             {imageErrors.has(client.name) ? (
               // Text-based logo fallback
               <div 
-                className="w-28 h-20 rounded-lg flex items-center justify-center text-white font-bold text-sm text-center px-2 group-hover:scale-105 transition-transform duration-300 border border-white/20"
-                style={{
-                  background: `linear-gradient(135deg, var(--blue-600) 0%, var(--gold-500) 100%)`,
-                  fontFamily: 'var(--font-primary)'
-                }}
+                className="w-28 h-20 rounded-lg flex items-center justify-center text-white font-bold text-sm text-center px-2 group-hover:scale-105 transition-transform duration-300 border border-white/20 client-logo-fallback"
               >
                 <div>
                   <div className="text-lg font-extrabold mb-1">
@@ -125,9 +117,7 @@ const ClientCarousel: React.FC<ClientCarouselProps> = ({
         ))}
       </div>
       
-      {/* Gradient overlays for smooth edges */}
-      <div className="absolute top-0 left-0 w-16 h-full bg-gradient-to-r from-blue-900 to-transparent pointer-events-none"></div>
-      <div className="absolute top-0 right-0 w-16 h-full bg-gradient-to-l from-blue-900 to-transparent pointer-events-none"></div>
+
     </div>
   );
 };

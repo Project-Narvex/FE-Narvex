@@ -8,12 +8,20 @@ import { ArrowRight, Play, Palette, Calendar, Megaphone, ExternalLink, Star, Map
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
-import { Card } from '@/components/ui/Card';
+import { Card, CardContent } from '@/components/ui/Card';
 import ClientCarousel from '@/components/ui/ClientCarousel';
 import MapComponent from '@/components/ui/MapComponent';
 import InstagramFeed from '@/components/social/InstagramFeed';
 import { getRecentArticles } from '@/data/blog';
-import { initializeAnimations, initializeHeroAnimation, addGSAPHoverAnimations } from '@/lib/animations';
+import { 
+  initializeAnimations, 
+  initializeHeroAnimation, 
+  addGSAPHoverAnimations,
+  DepthAnimationController,
+  add3DCardEffect,
+  addEnhancedParallax,
+  createMorphingBackground
+} from '@/lib/animations';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -257,16 +265,80 @@ export default function Home() {
     // Initialize hero entrance animation
     const heroAnimation = initializeHeroAnimation();
     
+    // Initialize depth animation controller
+    const depthController = new DepthAnimationController();
+    
     // Add hover animations
     addGSAPHoverAnimations();
     
+    // Add depth effects to specific elements after a delay
+    const depthEffectsTimeout = setTimeout(() => {
+      // Add 3D card effects to service cards
+      document.querySelectorAll('.service-card').forEach(card => {
+        add3DCardEffect(card, {
+          maxRotation: 12,
+          perspective: 1200,
+          shadowIntensity: 0.25,
+          liftHeight: 15
+        });
+      });
+      
+      // Add 3D effects to portfolio items
+      document.querySelectorAll('.portfolio-item').forEach(item => {
+        add3DCardEffect(item, {
+          maxRotation: 8,
+          perspective: 1000,
+          shadowIntensity: 0.2,
+          liftHeight: 12
+        });
+      });
+      
+      // Add 3D effects to testimonial cards
+      document.querySelectorAll('.testimonial-card').forEach(card => {
+        add3DCardEffect(card, {
+          maxRotation: 10,
+          perspective: 1100,
+          shadowIntensity: 0.3,
+          liftHeight: 18
+        });
+      });
+      
+      // Create floating shapes in hero section
+      const heroSection = document.querySelector('.hero-section');
+      if (heroSection) {
+        depthController.createFloatingShapes(heroSection, 8);
+      }
+      
+      // Create morphing background for sections
+      const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
+      sectionsWithMorphing.forEach(section => {
+        createMorphingBackground(section);
+      });
+      
+      // Add enhanced parallax to background elements
+      document.querySelectorAll('[data-parallax]').forEach(element => {
+        const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
+        const depth = parseFloat(element.getAttribute('data-depth') || '1');
+        addEnhancedParallax(element, {
+          speed,
+          depth,
+          blur: Math.max(0, (depth - 1) * 1.5),
+          opacity: Math.max(0.4, 1 - (depth - 1) * 0.15)
+        });
+      });
+    }, 500);
+    
     // Cleanup on unmount
     return () => {
+      clearTimeout(depthEffectsTimeout);
       if (animationController) {
         animationController.destroy();
       }
       if (heroAnimation) {
         heroAnimation.kill();
+      }
+      if (depthController) {
+        depthController.destroy();
       }
     };
   }, []);
@@ -304,9 +376,10 @@ export default function Home() {
       <Star
         key={index}
         className={`w-5 h-5 ${
-          index < rating ? 'fill-current' : 'text-gray-300'
+          index < rating ? 'fill-current' : 'text-gray-contrast-300'
         }`}
-        style={index < rating ? {color: 'var(--gold-500)'} : undefined}
+        style={index < rating ? {color: 'var(--gold-700)'} : undefined}
+        aria-hidden="true"
       />
     ));
   };
@@ -423,40 +496,57 @@ export default function Home() {
       {/* Main Content */}
       <main>
         {/* Hero Section */}
-        <section className="relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section">
-          {/* Background Gradient */}
+        <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
+          {/* Enhanced Background Layers */}
           <div className="absolute inset-0 gradient-hero">
-            {/* Overlay Pattern */}
-            <div className="absolute inset-0 opacity-20">
+            {/* Depth Layer 1 - Furthest back */}
+            <div className="absolute inset-0 opacity-15" data-depth-layer="3" data-parallax="0.8">
               <div className="absolute top-0 left-0 w-full h-full">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse bg-gold-500"></div>
-                <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000 bg-blue-500"></div>
-                <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500"></div>
+                <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse bg-gold-500" data-float="true" data-float-amplitude="15" data-float-duration="4"></div>
+                <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000 bg-blue-500" data-float="true" data-float-amplitude="20" data-float-duration="5"></div>
+                <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500" data-float="true" data-float-amplitude="12" data-float-duration="3.5"></div>
               </div>
             </div>
+            
+            {/* Depth Layer 2 - Middle */}
+            <div className="absolute inset-0 opacity-25" data-depth-layer="2" data-parallax="0.5">
+              <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-blue-400/20 to-gold-400/20 filter blur-lg" data-float="true" data-float-amplitude="10" data-float-duration="6"></div>
+              <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-gradient-to-tr from-gold-400/15 to-blue-400/15 filter blur-lg" data-float="true" data-float-amplitude="18" data-float-duration="4.5"></div>
+            </div>
+            
+            {/* Depth Layer 3 - Closest */}
+            <div className="absolute inset-0 opacity-30" data-depth-layer="1" data-parallax="0.2">
+              <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-white/10 filter blur-sm" data-float="true" data-float-amplitude="8" data-float-duration="3" data-mouse-parallax="0.3"></div>
+              <div className="absolute top-1/4 right-1/2 w-24 h-24 rounded-full bg-gold-300/20 filter blur-sm" data-float="true" data-float-amplitude="12" data-float-duration="4" data-mouse-parallax="0.2"></div>
+              <div className="absolute bottom-1/2 right-1/4 w-40 h-40 rounded-full bg-blue-300/15 filter blur-sm" data-float="true" data-float-amplitude="15" data-float-duration="5.5" data-mouse-parallax="0.25"></div>
+            </div>
+            
+            {/* Morphing Gradient Overlay */}
+            <div className="absolute inset-0 morphing-gradient opacity-60"></div>
           </div>
 
           {/* Content */}
-          <div className="relative z-10 container mx-auto px-6">
+          <div className="relative z-depth-3 container mx-auto px-6 transform-3d">
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Text Content */}
-              <div className="text-center lg:text-left">
-                <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
-                  <span className="block">Creative Solutions</span>
-                  <span className="block">for</span>
-                  <span className="block text-gold-500">Your Brand</span>
+              <div className="text-center lg:text-left depth-layer-2" data-mouse-parallax="0.1">
+                <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 text-depth-lg" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+                  <span className="block transform-3d" data-tilt="8">Creative Solutions</span>
+                  <span className="block transform-3d" data-tilt="6">for</span>
+                  <span className="block text-gold-500 transform-3d" data-tilt="10">Your Brand</span>
                 </h1>
                 
-                <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02">
+                <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
                   CV. Nara Exhibition Indonesia
                 </p>
                 
-                <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
                   <Button
                     variant="primary"
                     size="large"
                     onClick={() => scrollToSection('#portfolio')}
-                    className="group animate-glow"
+                    className="group animate-glow hover-depth shadow-depth-3 backdrop-blur-sm"
+                    data-tilt="5"
                   >
                     Lihat Portfolio
                     <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -466,7 +556,8 @@ export default function Home() {
                     variant="outline"
                     size="large"
                     onClick={() => scrollToSection('#contact')}
-                    className="border-white text-white hover:bg-white hover:text-[#6382b4] group animate-pulse-hover"
+                    className="border-white text-white hover:bg-white hover:text-[#6382b4] group animate-pulse-hover hover-depth-subtle glass-morphism"
+                    data-tilt="5"
                   >
                     <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
                     Konsultasi Gratis
@@ -474,24 +565,24 @@ export default function Home() {
                 </div>
 
                 {/* Stats */}
-                <div className="hero-stats grid grid-cols-3 gap-8 mt-16">
-                  <div className="text-center">
-                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">50+</div>
+                <div className="hero-stats grid grid-cols-3 gap-8 mt-16 stagger-children" data-mouse-parallax="0.06">
+                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-4 backdrop-blur-sm" data-tilt="3">
+                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500 text-depth">50+</div>
                     <div className="text-gray-300 text-sm md:text-base">Projects Completed</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">25+</div>
+                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-4 backdrop-blur-sm" data-tilt="3">
+                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500 text-depth">25+</div>
                     <div className="text-gray-300 text-sm md:text-base">Happy Clients</div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">3+</div>
+                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-4 backdrop-blur-sm" data-tilt="3">
+                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500 text-depth">3+</div>
                     <div className="text-gray-300 text-sm md:text-base">Years Experience</div>
                   </div>
                 </div>
               </div>
 
               {/* Visual Content - Service Coverflow */}
-              <div className="relative lg:block hidden w-full coverflow-container">
+              <div className="relative lg:block hidden w-full coverflow-container depth-layer-1" data-mouse-parallax="0.15">
                 <Swiper
                   effect={'coverflow'}
                   grabCursor={true}
@@ -501,33 +592,40 @@ export default function Home() {
                   coverflowEffect={{
                     rotate: 40,
                     stretch: 0,
-                    depth: 100,
+                    depth: 120,
                     modifier: 1,
                     slideShadows: false,
                   }}
                   pagination={{ clickable: true }}
                   navigation={true}
                   modules={[EffectCoverflow, Pagination, Navigation]}
-                  className="mySwiper"
+                  className="mySwiper perspective-1500"
                 >
                   {coverflowServices.map((service, index) => (
                     <SwiperSlide key={index} style={{ width: '300px' }}>
                       <div 
-                        className="relative rounded-2xl overflow-hidden h-80 shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
+                        className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
                         style={{
                           backgroundImage: `url(${service.image})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}
+                        data-tilt="12"
                       >
-                        {/* Dark overlay for text readability */}
-                        <div className="absolute inset-0 bg-black/40 hover:bg-black/30 transition-all duration-300"></div>
+                        {/* Enhanced overlay with depth */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
                         
-                        {/* Text content */}
-                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white">
-                          <h3 className="font-semibold text-lg mb-2 drop-shadow-lg">{service.title}</h3>
-                          <p className="text-gray-200 text-sm drop-shadow-md">{service.subtitle}</p>
+                        {/* Glass morphism overlay */}
+                        <div className="absolute inset-0 glass-morphism-dark opacity-20 hover:opacity-30 transition-opacity duration-300"></div>
+                        
+                        {/* Text content with depth */}
+                        <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
+                          <h3 className="font-semibold text-lg mb-2 text-depth-lg">{service.title}</h3>
+                          <p className="text-gray-200 text-sm text-depth">{service.subtitle}</p>
                         </div>
+                        
+                        {/* Floating accent */}
+                        <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
                       </div>
                     </SwiperSlide>
                   ))}
@@ -553,7 +651,7 @@ export default function Home() {
             <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-blue-400 blur-2xl"></div>
           </div>
           
-          <div className="container mx-auto px-6 text-center relative z-10">
+          <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             {/* Decorative Top Divider */}
             <div className="flex items-center justify-center mb-12">
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
@@ -561,49 +659,73 @@ export default function Home() {
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
             </div>
             
-            <div className="max-w-4xl mx-auto scroll-animate">
+            <div className="max-w-7xl mx-auto scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04" style={{willChange: 'transform, opacity'}}>
                 CV. Nara Exhibition Indonesia
               </h2>
-              <p className="body-large text-gray-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015" style={{willChange: 'transform, opacity'}}>
+              <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015" style={{willChange: 'transform, opacity'}}>
                 Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
                 mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
                 komprehensif. Dengan 4 subsidiary yang saling melengkapi, kami memberikan 
                 layanan end-to-end untuk kesuksesan setiap project Anda.
               </p>
-              <div className="grid md:grid-cols-4 gap-8 mt-16 animate-stagger">
-                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="0" style={{willChange: 'transform'}}>
-                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎨</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Creative Design & Branding</h3>
-                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Brand identity, graphic design, dan visual communication</p>
-                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                </div>
-                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="100" style={{willChange: 'transform'}}>
-                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎬</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Event Production</h3>
-                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Event planning, design, dan technical support</p>
-                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                </div>
-                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="200" style={{willChange: 'transform'}}>
-                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">📱</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Digital Marketing</h3>
-                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Social media, SEO, digital advertising, dan website development</p>
-                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                </div>
-                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="300" style={{willChange: 'transform'}}>
-                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">💼</span>
-                  </div>
-                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Brand Consultation</h3>
-                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Strategic planning dan brand positioning</p>
-                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                </div>
+              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-16 animate-stagger">
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  data-stagger="0"
+                >
+                  <CardContent className="px-4 py-8 flex flex-col h-full">
+                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎨</span>
+                    </div>
+                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
+                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
+                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                  </CardContent>
+                </Card>
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  data-stagger="100"
+                >
+                  <CardContent className="px-4 py-8 flex flex-col h-full">
+                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎬</span>
+                    </div>
+                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
+                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
+                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                  </CardContent>
+                </Card>
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  data-stagger="200"
+                >
+                  <CardContent className="px-4 py-8 flex flex-col h-full">
+                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">📱</span>
+                    </div>
+                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
+                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
+                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                  </CardContent>
+                </Card>
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  data-stagger="300"
+                >
+                  <CardContent className="px-4 py-8 flex flex-col h-full">
+                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">💼</span>
+                    </div>
+                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
+                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
+                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                  </CardContent>
+                </Card>
               </div>
               
               {/* Bottom Decorative Element */}
@@ -617,26 +739,36 @@ export default function Home() {
         </section>
         
         {/* Services Section */}
-        <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 scroll-snap-section">
-          <div className="container mx-auto px-6">
+        <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-blue-200/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/15 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
+          </div>
+          
+          <div className="container mx-auto px-6 relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6" style={{color: '#6382b4'}} data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.4" data-stagger="0.02">
+            <div className="text-center mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.05">
+              <h2 className="heading-2 mb-6 text-depth-lg transform-3d" style={{color: '#6382b4'}} data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.4" data-stagger="0.02" data-tilt="4">
                 Layanan Kami
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-700" data-element="description" data-text-animation="blur-focus" data-delay="0.2" data-duration="0.5" data-stagger="0.02">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-700 text-depth" data-element="description" data-text-animation="blur-focus" data-delay="0.2" data-duration="0.5" data-stagger="0.02" data-mouse-parallax="0.03">
                 Solusi kreatif terpadu yang dirancang untuk mengangkat brand Anda ke level yang lebih tinggi.
               </p>
             </div>
+
             
             {/* Services Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
               {services.map((service, index) => (
                 <Card
                   key={service.id}
                   variant="service"
-                  className={`service-card group hover:shadow-2xl flex flex-col h-full`}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform`}
                   data-stagger={index * 150}
+                  data-tilt="8"
+                  data-mouse-parallax="0.12"
                 >
                   {/* Icon */}
                   <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
@@ -647,20 +779,20 @@ export default function Home() {
                   
                   {/* Content */}
                   <div className="flex-1 flex flex-col">
-                    <h3 className="text-2xl font-bold mb-4 transition-colors" style={{color: '#6382b4'}}>
+                    <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
                       {service.title}
                     </h3>
                     
-                    <p className="text-gray-600 mb-6 leading-relaxed text-justify">
+                    <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
                       {service.description}
                     </p>
                     
                     {/* Features List */}
                     <ul className="space-y-3 mb-6 flex-1">
                       {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center text-gray-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                        <li key={idx} className="flex items-center text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
                           <div className="w-3 h-3 rounded-full mr-3 transition-colors shadow-sm" style={{backgroundColor: '#dbc48a'}}></div>
-                          <span className="text-sm font-medium group-hover:text-blue-900 transition-colors">{feature}</span>
+                          <span className="text-sm font-medium group-hover:text-blue-800 transition-colors">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -668,7 +800,7 @@ export default function Home() {
                     {/* CTA Button */}
                     <button 
                       onClick={scrollToContact}
-                      className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50 mt-auto" style={{color: '#dbc48a'}}
+                      className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50 mt-auto" style={{color: 'var(--gold-700)'}}
                     >
                       Pelajari Lebih Lanjut
                       <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
@@ -680,7 +812,7 @@ export default function Home() {
             
             {/* Bottom CTA */}
             <div className="text-center scroll-animate animate-stagger-4">
-              <p className="body-large mb-8 text-gray-600">
+              <p className="body-large mb-8 text-gray-contrast-600">
                 Siap untuk mengembangkan bisnis Anda? Mari diskusikan project impian Anda bersama tim ahli kami.
               </p>
               <Button
@@ -697,28 +829,36 @@ export default function Home() {
         </section>
         
         {/* Portfolio Section */}
-        <section id="portfolio" className="section-padding bg-white scroll-snap-section">
-          <div className="container mx-auto px-6">
+        <section id="portfolio" className="section-padding bg-white scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/30 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/20 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+          </div>
+          
+          <div className="container mx-auto px-6 relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.6" data-stagger="0.02">
+            <div className="text-center mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.04">
+              <h2 className="heading-2 mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.6" data-stagger="0.02" data-tilt="3">
                 Portfolio Terpilih
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-600 mb-8" data-element="filters" data-text-animation="slide-up" data-delay="0.2" data-duration="0.4" data-stagger="0.05">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0.2" data-duration="0.4" data-stagger="0.05" data-mouse-parallax="0.02">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
               
               {/* Filter Buttons */}
-              <div className="flex flex-wrap justify-center gap-4">
+              <div className="flex flex-wrap justify-center gap-4" data-mouse-parallax="0.06">
                 {filters.map((filter) => (
                   <button
                     key={filter.key}
                     onClick={() => setActiveFilter(filter.key)}
-                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 ${
+                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 hover-depth-subtle transform-3d backdrop-blur-sm ${
                       activeFilter === filter.key
-                        ? 'bg-gold-500 text-white shadow-lg transform scale-105'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200 hover:scale-105'
+                        ? 'bg-gold-500 text-white shadow-depth-3 transform scale-105 text-depth'
+                        : 'bg-gray-contrast-100 text-gray-contrast-700 hover:bg-gray-contrast-200 hover:scale-105 glass-morphism shadow-depth-1'
                     }`}
+                    data-tilt="5"
                   >
                     {filter.label}
                   </button>
@@ -727,13 +867,15 @@ export default function Home() {
             </div>
             
             {/* Projects Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
               {filteredProjects.map((project, index) => (
                 <Card
                   key={project.id}
                   variant="portfolio"
-                  className={`portfolio-item group cursor-pointer`}
+                  className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
                   data-stagger={index * 150}
+                  data-tilt="6"
+                  data-mouse-parallax="0.15"
                 >
                   <div className="relative overflow-hidden rounded-2xl">
                     <div className="relative w-full h-64">
@@ -771,7 +913,7 @@ export default function Home() {
             
             {/* Bottom CTA */}
             <div className="text-center scroll-animate animate-stagger-4">
-              <p className="body-large mb-8 text-gray-600">
+              <p className="body-large mb-8 text-gray-contrast-600">
                 Tertarik dengan hasil kerja kami? Mari diskusikan project Anda dan wujudkan visi kreatif bersama.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
@@ -798,34 +940,44 @@ export default function Home() {
         </section>
         
         {/* Testimonials Section */}
-        <section id="testimonials" className="section-padding bg-blue-900 scroll-snap-section">
-          <div className="container mx-auto px-6">
+        <section id="testimonials" className="section-padding bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/6 left-1/8 w-40 h-40 bg-gold-300/15 rounded-full filter blur-2xl" data-parallax="0.4" data-float="true" data-float-amplitude="25" data-float-duration="12"></div>
+            <div className="absolute bottom-1/5 right-1/6 w-32 h-32 bg-blue-300/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
+            <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
+          </div>
+          
+          <div className="container mx-auto px-6 relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-16 scroll-animate">
-              <h2 className="text-5xl font-bold leading-tight mb-6" style={{color: 'var(--white)', fontFamily: 'var(--font-primary)'}} data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.5" data-stagger="0.01">
+            <div className="text-center mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.03">
+              <h2 className="text-5xl font-bold leading-tight mb-6 text-depth-lg transform-3d testimonial-heading" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.5" data-stagger="0.01" data-tilt="3">
                 Kata Mereka
               </h2>
-              <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto" style={{color: 'var(--white)', fontFamily: 'var(--font-secondary)'}} data-element="content" data-text-animation="fade-in" data-delay="0.2" data-duration="0.4" data-stagger="0.02">
+              <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description" data-element="content" data-text-animation="fade-in" data-delay="0.2" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.02">
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
             
             {/* Testimonials Grid */}
-            <div className="grid md:grid-cols-2 gap-8 mb-16">
+            <div className="grid md:grid-cols-2 gap-8 mb-16 stagger-children" data-mouse-parallax="0.08">
               {defaultTestimonials.map((testimonial, index) => (
                 <Card
                   key={testimonial.id}
-                  className={`bg-white p-8 scroll-animate-scale`}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
                   data-stagger={index * 200}
-                  hover={false}
+                  data-tilt="8"
+                  data-mouse-parallax="0.12"
+                  hover={true}
                 >
                   {/* Rating */}
-                  <div className="flex mb-6">
+                  <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
                     {renderStars(testimonial.rating)}
                   </div>
                   
                   {/* Quote */}
-                  <blockquote className="text-gray-700 text-lg mb-6 italic leading-relaxed">
+                  <blockquote className="quote font-normal text-medium-contrast text-lg mb-6 italic leading-relaxed">
                     &ldquo;{testimonial.quote}&rdquo;
                   </blockquote>
                   
@@ -834,18 +986,18 @@ export default function Home() {
                     <div className="relative w-16 h-16 mr-4">
                       <Image
                         src={testimonial.avatar}
-                        alt={testimonial.name}
+                        alt={`${testimonial.name}, ${testimonial.position} at ${testimonial.company}`}
                         fill
                         className="rounded-full object-cover"
                         sizes="64px"
                       />
                     </div>
                     <div>
-                      <h4 className="font-bold text-lg" style={{color: 'var(--blue-900)'}}>{testimonial.name}</h4>
-                      <p className="text-gray-600 text-sm">{testimonial.position}</p>
-                      <p className="text-sm font-medium" style={{color: 'var(--gold-500)'}}>{testimonial.company}</p>
+                      <h4 className="author-name font-bold text-lg text-high-contrast">{testimonial.name}</h4>
+                      <p className="author-position text-gray-contrast-600 text-sm font-medium">{testimonial.position}</p>
+                      <p className="author-company text-sm font-semibold author-company-gold">{testimonial.company}</p>
                       {testimonial.project && (
-                        <p className="text-gray-500 text-xs mt-1">{testimonial.project}</p>
+                        <p className="author-project text-gray-contrast-500 text-xs mt-1 font-medium">{testimonial.project}</p>
                       )}
                     </div>
                   </div>
@@ -854,11 +1006,13 @@ export default function Home() {
             </div>
             
             {/* Client Logos Carousel */}
-            <div className="animate-fade-in animation-delay-600">
-              <p className="text-center mb-8 text-lg" style={{color: 'var(--white)'}}>
+            <div className="animate-fade-in animation-delay-600 no-shadow">
+              <p className="text-center mb-8 text-lg client-carousel-text">
                 Dipercaya oleh:
               </p>
-              <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />
+              <div className="no-shadow">
+                <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />
+              </div>
             </div>
             
             {/* Stats */}
@@ -888,7 +1042,7 @@ export default function Home() {
           <div className="container mx-auto px-6">
             <div className="text-center mb-16 scroll-animate">
               <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">Latest Updates</h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto scroll-animate animate-stagger-2">
+              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto scroll-animate animate-stagger-2">
                 Berita terbaru, insights industri, dan stories dari project-project terbaru kami.
               </p>
             </div>
@@ -898,23 +1052,23 @@ export default function Home() {
               <div className="lg:col-span-2 scroll-animate-left">
                 <div className="grid md:grid-cols-2 gap-6">
                   {getRecentArticles(4).map((article, index) => (
-                    <article key={article.id} className="article-card bg-gray-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale" data-stagger={index * 200}>
-                      <div className="h-40 bg-gray-200 flex items-center justify-center">
+                    <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
+                      <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
                         <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
                       </div>
                       <div className="p-6">
-                        <div className="text-sm font-medium mb-2 capitalize text-gold-500">
+                        <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
                           {article.category.replace('-', ' ')}
                         </div>
-                        <h3 className="text-lg font-bold mb-3 line-clamp-2 text-blue-900">
+                        <h3 className="text-lg font-bold mb-3 line-clamp-2 text-high-contrast">
                           {article.title}
                         </h3>
-                        <p className="text-gray-600 mb-4 line-clamp-2 text-sm">
+                        <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
                           {article.excerpt}
                         </p>
                         <a 
                           href={`/blog/${article.slug}`}
-                          className="font-medium transition-colors text-sm hover:opacity-80 text-gold-500"
+                          className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
                         >
                           Baca Selengkapnya →
                         </a>
@@ -926,7 +1080,7 @@ export default function Home() {
               
               {/* Instagram Feed */}
               <div className="lg:col-span-1 scroll-animate-right">
-                <div className="bg-gray-50 rounded-2xl p-6 card">
+                <div className="bg-gray-contrast-50 rounded-2xl p-6 card card-accessible">
                   <InstagramFeed 
                     username="skywork.id"
                     displayName="Skywork.id"
@@ -939,7 +1093,7 @@ export default function Home() {
             </div>
             
             <div className="text-center mt-12">
-              <a href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 bg-blue-900">
+              <a href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 btn-accessible-primary blog-button">
                 Lihat Semua Artikel
               </a>
             </div>
@@ -947,9 +1101,17 @@ export default function Home() {
         </section>
         
         {/* Multi-Channel Contact CTA */}
-        <section className="section-padding bg-blue-900 scroll-snap-section">
-          <div className="container mx-auto px-6">
-            <div className="text-center mb-16 scroll-animate-scale">
+        <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/6 left-1/8 w-40 h-40 bg-gold-300/15 rounded-full filter blur-2xl" data-parallax="0.4" data-float="true" data-float-amplitude="25" data-float-duration="12"></div>
+            <div className="absolute bottom-1/5 right-1/6 w-32 h-32 bg-blue-300/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
+            <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
+          </div>
+          
+          <div className="container mx-auto px-6 relative z-depth-2">
+            <div className="text-center mb-12 scroll-animate-scale">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
                 Siap Memulai Project Anda?
               </h2>
@@ -959,7 +1121,7 @@ export default function Home() {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12 scroll-animate">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <img src="/icons/email.png" alt="Email" className="w-8 h-8" />
@@ -1013,7 +1175,7 @@ export default function Home() {
                   <Card className="p-12">
                     <CheckCircle className="w-16 h-16 text-green-500 mx-auto mb-6" />
                     <h3 className="heading-3 mb-4 text-green-600">Pesan Terkirim!</h3>
-                    <p className="body-large text-gray-600 mb-6">
+                    <p className="body-large text-gray-contrast-600 mb-6">
                       Terima kasih telah menghubungi kami. Tim Narvex akan segera merespons inquiry Anda dalam 1x24 jam.
                     </p>
                     <Button
@@ -1035,7 +1197,7 @@ export default function Home() {
                     <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.8" data-stagger="0.05">
                       Mari Wujudkan Project Impian Anda
                     </h2>
-                    <p className="body-large text-gray-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0.2" data-duration="0.5" data-stagger="0.05">
+                    <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0.2" data-duration="0.5" data-stagger="0.05">
                       Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
                     </p>
                     
@@ -1048,8 +1210,8 @@ export default function Home() {
                             placeholder="Nama Lengkap"
                             value={formData.name}
                             onChange={handleInputChange}
-                            className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
-                              errors.name ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
+                            className={`form-input-accessible w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 ${
+                              errors.name ? 'border-red-500' : 'border-gray-contrast-400 focus:border-blue-700'
                             }`}
                           />
                           {errors.name && (
@@ -1064,8 +1226,8 @@ export default function Home() {
                             placeholder="Email"
                             value={formData.email}
                             onChange={handleInputChange}
-                            className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
-                              errors.email ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
+                            className={`form-input-accessible w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 ${
+                              errors.email ? 'border-red-500' : 'border-gray-contrast-400 focus:border-blue-700'
                             }`}
                           />
                           {errors.email && (
@@ -1082,8 +1244,8 @@ export default function Home() {
                             placeholder="Nomor Telepon"
                             value={formData.phone}
                             onChange={handleInputChange}
-                            className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
-                              errors.phone ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
+                            className={`form-input-accessible w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 ${
+                              errors.phone ? 'border-red-500' : 'border-gray-contrast-400 focus:border-blue-700'
                             }`}
                           />
                           {errors.phone && (
@@ -1096,8 +1258,8 @@ export default function Home() {
                             name="service"
                             value={formData.service}
                             onChange={handleInputChange}
-                            className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 ${
-                              errors.service ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
+                            className={`form-input-accessible w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 ${
+                              errors.service ? 'border-red-500' : 'border-gray-contrast-400 focus:border-blue-700'
                             }`}
                           >
                             {contactServices.map((service) => (
@@ -1119,8 +1281,8 @@ export default function Home() {
                           placeholder="Ceritakan project Anda..."
                           value={formData.message}
                           onChange={handleInputChange}
-                          className={`w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-gold-300 resize-none ${
-                            errors.message ? 'border-red-500' : 'border-gray-300 focus:border-gold-500'
+                          className={`form-input-accessible w-full px-4 py-3 rounded-lg border transition-colors focus:outline-none focus:ring-2 focus:ring-blue-300 resize-none ${
+                            errors.message ? 'border-red-500' : 'border-gray-contrast-400 focus:border-blue-700'
                           }`}
                         ></textarea>
                         {errors.message && (
@@ -1161,9 +1323,9 @@ export default function Home() {
                               {info.icon}
                             </div>
                             <div>
-                              <p className="font-semibold text-blue-900 text-lg">{info.label}</p>
-                              <p className="text-gray-700 font-medium">{info.value}</p>
-                              <p className="text-gray-500 text-sm">{info.description}</p>
+                              <p className="font-semibold text-high-contrast text-lg">{info.label}</p>
+                              <p className="text-gray-contrast-700 font-medium">{info.value}</p>
+                              <p className="text-gray-contrast-500 text-sm">{info.description}</p>
                             </div>
                           </div>
                         ))}

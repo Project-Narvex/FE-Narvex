@@ -935,29 +935,412 @@ export function removeAnimationsForAccessibility() {
 }
 
 /**
- * Hero Section Entrance Animation
+ * Enhanced Depth Animation Controller
+ * Provides advanced depth effects including parallax, 3D transforms, and layered animations
+ */
+export class DepthAnimationController {
+  private parallaxElements: Element[] = [];
+  private floatingElements: Element[] = [];
+  private depthLayers: Map<Element, number> = new Map();
+  private mousePosition = { x: 0, y: 0 };
+  private isInitialized = false;
+
+  constructor() {
+    this.init();
+  }
+
+  private init() {
+    if (typeof window === 'undefined' || this.isInitialized) return;
+    
+    this.setupMouseTracking();
+    this.initializeParallaxElements();
+    this.initializeFloatingElements();
+    this.initializeDepthLayers();
+    this.initializeTiltEffects();
+    this.isInitialized = true;
+  }
+
+  private setupMouseTracking() {
+    document.addEventListener('mousemove', (e) => {
+      this.mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
+      this.mousePosition.y = (e.clientY / window.innerHeight) * 2 - 1;
+      this.updateMouseParallax();
+    });
+  }
+
+  private initializeParallaxElements() {
+    const elements = gsap.utils.toArray('[data-parallax]') as Element[];
+    elements.forEach((element) => {
+      const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
+      const depth = parseFloat(element.getAttribute('data-depth') || '1');
+      
+      this.parallaxElements.push(element);
+      this.depthLayers.set(element, depth);
+      
+      gsap.to(element, {
+        yPercent: -50 * speed,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: element,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    });
+  }
+
+  private initializeFloatingElements() {
+    const elements = gsap.utils.toArray('[data-float]') as Element[];
+    elements.forEach((element, index) => {
+      const amplitude = parseFloat(element.getAttribute('data-float-amplitude') || '10');
+      const duration = parseFloat(element.getAttribute('data-float-duration') || '3');
+      const delay = parseFloat(element.getAttribute('data-float-delay') || '0');
+      
+      this.floatingElements.push(element);
+      
+      gsap.to(element, {
+        y: `+=${amplitude}`,
+        rotation: 2,
+        duration: duration,
+        ease: 'power2.inOut',
+        yoyo: true,
+        repeat: -1,
+        delay: delay + (index * 0.2)
+      });
+    });
+  }
+
+  private initializeDepthLayers() {
+    const layers = gsap.utils.toArray('[data-depth-layer]') as Element[];
+    layers.forEach((layer) => {
+      const depth = parseFloat(layer.getAttribute('data-depth-layer') || '1');
+      const blur = Math.max(0, (depth - 1) * 2);
+      
+      gsap.set(layer, {
+        filter: `blur(${blur}px)`,
+        opacity: Math.max(0.3, 1 - (depth - 1) * 0.2),
+        scale: 1 - (depth - 1) * 0.05
+      });
+      
+      // Parallax based on depth
+      gsap.to(layer, {
+        yPercent: -20 * depth,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: layer,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true
+        }
+      });
+    });
+  }
+
+  private initializeTiltEffects() {
+    const tiltElements = gsap.utils.toArray('[data-tilt]') as Element[];
+    tiltElements.forEach((element) => {
+      const maxTilt = parseFloat(element.getAttribute('data-tilt') || '10');
+      
+      element.addEventListener('mouseenter', () => {
+        gsap.to(element, {
+          rotationY: maxTilt * this.mousePosition.x * 0.5,
+          rotationX: -maxTilt * this.mousePosition.y * 0.5,
+          transformPerspective: 1000,
+          duration: 0.3,
+          ease: 'power2.out'
+        });
+      });
+      
+      element.addEventListener('mouseleave', () => {
+        gsap.to(element, {
+          rotationY: 0,
+          rotationX: 0,
+          duration: 0.5,
+          ease: 'power2.out'
+        });
+      });
+    });
+  }
+
+  private updateMouseParallax() {
+    const mouseElements = gsap.utils.toArray('[data-mouse-parallax]') as Element[];
+    mouseElements.forEach((element) => {
+      const intensity = parseFloat(element.getAttribute('data-mouse-parallax') || '0.1');
+      
+      gsap.to(element, {
+        x: this.mousePosition.x * intensity * 20,
+        y: this.mousePosition.y * intensity * 20,
+        duration: 0.8,
+        ease: 'power2.out'
+      });
+    });
+  }
+
+  public addDepthHover(element: Element, config: any = {}) {
+    const {
+      scale = 1.05,
+      y = -10,
+      rotationY = 5,
+      shadowIntensity = 0.3,
+      duration = 0.3
+    } = config;
+    
+    const tl = gsap.timeline({ paused: true });
+    
+    tl.to(element, {
+      scale,
+      y,
+      rotationY,
+      boxShadow: `0 20px 40px rgba(0,0,0,${shadowIntensity})`,
+      duration,
+      ease: 'power2.out'
+    });
+    
+    element.addEventListener('mouseenter', () => tl.play());
+    element.addEventListener('mouseleave', () => tl.reverse());
+  }
+
+  public createFloatingShapes(container: Element, count: number = 5) {
+    for (let i = 0; i < count; i++) {
+      const shape = document.createElement('div');
+      shape.className = 'floating-shape';
+      shape.setAttribute('data-float', 'true');
+      shape.setAttribute('data-float-amplitude', (Math.random() * 20 + 10).toString());
+      shape.setAttribute('data-float-duration', (Math.random() * 4 + 2).toString());
+      shape.setAttribute('data-float-delay', (Math.random() * 2).toString());
+      
+      const size = Math.random() * 100 + 50;
+      const opacity = Math.random() * 0.3 + 0.1;
+      const hue = Math.random() * 60 + 200; // Blue to purple range
+      
+      gsap.set(shape, {
+        width: size,
+        height: size,
+        borderRadius: '50%',
+        background: `hsla(${hue}, 70%, 60%, ${opacity})`,
+        position: 'absolute',
+        left: Math.random() * 100 + '%',
+        top: Math.random() * 100 + '%',
+        filter: 'blur(1px)',
+        zIndex: -1
+      });
+      
+      container.appendChild(shape);
+    }
+    
+    this.initializeFloatingElements();
+  }
+
+  public destroy() {
+    this.parallaxElements = [];
+    this.floatingElements = [];
+    this.depthLayers.clear();
+    this.isInitialized = false;
+  }
+}
+
+/**
+ * Enhanced Parallax Effect with Depth Layers
+ */
+export function addEnhancedParallax(element: Element, config: any = {}) {
+  const {
+    speed = 0.5,
+    depth = 1,
+    blur = 0,
+    opacity = 1,
+    scale = 1
+  } = config;
+  
+  // Apply depth-based styling
+  gsap.set(element, {
+    filter: `blur(${blur}px)`,
+    opacity: opacity,
+    scale: scale,
+    transformStyle: 'preserve-3d'
+  });
+  
+  // Parallax animation
+  gsap.to(element, {
+    yPercent: -50 * speed,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: element,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: true
+    }
+  });
+}
+
+/**
+ * 3D Card Hover Effect
+ */
+export function add3DCardEffect(card: Element, config: any = {}) {
+  const {
+    maxRotation = 15,
+    perspective = 1000,
+    shadowIntensity = 0.3,
+    liftHeight = 20
+  } = config;
+  
+  let bounds: DOMRect;
+  
+  const updateBounds = () => {
+    bounds = card.getBoundingClientRect();
+  };
+  
+  card.addEventListener('mouseenter', () => {
+    updateBounds();
+    gsap.to(card, {
+      transformPerspective: perspective,
+      duration: 0.3,
+      ease: 'power2.out'
+    });
+  });
+  
+  card.addEventListener('mousemove', (e: MouseEvent) => {
+    if (!bounds) return;
+    
+    const x = (e.clientX - bounds.left) / bounds.width;
+    const y = (e.clientY - bounds.top) / bounds.height;
+    
+    const rotateX = (y - 0.5) * maxRotation;
+    const rotateY = (x - 0.5) * -maxRotation;
+    
+    gsap.to(card, {
+      rotationX: rotateX,
+      rotationY: rotateY,
+      y: -liftHeight,
+      boxShadow: `0 ${liftHeight + 10}px ${liftHeight * 2}px rgba(0,0,0,${shadowIntensity})`,
+      duration: 0.2,
+      ease: 'power2.out'
+    });
+  });
+  
+  card.addEventListener('mouseleave', () => {
+    gsap.to(card, {
+      rotationX: 0,
+      rotationY: 0,
+      y: 0,
+      boxShadow: '0 4px 6px rgba(0,0,0,0.1)',
+      duration: 0.5,
+      ease: 'power2.out'
+    });
+  });
+}
+
+/**
+ * Morphing Background Pattern
+ */
+export function createMorphingBackground(container: Element) {
+  const canvas = document.createElement('canvas');
+  const ctx = canvas.getContext('2d');
+  if (!ctx) return;
+  
+  canvas.style.position = 'absolute';
+  canvas.style.top = '0';
+  canvas.style.left = '0';
+  canvas.style.width = '100%';
+  canvas.style.height = '100%';
+  canvas.style.zIndex = '-1';
+  canvas.style.opacity = '0.1';
+  
+  const resizeCanvas = () => {
+    canvas.width = container.clientWidth;
+    canvas.height = container.clientHeight;
+  };
+  
+  resizeCanvas();
+  window.addEventListener('resize', resizeCanvas);
+  
+  let time = 0;
+  const animate = () => {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    
+    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+    gradient.addColorStop(0, `hsla(${200 + Math.sin(time * 0.01) * 30}, 70%, 60%, 0.3)`);
+    gradient.addColorStop(1, `hsla(${240 + Math.cos(time * 0.01) * 30}, 70%, 60%, 0.3)`);
+    
+    ctx.fillStyle = gradient;
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    time++;
+    requestAnimationFrame(animate);
+  };
+  
+  animate();
+  container.appendChild(canvas);
+}
+
+/**
+ * Hero Section Entrance Animation with Enhanced Depth
  */
 export function initializeHeroAnimation() {
   const heroTl = gsap.timeline({ delay: 0.5 });
   
-  // Animate hero text elements
+  // Animate hero text elements with depth
   heroTl.fromTo('.hero-title', 
-    { opacity: 0, y: 100, scale: 0.8 },
-    { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: 'power3.out' }
+    { 
+      opacity: 0, 
+      y: 100, 
+      scale: 0.8,
+      rotationX: 15,
+      transformPerspective: 1000
+    },
+    { 
+      opacity: 1, 
+      y: 0, 
+      scale: 1,
+      rotationX: 0,
+      duration: 1.2, 
+      ease: 'power3.out' 
+    }
   )
   .fromTo('.hero-subtitle',
-    { opacity: 0, y: 50 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out' },
+    { 
+      opacity: 0, 
+      y: 50,
+      filter: 'blur(5px)'
+    },
+    { 
+      opacity: 1, 
+      y: 0,
+      filter: 'blur(0px)',
+      duration: 0.8, 
+      ease: 'power2.out' 
+    },
     '-=0.6'
   )
   .fromTo('.hero-buttons',
-    { opacity: 0, y: 30 },
-    { opacity: 1, y: 0, duration: 0.6, ease: 'power2.out' },
+    { 
+      opacity: 0, 
+      y: 30,
+      scale: 0.9
+    },
+    { 
+      opacity: 1, 
+      y: 0,
+      scale: 1,
+      duration: 0.6, 
+      ease: 'power2.out' 
+    },
     '-=0.4'
   )
   .fromTo('.hero-stats',
-    { opacity: 0, y: 40 },
-    { opacity: 1, y: 0, duration: 0.8, ease: 'power2.out', stagger: 0.1 },
+    { 
+      opacity: 0, 
+      y: 40,
+      rotationY: 10
+    },
+    { 
+      opacity: 1, 
+      y: 0,
+      rotationY: 0,
+      duration: 0.8, 
+      ease: 'power2.out', 
+      stagger: 0.1 
+    },
     '-=0.3'
   );
 
