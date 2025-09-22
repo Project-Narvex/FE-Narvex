@@ -1372,3 +1372,55 @@ export function initializeHeroAnimation() {
 
   return heroTl;
 }
+
+/**
+ * Sticky Scroll Animation for Value Cards
+ * Pins a container and animates child elements sequentially on scroll.
+ * @param sectionElement The outer container used to define scroll height.
+ * @param wrapperElement The inner container that will be pinned.
+ * @param childSelector The selector for the child elements to animate.
+ * @returns A GSAP Timeline instance with a .kill() method for cleanup.
+ */
+export function initializeStickyValuesAnimation(
+  sectionElement: Element,
+  wrapperElement: Element,
+  childSelector: string
+) {
+  // Ambil semua elemen anak yang akan dianimasikan
+  const children = gsap.utils.toArray(childSelector) as Element[];
+  if (children.length === 0) return null;
+
+  // Atur tinggi section container untuk menciptakan ruang scroll
+  // Faktor 80vh per item memberikan ruang yang cukup untuk setiap animasi
+  gsap.set(sectionElement, { height: `${children.length * 80}vh` });
+
+  // Buat timeline GSAP yang dikontrol oleh ScrollTrigger
+  const timeline = gsap.timeline({
+    scrollTrigger: {
+      trigger: wrapperElement,
+      start: 'top top', // Mulai saat bagian atas wrapper menyentuh bagian atas viewport
+      end: 'bottom bottom', // Akhiri saat bagian bawah wrapper menyentuh bagian bawah viewport
+      scrub: 1, // Buat animasi berjalan mulus mengikuti scroll
+      pin: true, // Sematkan wrapperElement selama animasi
+      anticipatePin: 1,
+    },
+  });
+
+  // Tambahkan animasi fade-in dan slide-up untuk setiap elemen anak secara berurutan
+  children.forEach((child, index) => {
+    timeline.fromTo(
+      child,
+      { autoAlpha: 0, y: 50 }, // Kondisi awal: transparan dan sedikit di bawah
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 1, // Durasi untuk satu animasi
+        ease: 'power2.inOut',
+      },
+      index * 0.5 // Tambahkan jeda 0.5 detik antar animasi untuk efek sekuensial
+    );
+  });
+
+  // Kembalikan timeline agar bisa di-kill saat komponen unmount
+  return timeline;
+}
