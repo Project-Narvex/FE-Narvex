@@ -652,11 +652,6 @@ export class GSAPAnimationController {
     ScrollTrigger.killAll();
   }
 
-  public refresh() {
-    // Refresh ScrollTrigger to recalculate positions
-    ScrollTrigger.refresh();
-  }
-
   /**
    * Get text controller for external access
    */
@@ -764,13 +759,27 @@ export const sectionAnimationConfigs = {
 };
 
 /**
+ * Animation configuration interface
+ */
+interface AnimationConfig {
+  animation: string;
+  delay: number;
+  duration: number;
+  stagger: number;
+}
+
+interface SectionConfig {
+  [key: string]: AnimationConfig;
+}
+
+/**
  * Apply section-specific text animations
  */
-export function applySectionAnimations(sectionId: string, config: any) {
+export function applySectionAnimations(sectionId: string, config: SectionConfig) {
   const section = document.querySelector(`#${sectionId}`);
   if (!section) return;
 
-  Object.entries(config).forEach(([elementType, animConfig]: [string, any]) => {
+  Object.entries(config).forEach(([elementType, animConfig]: [string, AnimationConfig]) => {
     const elements = section.querySelectorAll(`[data-element="${elementType}"]`);
     elements.forEach((element) => {
       element.setAttribute('data-text-animation', animConfig.animation);
@@ -1077,7 +1086,13 @@ export class DepthAnimationController {
     });
   }
 
-  public addDepthHover(element: Element, config: any = {}) {
+  public addDepthHover(element: Element, config: {
+    scale?: number;
+    y?: number;
+    rotationY?: number;
+    shadowIntensity?: number;
+    duration?: number;
+  } = {}) {
     const {
       scale = 1.05,
       y = -10,
@@ -1143,10 +1158,15 @@ export class DepthAnimationController {
 /**
  * Enhanced Parallax Effect with Depth Layers
  */
-export function addEnhancedParallax(element: Element, config: any = {}) {
+export function addEnhancedParallax(element: Element, config: {
+  speed?: number;
+  depth?: number;
+  blur?: number;
+  opacity?: number;
+  scale?: number;
+} = {}) {
   const {
     speed = 0.5,
-    depth = 1,
     blur = 0,
     opacity = 1,
     scale = 1
@@ -1176,7 +1196,12 @@ export function addEnhancedParallax(element: Element, config: any = {}) {
 /**
  * 3D Card Hover Effect
  */
-export function add3DCardEffect(card: Element, config: any = {}) {
+export function add3DCardEffect(card: Element, config: {
+  maxRotation?: number;
+  perspective?: number;
+  shadowIntensity?: number;
+  liftHeight?: number;
+} = {}) {
   const {
     maxRotation = 15,
     perspective = 1000,
@@ -1199,11 +1224,12 @@ export function add3DCardEffect(card: Element, config: any = {}) {
     });
   });
   
-  card.addEventListener('mousemove', (e: MouseEvent) => {
+  card.addEventListener('mousemove', (e: Event) => {
     if (!bounds) return;
     
-    const x = (e.clientX - bounds.left) / bounds.width;
-    const y = (e.clientY - bounds.top) / bounds.height;
+    const mouseEvent = e as MouseEvent;
+    const x = (mouseEvent.clientX - bounds.left) / bounds.width;
+    const y = (mouseEvent.clientY - bounds.top) / bounds.height;
     
     const rotateX = (y - 0.5) * maxRotation;
     const rotateY = (x - 0.5) * -maxRotation;

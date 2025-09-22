@@ -531,7 +531,7 @@ export default function Home() {
               {/* Text Content */}
               <div className="text-center lg:text-left depth-layer-2 px-4 sm:px-6 lg:px-0" data-mouse-parallax="0.1">
                 <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-depth-lg leading-tight md:leading-tight lg:leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
-                  <span className="block transform-3d break-words" data-tilt="8">Indonesia's Premier</span>
+                  <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
                   <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
                   <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
                 </h1>
@@ -1128,7 +1128,7 @@ export default function Home() {
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <img src="/icons/email.png" alt="Email" className="w-8 h-8" />
+                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
                 <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
@@ -1136,7 +1136,7 @@ export default function Home() {
               
               <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <img src="/icons/whatsapp.png" alt="WhatsApp" className="w-8 h-8" />
+                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
                 <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
@@ -1144,7 +1144,7 @@ export default function Home() {
               
               <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <img src="/icons/instagram.png" alt="Instagram" className="w-8 h-8" />
+                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
                 <p className="text-gray-300 text-sm">@narvex.id</p>
@@ -1152,7 +1152,7 @@ export default function Home() {
               
               <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <img src="/icons/phone.png" alt="Phone" className="w-8 h-8" />
+                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
                 <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
