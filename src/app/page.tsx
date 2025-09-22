@@ -13,7 +13,7 @@ import ClientCarousel from '@/components/ui/ClientCarousel';
 import MapComponent from '@/components/ui/MapComponent';
 import InstagramFeed from '@/components/social/InstagramFeed';
 import { getRecentArticles } from '@/data/blog';
-import { initializeAnimations } from '@/lib/animations';
+import { initializeAnimations, initializeHeroAnimation, addGSAPHoverAnimations } from '@/lib/animations';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -251,13 +251,22 @@ export default function Home() {
   const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
   useEffect(() => {
-    // Initialize scroll animations
+    // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
+    
+    // Initialize hero entrance animation
+    const heroAnimation = initializeHeroAnimation();
+    
+    // Add hover animations
+    addGSAPHoverAnimations();
     
     // Cleanup on unmount
     return () => {
       if (animationController) {
         animationController.destroy();
+      }
+      if (heroAnimation) {
+        heroAnimation.kill();
       }
     };
   }, []);
@@ -432,17 +441,17 @@ export default function Home() {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Text Content */}
               <div className="text-center lg:text-left">
-                <h1 className="text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
+                <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
                   <span className="block">Creative Solutions</span>
                   <span className="block">for</span>
                   <span className="block text-gold-500">Your Brand</span>
                 </h1>
                 
-                <p className="text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0 scroll-animate animate-stagger-2">
+                <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-8 max-w-2xl mx-auto lg:mx-0" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02">
                   CV. Nara Exhibition Indonesia
                 </p>
                 
-                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start scroll-animate animate-stagger-3">
+                <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                   <Button
                     variant="primary"
                     size="large"
@@ -465,7 +474,7 @@ export default function Home() {
                 </div>
 
                 {/* Stats */}
-                <div className="grid grid-cols-3 gap-8 mt-16 scroll-animate animate-stagger-4">
+                <div className="hero-stats grid grid-cols-3 gap-8 mt-16">
                   <div className="text-center">
                     <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500">50+</div>
                     <div className="text-gray-300 text-sm md:text-base">Projects Completed</div>
@@ -536,47 +545,72 @@ export default function Home() {
         </section>
         
         {/* Company Introduction - CV. Nara Exhibition Indonesia */}
-        <section id="about" className="section-padding bg-white scroll-snap-section">
-          <div className="container mx-auto px-6 text-center">
+        <section id="about" className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section relative overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-blue-500 blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 w-40 h-40 rounded-full bg-gold-500 blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-blue-400 blur-2xl"></div>
+          </div>
+          
+          <div className="container mx-auto px-6 text-center relative z-10">
+            {/* Decorative Top Divider */}
+            <div className="flex items-center justify-center mb-12">
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
+              <div className="mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
+            </div>
+            
             <div className="max-w-4xl mx-auto scroll-animate">
-              <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">
+              <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04" style={{willChange: 'transform, opacity'}}>
                 CV. Nara Exhibition Indonesia
               </h2>
-              <p className="body-large text-gray-600 mb-8 scroll-animate animate-stagger-2">
+              <p className="body-large text-gray-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015" style={{willChange: 'transform, opacity'}}>
                 Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
                 mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
                 komprehensif. Dengan 4 subsidiary yang saling melengkapi, kami memberikan 
                 layanan end-to-end untuk kesuksesan setiap project Anda.
               </p>
-              <div className="grid md:grid-cols-4 gap-6 mt-12 scroll-animate animate-stagger-3">
-                <div className="service-card text-center flex flex-col h-full min-h-[200px] scroll-animate-scale" data-stagger="0">
-                  <div className="service-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-blue-50">
-                    <span className="text-2xl">&#127912;</span>
+              <div className="grid md:grid-cols-4 gap-8 mt-16 animate-stagger">
+                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="0" style={{willChange: 'transform'}}>
+                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎨</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Creative Design & Branding</h3>
-                  <p className="text-gray-600 flex-1">Brand identity, graphic design, dan visual communication</p>
+                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Creative Design & Branding</h3>
+                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Brand identity, graphic design, dan visual communication</p>
+                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </div>
-                <div className="service-card text-center flex flex-col h-full min-h-[200px] scroll-animate-scale" data-stagger="150">
-                  <div className="service-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gold-50">
-                    <span className="text-2xl">&#127914;</span>
+                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="100" style={{willChange: 'transform'}}>
+                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎬</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Event Production</h3>
-                  <p className="text-gray-600 flex-1">Event planning, design, dan technical support</p>
+                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Event Production</h3>
+                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Event planning, design, dan technical support</p>
+                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </div>
-                <div className="service-card text-center flex flex-col h-full min-h-[200px] scroll-animate-scale" data-stagger="300">
-                  <div className="service-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-blue-50">
-                    <span className="text-2xl">&#128241;</span>
+                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="200" style={{willChange: 'transform'}}>
+                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">📱</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Digital Marketing</h3>
-                  <p className="text-gray-600 flex-1">Social media, SEO, digital advertising, dan website development</p>
+                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Digital Marketing</h3>
+                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Social media, SEO, digital advertising, dan website development</p>
+                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </div>
-                <div className="service-card text-center flex flex-col h-full min-h-[200px] scroll-animate-scale" data-stagger="450">
-                  <div className="service-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 bg-gold-50">
-                    <span className="text-2xl">&#128188;</span>
+                <div className="service-card group text-center flex flex-col h-full min-h-[240px] scroll-animate-scale bg-white rounded-3xl p-6 shadow-lg hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-gray-100" data-stagger="300" style={{willChange: 'transform'}}>
+                  <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">💼</span>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2 text-blue-900">Brand Consultation</h3>
-                  <p className="text-gray-600 flex-1">Strategic planning dan brand positioning</p>
+                  <h3 className="text-xl font-bold mb-3 text-blue-900 group-hover:text-blue-700 transition-colors duration-300">Brand Consultation</h3>
+                  <p className="text-gray-600 flex-1 leading-relaxed group-hover:text-gray-700 transition-colors duration-300">Strategic planning dan brand positioning</p>
+                  <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </div>
+              </div>
+              
+              {/* Bottom Decorative Element */}
+              <div className="flex items-center justify-center mt-16">
+                <div className="h-px bg-gradient-to-r from-transparent via-gold-300 to-transparent w-32"></div>
+                <div className="mx-4 w-3 h-3 rounded-full bg-blue-500"></div>
+                <div className="h-px bg-gradient-to-r from-transparent via-gold-300 to-transparent w-32"></div>
               </div>
             </div>
           </div>
@@ -587,21 +621,21 @@ export default function Home() {
           <div className="container mx-auto px-6">
             {/* Section Header */}
             <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1" style={{color: '#6382b4'}}>
+              <h2 className="heading-2 mb-6" style={{color: '#6382b4'}} data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.4" data-stagger="0.02">
                 Layanan Kami
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-700 scroll-animate animate-stagger-2">
+              <p className="body-large max-w-3xl mx-auto text-gray-700" data-element="description" data-text-animation="blur-focus" data-delay="0.2" data-duration="0.5" data-stagger="0.02">
                 Solusi kreatif terpadu yang dirancang untuk mengangkat brand Anda ke level yang lebih tinggi.
               </p>
             </div>
             
             {/* Services Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger">
               {services.map((service, index) => (
                 <Card
                   key={service.id}
                   variant="service"
-                  className={`group scroll-animate-scale hover:shadow-2xl flex flex-col h-full`}
+                  className={`service-card group hover:shadow-2xl flex flex-col h-full`}
                   data-stagger={index * 150}
                 >
                   {/* Icon */}
@@ -667,10 +701,10 @@ export default function Home() {
           <div className="container mx-auto px-6">
             {/* Section Header */}
             <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">
+              <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.6" data-stagger="0.02">
                 Portfolio Terpilih
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-600 mb-8 scroll-animate animate-stagger-2">
+              <p className="body-large max-w-3xl mx-auto text-gray-600 mb-8" data-element="filters" data-text-animation="slide-up" data-delay="0.2" data-duration="0.4" data-stagger="0.05">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
               
@@ -693,12 +727,12 @@ export default function Home() {
             </div>
             
             {/* Projects Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16">
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger">
               {filteredProjects.map((project, index) => (
                 <Card
                   key={project.id}
                   variant="portfolio"
-                  className={`group cursor-pointer scroll-animate-scale`}
+                  className={`portfolio-item group cursor-pointer`}
                   data-stagger={index * 150}
                 >
                   <div className="relative overflow-hidden rounded-2xl">
@@ -768,10 +802,10 @@ export default function Home() {
           <div className="container mx-auto px-6">
             {/* Section Header */}
             <div className="text-center mb-16 scroll-animate">
-              <h2 className="text-5xl font-bold leading-tight mb-6 scroll-animate animate-stagger-1" style={{color: 'var(--white)', fontFamily: 'var(--font-primary)'}}>
+              <h2 className="text-5xl font-bold leading-tight mb-6" style={{color: 'var(--white)', fontFamily: 'var(--font-primary)'}} data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.5" data-stagger="0.01">
                 Kata Mereka
               </h2>
-              <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto scroll-animate animate-stagger-2" style={{color: 'var(--white)', fontFamily: 'var(--font-secondary)'}}>
+              <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto" style={{color: 'var(--white)', fontFamily: 'var(--font-secondary)'}} data-element="content" data-text-animation="fade-in" data-delay="0.2" data-duration="0.4" data-stagger="0.02">
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
@@ -998,10 +1032,10 @@ export default function Home() {
                 <div className="grid lg:grid-cols-2 gap-12">
                   {/* Contact Form */}
                   <div className="scroll-animate">
-                    <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">
+                    <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.8" data-stagger="0.05">
                       Mari Wujudkan Project Impian Anda
                     </h2>
-                    <p className="body-large text-gray-600 mb-8 scroll-animate animate-stagger-2">
+                    <p className="body-large text-gray-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0.2" data-duration="0.5" data-stagger="0.05">
                       Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
                     </p>
                     
@@ -1119,7 +1153,7 @@ export default function Home() {
                   {/* Contact Info & Map */}
                   <div className="scroll-animate-right">
                     <Card className="p-8 mb-8 scroll-animate animate-stagger-4">
-                      <h3 className="heading-4 mb-6 scroll-animate animate-stagger-5">Hubungi Kami</h3>
+                      <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.05">Hubungi Kami</h3>
                       <div className="space-y-6">
                         {contactInfo.map((info, index) => (
                           <div key={index} className="flex items-start scroll-animate animate-stagger-6" data-stagger={index * 100}>

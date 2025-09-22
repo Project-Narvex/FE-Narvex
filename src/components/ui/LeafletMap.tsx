@@ -122,8 +122,7 @@ const LeafletMap: React.FC = () => {
         {
           enableHighAccuracy: true,
           timeout: 15000,
-          maximumAge: 60000, // 1 minute
-          distanceFilter: 10 // Update when user moves 10 meters
+          maximumAge: 60000 // 1 minute
         }
       );
     } else {

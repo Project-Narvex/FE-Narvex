@@ -9,8 +9,10 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@gsap/react": "^2.1.2",
     "@types/leaflet": "^1.9.20",
     "clsx": "^2.1.1",
+    "gsap": "^3.13.0",
     "leaflet": "^1.9.4",
     "lucide-react": "^0.544.0",
     "next": "15.5.3",
