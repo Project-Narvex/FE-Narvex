@@ -17,8 +17,8 @@ import {
   createMorphingBackground
 } from '@/lib/animations';
 
-export default function SubsidiariesPage() {
-  const subsidiaries = [
+export default function CompaniesPage() {
+  const companies = [
     {
       id: 'skywork',
       name: 'Skywork.id',
@@ -142,8 +142,8 @@ export default function SubsidiariesPage() {
     
     // Add depth effects to specific elements after a delay
     const depthEffectsTimeout = setTimeout(() => {
-      // Add 3D card effects to subsidiary cards
-      document.querySelectorAll('.subsidiary-card').forEach(card => {
+      // Add 3D card effects to company cards
+      document.querySelectorAll('.company-card').forEach(card => {
         add3DCardEffect(card, {
           maxRotation: 8,
           perspective: 1000,
@@ -200,17 +200,17 @@ export default function SubsidiariesPage() {
       <main>
         {/* Hero Section */}
         <SimpleHero
-          title="Subsidiaries Kami"
+          title="Companies Kami"
           subtitle="Narvex Ecosystem"
           description="Ekosistem perusahaan yang terintegrasi untuk memberikan solusi kreatif dan layanan terbaik"
           breadcrumb={[
             { label: 'Home', href: '/' },
-            { label: 'Subsidiaries' }
+            { label: 'Companies' }
           ]}
           className="scroll-snap-section"
         />
 
-        {/* Subsidiaries Overview */}
+        {/* Companies Overview */}
         <section className="section-padding bg-gradient-to-br from-white via-gray-50 to-white scroll-snap-section morphing-bg-section">
           {/* Background pattern */}
           <div className="absolute inset-0 opacity-5">
@@ -225,37 +225,37 @@ export default function SubsidiariesPage() {
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Keluarga Besar Narvex</h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Setiap subsidiary memiliki keahlian khusus yang saling melengkapi untuk memberikan 
+                Setiap company memiliki keahlian khusus yang saling melengkapi untuk memberikan 
                 solusi komprehensif bagi klien.
               </p>
             </div>
             
             <div className="space-y-24 scroll-animate" data-animation-delay="0.6">
-              {subsidiaries.map((subsidiary, index) => {
-                const IconComponent = subsidiary.icon;
+              {companies.map((company, index) => {
+                const IconComponent = company.icon;
                 return (
                   <Card 
-                    key={subsidiary.id} 
-                    variant="service" 
-                    className="subsidiary-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500"
+                      key={company.id} 
+                      variant="service" 
+                      className="company-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500"
                     style={{
                       animationDelay: `${index * 0.2}s`
                     }}
                   >
                     <CardContent className="p-8">
-                      {/* Subsidiary Header */}
+                      {/* Company Header */}
                       <div className="text-center mb-12">
-                        <div className={`w-24 h-24 ${subsidiary.color} rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6`}>
+                        <div className={`w-24 h-24 ${company.color} rounded-3xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6`}>
                           <IconComponent className="w-12 h-12 text-white" />
                         </div>
-                        <h3 className="heading-3 text-blue-900 mb-3">{subsidiary.name}</h3>
-                        <p className="text-xl text-gold-500 font-medium mb-4">{subsidiary.tagline}</p>
-                        <p className="body-large text-gray-600 max-w-2xl mx-auto">{subsidiary.description}</p>
+                        <h3 className="heading-3 text-blue-900 mb-3">{company.name}</h3>
+                        <p className="text-xl text-gold-500 font-medium mb-4">{company.tagline}</p>
+                        <p className="body-large text-gray-600 max-w-2xl mx-auto">{company.description}</p>
                         
-                        {subsidiary.notice && (
+                        {company.notice && (
                           <div className="mt-6 bg-gradient-to-r from-gold-50 to-gold-100 border border-gold-200 rounded-xl p-4 max-w-2xl mx-auto shadow-sm">
                             <p className="text-gold-700 text-sm">
-                              <strong>Notice:</strong> {subsidiary.notice}
+                              <strong>Notice:</strong> {company.notice}
                             </p>
                           </div>
                         )}
@@ -266,14 +266,14 @@ export default function SubsidiariesPage() {
                         <Card variant="service" className="glass-morphism depth-3 bg-gray-50/80 backdrop-blur-sm border-gray-200/50 hover:shadow-lg transition-all duration-300">
                           <CardContent className="p-8">
                             <h4 className="text-2xl font-bold text-blue-900 mb-6">Layanan</h4>
-                            <div className="space-y-3">
-                              {subsidiary.services.map((service, idx) => (
-                                <div key={idx} className="flex items-center transition-all duration-300 hover:text-blue-600 hover:translate-x-1">
-                                  <div className="w-2 h-2 bg-gold-400 rounded-full mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150"></div>
+                            <ul className="space-y-3 list-none">
+                              {company.services.map((service, idx) => (
+                                <li key={idx} className="flex items-center transition-all duration-300 hover:text-blue-600 hover:translate-x-1">
+                                  <span className="w-2 h-2 bg-gold-400 rounded-full mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
                                   <span className="text-gray-700">{service}</span>
-                                </div>
+                                </li>
                               ))}
-                            </div>
+                            </ul>
                           </CardContent>
                         </Card>
                         
@@ -282,7 +282,7 @@ export default function SubsidiariesPage() {
                           <CardContent className="p-8">
                             <h4 className="text-2xl font-bold text-blue-900 mb-6">Portfolio Highlights</h4>
                             <div className="space-y-4">
-                              {subsidiary.portfolio.map((project, idx) => (
+                              {company.portfolio.map((project, idx) => (
                                 <div key={idx} className="bg-white/80 rounded-xl p-4 transition-all duration-300 hover:bg-white hover:scale-105 hover:shadow-md">
                                   <h5 className="font-semibold text-blue-900 mb-1">{project.title}</h5>
                                   <span className="text-sm text-gold-500">{project.category}</span>
@@ -296,7 +296,7 @@ export default function SubsidiariesPage() {
                         <Card variant="service" className="glass-morphism depth-3 bg-gray-50/80 backdrop-blur-sm border-gray-200/50 hover:shadow-lg transition-all duration-300">
                           <CardContent className="p-8">
                             <SocialMediaGrid 
-                              companyId={subsidiary.id}
+                              companyId={company.id}
                               title="Kontak & Social"
                               layout="vertical"
                               className="mb-6"
@@ -306,19 +306,19 @@ export default function SubsidiariesPage() {
                               <div className="space-y-4">
                                 <div className="flex items-center transition-colors duration-300 hover:text-pink-600">
                                   <Instagram className="w-5 h-5 text-pink-500 mr-3" />
-                                  <span className="text-gray-700">{subsidiary.instagram}</span>
+                                  <span className="text-gray-700">{company.instagram}</span>
                                 </div>
                                 
                                 <div className="flex items-center transition-colors duration-300 hover:text-blue-600">
                                   <ExternalLink className="w-5 h-5 text-blue-500 mr-3" />
-                                  <span className="text-gray-700">{subsidiary.website}</span>
+                                  <span className="text-gray-700">{company.website}</span>
                                 </div>
                               </div>
                               
                               <div className="mt-6">
                                 <h5 className="font-semibold text-blue-900 mb-3">Major Clients</h5>
                                 <div className="grid grid-cols-2 gap-2">
-                                  {subsidiary.clients.map((client, idx) => (
+                                  {company.clients.map((client, idx) => (
                                     <div key={idx} className="bg-white/80 rounded-lg px-3 py-2 text-center text-sm text-gray-600 transition-all duration-300 hover:bg-white hover:scale-105 hover:shadow-sm">
                                       {client}
                                     </div>
@@ -327,8 +327,8 @@ export default function SubsidiariesPage() {
                               </div>
                               
                               <div className="mt-6">
-                                <button className={`w-full ${subsidiary.color} hover:opacity-90 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform`}>
-                                  Hubungi {subsidiary.name}
+                                <button className={`w-full ${company.color} hover:opacity-90 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform`}>
+                                  Hubungi {company.name}
                                 </button>
                               </div>
                             </div>
@@ -340,15 +340,15 @@ export default function SubsidiariesPage() {
                       <Card variant="service" className="mt-12 glass-morphism depth-3 bg-gray-50/80 backdrop-blur-sm border-gray-200/50 hover:shadow-lg transition-all duration-300">
                         <CardContent className="p-8">
                           <InstagramFeed 
-                            username={subsidiary.instagram.replace('@', '')}
-                            displayName={subsidiary.name}
+                            username={company.instagram.replace('@', '')}
+                            displayName={company.name}
                             limit={4}
                             className=""
                           />
                         </CardContent>
                       </Card>
                       
-                      {index < subsidiaries.length - 1 && (
+                      {index < companies.length - 1 && (
                         <div className="border-b border-gray-200 mt-16"></div>
                       )}
                     </CardContent>
@@ -374,7 +374,7 @@ export default function SubsidiariesPage() {
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Keunggulan Integrasi</h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Dengan subsidiaries yang terintegrasi, kami dapat memberikan solusi end-to-end 
+                Dengan companies yang terintegrasi, kami dapat memberikan solusi end-to-end 
                 yang lebih efisien dan efektif.
               </p>
             </div>
@@ -386,7 +386,7 @@ export default function SubsidiariesPage() {
                     <span className="text-2xl">🤝</span>
                   </div>
                   <h3 className="text-xl font-semibold text-blue-900 mb-2">Sinergi</h3>
-                  <p className="text-gray-600">Kolaborasi antar subsidiary untuk hasil optimal</p>
+                  <p className="text-gray-600">Kolaborasi antar company untuk hasil optimal</p>
                 </CardContent>
               </Card>
               
@@ -441,7 +441,7 @@ export default function SubsidiariesPage() {
                 Tertarik Berkolaborasi?
               </h2>
               <p className="body-large text-gray-300 mb-8" data-text-animation="fade-in" data-animation-delay="0.4">
-                Hubungi subsidiary yang sesuai dengan kebutuhan Anda atau konsultasikan 
+                Hubungi company yang sesuai dengan kebutuhan Anda atau konsultasikan 
                 untuk solusi terintegrasi.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center scroll-animate" data-animation-delay="0.6">

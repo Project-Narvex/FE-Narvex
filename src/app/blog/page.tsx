@@ -88,7 +88,7 @@ export default function BlogPage() {
     { id: 'industry-insights', name: 'Industry Insights', count: 6 },
     { id: 'project-stories', name: 'Project Stories', count: 5 },
     { id: 'tips-tricks', name: 'Tips & Tricks', count: 3 },
-    { id: 'subsidiary-news', name: 'Subsidiary News', count: 2 }
+    { id: 'company-news', name: 'Company News', count: 2 }
   ];
   
   const articles = [
@@ -128,8 +128,8 @@ export default function BlogPage() {
     {
       id: 4,
       title: 'Skywork.id Raih Penghargaan Best Creative Agency 2023',
-      excerpt: 'Subsidiary Narvex, Skywork.id, meraih penghargaan bergengsi sebagai Best Creative Agency 2023 berkat pendekatan "Bekerja dengan Seni" yang inovatif.',
-      category: 'subsidiary-news',
+      excerpt: 'Partner company Narvex, Skywork.id, meraih penghargaan bergengsi sebagai Best Creative Agency 2023 berkat pendekatan "Bekerja dengan Seni" yang inovatif.',
+      category: 'company-news',
       author: 'Tim Skywork',
       date: '2024-01-08',
       readTime: '4 min',
@@ -162,7 +162,7 @@ export default function BlogPage() {
       id: 7,
       title: 'Gutama Learning Luncurkan Program Sertifikasi Event Management',
       excerpt: 'Program sertifikasi komprehensif untuk para profesional yang ingin mengembangkan karir di bidang event management dan MICE industry.',
-      category: 'subsidiary-news',
+      category: 'company-news',
       author: 'Tim Gutama Learning',
       date: '2023-12-28',
       readTime: '6 min',
@@ -198,29 +198,52 @@ export default function BlogPage() {
       
       <main>
         {/* Hero Section */}
-        <SimpleHero
-          title="Blog & News Center"
-          subtitle="Narvex Insights"
-          description="Insights, updates, dan stories dari dunia MICE, event production, dan industri kreatif"
-          breadcrumb={[
-            { label: 'Home', href: '/' },
-            { label: 'Blog' }
-          ]}
-          className="scroll-snap-section"
+        <SimpleHero 
+          title="Blog & Insights"
+          subtitle="Temukan artikel terbaru, tips, dan insights dari dunia creative services dan event production"
+          backgroundImage="https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20blog%20workspace%20creative%20writing%20laptop%20coffee%20books%20inspiration&image_size=landscape_16_9"
         />
         
-        {/* Search Section */}
-        <section className="py-8 bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900">
-          <div className="container mx-auto px-6">
-            <div className="max-w-md mx-auto relative glass-morphism rounded-2xl p-2 backdrop-blur-sm shadow-depth-3 hover-depth-subtle">
-              <Search className="absolute left-6 top-1/2 transform -translate-y-1/2 text-gray-300 w-5 h-5" />
-              <input
-                type="text"
-                placeholder="Cari artikel..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-14 pr-4 py-4 bg-transparent text-white placeholder-gray-300 border-none focus:outline-none text-lg"
-              />
+        {/* Categories & Search Section */}
+        <section className="section-padding bg-gray-50 morphing-bg-section overflow-x-hidden">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            {/* Search Bar */}
+            <div className="max-w-2xl mx-auto mb-8 sm:mb-12">
+              <div className="relative">
+                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
+                <input
+                  type="text"
+                  placeholder="Cari artikel..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-base sm:text-lg min-h-[44px] touch-manipulation"
+                />
+              </div>
+            </div>
+            
+            {/* Categories Filter */}
+            <div className="flex flex-wrap gap-3 justify-center">
+              {categories.map((category, index) => (
+                <button
+                  key={category.id}
+                  onClick={() => setActiveCategory(category.id)}
+                  className={`category-card px-4 sm:px-6 py-3 rounded-2xl font-medium transition-all duration-300 hover-depth-subtle min-h-[44px] touch-manipulation ${
+                    activeCategory === category.id
+                      ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-gold-depth'
+                      : 'bg-white/80 backdrop-blur-sm text-gray-contrast-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 hover:text-blue-900 border border-gray-200'
+                  }`}
+                  style={{ animationDelay: `${index * 0.1}s` }}
+                >
+                  <span className="mr-2">{category.name}</span>
+                  <span className={`text-sm px-2 py-1 rounded-full ${
+                    activeCategory === category.id 
+                      ? 'bg-white/20 text-gold-100' 
+                      : 'bg-gray-contrast-100 text-gray-contrast-500'
+                  }`}>
+                    {category.count}
+                  </span>
+                </button>
+              ))}
             </div>
           </div>
         </section>
@@ -234,16 +257,16 @@ export default function BlogPage() {
             <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-blue-400 blur-2xl"></div>
           </div>
           
-          <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
             {/* Decorative Top Divider */}
-            <div className="flex items-center justify-center mb-12">
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
-              <div className="mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
+            <div className="flex items-center justify-center mb-8 sm:mb-12">
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
+              <div className="mx-3 sm:mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
-            <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
+            <div className="text-center mb-12 sm:mb-16 scroll-animate">
+              <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Artikel Unggulan
               </h2>
               <p className="body-large text-gray-contrast-700 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015">
@@ -251,7 +274,7 @@ export default function BlogPage() {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
               {featuredArticles.map((article, index) => (
                 <Card key={article.id} variant="service" className={`article-card group flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden ${index % 2 === 0 ? 'scroll-animate-left' : 'scroll-animate-right'}`}>
                   <div className="h-48 bg-gradient-to-br from-blue-100 to-gold-100 flex items-center justify-center relative overflow-hidden">
@@ -314,11 +337,11 @@ export default function BlogPage() {
             <div className="absolute top-1/3 right-1/3 w-28 h-28 rounded-full bg-gold-400 blur-2xl"></div>
           </div>
           
-          <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
-            <div className="grid lg:grid-cols-4 gap-8">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
               {/* Sidebar - Categories */}
               <div className="lg:col-span-1 scroll-animate-left">
-                <Card variant="service" className="category-card rounded-3xl shadow-depth-3 hover:shadow-depth-4 transition-all duration-500 backdrop-blur-sm glass-morphism sticky top-6">
+                <Card variant="service" className="category-card rounded-3xl shadow-depth-3 hover:shadow-depth-4 transition-all duration-500 backdrop-blur-sm glass-morphism lg:sticky lg:top-6">
                   <CardContent className="p-6">
                     <h3 className="text-xl font-bold text-blue-900 mb-6" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
                       Kategori
@@ -329,7 +352,7 @@ export default function BlogPage() {
                         <button
                           key={category.id}
                           onClick={() => setActiveCategory(category.id)}
-                          className={`w-full text-left px-4 py-3 rounded-xl transition-all duration-300 hover-depth-subtle ${
+                          className={`w-full text-left px-3 sm:px-4 py-3 rounded-xl transition-all duration-300 hover-depth-subtle min-h-[44px] touch-manipulation ${
                             activeCategory === category.id
                               ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-gold-depth'
                               : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 text-gray-contrast-700 hover:text-blue-900'
@@ -384,9 +407,9 @@ export default function BlogPage() {
                   {filteredArticles.map((article, index) => (
                     <Card key={article.id} variant="service" className="article-card group rounded-3xl shadow-depth-2 hover:shadow-depth-4 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden scroll-animate" style={{ animationDelay: `${index * 0.1}s` }}>
                       <CardContent className="p-6">
-                        <div className="grid md:grid-cols-4 gap-6">
+                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
                           <div className="md:col-span-1">
-                            <div className="h-32 bg-gradient-to-br from-blue-100 to-gold-100 rounded-2xl flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
+                            <div className="h-24 sm:h-32 bg-gradient-to-br from-blue-100 to-gold-100 rounded-2xl flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
                               <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10"></div>
                               <div className="text-center text-blue-600 relative z-10">
                                 <div className="text-3xl mb-1 group-hover:scale-110 transition-transform duration-300">📄</div>
@@ -521,7 +544,6 @@ export default function BlogPage() {
           </div>
         </section>
       </main>
-      
       <Footer />
     </div>
   );

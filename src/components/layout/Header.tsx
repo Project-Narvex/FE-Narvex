@@ -30,7 +30,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
     { href: '/', label: 'Home' },
     { href: '/about', label: 'About' },
     { href: '/services', label: 'Services' },
-    { href: '/subsidiaries', label: 'Subsidiaries' },
+    { href: '/companies', label: 'Companies' },
     { href: '/portfolio', label: 'Portfolio' },
     { href: '/blog', label: 'Blog' },
     { href: '/contact', label: 'Contact' },
@@ -55,11 +55,11 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
           : 'bg-transparent'
       )}
     >
-      <div className="container mx-auto px-4 md:px-6">
-        <div className="flex items-center justify-between h-20">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+        <div className="flex items-center justify-between h-16 sm:h-20">
           {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <div className="relative w-20 h-20 md:w-24 md:h-24 lg:w-28 lg:h-28">
+          <Link href="/" className="flex items-center flex-shrink-0">
+            <div className="relative w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28">
               <Image
                 src="/narvex-logo.png"
                 alt="Narvex Logo"
@@ -115,18 +115,19 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
 
           {/* Mobile Menu Button */}
           <button
-            className="lg:hidden p-2"
+            className="lg:hidden p-3 -mr-3 touch-manipulation"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle mobile menu"
+            aria-expanded={isMobileMenuOpen}
           >
             {isMobileMenuOpen ? (
               <X className={cn(
-                'w-6 h-6',
+                'w-6 h-6 transition-transform duration-200',
                 isScrolled ? 'text-gray-700' : 'text-white'
               )} />
             ) : (
               <Menu className={cn(
-                'w-6 h-6',
+                'w-6 h-6 transition-transform duration-200',
                 isScrolled ? 'text-gray-700' : 'text-white'
               )} />
             )}
@@ -134,15 +135,18 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
         </div>
 
         {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className="lg:hidden bg-white border-t border-gray-200 py-4">
-            <nav className="flex flex-col space-y-4">
+        <div className={cn(
+          'lg:hidden overflow-hidden transition-all duration-300 ease-in-out',
+          isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'
+        )}>
+          <div className="bg-white/95 backdrop-blur-md border-t border-gray-200 py-4 shadow-lg">
+            <nav className="flex flex-col space-y-1">
               {navItems.map((item) => (
                 item.href.startsWith('#') ? (
                   <button
                     key={item.href}
                     onClick={() => handleNavigation(item.href)}
-                    className="text-left font-medium text-gray-700 hover:text-gold-500 transition-colors px-4 py-2"
+                    className="text-left font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50 transition-all duration-200 px-6 py-3 min-h-[44px] touch-manipulation"
                   >
                     {item.label}
                   </button>
@@ -152,19 +156,19 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
                     href={item.href}
                     prefetch={false}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="text-left font-medium text-gray-700 hover:text-gold-500 transition-colors px-4 py-2 block"
+                    className="text-left font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50 transition-all duration-200 px-6 py-3 min-h-[44px] block touch-manipulation"
                   >
                     {item.label}
                   </Link>
                 )
               ))}
-              <div className="px-4 pt-2">
+              <div className="px-6 pt-4 pb-2">
                 <Link href="/contact" prefetch={false}>
                   <Button
                     variant="primary"
                     size="normal"
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="w-full"
+                    className="w-full min-h-[44px] touch-manipulation"
                   >
                     Get Started
                   </Button>
@@ -172,7 +176,7 @@ const Header: React.FC<HeaderProps> = ({ isScrolled: propIsScrolled }) => {
               </div>
             </nav>
           </div>
-        )}
+        </div>
       </div>
     </header>
   );

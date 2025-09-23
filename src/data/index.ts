@@ -57,7 +57,7 @@ export const globalSearch = () => {
 // Data statistics
 export const getDataStats = () => {
   return {
-    totalCompanies: 5, // Narvex + 4 subsidiaries
+    totalCompanies: 5, // Narvex + 4 companies
     totalProjects: 20, // Approximate from projects.ts
     totalTeamMembers: 25, // Approximate from team.ts
     totalArticles: 5, // From blog.ts

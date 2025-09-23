@@ -161,7 +161,7 @@ export const getCompanyById = (id: string): Company | undefined => {
   return companies.find(company => company.id === id);
 };
 
-export const getSubsidiaries = (): Company[] => {
+export const getCompanies = (): Company[] => {
   return companies.filter(company => !company.isParent);
 };
 

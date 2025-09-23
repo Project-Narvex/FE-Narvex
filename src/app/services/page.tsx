@@ -143,10 +143,10 @@ export default function ServicesPage() {
   }, []);
 
   return (
-    <div className="min-h-screen scroll-snap-container">
+    <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       <Header />
       
-      <main>
+      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <SimpleHero
           title="Layanan Kami"
@@ -170,30 +170,30 @@ export default function ServicesPage() {
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
-          <div className="relative container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Portfolio Layanan Lengkap</h2>
+          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
+            <div className="text-center mb-12 sm:mb-16">
+              <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Portfolio Layanan Lengkap</h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
                 Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi 
                 untuk kesuksesan setiap project Anda.
               </p>
             </div>
             
-            <div className="space-y-16 scroll-animate" data-animation-delay="0.6">
+            <div className="space-y-12 sm:space-y-16 scroll-animate" data-animation-delay="0.6">
               {services.map((service, index) => {
                 const IconComponent = service.icon;
                 return (
                   <Card 
                     key={index} 
                     variant="service" 
-                    className={`service-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50 grid lg:grid-cols-2 gap-12 items-center hover:shadow-2xl transition-all duration-500 ${
+                    className={`service-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50 grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center hover:shadow-2xl transition-all duration-500 ${
                       index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
                     }`}
                     style={{
                       animationDelay: `${index * 0.2}s`
                     }}
                   >
-                    <CardContent className={`p-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
+                    <CardContent className={`p-6 sm:p-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
                       <div className="flex items-center mb-6">
                         <div className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110 hover:rotate-6`}>
                           <IconComponent className="w-8 h-8 text-white" />
@@ -208,14 +208,14 @@ export default function ServicesPage() {
                         {service.description}
                       </p>
                       
-                      <div className="grid md:grid-cols-2 gap-4">
+                      <ul className="space-y-3 list-none">
                         {service.features.map((feature, idx) => (
-                          <div key={idx} className="flex items-center transition-all duration-300 hover:text-blue-600 hover:translate-x-1">
-                            <div className="w-2 h-2 bg-gold-400 rounded-full mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150"></div>
-                            <span className="text-gray-700">{feature}</span>
-                          </div>
+                          <li key={idx} className="flex items-start transition-all duration-300 hover:text-blue-600 hover:translate-x-1">
+                            <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
+                            <span className="text-gray-700 leading-relaxed">{feature}</span>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                       
                       <div className="mt-8">
                         <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-8 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">

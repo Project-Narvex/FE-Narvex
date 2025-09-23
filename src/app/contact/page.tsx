@@ -183,10 +183,10 @@ export default function ContactPage() {
   };
 
   return (
-    <div className="min-h-screen scroll-snap-container">
+    <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       <Header />
       
-      <main>
+      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <SimpleHero
           title="Hubungi Kami"

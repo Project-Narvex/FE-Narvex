@@ -489,12 +489,12 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen scroll-snap-container">
+    <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       {/* Header */}
       <Header />
       
       {/* Main Content */}
-      <main>
+      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
           {/* Enhanced Background Layers */}
@@ -526,67 +526,67 @@ export default function Home() {
           </div>
 
           {/* Content */}
-          <div className="relative z-depth-3 container mx-auto px-6 transform-3d">
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Text Content */}
-              <div className="text-center lg:text-left depth-layer-2 px-4 sm:px-6 lg:px-0" data-mouse-parallax="0.1">
-                <h1 className="hero-title text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 text-depth-lg leading-tight md:leading-tight lg:leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+              <div className="text-center lg:text-left depth-layer-2 w-full" data-mouse-parallax="0.1">
+                <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
                   <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
                   <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
                   <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
                 </h1>
                 
-                <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+                <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
                   CV. Nara Exhibition Indonesia
                 </p>
                 
-                <p className="text-lg md:text-xl text-gold-300 mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" data-element="trust-badge" data-text-animation="fade-in" data-delay="0.6" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+                <p className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" data-element="trust-badge" data-text-animation="fade-in" data-delay="0.6" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
                   Trusted by Government & Fortune 500 Companies
                 </p>
                 
-                <div className="hero-buttons flex flex-col sm:flex-row gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
+                <div className="hero-buttons flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
                   <Button
                     variant="secondary"
-                    size="large"
+                    size="normal"
                     onClick={() => scrollToSection('#portfolio')}
-                    className="group animate-glow hover-depth shadow-depth-3 backdrop-blur-sm"
+                    className="group animate-glow hover-depth shadow-depth-3 backdrop-blur-sm w-full sm:w-auto"
                     data-tilt="5"
                   >
                     Lihat Portfolio
-                    <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                    <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                   
                   <Button
                     variant="outline"
-                    size="large"
+                    size="normal"
                     onClick={() => scrollToSection('#contact')}
-                    className="border-white text-white hover:bg-white hover:text-white group animate-pulse-hover hover-depth-subtle glass-morphism"
+                    className="border-white text-white hover:bg-white hover:text-gray-900 group animate-pulse-hover hover-depth-subtle glass-morphism w-full sm:w-auto"
                     data-tilt="5"
                   >
-                    <Play className="mr-2 w-5 h-5 group-hover:scale-110 transition-transform" />
+                    <Play className="mr-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:scale-110 transition-transform" />
                     Konsultasi Gratis
                   </Button>
                 </div>
 
                 {/* Stats */}
-                <div className="hero-stats grid grid-cols-3 gap-8 mt-16 stagger-children" data-mouse-parallax="0.06">
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500 text-depth">50+</div>
-                    <div className="text-gray-300 text-sm md:text-base">Projects Completed</div>
+                <div className="hero-stats grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 stagger-children" data-mouse-parallax="0.06">
+                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
+                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
                   </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500 text-depth">25+</div>
-                    <div className="text-gray-300 text-sm md:text-base">Happy Clients</div>
+                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
+                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
                   </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-3xl md:text-4xl font-bold mb-2 text-gold-500 text-depth">3+</div>
-                    <div className="text-gray-300 text-sm md:text-base">Years Experience</div>
+                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
+                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
                   </div>
                 </div>
               </div>
 
               {/* Visual Content - Service Coverflow */}
-              <div className="relative lg:block hidden w-full coverflow-container depth-layer-1" data-mouse-parallax="0.15">
+              <div className="relative hidden lg:block w-full coverflow-container depth-layer-1 overflow-hidden" data-mouse-parallax="0.15">
                 <Swiper
                   effect={'coverflow'}
                   grabCursor={true}
@@ -655,12 +655,12 @@ export default function Home() {
             <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-blue-400 blur-2xl"></div>
           </div>
           
-          <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl text-center relative z-10">
             {/* Decorative Top Divider */}
-            <div className="flex items-center justify-center mb-12">
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
-              <div className="mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
+            <div className="flex items-center justify-center mb-8 sm:mb-12">
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
+              <div className="mx-3 sm:mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
             <div className="max-w-7xl mx-auto scroll-animate">
@@ -670,10 +670,10 @@ export default function Home() {
               <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015" style={{willChange: 'transform, opacity'}}>
                 Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
                 mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
-                komprehensif. Dengan 4 subsidiary yang saling melengkapi, kami memberikan 
+                komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan 
                 layanan end-to-end untuk kesuksesan setiap project Anda.
               </p>
-              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6 mt-16 animate-stagger">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-12 sm:mt-16 animate-stagger">
                 <Card 
                   variant="service" 
                   className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
@@ -751,10 +751,10 @@ export default function Home() {
             <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/15 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
           </div>
           
-          <div className="container mx-auto px-6 relative z-depth-2">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.05">
-              <h2 className="heading-2 mb-6 text-depth-lg transform-3d" style={{color: '#6382b4'}} data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.4" data-stagger="0.02" data-tilt="4">
+            <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.05">
+              <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" style={{color: '#6382b4'}} data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.4" data-stagger="0.02" data-tilt="4">
                 Layanan Kami
               </h2>
               <p className="body-large max-w-3xl mx-auto text-gray-contrast-700 text-depth" data-element="description" data-text-animation="blur-focus" data-delay="0.2" data-duration="0.5" data-stagger="0.02" data-mouse-parallax="0.03">
@@ -764,7 +764,7 @@ export default function Home() {
 
             
             {/* Services Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
               {services.map((service, index) => (
                 <Card
                   key={service.id}
@@ -792,11 +792,11 @@ export default function Home() {
                     </p>
                     
                     {/* Features List */}
-                    <ul className="space-y-3 mb-6 flex-1">
+                    <ul className="space-y-3 mb-6 flex-1 list-none">
                       {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-center text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
-                          <div className="w-3 h-3 rounded-full mr-3 transition-colors shadow-sm" style={{backgroundColor: '#dbc48a'}}></div>
-                          <span className="text-sm font-medium group-hover:text-blue-800 transition-colors">{feature}</span>
+                        <li key={idx} className="flex items-start text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                          <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
+                          <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
                         </li>
                       ))}
                     </ul>
@@ -841,23 +841,23 @@ export default function Home() {
             <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
           </div>
           
-          <div className="container mx-auto px-6 relative z-depth-2">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.04">
-              <h2 className="heading-2 mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.6" data-stagger="0.02" data-tilt="3">
+            <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.04">
+              <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.6" data-stagger="0.02" data-tilt="3">
                 Portfolio Terpilih
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0.2" data-duration="0.4" data-stagger="0.05" data-mouse-parallax="0.02">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0.2" data-duration="0.4" data-stagger="0.05" data-mouse-parallax="0.02">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
               
               {/* Filter Buttons */}
-              <div className="flex flex-wrap justify-center gap-4" data-mouse-parallax="0.06">
+              <div className="flex flex-wrap justify-center gap-2 sm:gap-4" data-mouse-parallax="0.06">
                 {filters.map((filter) => (
                   <button
                     key={filter.key}
                     onClick={() => setActiveFilter(filter.key)}
-                    className={`px-6 py-3 rounded-full font-semibold transition-all duration-300 hover-depth-subtle transform-3d backdrop-blur-sm ${
+                    className={`px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold transition-all duration-300 hover-depth-subtle transform-3d backdrop-blur-sm min-h-[44px] touch-manipulation text-sm sm:text-base ${
                       activeFilter === filter.key
                         ? 'bg-gold-500 text-white shadow-depth-3 transform scale-105 text-depth'
                         : 'bg-gray-contrast-100 text-gray-contrast-700 hover:bg-gray-contrast-200 hover:scale-105 glass-morphism shadow-depth-1'
@@ -871,7 +871,7 @@ export default function Home() {
             </div>
             
             {/* Projects Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
               {filteredProjects.map((project, index) => (
                 <Card
                   key={project.id}
@@ -953,19 +953,19 @@ export default function Home() {
             <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
           </div>
           
-          <div className="container mx-auto px-6 relative z-depth-2">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.03">
-              <h2 className="text-5xl font-bold leading-tight mb-6 text-depth-lg transform-3d testimonial-heading" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.5" data-stagger="0.01" data-tilt="3">
+            <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.03">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.5" data-stagger="0.01" data-tilt="3">
                 Kata Mereka
               </h2>
-              <p className="text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description" data-element="content" data-text-animation="fade-in" data-delay="0.2" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.02">
+              <p className="text-lg sm:text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description text-gray-200" data-element="content" data-text-animation="fade-in" data-delay="0.2" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.02">
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
             
             {/* Testimonials Grid */}
-            <div className="grid md:grid-cols-2 gap-8 mb-16 stagger-children" data-mouse-parallax="0.08">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16 stagger-children" data-mouse-parallax="0.08">
               {defaultTestimonials.map((testimonial, index) => (
                 <Card
                   key={testimonial.id}

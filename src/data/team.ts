@@ -34,7 +34,7 @@ export const teamMembers: TeamMember[] = [
     education: 'MBA - Business Management',
     achievements: [
       'Founded CV. Nara Exhibition Indonesia',
-      'Expanded to 4 subsidiary companies',
+      'Expanded to 4 partner companies',
       'Led 50+ successful major events'
     ],
     isLeadership: true,

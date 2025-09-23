@@ -17,6 +17,11 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Narvex - Creative Services & Event Production",
   description: "Narvex adalah perusahaan creative services yang berdedikasi untuk membantu brand berkembang melalui solusi kreatif yang inovatif.",
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+  },
 };
 
 export default async function RootLayout({

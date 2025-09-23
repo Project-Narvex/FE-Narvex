@@ -78,10 +78,10 @@ export default function AboutPage() {
   }, []);
 
   return (
-    <div className="min-h-screen scroll-snap-container">
+    <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       <Header />
       
-      <main>
+      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
           {/* Enhanced Background Layers */}
@@ -113,13 +113,13 @@ export default function AboutPage() {
           </div>
 
           {/* Content */}
-          <div className="relative z-depth-3 container mx-auto px-6 transform-3d text-center">
+          <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
             <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
-              <h1 className="hero-title text-5xl md:text-6xl lg:text-7xl font-bold text-white mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
                 <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
                 <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
               </h1>
-              <p className="hero-subtitle text-xl md:text-2xl text-gray-200 mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
                 CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing
               </p>
             </div>
@@ -142,16 +142,16 @@ export default function AboutPage() {
             <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-blue-400 blur-2xl"></div>
           </div>
           
-          <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
+          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
             {/* Decorative Top Divider */}
-            <div className="flex items-center justify-center mb-12">
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
-              <div className="mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
-              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-24"></div>
+            <div className="flex items-center justify-center mb-8 sm:mb-12">
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
+              <div className="mx-3 sm:mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
+              <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
-            <div className="max-w-4xl mx-auto text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
+            <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 scroll-animate">
+              <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Perjalanan Kami
               </h2>
               <p className="body-large text-gray-contrast-700 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015">
@@ -160,7 +160,7 @@ export default function AboutPage() {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
               <div className="scroll-animate-left">
                 <h3 className="heading-3 mb-8 text-blue-900" data-element="heading" data-text-animation="slide-up" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
                   Nilai-Nilai Perusahaan
@@ -265,24 +265,24 @@ export default function AboutPage() {
                   <h3 className="text-2xl font-bold text-blue-900 mb-6 group-hover:text-blue-800 transition-colors duration-300 leading-snug" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
                     Misi
                   </h3>
-                  <div className="text-left text-gray-contrast-600 space-y-3 flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                    <p className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      Memberikan layanan creative services berkualitas tinggi dengan pendekatan profesional dan inovatif
-                    </p>
-                    <p className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      Membantu klien membangun brand identity yang kuat dan memorable
-                    </p>
-                    <p className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      Menghadirkan event production yang memorable dan impactful
-                    </p>
-                    <p className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0"></span>
-                      Mengoptimalkan digital presence klien melalui strategi digital marketing yang efektif
-                    </p>
-                  </div>
+                  <ul className="text-left text-gray-contrast-600 space-y-3 flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300 leading-relaxed list-none" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
+                      <span>Memberikan layanan creative services berkualitas tinggi dengan pendekatan profesional dan inovatif</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
+                      <span>Membantu klien membangun brand identity yang kuat dan memorable</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
+                      <span>Menghadirkan event production yang memorable dan impactful</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
+                      <span>Mengoptimalkan digital presence klien melalui strategi digital marketing yang efektif</span>
+                    </li>
+                  </ul>
                   <div className="mt-6 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </CardContent>
               </Card>
