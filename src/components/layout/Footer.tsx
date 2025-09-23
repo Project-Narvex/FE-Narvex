@@ -2,6 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Instagram, Mail, Phone, MapPin, ArrowUp } from 'lucide-react';
 import Button from '../ui/Button';
 
@@ -61,12 +62,17 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
       <footer className="bg-blue-900 text-white py-8">
         <div className="container mx-auto px-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
-            <div className="flex items-center space-x-2 mb-4 md:mb-0">
-              <div className="w-8 h-8 bg-gradient-to-br from-blue-700 to-gold-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-sm">N</span>
+            <Link href="/" className="flex items-center justify-center mb-4 md:mb-0 hover:opacity-80 transition-opacity">
+              <div className="relative w-24 h-24 flex items-center justify-center">
+                <Image
+                  src="/narvex-logo.png"
+                  alt="Narvex Logo"
+                  fill
+                  className="object-contain object-center"
+                  priority
+                />
               </div>
-              <span className="text-xl font-bold">Narvex</span>
-            </div>
+            </Link>
             <p className="text-gray-400 text-sm">
               © {currentYear} Narvex. All rights reserved.
             </p>
@@ -83,11 +89,18 @@ const Footer: React.FC<FooterProps> = ({ variant = 'default' }) => {
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
           {/* Company Info */}
           <div className="lg:col-span-1">
-            <div className="flex items-center space-x-2 mb-6">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-700 to-gold-500 rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-xl">N</span>
-              </div>
-              <span className="text-2xl font-bold">Narvex</span>
+            <div className="flex justify-center lg:justify-start mb-6">
+              <Link href="/" className="flex items-center justify-center hover:opacity-80 transition-opacity">
+                <div className="relative w-28 h-28 flex items-center justify-center">
+                  <Image
+                    src="/narvex-logo.png"
+                    alt="Narvex Logo"
+                    fill
+                    className="object-contain object-center"
+                    priority
+                  />
+                </div>
+              </Link>
             </div>
             <p className="text-gray-300 mb-6 leading-relaxed">
               Solusi kreatif terpadu untuk branding, event production, dan digital marketing yang memorable.

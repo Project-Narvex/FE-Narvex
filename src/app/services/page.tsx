@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import SimpleHero from '@/components/ui/SimpleHero';
@@ -160,11 +161,26 @@ export default function ServicesPage() {
         />
 
         {/* Services Overview */}
-        <section className="section-padding bg-gradient-to-br from-white via-gray-50 to-white scroll-snap-section morphing-bg-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-10 right-20 w-56 h-56 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
+        <section className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-blue-200/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/15 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
+            <div className="absolute top-10 left-10 w-28 h-28 bg-blue-500/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-20 right-20 w-36 h-36 bg-gold-500/8 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-blue-400/12 rounded-full blur-xl" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/15 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/18 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
+            <div className="absolute top-3/5 right-1/3 w-20 h-20 bg-blue-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-2/5 left-1/8 w-32 h-32 bg-gold-200/10 rounded-full filter blur-3xl" data-parallax="0.2" data-float="true" data-float-amplitude="22" data-float-duration="11"></div>
+            <div className="absolute top-1/8 left-2/3 w-18 h-18 bg-blue-100/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            <div className="absolute bottom-1/8 right-2/5 w-28 h-28 bg-gold-300/12 rounded-full filter blur-2xl" data-parallax="0.15" data-float="true" data-float-amplitude="20" data-float-duration="9"></div>
+            <div className="absolute top-4/5 left-1/5 w-22 h-22 bg-blue-300/10 rounded-full filter blur-xl" data-parallax="0.45" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-1/3 right-1/6 w-26 h-26 bg-gold-100/15 rounded-full filter blur-2xl" data-parallax="0.28" data-float="true" data-float-amplitude="17" data-float-duration="8"></div>
           </div>
           
           {/* Decorative divider */}
@@ -243,11 +259,23 @@ export default function ServicesPage() {
         </section>
 
         {/* Why Choose Us */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 right-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 left-20 w-48 h-48 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
+        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-blue-50/20 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/30 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/20 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
+            <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/20 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/12 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/15 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
+            <div className="absolute top-2/3 left-1/4 w-18 h-18 bg-blue-100/18 rounded-full filter blur-lg" data-parallax="0.35" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            <div className="absolute bottom-3/4 right-2/3 w-30 h-30 bg-gold-100/12 rounded-full filter blur-3xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
+            <div className="absolute top-1/6 right-1/6 w-20 h-20 bg-blue-200/10 rounded-full filter blur-2xl" data-parallax="0.45" data-float="true" data-float-amplitude="16" data-float-duration="7"></div>
+            <div className="absolute bottom-1/6 left-2/3 w-24 h-24 bg-gold-300/14 rounded-full filter blur-xl" data-parallax="0.2" data-float="true" data-float-amplitude="15" data-float-duration="9"></div>
           </div>
           
           {/* Decorative divider */}
@@ -305,37 +333,72 @@ export default function ServicesPage() {
           </div>
         </section>
 
-        {/* CTA Section */}
-        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 scroll-snap-section morphing-bg-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-20 left-20 w-64 h-64 bg-gold-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 right-20 w-48 h-48 bg-blue-400 rounded-full blur-2xl animate-float-delayed"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-float"></div>
+        {/* Multi-Channel Contact CTA */}
+        <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            <div className="absolute top-1/6 left-1/8 w-40 h-40 bg-gold-300/15 rounded-full filter blur-2xl" data-parallax="0.4" data-float="true" data-float-amplitude="25" data-float-duration="12"></div>
+            <div className="absolute bottom-1/5 right-1/6 w-32 h-32 bg-blue-300/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
+            <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
           </div>
           
-          {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-400 to-transparent opacity-50"></div>
-          
-          <div className="relative container mx-auto px-6 text-center">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="heading-1 text-white mb-6" data-text-animation="wave" data-animation-delay="0.2">
+          <div className="container mx-auto px-6 relative z-depth-2">
+            <div className="text-center mb-12 scroll-animate-scale">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
                 Siap Memulai Project Anda?
               </h2>
-              <p className="body-large text-gray-300 mb-8" data-text-animation="fade-in" data-animation-delay="0.4">
-                Hubungi kami sekarang untuk konsultasi gratis dan dapatkan solusi terbaik untuk kebutuhan Anda
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
+                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
+                mewujudkan visi kreatif Anda menjadi kenyataan.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center scroll-animate" data-animation-delay="0.6">
-                <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-                  Konsultasi Gratis
-                </button>
-                <button className="border-2 border-white text-white hover:bg-white hover:text-blue-900 px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-                  Lihat Portfolio
-                </button>
-              </div>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
+              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
+                <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
+                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Email</h3>
+                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+              </a>
+              
+              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
+                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
+                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+              </a>
+              
+              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
+                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
+                <p className="text-gray-300 text-sm">@narvex.id</p>
+              </a>
+              
+              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
+                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
+                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
+                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+              </a>
+            </div>
+            
+            <div className="text-center scroll-animate animate-stagger-4">
+              <a href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
+                Konsultasi Gratis
+              </a>
+              <a href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
+                Lihat Portfolio
+              </a>
             </div>
           </div>
         </section>
+        
       </main>
       
       <Footer />

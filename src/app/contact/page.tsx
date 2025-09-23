@@ -200,11 +200,19 @@ export default function ContactPage() {
         />
 
         {/* Company Selection */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-10 right-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 left-10 w-48 h-48 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
+        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
+            <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
           </div>
           
           {/* Decorative divider */}
@@ -268,11 +276,22 @@ export default function ContactPage() {
         </section>
 
         {/* Contact Form & Info */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-10 right-20 w-56 h-56 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
+        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
+            <div className="absolute top-20 left-10 w-28 h-28 bg-blue-300/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-10 right-20 w-36 h-36 bg-gold-300/12 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-blue-200/15 rounded-full blur-xl" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/18 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
+            <div className="absolute top-3/5 right-1/3 w-20 h-20 bg-blue-200/10 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-2/5 left-1/8 w-32 h-32 bg-gold-200/12 rounded-full filter blur-3xl" data-parallax="0.2" data-float="true" data-float-amplitude="22" data-float-duration="11"></div>
           </div>
           
           {/* Decorative divider */}

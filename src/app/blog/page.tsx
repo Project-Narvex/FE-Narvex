@@ -201,7 +201,6 @@ export default function BlogPage() {
         <SimpleHero 
           title="Blog & Insights"
           subtitle="Temukan artikel terbaru, tips, dan insights dari dunia creative services dan event production"
-          backgroundImage="https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20blog%20workspace%20creative%20writing%20laptop%20coffee%20books%20inspiration&image_size=landscape_16_9"
         />
         
         {/* Categories & Search Section */}
@@ -249,13 +248,24 @@ export default function BlogPage() {
         </section>
 
         {/* Featured Articles */}
-        <section className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section relative overflow-hidden morphing-bg-section">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-blue-500 blur-3xl"></div>
-            <div className="absolute bottom-20 right-20 w-40 h-40 rounded-full bg-gold-500 blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/3 w-24 h-24 rounded-full bg-blue-400 blur-2xl"></div>
+        <section className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
+            <div className="absolute top-10 left-10 w-28 h-28 bg-blue-300/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-20 right-20 w-36 h-36 bg-gold-300/12 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-blue-200/15 rounded-full blur-xl" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/18 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
           </div>
+          
+          {/* Decorative divider */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
             {/* Decorative Top Divider */}
@@ -329,13 +339,23 @@ export default function BlogPage() {
         </section>
 
         {/* Categories & Articles */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-blue-50/20 scroll-snap-section relative overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 right-10 w-40 h-40 rounded-full bg-gold-500 blur-3xl"></div>
-            <div className="absolute bottom-10 left-20 w-32 h-32 rounded-full bg-blue-500 blur-3xl"></div>
-            <div className="absolute top-1/3 right-1/3 w-28 h-28 rounded-full bg-gold-400 blur-2xl"></div>
+        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-blue-50/20 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+            <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
+            <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
           </div>
+          
+          {/* Decorative divider */}
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">

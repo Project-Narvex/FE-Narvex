@@ -1,11 +1,13 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
-import { MapPin, Calendar, Users, Award, ExternalLink } from 'lucide-react';
+import { MapPin, Calendar, Users, Award, ExternalLink, Search, Filter } from 'lucide-react';
+import { projects, Project } from '@/data/projects';
 import { 
   initializeAnimations, 
   addGSAPHoverAnimations,
@@ -17,73 +19,14 @@ import {
 
 export default function PortfolioPage() {
   const [activeFilter, setActiveFilter] = useState('all');
+  const [searchQuery, setSearchQuery] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('all');
+  const [yearFilter, setYearFilter] = useState('all');
+  const [companyFilter, setCompanyFilter] = useState('all');
+  const [statusFilter, setStatusFilter] = useState('all');
   
-  const narvexProjects = [
-    {
-      id: 'tech-startup-branding',
-      title: 'Tech Startup Complete Branding',
-      category: 'branding',
-      location: 'Jakarta',
-      date: '2023',
-      client: 'InnovateTech Solutions',
-      description: 'Pengembangan identitas brand lengkap untuk startup teknologi, mulai dari logo hingga brand guidelines.',
-      services: ['Brand Strategy', 'Logo Design', 'Brand Guidelines', 'Marketing Collaterals'],
-      results: {
-        recognition: '300%',
-        engagement: '250%',
-        satisfaction: '98%'
-      },
-      featured: true
-    },
-    {
-      id: 'corporate-event-production',
-      title: 'Annual Corporate Summit',
-      category: 'event',
-      location: 'Bali International Convention Centre',
-      date: '2023',
-      client: 'Global Finance Corp',
-      description: 'Produksi event corporate summit tahunan dengan 500+ peserta dan teknologi hybrid streaming.',
-      services: ['Event Production', 'Stage Design', 'Audio Visual', 'Live Streaming'],
-      results: {
-        participants: '500+',
-        online_viewers: '2000+',
-        satisfaction: '96%'
-      },
-      featured: true
-    },
-    {
-      id: 'digital-campaign',
-      title: 'E-commerce Digital Campaign',
-      category: 'digital',
-      location: 'Multi-platform',
-      date: '2023',
-      client: 'FashionForward',
-      description: 'Kampanye digital marketing terintegrasi untuk brand fashion dengan fokus pada Gen Z audience.',
-      services: ['Social Media Strategy', 'Content Creation', 'Influencer Marketing', 'Performance Ads'],
-      results: {
-        reach: '1M+',
-        engagement: '15%',
-        conversion: '8.5%'
-      },
-      featured: true
-    },
-    {
-      id: 'brand-consultation',
-      title: 'Restaurant Chain Rebranding',
-      category: 'consultation',
-      location: 'Surabaya',
-      date: '2023',
-      client: 'Nusantara Flavors',
-      description: 'Konsultasi dan implementasi rebranding untuk chain restaurant dengan 15 cabang.',
-      services: ['Brand Audit', 'Market Research', 'Brand Strategy', 'Implementation Support'],
-      results: {
-        sales_increase: '40%',
-        brand_awareness: '60%',
-        satisfaction: '94%'
-      },
-      featured: true
-    }
-  ];
+  // Use featured projects from the main projects data for Narvex Portfolio section
+  const narvexProjects = projects.filter(project => project.featured && project.companyId === 'narvex').slice(0, 4);
   
   const serviceHighlights = [
     {
@@ -136,6 +79,57 @@ export default function PortfolioPage() {
     ? serviceHighlights
     : serviceHighlights.filter(service => service.category === activeFilter);
 
+  // Portfolio query filtering logic
+  const filteredPortfolioProjects = projects.filter(project => {
+    const matchesSearch = searchQuery === '' || 
+      project.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.client.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      project.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+    
+    const matchesCategory = categoryFilter === 'all' || project.category === categoryFilter;
+    const matchesYear = yearFilter === 'all' || project.year.toString() === yearFilter;
+    const matchesCompany = companyFilter === 'all' || project.companyId === companyFilter;
+    const matchesStatus = statusFilter === 'all' || project.status === statusFilter;
+    
+    return matchesSearch && matchesCategory && matchesYear && matchesCompany && matchesStatus;
+  });
+
+  // Get unique years for year filter
+  const availableYears = [...new Set(projects.map(p => p.year))].sort((a, b) => b - a);
+  
+  // Get unique companies for company filter
+  const availableCompanies = [...new Set(projects.map(p => p.companyId))];
+  
+  // Category options for portfolio query
+  const portfolioCategories = [
+    { id: 'all', name: 'All Categories' },
+    { id: 'exhibition', name: 'Exhibition' },
+    { id: 'booth', name: 'Booth' },
+    { id: 'activation', name: 'Activation' },
+    { id: 'tour', name: 'Tour' },
+    { id: 'corporate', name: 'Corporate' },
+    { id: 'creative', name: 'Creative' },
+    { id: 'education', name: 'Education' },
+    { id: 'wedding', name: 'Wedding' }
+  ];
+  
+  const statusOptions = [
+    { id: 'all', name: 'All Status' },
+    { id: 'completed', name: 'Completed' },
+    { id: 'ongoing', name: 'Ongoing' },
+    { id: 'upcoming', name: 'Upcoming' }
+  ];
+  
+  const companyOptions = [
+    { id: 'all', name: 'All Companies' },
+    { id: 'narvex', name: 'Narvex' },
+    { id: 'skywork', name: 'Skywork.id' },
+    { id: 'gutama', name: 'Gutama Learning' },
+    { id: 'creativework', name: 'CreativeWork' },
+    { id: 'evervow', name: 'Evervow.wo' }
+  ];
+
   useEffect(() => {
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
@@ -158,8 +152,8 @@ export default function PortfolioPage() {
         });
       });
       
-      // Add 3D effects to service highlight cards
-      document.querySelectorAll('.service-highlight-card').forEach(card => {
+      // Add 3D effects to portfolio query cards
+      document.querySelectorAll('.portfolio-query-card').forEach(card => {
         add3DCardEffect(card, {
           maxRotation: 6,
           perspective: 800,
@@ -226,45 +220,23 @@ export default function PortfolioPage() {
           className="scroll-snap-section"
         />
 
-        {/* Filter Section */}
-        <section className="py-12 bg-gradient-to-br from-white via-gray-50 to-white border-b scroll-snap-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-10 right-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 left-10 w-48 h-48 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
-          </div>
-          
-          {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-          
-          <div className="relative container mx-auto px-6">
-            <div className="flex flex-wrap justify-center gap-4 scroll-animate" data-animation-delay="0.2">
-              {categories.map((category, index) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveFilter(category.id)}
-                  className={`filter-button px-6 py-3 rounded-full font-semibold transition-all duration-500 hover:scale-105 hover:shadow-lg transform ${
-                    activeFilter === category.id
-                      ? 'text-white bg-gradient-to-r from-gold-500 to-gold-600 shadow-xl scale-105'
-                      : 'bg-white/80 text-gray-700 hover:bg-blue-50/80 border border-gray-200 hover:border-blue-300'
-                  }`}
-                  style={{
-                    animationDelay: `${index * 0.1}s`
-                  }}
-                >
-                  {category.name}
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Narvex Portfolio */}
-        <section className="section-padding bg-gradient-to-br from-white via-gray-50 to-white scroll-snap-section morphing-bg-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 left-10 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-10 right-20 w-56 h-56 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
+        <section className="section-padding bg-gradient-to-br from-white via-gray-50 to-white scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
+            <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
+            <div className="absolute top-20 left-10 w-28 h-28 bg-blue-300/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-10 right-20 w-36 h-36 bg-gold-300/12 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+            
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/18 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+            <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
+            <div className="absolute top-3/5 right-1/3 w-20 h-20 bg-blue-200/10 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+            <div className="absolute bottom-2/5 left-1/8 w-32 h-32 bg-gold-200/12 rounded-full filter blur-3xl" data-parallax="0.2" data-float="true" data-float-amplitude="22" data-float-duration="11"></div>
           </div>
           
           {/* Decorative divider */}
@@ -337,10 +309,13 @@ export default function PortfolioPage() {
                       ))}
                     </div>
                     
-                    <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform">
+                    <Link 
+                      href={`/portfolio/${project.slug}`}
+                      className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform"
+                    >
                       Lihat Detail Case Study
                       <ExternalLink className="w-4 h-4 ml-2" />
-                    </button>
+                    </Link>
                   </CardContent>
                   
                   <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
@@ -361,140 +336,238 @@ export default function PortfolioPage() {
           </div>
         </section>
 
-        {/* Service Highlights */}
-        {filteredServiceHighlights.length > 0 && (
-          <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute top-20 right-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-              <div className="absolute bottom-20 left-20 w-48 h-48 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
-            </div>
+        {/* Portfolio Query Section */}
+        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+          {/* Enhanced floating background elements */}
+          <div className="absolute inset-0 overflow-hidden pointer-events-none">
+            {/* Original circles */}
+            <div className="absolute top-1/5 right-1/4 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/4 left-1/6 w-28 h-28 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
+            <div className="absolute top-3/5 left-3/4 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.25" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
             
-            {/* Decorative divider */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-            
-            <div className="relative container mx-auto px-6">
-              <div className="text-center mb-16">
-                <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Service Highlights</h2>
-                <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                  Showcase keahlian kami dalam berbagai layanan creative services yang telah terbukti memberikan hasil optimal.
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
-                {filteredServiceHighlights.map((service, index) => (
-                  <Card 
-                    key={service.id} 
-                    variant="service" 
-                    className="service-highlight-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500 hover:scale-105"
-                    style={{
-                      animationDelay: `${index * 0.1}s`
-                    }}
-                  >
-                    <CardContent className="p-6">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                          <span className="text-2xl">{service.icon}</span>
-                        </div>
-                        <h3 className="text-xl font-bold mb-2 transition-colors duration-300" style={{color: '#6382b4'}}>{service.title}</h3>
-                      </div>
-                      
-                      <p className="text-gray-600 mb-4 text-sm">{service.description}</p>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold mb-3 transition-colors duration-300" style={{color: '#dbc48a'}}>{service.count}</div>
-                        <button className="w-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-100 hover:to-blue-200 text-gray-700 hover:text-blue-700 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md transform">
-                          Lihat Detail
-                        </button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-
-        {/* Stats Section */}
-        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 scroll-snap-section morphing-bg-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute top-20 left-20 w-64 h-64 bg-gold-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 right-20 w-48 h-48 bg-blue-400 rounded-full blur-2xl animate-float-delayed"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-500 rounded-full blur-3xl animate-float"></div>
-          </div>
-          
-          {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-400 to-transparent opacity-50"></div>
-          
-          <div className="relative container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="heading-2 text-white mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Pencapaian Kami</h2>
-              <p className="body-large text-gray-300 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Angka-angka yang menunjukkan dedikasi dan kualitas layanan kami.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
-              <Card variant="service" className="glass-morphism depth-3 bg-white/10 backdrop-blur-sm border-white/20 text-center hover:scale-105 transition-all duration-500">
-                <CardContent className="p-6">
-                  <div className="text-4xl font-bold text-gold-400 mb-2 transition-transform duration-300 hover:scale-110">100+</div>
-                  <div className="text-white">Total Projects</div>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="glass-morphism depth-3 bg-white/10 backdrop-blur-sm border-white/20 text-center hover:scale-105 transition-all duration-500">
-                <CardContent className="p-6">
-                  <div className="text-4xl font-bold text-gold-400 mb-2 transition-transform duration-300 hover:scale-110">50+</div>
-                  <div className="text-white">Happy Clients</div>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="glass-morphism depth-3 bg-white/10 backdrop-blur-sm border-white/20 text-center hover:scale-105 transition-all duration-500">
-                <CardContent className="p-6">
-                  <div className="text-4xl font-bold text-gold-400 mb-2 transition-transform duration-300 hover:scale-110">98%</div>
-                  <div className="text-white">Satisfaction Rate</div>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="glass-morphism depth-3 bg-white/10 backdrop-blur-sm border-white/20 text-center hover:scale-105 transition-all duration-500">
-                <CardContent className="p-6">
-                  <div className="text-4xl font-bold text-gold-400 mb-2 transition-transform duration-300 hover:scale-110">4</div>
-                  <div className="text-white">Core Services</div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
-        </section>
-
-        {/* CTA Section */}
-        <section className="section-padding bg-gradient-to-br from-white via-gray-50 to-white scroll-snap-section">
-          {/* Background pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 left-20 w-72 h-72 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-            <div className="absolute bottom-20 right-20 w-56 h-56 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
+            {/* Additional circles for enhanced visual depth */}
+            <div className="absolute top-1/8 left-1/8 w-20 h-20 bg-gold-300/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="14" data-float-duration="7"></div>
+            <div className="absolute bottom-1/8 right-1/8 w-24 h-24 bg-blue-300/10 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="18" data-float-duration="10"></div>
+            <div className="absolute top-2/3 right-1/3 w-16 h-16 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
           </div>
           
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-          
-          <div className="relative container mx-auto px-6 text-center">
-            <div className="max-w-4xl mx-auto">
-              <h2 className="heading-1 text-blue-900 mb-6" data-text-animation="wave" data-animation-delay="0.2">
-                Siap Menjadi Bagian dari Portfolio Kami?
-              </h2>
-              <p className="body-large text-gray-600 mb-8" data-text-animation="fade-in" data-animation-delay="0.4">
-                Mari diskusikan project Anda dan wujudkan visi kreatif yang luar biasa bersama tim Narvex.
+            
+          <div className="relative container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Explore Our Full Portfolio</h2>
+              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+                Discover our complete collection of projects across all services and companies. Use the search and filters below to find specific projects.
               </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center scroll-animate" data-animation-delay="0.6">
-                <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-                  Mulai Project
-                </button>
-                <button className="border-2 border-blue-900 text-blue-900 hover:bg-blue-900 hover:text-white px-8 py-4 rounded-xl text-lg font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform">
-                  Download Portfolio
+            </div>
+            
+            {/* Search and Filter Controls */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 mb-12 shadow-lg border border-white/50" data-animation-delay="0.6">
+              {/* Search Bar */}
+              <div className="relative mb-6">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search projects by title, client, description, or tags..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 placeholder-gray-400"
+                />
+              </div>
+              
+              {/* Filter Controls */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {/* Category Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <select
+                    value={categoryFilter}
+                    onChange={(e) => setCategoryFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    {portfolioCategories.map(category => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Year Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                  <select
+                    value={yearFilter}
+                    onChange={(e) => setYearFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    <option value="all">All Years</option>
+                    {availableYears.map(year => (
+                      <option key={year} value={year.toString()}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Company Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Company</label>
+                  <select
+                    value={companyFilter}
+                    onChange={(e) => setCompanyFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    {companyOptions.map(company => (
+                      <option key={company.id} value={company.id}>{company.name}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Status Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <select
+                    value={statusFilter}
+                    onChange={(e) => setStatusFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    {statusOptions.map(status => (
+                      <option key={status.id} value={status.id}>{status.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              {/* Results Counter */}
+              <div className="flex items-center justify-between">
+                <div className="text-gray-600">
+                  <span className="font-semibold text-blue-600">{filteredPortfolioProjects.length}</span> projects found
+                </div>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setCategoryFilter('all');
+                    setYearFilter('all');
+                    setCompanyFilter('all');
+                    setStatusFilter('all');
+                  }}
+                  className="text-sm text-gray-500 hover:text-blue-600 transition-colors duration-300"
+                >
+                  Clear all filters
                 </button>
               </div>
             </div>
+            
+            {/* Portfolio Results Grid */}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
+              {filteredPortfolioProjects.map((project, index) => (
+                <Card 
+                  key={project.id} 
+                  variant="service" 
+                  className="portfolio-query-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500 hover:scale-105"
+                  style={{
+                    animationDelay: `${index * 0.1}s`
+                  }}
+                >
+                  <CardContent className="p-6 flex flex-col h-full">
+                    {/* Project Image Placeholder */}
+                    <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl h-48 mb-6 flex items-center justify-center overflow-hidden relative group">
+                      <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
+                        <div className="text-3xl mb-2 transition-transform duration-300 group-hover:rotate-12">📸</div>
+                        <p className="text-sm font-medium">{project.category}</p>
+                      </div>
+                      <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-gold-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                    </div>
+                    
+                    {/* Category Badge */}
+                    <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-3 py-1 rounded-full text-xs font-medium mb-4 capitalize">
+                      {project.category}
+                    </div>
+                    
+                    {/* Project Title */}
+                    <h3 className="text-xl font-bold mb-4 text-blue-900 line-clamp-2">{project.title}</h3>
+                    
+                    {/* Project Meta */}
+                    <div className="flex flex-wrap gap-3 mb-4 text-sm text-gray-600">
+                      <div className="flex items-center min-w-0">
+                        <Users className="w-4 h-4 mr-1 flex-shrink-0" />
+                        <span className="truncate">{project.client}</span>
+                      </div>
+                      <div className="flex items-center min-w-0">
+                        <MapPin className="w-4 h-4 mr-1 flex-shrink-0" />
+                        <span className="truncate">{project.location}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Calendar className="w-4 h-4 mr-1 flex-shrink-0" />
+                        <span>{project.year}</span>
+                      </div>
+                    </div>
+                    
+                    {/* Description */}
+                    <p className="text-gray-600 mb-4 text-sm line-clamp-3 leading-relaxed">{project.description}</p>
+                    
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2 mb-6 min-h-[2rem]">
+                      {project.tags.slice(0, 3).map((tag, idx) => (
+                        <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-2 py-1 rounded-full text-xs transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
+                          {tag}
+                        </span>
+                      ))}
+                      {project.tags.length > 3 && (
+                        <span className="text-xs text-gray-400 self-center">+{project.tags.length - 3} more</span>
+                      )}
+                    </div>
+                    
+                    {/* Status and Featured Section */}
+                    <div className="flex items-center justify-between mb-6 min-h-[1.75rem]">
+                      <span className={`px-3 py-1 rounded-full text-xs font-medium capitalize ${
+                        project.status === 'completed' ? 'bg-green-100 text-green-700' :
+                        project.status === 'ongoing' ? 'bg-yellow-100 text-yellow-700' :
+                        'bg-blue-100 text-blue-700'
+                      }`}>
+                        {project.status}
+                      </span>
+                      {project.featured ? (
+                        <div className="flex items-center text-gold-600 text-xs">
+                          <Award className="w-3 h-3 mr-1" />
+                          Featured
+                        </div>
+                      ) : (
+                        <div className="w-16"></div>
+                      )}
+                    </div>
+                    
+                    {/* View Details Button */}
+                    <Link 
+                      href={`/portfolio/${project.slug}`}
+                      className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform inline-flex items-center justify-center mt-auto"
+                    >
+                      View Details
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </Link>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            {/* No Results Message */}
+            {filteredPortfolioProjects.length === 0 && (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">No projects found</h3>
+                <p className="text-gray-500 mb-6">Try adjusting your search criteria or filters to find more projects.</p>
+                <button
+                  onClick={() => {
+                    setSearchQuery('');
+                    setCategoryFilter('all');
+                    setYearFilter('all');
+                    setCompanyFilter('all');
+                    setStatusFilter('all');
+                  }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
           </div>
         </section>
       </main>

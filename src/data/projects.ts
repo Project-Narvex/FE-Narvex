@@ -12,6 +12,7 @@ export interface Project {
   longDescription?: string;
   services: string[];
   images: string[];
+  gallery?: string[]; // Additional gallery images for detailed view
   tags: string[];
   results?: {
     [key: string]: string;
@@ -21,6 +22,29 @@ export interface Project {
   budget?: string;
   duration?: string;
   teamSize?: number;
+  // CMS-compatible fields for detailed views
+  challenges?: string[]; // Project challenges faced
+  solutions?: string[]; // Solutions implemented
+  timeline?: {
+    phase: string;
+    description: string;
+    date: string;
+    completed: boolean;
+  }[];
+  testimonials?: {
+    name: string;
+    role: string;
+    company: string;
+    content: string;
+    avatar?: string;
+  }[];
+  technologies?: string[]; // Technologies or tools used
+  objectives?: string[]; // Project objectives
+  deliverables?: string[]; // Project deliverables
+  relatedProjects?: string[]; // IDs of related projects
+  seoTitle?: string; // SEO optimized title
+  seoDescription?: string; // SEO meta description
+  ogImage?: string; // Open Graph image for social sharing
 }
 
 export const projects: Project[] = [
@@ -39,6 +63,7 @@ export const projects: Project[] = [
     longDescription: 'Event berskala nasional yang menggabungkan exhibition dan seminar dengan fokus pada sustainability dan bisnis berkelanjutan. Melibatkan 50+ exhibitor dan 500+ peserta dari berbagai industri.',
     services: ['Event Management', 'Exhibition Design', 'Audio Visual', 'Registration System', 'Catering Management'],
     images: ['/images/projects/jbbi-expo-1.jpg', '/images/projects/jbbi-expo-2.jpg'],
+    gallery: ['/images/projects/jbbi-expo-gallery-1.jpg', '/images/projects/jbbi-expo-gallery-2.jpg', '/images/projects/jbbi-expo-gallery-3.jpg', '/images/projects/jbbi-expo-gallery-4.jpg'],
     tags: ['Exhibition', 'Sustainability', 'Business', 'Seminar'],
     results: {
       participants: '500+',
@@ -49,7 +74,62 @@ export const projects: Project[] = [
     featured: true,
     status: 'completed',
     duration: '3 days',
-    teamSize: 15
+    teamSize: 15,
+    challenges: [
+      'Koordinasi dengan 50+ exhibitor dari berbagai industri',
+      'Mengatur sistem registrasi untuk 500+ peserta',
+      'Memastikan tema sustainability terintegrasi di seluruh event'
+    ],
+    solutions: [
+      'Implementasi sistem manajemen exhibitor digital',
+      'Penggunaan QR code untuk registrasi dan check-in',
+      'Desain booth dan materi yang eco-friendly'
+    ],
+    timeline: [
+      {
+        phase: 'Planning & Preparation',
+        description: 'Perencanaan konsep, koordinasi dengan exhibitor, dan persiapan venue',
+        date: '2023-07-01',
+        completed: true
+      },
+      {
+        phase: 'Setup & Installation',
+        description: 'Setup booth, instalasi audio visual, dan persiapan final',
+        date: '2023-09-13',
+        completed: true
+      },
+      {
+        phase: 'Event Execution',
+        description: 'Pelaksanaan expo dan seminar selama 3 hari',
+        date: '2023-09-15',
+        completed: true
+      }
+    ],
+    testimonials: [
+      {
+        name: 'Dr. Sari Wijaya',
+        role: 'Director',
+        company: 'JBBI',
+        content: 'Narvex berhasil mengorganisir event yang luar biasa. Profesionalisme dan perhatian terhadap detail sangat mengesankan.',
+        avatar: '/images/testimonials/sari-wijaya.jpg'
+      }
+    ],
+    technologies: ['Digital Registration System', 'QR Code Technology', 'Live Streaming Platform', 'Audio Visual Equipment'],
+    objectives: [
+      'Meningkatkan awareness tentang bisnis berkelanjutan',
+      'Memfasilitasi networking antar pelaku bisnis',
+      'Showcase produk dan layanan berkelanjutan'
+    ],
+    deliverables: [
+      'Event management lengkap selama 3 hari',
+      'Koordinasi 50+ exhibitor',
+      'Sistem registrasi digital',
+      'Dokumentasi foto dan video event'
+    ],
+    relatedProjects: ['spg-kefii-booth-2023', 'activity-camel-2023'],
+    seoTitle: 'JBBI Expo & Seminar Nasional - Sustainability Business Exhibition',
+    seoDescription: 'Event expo dan seminar nasional bertema sustainability dan bisnis berkelanjutan dengan 50+ exhibitor dan 500+ peserta di Bandung.',
+    ogImage: '/images/projects/jbbi-expo-og.jpg'
   },
   {
     id: 'spg-kefii-booth-2023',
