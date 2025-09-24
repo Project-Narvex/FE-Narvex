@@ -1,86 +1,108 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
+import Link from 'next/link';
+import Head from 'next/head';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Calendar, User, Tag, ArrowRight, Search } from 'lucide-react';
-import { 
-  initializeAnimations, 
-  addGSAPHoverAnimations,
-  DepthAnimationController,
-  add3DCardEffect,
-  addEnhancedParallax,
-  createMorphingBackground
-} from '@/lib/animations';
+import { Calendar, User, Search, AlertCircle, ExternalLink, Award, Star, ArrowRight } from 'lucide-react';
+// Animation imports removed as they're not used in this simplified version
+import { blogArticles, BlogArticle } from '@/data/blog';
 
 export default function BlogPage() {
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [searchTerm, setSearchTerm] = useState('');
+  // Blog Query Section state variables
+  const [blogSearchQuery, setBlogSearchQuery] = useState('');
+  const [blogCategoryFilter, setBlogCategoryFilter] = useState('all');
+  const [blogYearFilter, setBlogYearFilter] = useState('all');
+  const [blogAuthorFilter, setBlogAuthorFilter] = useState('all');
+  const [blogStatusFilter, setBlogStatusFilter] = useState('all');
+  
+  // Custom hook for debounced search
+  function useDebounce<T>(value: T, delay: number): T {
+    const [debouncedValue, setDebouncedValue] = useState<T>(value);
 
-  useEffect(() => {
-    // Initialize GSAP scroll animations
-    const animationController = initializeAnimations();
-    
-    // Initialize depth animation controller
-    const depthController = new DepthAnimationController();
-    
-    // Add hover animations
-    addGSAPHoverAnimations();
-    
-    // Add depth effects to specific elements after a delay
-    const depthEffectsTimeout = setTimeout(() => {
-      // Add 3D card effects to article cards
-      document.querySelectorAll('.article-card').forEach(card => {
-        add3DCardEffect(card, {
-          maxRotation: 8,
-          perspective: 1000,
-          shadowIntensity: 0.2,
-          liftHeight: 12
-        });
-      });
-      
-      // Add 3D effects to category cards
-       document.querySelectorAll('.category-card').forEach(card => {
-         add3DCardEffect(card, {
-           maxRotation: 6,
-           perspective: 800,
-           shadowIntensity: 0.15,
-           liftHeight: 8
-         });
-       });
-      
-      // Create morphing background for sections
-      const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
-      sectionsWithMorphing.forEach(section => {
-        createMorphingBackground(section);
-      });
-      
-      // Add enhanced parallax to background elements
-      document.querySelectorAll('[data-parallax]').forEach(element => {
-        const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
-        const depth = parseFloat(element.getAttribute('data-depth') || '1');
-        addEnhancedParallax(element, {
-          speed,
-          depth,
-          blur: Math.max(0, (depth - 1) * 1.5),
-          opacity: Math.max(0.4, 1 - (depth - 1) * 0.15)
-        });
-      });
-    }, 500);
-    
-    // Cleanup on unmount
-    return () => {
-      clearTimeout(depthEffectsTimeout);
-      if (animationController) {
-        animationController.destroy();
-      }
-      if (depthController) {
-        depthController.destroy();
-      }
-    };
-  }, []);
+    useEffect(() => {
+      const handler = setTimeout(() => {
+        setDebouncedValue(value);
+      }, delay);
+
+      return () => {
+        clearTimeout(handler);
+      };
+    }, [value, delay]);
+
+    return debouncedValue;
+  }
+
+  // Debounced search term for performance
+  const debouncedBlogSearchQuery = useDebounce(blogSearchQuery, 300);
+  
+  // Blog query filtering options
+  const blogCategories = [
+    { id: 'all', name: 'All Categories' },
+    { id: 'company-updates', name: 'Company Updates' },
+    { id: 'industry-insights', name: 'Industry Insights' },
+    { id: 'project-stories', name: 'Project Stories' },
+    { id: 'tips-tricks', name: 'Tips & Tricks' },
+    { id: 'company-news', name: 'Company News' }
+  ];
+  
+  // Get unique years from blog articles
+   const availableYears = useMemo(() => {
+     const years = [...new Set(blogArticles.map(article => new Date(article.publishDate).getFullYear()))];
+     return years.sort((a, b) => b - a);
+   }, []);
+   
+   // Get unique authors from blog articles
+   const availableAuthors = useMemo(() => {
+     return [...new Set(blogArticles.map(article => article.author))];
+   }, []);
+  
+  const statusOptions = [
+     { id: 'all', name: 'All Status' },
+     { id: 'published', name: 'Published' },
+     { id: 'featured', name: 'Featured' }
+   ];
+   
+   // Get featured articles
+    const featuredArticles = useMemo(() => {
+      return blogArticles.filter(article => article.featured && article.published).slice(0, 3);
+    }, []);
+
+   // Blog query filtering logic
+   const filteredBlogArticles = useMemo(() => {
+     const filtered = blogArticles.filter(article => {
+       const matchesSearch = debouncedBlogSearchQuery === '' || 
+         article.title.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+         article.excerpt.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+         article.author.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+         article.tags.some(tag => tag.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()));
+       
+       const matchesCategory = blogCategoryFilter === 'all' || article.category === blogCategoryFilter;
+       const matchesYear = blogYearFilter === 'all' || new Date(article.publishDate).getFullYear().toString() === blogYearFilter;
+       const matchesAuthor = blogAuthorFilter === 'all' || article.author === blogAuthorFilter;
+       const matchesStatus = blogStatusFilter === 'all' || 
+         (blogStatusFilter === 'published' && article.published) ||
+         (blogStatusFilter === 'featured' && article.featured);
+       
+       return matchesSearch && matchesCategory && matchesYear && matchesAuthor && matchesStatus && article.published;
+     });
+     
+     return filtered;
+   }, [debouncedBlogSearchQuery, blogCategoryFilter, blogYearFilter, blogAuthorFilter, blogStatusFilter]);
+   
+   // Enhanced articles with slug and proper date handling
+   const filteredBlogArticlesEnhanced = useMemo(() => {
+     return filteredBlogArticles.map(article => ({
+       ...article,
+       slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+       publishDate: article.publishDate || article.date
+     }));
+   }, [filteredBlogArticles]);
+
+  // Animation effects can be added later when animation utilities are available
   
   const categories = [
     { id: 'all', name: 'Semua Artikel', count: 24 },
@@ -182,17 +204,31 @@ export default function BlogPage() {
     }
   ];
   
-  const filteredArticles = articles.filter(article => {
-    const matchesCategory = activeCategory === 'all' || article.category === activeCategory;
-    const matchesSearch = article.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         article.excerpt.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         article.tags.some(tag => tag.toLowerCase().includes(searchTerm.toLowerCase()));
-    return matchesCategory && matchesSearch;
-  });
+  // Add missing properties to articles for compatibility
+  const enhancedArticles = blogArticles.map(article => ({
+    ...article,
+    slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+    publishDate: article.publishDate || article.date
+  }));
   
-  const featuredArticles = articles.filter(article => article.featured);
+  const filteredArticles = enhancedArticles.filter(article => {
+     const matchesCategory = blogCategoryFilter === 'all' || article.category === blogCategoryFilter;
+     const matchesSearch = debouncedBlogSearchQuery === '' || 
+                          article.title.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+                          article.excerpt.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+                          article.author.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+                          article.tags.some(tag => tag.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()));
+     
+     const matchesYear = blogYearFilter === 'all' || new Date(article.publishDate).getFullYear().toString() === blogYearFilter;
+     const matchesAuthor = blogAuthorFilter === 'all' || article.author === blogAuthorFilter;
+     const matchesStatus = blogStatusFilter === 'all' || 
+       (blogStatusFilter === 'published' && article.published) ||
+       (blogStatusFilter === 'featured' && article.featured);
+     
+     return matchesCategory && matchesSearch && matchesYear && matchesAuthor && matchesStatus && article.published;
+   });
 
-  return (
+   return (
     <div className="min-h-screen scroll-snap-container">
       <Header />
       
@@ -202,50 +238,6 @@ export default function BlogPage() {
           title="Blog & Insights"
           subtitle="Temukan artikel terbaru, tips, dan insights dari dunia creative services dan event production"
         />
-        
-        {/* Categories & Search Section */}
-        <section className="section-padding bg-gray-50 morphing-bg-section overflow-x-hidden">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            {/* Search Bar */}
-            <div className="max-w-2xl mx-auto mb-8 sm:mb-12">
-              <div className="relative">
-                <Search className="absolute left-3 sm:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4 sm:w-5 sm:h-5" />
-                <input
-                  type="text"
-                  placeholder="Cari artikel..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="w-full pl-10 sm:pl-12 pr-3 sm:pr-4 py-3 sm:py-4 rounded-2xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-base sm:text-lg min-h-[44px] touch-manipulation"
-                />
-              </div>
-            </div>
-            
-            {/* Categories Filter */}
-            <div className="flex flex-wrap gap-3 justify-center">
-              {categories.map((category, index) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`category-card px-4 sm:px-6 py-3 rounded-2xl font-medium transition-all duration-300 hover-depth-subtle min-h-[44px] touch-manipulation ${
-                    activeCategory === category.id
-                      ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-gold-depth'
-                      : 'bg-white/80 backdrop-blur-sm text-gray-contrast-700 hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 hover:text-blue-900 border border-gray-200'
-                  }`}
-                  style={{ animationDelay: `${index * 0.1}s` }}
-                >
-                  <span className="mr-2">{category.name}</span>
-                  <span className={`text-sm px-2 py-1 rounded-full ${
-                    activeCategory === category.id 
-                      ? 'bg-white/20 text-gold-100' 
-                      : 'bg-gray-contrast-100 text-gray-contrast-500'
-                  }`}>
-                    {category.count}
-                  </span>
-                </button>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Featured Articles */}
         <section className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
@@ -338,182 +330,249 @@ export default function BlogPage() {
           </div>
         </section>
 
-        {/* Categories & Articles */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-blue-50/20 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
+        {/* Blog Query Section */}
+        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
           {/* Enhanced floating background elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Original circles */}
-            <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
-            <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
-            <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
-            <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
-            <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute top-1/5 right-1/4 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+            <div className="absolute bottom-1/4 left-1/6 w-28 h-28 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
+            <div className="absolute top-3/5 left-3/4 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.25" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
             
             {/* Additional circles for enhanced visual depth */}
-            <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
-            <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
+            <div className="absolute top-1/8 left-1/8 w-20 h-20 bg-gold-300/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="14" data-float-duration="7"></div>
+            <div className="absolute bottom-1/8 right-1/8 w-24 h-24 bg-blue-300/10 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="18" data-float-duration="10"></div>
+            <div className="absolute top-2/3 right-1/3 w-16 h-16 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
           </div>
           
           {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
-          
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-10">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-6 lg:gap-8">
-              {/* Sidebar - Categories */}
-              <div className="lg:col-span-1 scroll-animate-left">
-                <Card variant="service" className="category-card rounded-3xl shadow-depth-3 hover:shadow-depth-4 transition-all duration-500 backdrop-blur-sm glass-morphism lg:sticky lg:top-6">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-bold text-blue-900 mb-6" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
-                      Kategori
-                    </h3>
-                    
-                    <div className="space-y-3">
-                      {categories.map((category, index) => (
-                        <button
-                          key={category.id}
-                          onClick={() => setActiveCategory(category.id)}
-                          className={`w-full text-left px-3 sm:px-4 py-3 rounded-xl transition-all duration-300 hover-depth-subtle min-h-[44px] touch-manipulation ${
-                            activeCategory === category.id
-                              ? 'bg-gradient-to-r from-gold-500 to-gold-600 text-white shadow-gold-depth'
-                              : 'hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 text-gray-contrast-700 hover:text-blue-900'
-                          }`}
-                          style={{ animationDelay: `${index * 0.1}s` }}
-                        >
-                          <div className="flex justify-between items-center">
-                            <span className="font-medium">{category.name}</span>
-                            <span className={`text-sm px-2 py-1 rounded-full ${
-                              activeCategory === category.id 
-                                ? 'bg-white/20 text-gold-100' 
-                                : 'bg-gray-contrast-100 text-gray-contrast-500'
-                            }`}>
-                              {category.count}
-                            </span>
-                          </div>
-                        </button>
-                      ))}
-                    </div>
-                    
-                    <div className="mt-8 pt-6 border-t border-gray-contrast-200">
-                      <h4 className="font-semibold text-blue-900 mb-4">Tags Populer</h4>
-                      <div className="flex flex-wrap gap-2">
-                        {['MICE', 'Event Planning', 'Creative Design', 'Case Study', 'Industry Trends'].map((tag, index) => (
-                          <span 
-                            key={tag} 
-                            className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-contrast-600 px-3 py-2 rounded-full text-sm hover:from-gold-100 hover:to-gold-200 hover:text-gold-700 cursor-pointer transition-all duration-300 hover-depth-subtle font-medium"
-                            style={{ animationDelay: `${index * 0.05}s` }}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
+            
+          <div className="relative container mx-auto px-6">
+            <div className="text-center mb-16">
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Explore Our Full Blog Archive</h2>
+              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+                Discover our complete collection of articles across all categories. Use the search and filters below to find specific content.
+              </p>
+            </div>
+            
+            {/* Search and Filter Controls */}
+            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 mb-12 shadow-lg border border-white/50" data-animation-delay="0.6">
+              {/* Search Bar */}
+              <div className="relative mb-6">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <input
+                  type="text"
+                  placeholder="Search articles by title, content, author, or tags..."
+                  value={blogSearchQuery}
+                  onChange={(e) => setBlogSearchQuery(e.target.value)}
+                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 placeholder-gray-400"
+                />
               </div>
               
-              {/* Main Content - Articles */}
-              <div className="lg:col-span-3 scroll-animate-right">
-                <div className="mb-8">
-                  <h3 className="text-2xl font-bold text-blue-900 mb-3" data-element="heading" data-text-animation="slide-up" data-delay="0.1" data-duration="0.5">
-                    {activeCategory === 'all' ? 'Semua Artikel' : categories.find(c => c.id === activeCategory)?.name}
-                  </h3>
-                  <p className="text-gray-contrast-600 text-lg">
-                    {filteredArticles.length} artikel ditemukan
-                    {searchTerm && ` untuk "${searchTerm}"`}
-                  </p>
+              {/* Filter Controls */}
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                {/* Category Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+                  <select
+                    value={blogCategoryFilter}
+                    onChange={(e) => setBlogCategoryFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    {blogCategories.map(category => (
+                      <option key={category.id} value={category.id}>{category.name}</option>
+                    ))}
+                  </select>
                 </div>
                 
-                <div className="space-y-8">
-                  {filteredArticles.map((article, index) => (
-                    <Card key={article.id} variant="service" className="article-card group rounded-3xl shadow-depth-2 hover:shadow-depth-4 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden scroll-animate" style={{ animationDelay: `${index * 0.1}s` }}>
-                      <CardContent className="p-6">
-                        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 sm:gap-6">
-                          <div className="md:col-span-1">
-                            <div className="h-24 sm:h-32 bg-gradient-to-br from-blue-100 to-gold-100 rounded-2xl flex items-center justify-center relative overflow-hidden group-hover:scale-105 transition-transform duration-300">
-                              <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10"></div>
-                              <div className="text-center text-blue-600 relative z-10">
-                                <div className="text-3xl mb-1 group-hover:scale-110 transition-transform duration-300">📄</div>
-                                <p className="text-xs font-medium">Article</p>
-                              </div>
-                              <div className="absolute top-2 right-2 w-2 h-2 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="2" data-float-duration="1.5"></div>
+                {/* Year Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
+                  <select
+                    value={blogYearFilter}
+                    onChange={(e) => setBlogYearFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    <option value="all">All Years</option>
+                    {availableYears.map(year => (
+                      <option key={year} value={year.toString()}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Author Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Author</label>
+                  <select
+                    value={blogAuthorFilter}
+                    onChange={(e) => setBlogAuthorFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    <option value="all">All Authors</option>
+                    {availableAuthors.map(author => (
+                      <option key={author} value={author}>{author}</option>
+                    ))}
+                  </select>
+                </div>
+                
+                {/* Status Filter */}
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
+                  <select
+                    value={blogStatusFilter}
+                    onChange={(e) => setBlogStatusFilter(e.target.value)}
+                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
+                  >
+                    {statusOptions.map(status => (
+                      <option key={status.id} value={status.id}>{status.name}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              {/* Results Counter */}
+              <div className="flex items-center justify-between">
+                <div className="text-gray-600">
+                  <span className="font-semibold text-blue-600">{filteredBlogArticlesEnhanced.length}</span> articles found
+                </div>
+                <button
+                  onClick={() => {
+                    setBlogSearchQuery('');
+                    setBlogCategoryFilter('all');
+                    setBlogYearFilter('all');
+                    setBlogAuthorFilter('all');
+                    setBlogStatusFilter('all');
+                  }}
+                  className="text-sm text-gray-500 hover:text-blue-600 transition-colors duration-300"
+                >
+                  Clear all filters
+                </button>
+              </div>
+            </div>
+            
+            {/* Query Results Section */}
+            {filteredBlogArticlesEnhanced.length > 0 ? (
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
+                 {filteredBlogArticlesEnhanced.map((article, index) => (
+                  <Link 
+                    key={article.id}
+                    href={`/blog/${article.slug || article.id}`}
+                    className="block h-full cursor-pointer"
+                  >
+                    <Card 
+                      variant="service" 
+                      className="blog-query-card group glass-morphism depth-4 bg-white/95 backdrop-blur-lg border-white/30 hover:shadow-2xl transition-all duration-700 hover:scale-105 hover:-translate-y-2 relative overflow-hidden h-full"
+                      style={{
+                        animationDelay: `${index * 0.1}s`
+                      }}
+                    >
+                      {article.featured && (
+                        <div className="absolute top-4 right-4 z-20">
+                          <div className="bg-gradient-to-r from-gold-500 to-gold-600 text-white px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
+                            <Star className="w-3 h-3" />
+                            Featured
+                          </div>
+                        </div>
+                      )}
+                      
+                      <CardContent className="p-0 flex flex-col h-full">
+                        {/* Article Thumbnail */}
+                        <div className="h-48 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center overflow-hidden relative group-hover:scale-110 transition-transform duration-700">
+                          <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
+                            <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">📰</div>
+                            <p className="text-sm font-semibold uppercase tracking-wide">{article.category.replace('-', ' ')}</p>
+                          </div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-gold-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                          
+                          {/* Floating particles effect */}
+                          <div className="absolute top-4 left-4 w-2 h-2 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
+                          <div className="absolute bottom-6 right-6 w-3 h-3 bg-blue-400 rounded-full opacity-60 animate-pulse animation-delay-1000" data-float="true" data-float-amplitude="4" data-float-duration="3"></div>
+                        </div>
+                        
+                        <div className="p-6 flex flex-col flex-grow">
+                          {/* Category Badge */}
+                          <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium capitalize w-fit mb-3">
+                            {article.category.replace('-', ' ')}
+                          </div>
+                          
+                          {/* Article Title */}
+                          <h3 className="text-xl font-bold text-blue-900 line-clamp-2 group-hover:text-blue-800 transition-colors duration-300 min-w-0 mb-3">
+                            {article.title}
+                          </h3>
+                          
+                          {/* Article Meta */}
+                          <div className="flex flex-wrap gap-3 text-sm text-gray-600 min-w-0 mb-4">
+                            <div className="flex items-center min-w-0">
+                              <User className="w-4 h-4 mr-1 flex-shrink-0 text-blue-500" />
+                              <span className="truncate">{article.author}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <Calendar className="w-4 h-4 mr-1 flex-shrink-0 text-blue-500" />
+                              <span>{new Date(article.publishDate).toLocaleDateString('id-ID')}</span>
+                            </div>
+                            <div className="flex items-center">
+                              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">{article.readTime}</span>
                             </div>
                           </div>
                           
-                          <div className="md:col-span-3">
-                            <div className="flex items-center gap-4 text-sm text-gray-contrast-500 mb-4 flex-wrap">
-                              <div className="flex items-center">
-                                <Calendar className="w-4 h-4 mr-2 text-blue-500" />
-                                {new Date(article.date).toLocaleDateString('id-ID')}
-                              </div>
-                              <div className="flex items-center">
-                                <User className="w-4 h-4 mr-2 text-blue-500" />
-                                {article.author}
-                              </div>
-                              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">{article.readTime} read</span>
-                              <div className="flex items-center">
-                                <Tag className="w-4 h-4 mr-2 text-gold-500" />
-                                <span className="bg-gold-100 text-gold-700 px-2 py-1 rounded-full text-xs">
-                                  {categories.find(c => c.id === article.category)?.name}
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <h3 className="text-xl font-bold text-blue-900 mb-3 hover:text-gold-600 cursor-pointer transition-colors duration-300 leading-snug group-hover:text-blue-800">
-                              {article.title}
-                            </h3>
-                            
-                            <p className="text-gray-contrast-600 mb-4 line-clamp-2 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300">
-                              {article.excerpt}
-                            </p>
-                            
-                            <div className="flex flex-wrap gap-2 mb-4">
-                              {article.tags.map((tag, idx) => (
-                                <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-contrast-600 px-3 py-1 rounded-full text-xs font-medium hover-depth-subtle">
-                                  {tag}
-                                </span>
-                              ))}
-                            </div>
-                            
-                            <button className="text-gold-600 hover:text-gold-700 font-semibold inline-flex items-center transition-all duration-300 group-hover:translate-x-1">
-                              Baca Selengkapnya
-                              <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                            </button>
+                          {/* Brief Excerpt */}
+                          <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 flex-grow mb-4">
+                            {article.excerpt}
+                          </p>
+                          
+                          {/* Tags */}
+                          <div className="flex flex-wrap gap-2 mt-auto">
+                            {article.tags.slice(0, 2).map((tag, idx) => (
+                              <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
+                                {tag}
+                              </span>
+                            ))}
+                            {article.tags.length > 2 && (
+                              <span className="text-xs text-gray-400 self-center font-medium">+{article.tags.length - 2} more</span>
+                            )}
                           </div>
                         </div>
                         
-                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                        {/* Hover overlay with "Click to read" */}
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                          <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-blue-900 font-semibold text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                            Click to read article
+                          </div>
+                        </div>
+                        
+                        {/* Bottom accent line */}
+                        <div className="h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-700 rounded-b-xl"></div>
                       </CardContent>
                     </Card>
-                  ))}
-                </div>
-                
-                {/* Enhanced Pagination */}
-                <div className="mt-12 flex justify-center scroll-animate">
-                  <div className="flex items-center space-x-3">
-                    <button className="px-6 py-3 border-2 border-gray-contrast-300 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 hover:border-blue-300 transition-all duration-300 font-medium text-gray-contrast-700 hover:text-blue-900 hover-depth-subtle">
-                      Previous
-                    </button>
-                    <button className="px-6 py-3 bg-gradient-to-r from-gold-500 to-gold-600 text-white rounded-xl shadow-gold-depth hover:shadow-gold-depth font-semibold">
-                      1
-                    </button>
-                    <button className="px-6 py-3 border-2 border-gray-contrast-300 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 hover:border-blue-300 transition-all duration-300 font-medium text-gray-contrast-700 hover:text-blue-900 hover-depth-subtle">
-                      2
-                    </button>
-                    <button className="px-6 py-3 border-2 border-gray-contrast-300 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 hover:border-blue-300 transition-all duration-300 font-medium text-gray-contrast-700 hover:text-blue-900 hover-depth-subtle">
-                      3
-                    </button>
-                    <button className="px-6 py-3 border-2 border-gray-contrast-300 rounded-xl hover:bg-gradient-to-r hover:from-blue-50 hover:to-gold-50 hover:border-blue-300 transition-all duration-300 font-medium text-gray-contrast-700 hover:text-blue-900 hover-depth-subtle">
-                      Next
-                    </button>
-                  </div>
-                </div>
+                  </Link>
+                ))}
               </div>
-            </div>
+            ) : (
+              /* No Results Message */
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4 opacity-60">🔍</div>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">No articles found</h3>
+                <p className="text-gray-500 mb-6">Try adjusting your search criteria or filters to find more articles.</p>
+                <button
+                  onClick={() => {
+                    setBlogSearchQuery('');
+                    setBlogCategoryFilter('all');
+                    setBlogYearFilter('all');
+                    setBlogAuthorFilter('all');
+                    setBlogStatusFilter('all');
+                  }}
+                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
           </div>
         </section>
 
         {/* Newsletter Subscription */}
-        <section className="section-padding bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 scroll-snap-section relative overflow-hidden">
+        <section className="min-h-screen flex items-center bg-gradient-to-br from-blue-900 via-blue-800 to-blue-900 scroll-snap-section relative overflow-hidden py-20">
           {/* Enhanced Background Layers */}
           <div className="absolute inset-0">
             {/* Depth Layer 1 - Furthest back */}
@@ -528,7 +587,7 @@ export default function BlogPage() {
             <div className="absolute inset-0 morphing-gradient opacity-30"></div>
           </div>
           
-          <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
+          <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10 flex items-center justify-center min-h-full">
             <div className="max-w-2xl mx-auto scroll-animate">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 text-depth-lg" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Stay Updated
