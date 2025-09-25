@@ -1,7 +1,7 @@
 // Strapi API client for Next.js frontend
 
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
-const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:7245';
+const STRAPI_TOKEN = process.env.NEXT_PUBLIC_STRAPI_API_TOKEN;
 
 interface StrapiResponse<T> {
   data: T;
@@ -183,6 +183,17 @@ class StrapiAPI {
   async getRecentArticles(limit: number = 5) {
     return this.request<StrapiEntity[]>(`/blog-articles?populate=*&sort=publishDate:desc&pagination[pageSize]=${limit}`);
   }
+
+  // Home Page API
+  async getHomePage() {
+    try {
+      const response = await this.request<HomePageData>('/home-page?populate=deep');
+      return response.data;
+    } catch (error) {
+      console.error('Error fetching home page data:', error);
+      throw error;
+    }
+  }
 }
 
 // Create a default instance
@@ -270,4 +281,148 @@ export interface BlogArticle {
     metaDescription?: string;
     keywords?: string;
   };
+}
+
+// Home Page Data Interfaces
+export interface StrapiImage {
+  id: number;
+  documentId: string;
+  name: string;
+  alternativeText?: string;
+  caption?: string;
+  width: number;
+  height: number;
+  formats: {
+    large?: ImageFormat;
+    medium?: ImageFormat;
+    small?: ImageFormat;
+    thumbnail?: ImageFormat;
+  };
+  hash: string;
+  ext: string;
+  mime: string;
+  size: number;
+  url: string;
+  previewUrl?: string;
+  provider: string;
+  provider_metadata?: unknown;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+}
+
+export interface ImageFormat {
+  ext: string;
+  url: string;
+  hash: string;
+  mime: string;
+  name: string;
+  path?: string;
+  size: number;
+  width: number;
+  height: number;
+  sizeInBytes: number;
+}
+
+export interface HeroSlide {
+  id: number;
+  documentId: string;
+  title: string;
+  subtitle: string;
+  orderNo: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  image: StrapiImage;
+}
+
+export interface Statistic {
+  id: number;
+  value: number;
+  suffix: string;
+  label: string;
+}
+
+export interface HeroSection {
+  __component: 'sections.hero-section';
+  id: number;
+  titleLine1: string;
+  titleLine2: string;
+  subtitleLine1: string;
+  subtitleLine2?: string;
+  hero_slides: HeroSlide[];
+  statistic: Statistic[];
+}
+
+export interface SelectedCompany {
+  id: number;
+  documentId: string;
+  name: string;
+  slug: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  logo?: StrapiImage;
+}
+
+export interface CompanyHighlights {
+  __component: 'components.company-highlights';
+  id: number;
+  title: string;
+  description: string;
+  selected_companies: SelectedCompany[];
+}
+
+export interface ServiceItem {
+  id: number;
+  documentId: string;
+  title: string;
+  description?: string;
+  orderNo?: number;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  icon?: StrapiImage;
+}
+
+export interface ServiceHighlight {
+  __component: 'components.service-highlight';
+  id: number;
+  title: string;
+  description: string;
+  services: ServiceItem[];
+}
+
+export interface FeaturedProject {
+  id: number;
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  title: string;
+  slug: string;
+  excerpt: string;
+  linkURL: string;
+  orderNo: number;
+  cover: StrapiImage;
+  gallery: StrapiImage[];
+}
+
+export interface ProjectHighlights {
+  __component: 'sections.project-highlights';
+  id: number;
+  title: string;
+  description: string;
+  featuredProjects: FeaturedProject[];
+}
+
+export type PageComponent = HeroSection | CompanyHighlights | ServiceHighlight | ProjectHighlights;
+
+export interface HomePageData {
+  id: number;
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt: string;
+  pageContent: PageComponent[];
 }

@@ -22,6 +22,15 @@ import {
   addEnhancedParallax,
   createMorphingBackground
 } from '@/lib/animations';
+import { 
+  strapi, 
+  HomePageData, 
+  HeroSection, 
+  CompanyHighlights, 
+  ServiceHighlight, 
+  ProjectHighlights,
+  StrapiImage 
+} from '@/lib/strapi';
 
 import 'swiper/css';
 import 'swiper/css/effect-coverflow';
@@ -246,6 +255,11 @@ export default function Home() {
   // State for portfolio filter
   const [activeFilter, setActiveFilter] = useState<'all' | 'branding' | 'events' | 'digital'>('all');
   
+  // State for home page data
+  const [homePageData, setHomePageData] = useState<HomePageData | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  
   // State for contact form
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -259,6 +273,23 @@ export default function Home() {
   const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
   useEffect(() => {
+    // Fetch home page data from Strapi
+    const fetchHomePageData = async () => {
+      try {
+        setIsLoading(true);
+        const data = await strapi.getHomePage();
+        setHomePageData(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching home page data:', err);
+        setError('Failed to load page content');
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchHomePageData();
+
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
     
@@ -349,6 +380,43 @@ export default function Home() {
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
+  };
+
+  // Helper function to get image URL from Strapi
+  const getImageUrl = (image: StrapiImage | undefined, size: 'thumbnail' | 'small' | 'medium' | 'large' = 'medium'): string => {
+    if (!image) return '';
+    
+    const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.narvex.id';
+    
+    // Try to get the specified size, fallback to original
+    const format = image.formats?.[size];
+    if (format) {
+      return `${baseUrl}${format.url}`;
+    }
+    
+    // Fallback to original image
+    return `${baseUrl}${image.url}`;
+  };
+
+  // Extract sections from home page data
+  const getHeroSection = (): HeroSection | null => {
+    if (!homePageData) return null;
+    return homePageData.pageContent.find(section => section.__component === 'sections.hero-section') as HeroSection || null;
+  };
+
+  const getCompanyHighlights = (): CompanyHighlights | null => {
+    if (!homePageData) return null;
+    return homePageData.pageContent.find(section => section.__component === 'components.company-highlights') as CompanyHighlights || null;
+  };
+
+  const getServiceHighlight = (): ServiceHighlight | null => {
+    if (!homePageData) return null;
+    return homePageData.pageContent.find(section => section.__component === 'components.service-highlight') as ServiceHighlight || null;
+  };
+
+  const getProjectHighlights = (): ProjectHighlights | null => {
+    if (!homePageData) return null;
+    return homePageData.pageContent.find(section => section.__component === 'sections.project-highlights') as ProjectHighlights || null;
   };
 
   const scrollToContact = () => {
@@ -488,6 +556,38 @@ export default function Home() {
     }
   };
 
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-blue-900 to-gray-900">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gold-500 mx-auto mb-4"></div>
+          <p className="text-white text-xl">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Error state
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-red-900 to-gray-900">
+        <div className="text-center">
+          <p className="text-red-400 text-xl mb-4">{error}</p>
+          <Button onClick={() => window.location.reload()} variant="secondary">
+            Try Again
+          </Button>
+        </div>
+      </div>
+    );
+  }
+
+  // Get sections from API data
+  const heroSection = getHeroSection();
+  const companyHighlights = getCompanyHighlights();
+  const serviceHighlight = getServiceHighlight();
+  const projectHighlights = getProjectHighlights();
+
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       {/* Header */}
@@ -531,13 +631,13 @@ export default function Home() {
               {/* Text Content */}
               <div className="text-center lg:text-left depth-layer-2 w-full" data-mouse-parallax="0.1">
                 <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
-                  <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
-                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
-                  <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                  <span className="block transform-3d break-words" data-tilt="8">{heroSection?.titleLine1 || 'Creative Solutions for'}</span>
+                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{heroSection?.titleLine2 || 'Your Brand'}</span>
                 </h1>
                 
                 <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
-                  CV. Nara Exhibition Indonesia
+                  {heroSection?.subtitleLine1 || 'CV. Nara Exhibition Indonesia'}
+                  {heroSection?.subtitleLine2 && <span className="block">{heroSection.subtitleLine2}</span>}
                 </p>
                 
                 <p className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" data-element="trust-badge" data-text-animation="fade-in" data-delay="0.6" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
@@ -570,18 +670,30 @@ export default function Home() {
 
                 {/* Stats */}
                 <div className="hero-stats grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 stagger-children" data-mouse-parallax="0.06">
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
-                  </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
-                  </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
-                  </div>
+                  {heroSection?.statistic?.map((stat, index) => (
+                    <div key={stat.id} className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                      <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                        {stat.value}{stat.suffix}
+                      </div>
+                      <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">{stat.label}</div>
+                    </div>
+                  )) || (
+                    // Fallback to default stats if no API data
+                    <>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -605,12 +717,12 @@ export default function Home() {
                   modules={[EffectCoverflow, Pagination, Navigation]}
                   className="mySwiper perspective-1500"
                 >
-                  {coverflowServices.map((service, index) => (
-                    <SwiperSlide key={index} style={{ width: '300px' }}>
+                  {(heroSection?.hero_slides?.length ? heroSection.hero_slides : coverflowServices).map((slide, index) => (
+                    <SwiperSlide key={heroSection?.hero_slides?.length ? slide.id : index} style={{ width: '300px' }}>
                       <div 
                         className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
                         style={{
-                          backgroundImage: `url(${service.image})`,
+                          backgroundImage: `url(${heroSection?.hero_slides?.length ? getImageUrl(slide.image, 'large') : slide.image})`,
                           backgroundSize: 'cover',
                           backgroundPosition: 'center'
                         }}
@@ -624,8 +736,12 @@ export default function Home() {
                         
                         {/* Text content with depth */}
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
-                          <h3 className="font-semibold text-lg mb-2 text-depth-lg">{service.title}</h3>
-                          <p className="text-gray-200 text-sm text-depth">{service.subtitle}</p>
+                          <h3 className="font-semibold text-lg mb-2 text-depth-lg">
+                            {heroSection?.hero_slides?.length ? slide.title : slide.title}
+                          </h3>
+                          <p className="text-gray-200 text-sm text-depth">
+                            {heroSection?.hero_slides?.length ? slide.subtitle : slide.subtitle}
+                          </p>
                         </div>
                         
                         {/* Floating accent */}
