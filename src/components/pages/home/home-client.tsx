@@ -49,10 +49,7 @@ interface Testimonial {
   project?: string;
 }
 
-interface Client {
-  name: string;
-  logo: string;
-}
+// Removed unused Client interface - using ClientLogo from data/clients instead
 
 interface ContactFormData {
   name: string;
@@ -143,7 +140,44 @@ export default function HomeClient({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
+  // State for animation attributes to prevent hydration mismatch
+  const [animationAttrs, setAnimationAttrs] = useState({
+    delay: "0",
+    duration: "0.3", 
+    stagger: "0.02"
+  });
+  const [isClient, setIsClient] = useState(false);
+
   useEffect(() => {
+    // Set client-side flag to prevent hydration mismatch
+    setIsClient(true);
+    
+    // Set standardized animation attributes
+    setAnimationAttrs({
+      delay: "0",
+      duration: "0.3",
+      stagger: "0.02"
+    });
+
+    // Update all animation attributes client-side to prevent hydration mismatch
+    const updateAnimationAttributes = () => {
+      const animatedElements = document.querySelectorAll('[data-delay], [data-duration], [data-stagger]');
+      animatedElements.forEach(element => {
+        element.setAttribute('data-delay', '0');
+        element.setAttribute('data-duration', '0.3');
+        element.setAttribute('data-stagger', '0.02');
+      });
+    };
+
+    // Apply updates after a short delay to ensure DOM is ready
+    const timeoutId = setTimeout(updateAnimationAttributes, 100);
+    
+    return () => clearTimeout(timeoutId);
+  }, []);
+
+  useEffect(() => {
+    // Only initialize animations on client-side after hydration
+    if (!isClient) return;
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
     
@@ -226,7 +260,7 @@ export default function HomeClient({
         depthController.destroy();
       }
     };
-  }, []);
+  }, [isClient]);
 
   // Helper functions
   const scrollToSection = (sectionId: string) => {
@@ -375,7 +409,7 @@ export default function HomeClient({
   };
 
   return (
-    <div className="min-h-screen scroll-snap-container overflow-x-hidden">
+    <div className="min-h-screen scroll-snap-container overflow-x-hidden" suppressHydrationWarning>
         {/* Hero Section */}
         <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
           {/* Enhanced Background Layers */}
@@ -411,17 +445,43 @@ export default function HomeClient({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Text Content */}
               <div className="text-center lg:text-left depth-layer-2 w-full" data-mouse-parallax="0.1">
-                <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+                <h1 
+                  className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" 
+                  data-element="title" 
+                  data-text-animation="wave" 
+                  data-delay={animationAttrs.delay} 
+                  data-duration={animationAttrs.duration} 
+                  data-stagger={animationAttrs.stagger}
+                  suppressHydrationWarning
+                >
                   <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
                   <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
                   <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
                 </h1>
                 
-                <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+                <p 
+                  className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" 
+                  data-element="subtitle" 
+                  data-text-animation="fade-in" 
+                  data-delay={animationAttrs.delay} 
+                  data-duration={animationAttrs.duration} 
+                  data-stagger={animationAttrs.stagger} 
+                  data-mouse-parallax="0.05"
+                  suppressHydrationWarning
+                >
                   CV. Nara Exhibition Indonesia
                 </p>
                 
-                <p className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" data-element="trust-badge" data-text-animation="fade-in" data-delay="0.6" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+                <p 
+                  className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" 
+                  data-element="trust-badge" 
+                  data-text-animation="fade-in" 
+                  data-delay={animationAttrs.delay} 
+                  data-duration={animationAttrs.duration} 
+                  data-stagger={animationAttrs.stagger} 
+                  data-mouse-parallax="0.05"
+                  suppressHydrationWarning
+                >
                   Trusted by Government & Fortune 500 Companies
                 </p>
                 
@@ -559,11 +619,20 @@ export default function HomeClient({
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
-            <div className="max-w-7xl mx-auto scroll-animate">
-              <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04" style={{willChange: 'transform, opacity'}}>
+            <div className="max-w-7xl mx-auto z-depth-2">
+              <h2 
+                className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand"  
+                data-element="heading" 
+                data-text-animation="rotate-in" 
+                data-delay={animationAttrs.delay} 
+                data-duration={animationAttrs.duration} 
+                data-stagger={animationAttrs.stagger} 
+                data-tilt="4"
+                suppressHydrationWarning
+              >
                 CV. Nara Exhibition Indonesia
               </h2>
-              <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015" style={{willChange: 'transform, opacity'}}>
+              <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.3" data-stagger="0.02" data-mouse-parallax="0.03">
                 Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
                 mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
                 komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan 
@@ -650,10 +719,10 @@ export default function HomeClient({
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
             <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.05">
-              <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" style={{color: '#6382b4'}} data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.4" data-stagger="0.02" data-tilt="4">
+              <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand" data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.3" data-stagger="0.02" data-tilt="4">
                 Layanan Kami
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-contrast-700 text-depth" data-element="description" data-text-animation="blur-focus" data-delay="0.2" data-duration="0.5" data-stagger="0.02" data-mouse-parallax="0.03">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-700 text-depth" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.3" data-stagger="0.02" data-mouse-parallax="0.03">
                 Solusi kreatif terpadu yang dirancang untuk mengangkat brand Anda ke level yang lebih tinggi.
               </p>
             </div>
@@ -754,10 +823,10 @@ export default function HomeClient({
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
             <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.04">
-              <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.6" data-stagger="0.02" data-tilt="3">
+              <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.3" data-stagger="0.02" data-tilt="3">
                 Portfolio Terpilih
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0.2" data-duration="0.4" data-stagger="0.05" data-mouse-parallax="0.02">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0" data-duration="0.3" data-stagger="0.02" data-mouse-parallax="0.02">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
               
@@ -866,10 +935,10 @@ export default function HomeClient({
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
             <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.03">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.5" data-stagger="0.01" data-tilt="3">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.3" data-stagger="0.02" data-tilt="3">
                 Kata Mereka
               </h2>
-              <p className="text-lg sm:text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description text-gray-200" data-element="content" data-text-animation="fade-in" data-delay="0.2" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.02">
+              <p className="text-lg sm:text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description text-gray-200" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.3" data-stagger="0.02" data-mouse-parallax="0.02">
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
@@ -961,38 +1030,39 @@ export default function HomeClient({
               </p>
             </div>
             
-            <div className="grid lg:grid-cols-3 gap-8">
-              {/* Blog Articles */}
-              <div className="lg:col-span-2 scroll-animate-left">
-                <div className="grid md:grid-cols-2 gap-6">
-                  {recentArticles.map((article, index) => (
-                    <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
-                      <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
-                        <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
-                      </div>
-                      <div className="p-6">
-                        <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
-                          {article.category.replace('-', ' ')}
+            {/* Centered Blog Articles Container */}
+            <div className="flex justify-center">
+              <div className="w-full max-w-5xl">
+                {/* Blog Articles */}
+                <div className="scroll-animate-left">
+                  <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
+                    {recentArticles.map((article, index) => (
+                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
+                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
+                          <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
                         </div>
-                        <h3 className="text-lg font-bold mb-3 line-clamp-2 text-high-contrast">
-                          {article.title}
-                        </h3>
-                        <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
-                          {article.excerpt}
-                        </p>
-                        <a 
-                          href={`/blog/${article.slug}`}
-                          className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
-                        >
-                          Baca Selengkapnya →
-                        </a>
-                      </div>
-                    </article>
-                  ))}
+                        <div className="p-6">
+                          <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
+                            {article.category.replace('-', ' ')}
+                          </div>
+                          <h3 className="text-lg font-bold mb-3 line-clamp-2 text-high-contrast">
+                            {article.title}
+                          </h3>
+                          <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
+                            {article.excerpt}
+                          </p>
+                          <a 
+                            href={`/blog/${article.slug}`}
+                            className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
+                          >
+                            Baca Selengkapnya →
+                          </a>
+                        </div>
+                      </article>
+                    ))}
+                  </div>
                 </div>
               </div>
-              
-
             </div>
             
             <div className="text-center mt-12">
@@ -1015,10 +1085,10 @@ export default function HomeClient({
           
           <div className="container mx-auto px-6 relative z-depth-2">
             <div className="text-center mb-12 scroll-animate-scale">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.3" data-stagger="0.02">
                 Siap Memulai Project Anda?
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.3" data-stagger="0.02">
                 Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
                 mewujudkan visi kreatif Anda menjadi kenyataan.
               </p>
@@ -1097,10 +1167,10 @@ export default function HomeClient({
                 <div className="grid lg:grid-cols-2 gap-12">
                   {/* Contact Form */}
                   <div className="scroll-animate">
-                    <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.8" data-stagger="0.05">
+                    <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.3" data-stagger="0.02">
                       Mari Wujudkan Project Impian Anda
                     </h2>
-                    <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0.2" data-duration="0.5" data-stagger="0.05">
+                    <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0" data-duration="0.3" data-stagger="0.02">
                       Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
                     </p>
                     
@@ -1218,7 +1288,7 @@ export default function HomeClient({
                   {/* Contact Info & Map */}
                   <div className="scroll-animate-right">
                     <Card className="p-8 mb-8 scroll-animate animate-stagger-4">
-                      <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.05">Hubungi Kami</h3>
+                      <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0" data-duration="0.3" data-stagger="0.02">Hubungi Kami</h3>
                       <div className="space-y-6">
                         {contactInfo.map((info, index) => (
                           <div key={index} className="flex items-start scroll-animate animate-stagger-6" data-stagger={index * 100}>

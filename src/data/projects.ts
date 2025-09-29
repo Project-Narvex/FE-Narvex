@@ -62,8 +62,8 @@ export const projects: Project[] = [
     description: 'Penyelenggaraan expo dan seminar nasional dengan tema sustainability dan bisnis berkelanjutan.',
     longDescription: 'Event berskala nasional yang menggabungkan exhibition dan seminar dengan fokus pada sustainability dan bisnis berkelanjutan. Melibatkan 50+ exhibitor dan 500+ peserta dari berbagai industri.',
     services: ['Event Management', 'Exhibition Design', 'Audio Visual', 'Registration System', 'Catering Management'],
-    images: ['/images/projects/jbbi-expo-1.jpg', '/images/projects/jbbi-expo-2.jpg'],
-    gallery: ['/images/projects/jbbi-expo-gallery-1.jpg', '/images/projects/jbbi-expo-gallery-2.jpg', '/images/projects/jbbi-expo-gallery-3.jpg', '/images/projects/jbbi-expo-gallery-4.jpg'],
+    images: ['https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop&crop=center', 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&h=600&fit=crop&crop=center'],
+    gallery: ['https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&h=800&fit=crop&crop=center', 'https://images.unsplash.com/photo-1511578314322-379afb476865?w=1200&h=800&fit=crop&crop=center', 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=1200&h=800&fit=crop&crop=center', 'https://images.unsplash.com/photo-1587825140708-dfaf72ae4b04?w=1200&h=800&fit=crop&crop=center'],
     tags: ['Exhibition', 'Sustainability', 'Business', 'Seminar'],
     results: {
       participants: '500+',
@@ -111,7 +111,7 @@ export const projects: Project[] = [
         role: 'Director',
         company: 'JBBI',
         content: 'Narvex berhasil mengorganisir event yang luar biasa. Profesionalisme dan perhatian terhadap detail sangat mengesankan.',
-        avatar: '/images/testimonials/sari-wijaya.jpg'
+        avatar: 'https://images.unsplash.com/photo-1580489944761-15a19d654956?w=400&h=400&fit=crop&crop=face'
       }
     ],
     technologies: ['Digital Registration System', 'QR Code Technology', 'Live Streaming Platform', 'Audio Visual Equipment'],
@@ -144,7 +144,7 @@ export const projects: Project[] = [
     description: 'Desain dan konstruksi booth promosi produk Kefii dengan konsep modern dan eye-catching.',
     longDescription: 'Booth activation untuk brand Kefii di Grand City Mall dengan desain yang menarik dan interaktif. Fokus pada brand awareness dan lead generation.',
     services: ['Booth Design', 'Construction', 'Brand Activation', 'Staff Coordination', 'Lead Management'],
-    images: ['/images/projects/kefii-booth-1.jpg', '/images/projects/kefii-booth-2.jpg'],
+    images: ['https://images.unsplash.com/photo-1556761175-b413da4baf72?w=800&h=600&fit=crop&crop=center', 'https://images.unsplash.com/photo-1573164713714-d95e436ab8d6?w=800&h=600&fit=crop&crop=center'],
     tags: ['Booth Design', 'Brand Activation', 'Retail', 'Product Launch'],
     results: {
       visitors: '2000+',
@@ -170,7 +170,7 @@ export const projects: Project[] = [
     description: 'Brand activation outdoor dengan konsep adventure dan petualangan yang sesuai dengan brand Camel.',
     longDescription: 'Outdoor brand activation yang mengusung tema adventure dan petualangan. Event ini dirancang untuk meningkatkan engagement dengan target audience Camel.',
     services: ['Event Activation', 'Outdoor Setup', 'Entertainment', 'Safety Management', 'Logistics'],
-    images: ['/images/projects/camel-activity-1.jpg', '/images/projects/camel-activity-2.jpg'],
+    images: ['https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800&h=600&fit=crop&crop=center', 'https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&h=600&fit=crop&crop=center'],
     tags: ['Brand Activation', 'Outdoor Event', 'Adventure', 'Engagement'],
     results: {
       participants: '1000+',
@@ -196,7 +196,7 @@ export const projects: Project[] = [
     description: 'Community tour multi-destinasi dengan program team building dan networking.',
     longDescription: 'Tour komunitas yang menggabungkan wisata, team building, dan networking. Meliputi 3 destinasi dengan berbagai aktivitas yang dirancang untuk memperkuat ikatan komunitas.',
     services: ['Tour Management', 'Transportation', 'Accommodation', 'Activity Coordination', 'Documentation'],
-    images: ['/images/projects/inova-tour-1.jpg', '/images/projects/inova-tour-2.jpg'],
+    images: ['https://images.unsplash.com/photo-1469474968028-56623f02e42e?w=800&h=600&fit=crop&crop=center', 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800&h=600&fit=crop&crop=center'],
     tags: ['Community Tour', 'Team Building', 'Networking', 'Multi-destination'],
     results: {
       participants: '150+',
@@ -222,7 +222,7 @@ export const projects: Project[] = [
     description: 'Serangkaian corporate outing dan team building untuk pegawai Kementerian LHK.',
     longDescription: 'Program corporate outing berkelanjutan untuk Kementerian LHK dengan berbagai aktivitas team building dan recreational activities di berbagai lokasi.',
     services: ['Event Planning', 'Venue Management', 'Team Building', 'Catering', 'Transportation'],
-    images: ['/images/projects/lhk-outing-1.jpg', '/images/projects/lhk-outing-2.jpg'],
+    images: ['https://images.unsplash.com/photo-1511578314322-379afb476865?w=800&h=600&fit=crop&crop=center', 'https://images.unsplash.com/photo-1505373877841-8d25f7d46678?w=800&h=600&fit=crop&crop=center'],
     tags: ['Corporate Event', 'Team Building', 'Government', 'Recreation'],
     results: {
       events: '5+',
@@ -249,7 +249,7 @@ export const projects: Project[] = [
     year: 2023,
     description: 'Comprehensive brand identity design untuk startup teknologi dengan pendekatan modern dan inovatif.',
     services: ['Brand Strategy', 'Logo Design', 'Visual Identity', 'Brand Guidelines'],
-    images: ['/images/projects/skywork-alpha-1.jpg'],
+    images: ['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&h=600&fit=crop&crop=center'],
     tags: ['Branding', 'Logo Design', 'Startup', 'Technology'],
     featured: false,
     status: 'completed'
@@ -268,7 +268,7 @@ export const projects: Project[] = [
     year: 2023,
     description: 'Program training korporat untuk pengembangan skill leadership dan management.',
     services: ['Training Design', 'Facilitation', 'Assessment', 'Certification'],
-    images: ['/images/projects/gutama-training-1.jpg'],
+    images: ['https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&h=600&fit=crop&crop=center'],
     tags: ['Training', 'Leadership', 'Corporate', 'Skill Development'],
     featured: false,
     status: 'completed'
@@ -287,7 +287,7 @@ export const projects: Project[] = [
     year: 2023,
     description: 'Kampanye kreatif terintegrasi untuk brand awareness dan engagement.',
     services: ['Creative Strategy', 'Campaign Development', 'Content Creation', 'Execution'],
-    images: ['/images/projects/creativework-gamma-1.jpg'],
+    images: ['https://images.unsplash.com/photo-1556761175-4b46a572b786?w=800&h=600&fit=crop&crop=center'],
     tags: ['Creative Campaign', 'Brand Awareness', 'Content', 'Strategy'],
     featured: false,
     status: 'completed'
@@ -306,7 +306,7 @@ export const projects: Project[] = [
     year: 2023,
     description: 'Pernikahan outdoor dengan konsep romantic garden yang elegan dan memorable.',
     services: ['Wedding Planning', 'Decoration', 'Coordination', 'Photography'],
-    images: ['/images/projects/evervow-delta-1.jpg'],
+    images: ['https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop&crop=center'],
     tags: ['Wedding', 'Outdoor', 'Romantic', 'Garden'],
     featured: false,
     status: 'completed'

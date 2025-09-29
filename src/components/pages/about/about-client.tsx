@@ -13,9 +13,10 @@ import {
 
 interface AboutClientProps {
   // Add props here for future data integration
+  [key: string]: unknown;
 }
 
-export default function AboutClient(props: AboutClientProps) {
+export default function AboutClient(_props: AboutClientProps) {
   useEffect(() => {
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();

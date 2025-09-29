@@ -862,6 +862,7 @@ interface SectionConfig {
 
 /**
  * Apply section-specific text animations
+ * Only applies attributes if they don't already exist to prevent hydration mismatch
  */
 export function applySectionAnimations(sectionId: string, config: SectionConfig) {
   const section = document.querySelector(`#${sectionId}`);
@@ -870,10 +871,19 @@ export function applySectionAnimations(sectionId: string, config: SectionConfig)
   Object.entries(config).forEach(([elementType, animConfig]: [string, SectionAnimationConfig]) => {
     const elements = section.querySelectorAll(`[data-element="${elementType}"]`);
     elements.forEach((element) => {
-      element.setAttribute('data-text-animation', animConfig.animation);
-      element.setAttribute('data-delay', animConfig.delay.toString());
-      element.setAttribute('data-duration', animConfig.duration.toString());
-      element.setAttribute('data-stagger', animConfig.stagger.toString());
+      // Only set attributes if they don't already exist (prevent hydration mismatch)
+      if (!element.hasAttribute('data-text-animation')) {
+        element.setAttribute('data-text-animation', animConfig.animation);
+      }
+      if (!element.hasAttribute('data-delay')) {
+        element.setAttribute('data-delay', animConfig.delay.toString());
+      }
+      if (!element.hasAttribute('data-duration')) {
+        element.setAttribute('data-duration', animConfig.duration.toString());
+      }
+      if (!element.hasAttribute('data-stagger')) {
+        element.setAttribute('data-stagger', animConfig.stagger.toString());
+      }
     });
   });
 }
@@ -890,12 +900,8 @@ export function initializeAnimations() {
   const monitor = PerformanceMonitor.getInstance();
   monitor.startMonitoring();
 
-  // Apply section-specific animations
-  gsap.delayedCall(0.1, () => {
-    Object.entries(sectionAnimationConfigs).forEach(([sectionId, config]) => {
-      applySectionAnimations(sectionId, config);
-    });
-  });
+  // Skip applying section animations to prevent hydration mismatch
+  // Animation attributes are now managed directly in JSX
 
   // Add specific stagger animations for sections
   gsap.delayedCall(0.2, () => {
