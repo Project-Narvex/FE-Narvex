@@ -1,18 +1,20 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
+import { getRecentArticles, BlogArticle } from '@/data/blog';
+import { projects as allProjects, Project } from '@/data/projects';
+import { teamMembers } from '@/data/team';
+import { clientLogos, ClientLogo } from '@/data/clients';
 import Image from 'next/image';
+import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 import { ArrowRight, Play, Palette, Calendar, Megaphone, ExternalLink, Star, MapPin, Phone, Mail, Instagram, Send, CheckCircle } from 'lucide-react';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import ClientCarousel from '@/components/ui/ClientCarousel';
 import MapComponent from '@/components/ui/MapComponent';
 
-import { getRecentArticles } from '@/data/blog';
 import { 
   initializeAnimations, 
   initializeHeroAnimation, 
@@ -37,15 +39,7 @@ interface Service {
   features: string[];
 }
 
-interface Project {
-  id: number;
-  title: string;
-  category: 'branding' | 'events' | 'digital' | 'all';
-  image: string;
-  description: string;
-  tags: string[];
-  client?: string;
-}
+
 
 interface Testimonial {
   id: string;
@@ -98,153 +92,50 @@ const services: Service[] = [
 
 const coverflowServices = [
   {
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=modern%20creative%20design%20workspace%20with%20tools%20palette%20brushes%20computer%20vibrant%20colors&image_size=landscape_4_3',
+    image: 'https://picsum.photos/800/600?random=1',
     title: 'Creative Design',
     subtitle: 'Branding & Visual Identity'
   },
   {
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=digital%20marketing%20dashboard%20analytics%20social%20media%20graphs%20smartphone%20modern%20office&image_size=landscape_4_3',
+    image: 'https://picsum.photos/800/600?random=2',
     title: 'Digital Marketing',
     subtitle: 'Social Media & SEO'
   },
   {
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=event%20production%20stage%20lighting%20camera%20equipment%20concert%20venue%20professional&image_size=landscape_4_3',
+    image: 'https://picsum.photos/800/600?random=3',
     title: 'Event Production',
     subtitle: 'Planning & Coordination'
   },
   {
-    image: 'https://trae-api-sg.mchost.guru/api/ide/v1/text_to_image?prompt=business%20consultation%20meeting%20room%20strategy%20charts%20professional%20office%20planning&image_size=landscape_4_3',
+    image: 'https://picsum.photos/800/600?random=4',
     title: 'Consultation',
     subtitle: 'Strategy & Planning'
   }
 ];
 
-const defaultProjects: Project[] = [
-  {
-    id: 1,
-    title: 'Brand Identity Skywork',
-    category: 'branding',
-    image: 'https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=800&h=600&fit=crop&crop=center',
-    description: 'Comprehensive brand identity design untuk Skywork Events dengan fokus pada profesionalisme dan kreativitas.',
-    tags: ['Logo Design', 'Brand Guidelines', 'Visual Identity'],
-    client: 'Skywork Events'
-  },
-  {
-    id: 2,
-    title: 'Wedding Event Production',
-    category: 'events',
-    image: 'https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=800&h=600&fit=crop&crop=center',
-    description: 'Event production untuk pernikahan mewah dengan konsep elegant dan romantic yang tak terlupakan.',
-    tags: ['Event Planning', 'Stage Design', 'Decoration'],
-    client: 'Private Client'
-  },
-  {
-    id: 3,
-    title: 'Digital Campaign Gutama',
-    category: 'digital',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&h=600&fit=crop&crop=center',
-    description: 'Kampanye digital marketing untuk Gutama Learning yang meningkatkan engagement hingga 300%.',
-    tags: ['Social Media', 'Content Creation', 'Digital Strategy'],
-    client: 'Gutama Learning'
-  },
-  {
-    id: 4,
-    title: 'Creative Sky Branding',
-    category: 'branding',
-    image: 'https://images.unsplash.com/photo-1561070791-2526d30994b5?w=800&h=600&fit=crop&crop=center',
-    description: 'Rebranding lengkap untuk Creative Sky dengan pendekatan fresh dan modern.',
-    tags: ['Rebranding', 'Logo Design', 'Marketing Materials'],
-    client: 'Creative Sky'
-  },
-  {
-    id: 5,
-    title: 'Corporate Event Evervow',
-    category: 'events',
-    image: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=800&h=600&fit=crop&crop=center',
-    description: 'Event production untuk corporate gathering Evervow dengan tema professional dan engaging.',
-    tags: ['Corporate Event', 'Audio Visual', 'Event Management'],
-    client: 'Evervow'
-  },
-  {
-    id: 6,
-    title: 'Social Media Strategy',
-    category: 'digital',
-    image: 'https://images.unsplash.com/photo-1611926653458-09294b3142bf?w=800&h=600&fit=crop&crop=center',
-    description: 'Strategi social media comprehensive untuk meningkatkan brand awareness dan engagement.',
-    tags: ['Social Media', 'Content Strategy', 'Brand Awareness'],
-    client: 'Multiple Clients'
-  }
-];
 
-const defaultTestimonials: Testimonial[] = [
-  {
-    id: '1',
-    name: 'Sarah Johnson',
-    company: 'Skywork Events',
-    position: 'Event Director',
-    avatar: 'https://images.unsplash.com/photo-1494790108755-2616b612b786?w=400&h=400&fit=crop&crop=face',
-    quote: 'Narvex berhasil mengubah visi kami menjadi event yang luar biasa. Tim mereka sangat profesional, kreatif, dan detail-oriented. Hasil akhirnya melebihi ekspektasi kami.',
-    rating: 5,
-    project: 'Corporate Event Production'
-  },
-  {
-    id: '2',
-    name: 'Ahmad Gutama',
-    company: 'Gutama Learning',
-    position: 'Marketing Manager',
-    avatar: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400&h=400&fit=crop&crop=face',
-    quote: 'Strategi digital marketing dari Narvex meningkatkan engagement kami hingga 300% dalam 6 bulan. ROI yang luar biasa! Highly recommended untuk semua bisnis.',
-    rating: 5,
-    project: 'Digital Marketing Campaign'
-  },
-  {
-    id: '3',
-    name: 'Maria Creative',
-    company: 'Creative Sky',
-    position: 'Creative Director',
-    avatar: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400&h=400&fit=crop&crop=face',
-    quote: 'Rebranding yang dilakukan Narvex memberikan fresh perspective untuk brand kami. Proses kolaborasinya sangat smooth dan hasilnya beyond expectations.',
-    rating: 5,
-    project: 'Brand Identity Design'
-  },
-  {
-    id: '4',
-    name: 'David Wilson',
-    company: 'Evervow',
-    position: 'CEO',
-    avatar: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=400&fit=crop&crop=face',
-    quote: 'Partnership dengan Narvex adalah salah satu keputusan terbaik untuk company kami. Mereka tidak hanya deliver hasil yang excellent, tapi juga memberikan strategic insights.',
-    rating: 5,
-    project: 'Comprehensive Branding'
-  }
-];
 
-const defaultClients: Client[] = [
-  { name: 'Bank Indonesia', logo: '/logos/BI.png' },
-  { name: 'Kominfo', logo: '/logos/Kominfo.png' },
-  { name: 'Kementerian Perhubungan RI', logo: '/logos/Mentri_perhubungan.png' },
-  { name: 'Upscaled', logo: '/logos/Upscaled.png' },
-  { name: 'Basarnas', logo: '/logos/Basarnas.png' },
-  { name: 'Universitas Airlangga', logo: '/logos/Unair.png' },
-  { name: 'SD Muhammadiyah Taman', logo: '/logos/SDMTaman.png' },
-  { name: 'SMAN 2', logo: '/logos/SMAN2.png' },
-  { name: 'Madiun', logo: '/logos/Madiun.png' },
-  { name: 'Puma', logo: '/logos/Puma.png' },
-  { name: 'Campina', logo: '/logos/Campina.png' },
-  { name: 'Erajaya', logo: '/logos/Erajaya.png' },
-  { name: 'Erafone', logo: '/logos/Erafone.png' },
-  { name: 'Badanamu', logo: '/logos/Badanamu.png' },
-  { name: 'Jaya', logo: '/logos/Jaya.png' },
-  { name: 'RCH', logo: '/logos/RCH.png' },
-  { name: 'Plaza Surabaya', logo: '/logos/PlazaSBY.png' },
-  { name: 'DGW', logo: '/logos/DGW.png' },
-  { name: 'SAW Tour', logo: '/logos/SAWTour.png' },
-  { name: 'J99', logo: '/logos/J99.png' }
-];
+
 
 export default function Home() {
+  // Fetch data directly in the component
+  const recentArticles = getRecentArticles(4);
+  const defaultProjects = allProjects;
+  const defaultClients = clientLogos;
+  
+  // Create testimonial data from team members
+  const defaultTestimonials = teamMembers.slice(0, 4).map(member => ({
+    id: member.id,
+    name: member.name,
+    company: member.companyId,
+    position: member.position,
+    avatar: member.avatar,
+    quote: member.bio,
+    rating: 5,
+    project: 'Various Projects',
+  }));
   // State for portfolio filter
-  const [activeFilter, setActiveFilter] = useState<'all' | 'branding' | 'events' | 'digital'>('all');
+  const [activeFilter, setActiveFilter] = useState<'all' | 'creative' | 'exhibition' | 'corporate' | 'wedding'>('all');
   
   // State for contact form
   const [formData, setFormData] = useState<ContactFormData>({
@@ -361,9 +252,10 @@ export default function Home() {
   // Portfolio filter
   const filters = [
     { key: 'all' as const, label: 'Semua' },
-    { key: 'branding' as const, label: 'Branding' },
-    { key: 'events' as const, label: 'Events' },
-    { key: 'digital' as const, label: 'Digital' }
+    { key: 'creative' as const, label: 'Creative' },
+    { key: 'exhibition' as const, label: 'Exhibition' },
+    { key: 'corporate' as const, label: 'Corporate' },
+    { key: 'wedding' as const, label: 'Wedding' }
   ];
 
   const filteredProjects = defaultProjects.filter(project => 
@@ -490,11 +382,6 @@ export default function Home() {
 
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
-      {/* Header */}
-      <Header />
-      
-      {/* Main Content */}
-      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
           {/* Enhanced Background Layers */}
@@ -913,7 +800,7 @@ export default function Home() {
                   <div className="relative overflow-hidden rounded-2xl">
                     <div className="relative w-full h-64">
                       <Image
-                        src={project.image}
+                        src={project.images[0] || '/placeholder-image.jpg'}
                         alt={project.title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -1115,9 +1002,9 @@ export default function Home() {
             </div>
             
             <div className="text-center mt-12">
-              <a href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 btn-accessible-primary blog-button">
+              <Link href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 btn-accessible-primary blog-button">
                 Lihat Semua Artikel
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -1178,12 +1065,12 @@ export default function Home() {
             </div>
             
             <div className="text-center scroll-animate animate-stagger-4">
-              <a href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
+              <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
-              </a>
-              <a href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
+              </Link>
+              <Link href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
                 Lihat Portfolio
-              </a>
+              </Link>
             </div>
           </div>
         </section>
@@ -1364,10 +1251,6 @@ export default function Home() {
             </section>
           )}
         </div>
-      </main>
-      
-      {/* Footer */}
-      <Footer />
     </div>
   );
 }

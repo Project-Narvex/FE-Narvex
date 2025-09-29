@@ -1,6 +1,8 @@
+// src/components/ui/CMSImage.tsx
 'use client';
 
 import React from 'react';
+import Image from 'next/image'; // Import the Next.js Image component
 import { Image as ImageIcon } from 'lucide-react';
 
 interface CMSImageProps {
@@ -13,7 +15,6 @@ interface CMSImageProps {
 
 export default function CMSImage({ src, alt, className, fallbackText, category }: CMSImageProps) {
   const [imageError, setImageError] = React.useState(false);
-  const [imageLoading, setImageLoading] = React.useState(true);
 
   if (!src || imageError) {
     return (
@@ -28,27 +29,16 @@ export default function CMSImage({ src, alt, className, fallbackText, category }
     );
   }
 
+  // Use the Next.js Image component
   return (
     <div className={`relative ${className}`}>
-      {imageLoading && (
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center">
-          <div className="text-center text-gray-500">
-            <div className="animate-spin w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full mx-auto mb-2"></div>
-            <p className="text-sm">Loading...</p>
-          </div>
-        </div>
-      )}
-      <img 
+      <Image
         src={src}
         alt={alt}
-        className={`w-full h-full object-cover transition-opacity duration-300 ${
-          imageLoading ? 'opacity-0' : 'opacity-100'
-        }`}
-        onLoad={() => setImageLoading(false)}
-        onError={() => {
-          setImageError(true);
-          setImageLoading(false);
-        }}
+        fill // Use fill to make it cover the parent container
+        className="object-cover" // Ensure the image covers the area
+        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw" // Help Next.js pick the right size
+        onError={() => setImageError(true)}
       />
     </div>
   );

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState, useRef, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -85,7 +85,7 @@ const MapUpdater: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
 
 const LeafletMap: React.FC = () => {
   // Jakarta coordinates as fallback
-  const jakartaPosition: [number, number] = [-6.2088, 106.8456];
+  const jakartaPosition: [number, number] = useMemo(() => [-6.2088, 106.8456], []);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
   const [mapCenter, setMapCenter] = useState<[number, number]>(jakartaPosition);
   const [locationError, setLocationError] = useState<string | null>(null);
@@ -138,7 +138,7 @@ const LeafletMap: React.FC = () => {
         watchIdRef.current = null;
       }
     };
-  }, []);
+  }, [jakartaPosition]);
 
   return (
     <MapContainer

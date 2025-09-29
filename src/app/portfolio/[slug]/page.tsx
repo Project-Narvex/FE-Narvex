@@ -1,8 +1,6 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import CMSImage from '@/components/ui/CMSImage';
 import { 
   MapPin, 
@@ -46,7 +44,7 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
         <div className="text-center">
           <div className="text-6xl mb-4">🔍</div>
           <h1 className="text-2xl font-bold text-gray-700 mb-2">Project Not Found</h1>
-          <p className="text-gray-500 mb-6">The portfolio item you're looking for doesn't exist.</p>
+          <p className="text-gray-500 mb-6">The portfolio item you&apos;re looking for doesn&apos;t exist.</p>
           <Link 
             href="/portfolio" 
             className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
@@ -63,8 +61,6 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-      
       <main>
         {/* Enhanced Navigation Bar - Consistent with Main Header */}
         <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 shadow-lg">
@@ -328,7 +324,7 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
                   {project.testimonials.slice(0, 1).map((testimonial, index) => (
                     <div key={index}>
                       <blockquote className="text-lg text-gray-700 italic mb-6 leading-relaxed">
-                        "{testimonial.content}"
+                        &ldquo;{testimonial.content}&rdquo;
                       </blockquote>
                       <div className="flex items-center">
                         <div className="w-12 h-12 rounded-full mr-4 overflow-hidden bg-gray-200 flex-shrink-0">
@@ -459,9 +455,6 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
             </div>
           </div>
         </section>
-      </main>
-      
-      <Footer />
     </div>
   );
 }

@@ -1,0 +1,363 @@
+// Contact page data structure for CMS integration
+
+export interface ContactInfo {
+  id: string;
+  name: string;
+  description: string;
+  address: {
+    street: string;
+    city: string;
+    province: string;
+    postalCode: string;
+    country: string;
+    coordinates: {
+      lat: number;
+      lng: number;
+    };
+  };
+  contact: {
+    phone: string;
+    email: string;
+    whatsapp: string;
+  };
+  businessHours: {
+    weekdays: string;
+    saturday: string;
+    sunday?: string;
+  };
+  socialMedia: {
+    instagram: string;
+    facebook?: string;
+    linkedin?: string;
+    youtube?: string;
+  };
+}
+
+export interface ServiceCategory {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  services: string[];
+  contact: {
+    phone: string;
+    email: string;
+    whatsapp: string;
+  };
+  featured: boolean;
+  order: number;
+}
+
+export interface ContactPageContent {
+  hero: {
+    title: string;
+    subtitle: string;
+    description: string;
+    backgroundImage?: string;
+  };
+  serviceSelection: {
+    title: string;
+    description: string;
+  };
+  contactForm: {
+    title: string;
+    description: string;
+    fields: {
+      name: { required: boolean; placeholder: string; };
+      email: { required: boolean; placeholder: string; };
+      phone: { required: boolean; placeholder: string; };
+      company: { required: boolean; placeholder: string; };
+      service: { required: boolean; options: string[]; };
+      budget: { required: boolean; options: { value: string; label: string; }[]; };
+      timeline: { required: boolean; options: { value: string; label: string; }[]; };
+      message: { required: boolean; placeholder: string; };
+    };
+    submitButton: {
+      text: string;
+      loadingText: string;
+    };
+    successMessage: {
+      title: string;
+      description: string;
+      buttonText: string;
+    };
+  };
+  socialSection: {
+    title: string;
+    description: string;
+  };
+}
+
+export interface FormSubmission {
+  id?: string;
+  name: string;
+  email: string;
+  phone: string;
+  company?: string;
+  service: string;
+  budget?: string;
+  timeline?: string;
+  message: string;
+  targetService: string;
+  submittedAt: Date;
+  status: 'pending' | 'contacted' | 'completed';
+  source: 'website' | 'social' | 'referral';
+}
+
+// Default contact page content (would be fetched from CMS)
+export const defaultContactPageContent: ContactPageContent = {
+  hero: {
+    title: "Hubungi Kami",
+    subtitle: "Narvex Creative Services",
+    description: "Siap membantu mewujudkan project impian Anda dengan layanan creative services terbaik dari Narvex"
+  },
+  serviceSelection: {
+    title: "Pilih Layanan",
+    description: "Pilih layanan yang sesuai dengan kebutuhan project Anda untuk mendapatkan konsultasi yang tepat"
+  },
+  contactForm: {
+    title: "Konsultasi Gratis",
+    description: "Formulir ini akan diteruskan langsung ke tim spesialis untuk konsultasi yang tepat.",
+    fields: {
+      name: { required: true, placeholder: "Masukkan nama lengkap" },
+      email: { required: true, placeholder: "email@example.com" },
+      phone: { required: true, placeholder: "+62 xxx xxxx xxxx" },
+      company: { required: false, placeholder: "Nama perusahaan (opsional)" },
+      service: { required: true, options: [] }, // Will be populated dynamically
+      budget: { 
+        required: false, 
+        options: [
+          { value: "under-10m", label: "< 10 Juta" },
+          { value: "10m-50m", label: "10 - 50 Juta" },
+          { value: "50m-100m", label: "50 - 100 Juta" },
+          { value: "100m-500m", label: "100 - 500 Juta" },
+          { value: "above-500m", label: "> 500 Juta" },
+          { value: "discuss", label: "Diskusi Lebih Lanjut" }
+        ]
+      },
+      timeline: {
+        required: false,
+        options: [
+          { value: "urgent", label: "Mendesak (< 1 minggu)" },
+          { value: "1-2weeks", label: "1-2 minggu" },
+          { value: "1month", label: "1 bulan" },
+          { value: "2-3months", label: "2-3 bulan" },
+          { value: "flexible", label: "Fleksibel" }
+        ]
+      },
+      message: { required: true, placeholder: "Ceritakan detail proyek Anda, tujuan, target audiens, dan ekspektasi hasil..." }
+    },
+    submitButton: {
+      text: "Kirim Pesan",
+      loadingText: "Mengirim..."
+    },
+    successMessage: {
+      title: "Pesan Terkirim!",
+      description: "Terima kasih telah menghubungi kami. Tim kami akan segera menghubungi Anda.",
+      buttonText: "Kirim Pesan Lain"
+    }
+  },
+  socialSection: {
+    title: "Terhubung dengan Kami",
+    description: "Ikuti kami di media sosial untuk mendapatkan update terbaru tentang proyek dan layanan kami"
+  }
+};
+
+// Default company information (would be fetched from CMS)
+export const defaultContactInfo: ContactInfo = {
+  id: "narvex-main",
+  name: "CV. Nara Exhibition Indonesia",
+  description: "Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing",
+  address: {
+    street: "Jakarta",
+    city: "Jakarta",
+    province: "DKI Jakarta",
+    postalCode: "12345",
+    country: "Indonesia",
+    coordinates: {
+      lat: -6.2088,
+      lng: 106.8456
+    }
+  },
+  contact: {
+    phone: "+62 xxx xxxx xxxx",
+    email: "narvex.ind@gmail.com",
+    whatsapp: "+62 xxx xxxx xxxx"
+  },
+  businessHours: {
+    weekdays: "Senin - Jumat: 09:00 - 18:00",
+    saturday: "Sabtu: 09:00 - 15:00",
+    sunday: "Minggu: Tutup"
+  },
+  socialMedia: {
+    instagram: "https://instagram.com/narvex.id",
+    facebook: "https://facebook.com/narvex.id",
+    linkedin: "https://linkedin.com/company/narvex",
+    youtube: "https://youtube.com/@narvex"
+  }
+};
+
+// Default service categories (would be fetched from CMS)
+export const defaultServiceCategories: ServiceCategory[] = [
+  {
+    id: 'branding',
+    name: 'Creative Design & Branding',
+    description: 'Identitas visual yang kuat dan memorable untuk brand Anda',
+    icon: '🎨',
+    color: 'bg-blue-500',
+    services: [
+      'Brand Strategy & Identity',
+      'Logo & Visual Design',
+      'Brand Guidelines',
+      'Marketing Collaterals',
+      'Brand Consultation'
+    ],
+    contact: {
+      phone: '+62 xxx xxxx xxxx',
+      email: 'creative@narvex.id',
+      whatsapp: '+62 xxx xxxx xxxx'
+    },
+    featured: true,
+    order: 1
+  },
+  {
+    id: 'event',
+    name: 'Event Production',
+    description: 'Produksi event berkualitas tinggi dari konsep hingga eksekusi',
+    icon: '🎪',
+    color: 'bg-gold-500',
+    services: [
+      'Event Planning & Management',
+      'Stage & Set Design',
+      'Audio Visual Production',
+      'Live Streaming',
+      'Event Coordination'
+    ],
+    contact: {
+      phone: '+62 xxx xxxx xxxx',
+      email: 'event@narvex.id',
+      whatsapp: '+62 xxx xxxx xxxx'
+    },
+    featured: true,
+    order: 2
+  },
+  {
+    id: 'digital',
+    name: 'Digital Marketing',
+    description: 'Strategi digital marketing yang efektif dan terukur',
+    icon: '📱',
+    color: 'bg-blue-600',
+    services: [
+      'Social Media Strategy',
+      'Content Creation',
+      'Influencer Marketing',
+      'Performance Advertising',
+      'Digital Analytics'
+    ],
+    contact: {
+      phone: '+62 xxx xxxx xxxx',
+      email: 'digital@narvex.id',
+      whatsapp: '+62 xxx xxxx xxxx'
+    },
+    featured: true,
+    order: 3
+  },
+  {
+    id: 'consultation',
+    name: 'Brand Consultation',
+    description: 'Konsultasi strategis untuk pengembangan dan transformasi brand',
+    icon: '💡',
+    color: 'bg-gold-600',
+    services: [
+      'Brand Audit & Research',
+      'Market Analysis',
+      'Brand Strategy Development',
+      'Implementation Support',
+      'Performance Monitoring'
+    ],
+    contact: {
+      phone: '+62 xxx xxxx xxxx',
+      email: 'consultation@narvex.id',
+      whatsapp: '+62 xxx xxxx xxxx'
+    },
+    featured: true,
+    order: 4
+  }
+];
+
+// CMS API functions (would integrate with Strapi)
+export const contactAPI = {
+  // Get contact page content
+  async getContactPageContent(): Promise<ContactPageContent> {
+    try {
+      // In a real implementation, this would fetch from Strapi
+      // const response = await strapi.request('/contact-page?populate=*');
+      // return transformStrapiEntity(response.data);
+      return defaultContactPageContent;
+    } catch (error) {
+      console.error('Error fetching contact page content:', error);
+      return defaultContactPageContent;
+    }
+  },
+
+  // Get contact information
+  async getContactInfo(): Promise<ContactInfo> {
+    try {
+      // const response = await strapi.request('/contact-info?populate=*');
+      // return transformStrapiEntity(response.data);
+      return defaultContactInfo;
+    } catch (error) {
+      console.error('Error fetching contact info:', error);
+      return defaultContactInfo;
+    }
+  },
+
+  // Get service categories
+  async getServiceCategories(): Promise<ServiceCategory[]> {
+    try {
+      // const response = await strapi.request('/service-categories?populate=*&sort=order:asc');
+      // return response.data.map(transformStrapiEntity);
+      return defaultServiceCategories.sort((a, b) => a.order - b.order);
+    } catch (error) {
+      console.error('Error fetching service categories:', error);
+      return defaultServiceCategories;
+    }
+  },
+
+  // Submit contact form
+  async submitContactForm(formData: Omit<FormSubmission, 'id' | 'submittedAt' | 'status'>): Promise<{ success: boolean; message: string; id?: string }> {
+    try {
+      // In a real implementation, this would submit to Strapi
+      // const response = await strapi.request('/contact-submissions', {
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     data: {
+      //       ...formData,
+      //       submittedAt: new Date().toISOString(),
+      //       status: 'pending'
+      //     }
+      //   })
+      // });
+      
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      console.log('Form submitted:', formData);
+      
+      return {
+        success: true,
+        message: 'Pesan berhasil dikirim. Tim kami akan segera menghubungi Anda.',
+        id: `submission_${Date.now()}`
+      };
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      return {
+        success: false,
+        message: 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.'
+      };
+    }
+  }
+};
+
+// All types and data are exported above

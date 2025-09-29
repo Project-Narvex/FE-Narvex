@@ -2,10 +2,10 @@
 
 import React, { useEffect } from 'react';
 import Image from 'next/image';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
+import Link from 'next/link';
 import SimpleHero from '@/components/ui/SimpleHero';
-import { Card, CardContent } from '@/components/ui/Card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card';
+import Button from '@/components/ui/Button';
 import { Palette, Calendar, Smartphone, Users } from 'lucide-react';
 import { 
   initializeAnimations, 
@@ -145,9 +145,6 @@ export default function ServicesPage() {
 
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
-      <Header />
-      
-      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <SimpleHero
           title="Layanan Kami"
@@ -389,19 +386,15 @@ export default function ServicesPage() {
             </div>
             
             <div className="text-center scroll-animate animate-stagger-4">
-              <a href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
+              <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
-              </a>
-              <a href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
+              </Link>
+              <Link href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
                 Lihat Portfolio
-              </a>
+              </Link>
             </div>
           </div>
         </section>
-        
-      </main>
-      
-      <Footer />
     </div>
   );
 }

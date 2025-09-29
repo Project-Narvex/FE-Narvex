@@ -1,14 +1,13 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Header from '@/components/layout/Header';
+import Link from 'next/link';
 import Image from 'next/image';
-import Footer from '@/components/layout/Footer';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Palette, GraduationCap, Lightbulb, Heart, Instagram, ExternalLink } from 'lucide-react';
 
-import SocialMediaGrid from '@/components/social/SocialMediaGrid';
+
 import { 
   initializeAnimations, 
   addGSAPHoverAnimations,
@@ -196,8 +195,6 @@ export default function CompaniesPage() {
 
   return (
     <div className="min-h-screen scroll-snap-container">
-      <Header />
-      
       <main>
         {/* Hero Section */}
         <SimpleHero
@@ -454,13 +451,13 @@ export default function CompaniesPage() {
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
-              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
+              <Link href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
                 <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
-              </a>
+              </Link>
               
               <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
@@ -488,18 +485,15 @@ export default function CompaniesPage() {
             </div>
             
             <div className="text-center scroll-animate animate-stagger-4">
-              <a href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
+              <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
-              </a>
-              <a href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
+              </Link>
+              <Link href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
                 Lihat Portfolio
-              </a>
+              </Link>
             </div>
           </div>
         </section>
-      </main>
-      
-      <Footer />
     </div>
   );
 }

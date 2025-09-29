@@ -1,17 +1,11 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import CMSImage from '@/components/ui/CMSImage';
 import { 
-  MapPin, 
   Calendar, 
-  Users, 
-  Award, 
   ArrowLeft, 
   ArrowRight, 
-  CheckCircle,
   User,
   Clock,
   Eye,
@@ -19,7 +13,7 @@ import {
   Star,
   Tag
 } from 'lucide-react';
-import { blogArticles, BlogArticle } from '@/data/blog';
+import { blogArticles } from '@/data/blog';
 
 interface BlogDetailPageProps {
   params: {
@@ -50,7 +44,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
         <div className="text-center">
           <div className="text-6xl mb-4">📄</div>
           <h1 className="text-2xl font-bold text-gray-700 mb-2">Article Not Found</h1>
-          <p className="text-gray-500 mb-6">The article you're looking for doesn't exist.</p>
+          <p className="text-gray-500 mb-6">The article you&apos;re looking for doesn&apos;t exist.</p>
           <Link 
             href="/blog" 
             className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
@@ -72,8 +66,6 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <Header />
-      
       <main>
         {/* Enhanced Navigation Bar */}
         <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 shadow-lg">
@@ -312,9 +304,6 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
             </div>
           </div>
         </section>
-      </main>
-      
-      <Footer />
     </div>
   );
 }

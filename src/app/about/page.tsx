@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import { Card, CardContent } from '@/components/ui/Card';
 import { 
   initializeAnimations, 
@@ -79,9 +77,6 @@ export default function AboutPage() {
 
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
-      <Header />
-      
-      <main className="overflow-x-hidden">
         {/* Hero Section */}
         <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
           {/* Enhanced Background Layers */}
@@ -448,9 +443,6 @@ export default function AboutPage() {
             </div>
           </div>
         </section>
-      </main>
-      
-      <Footer />
     </div>
   );
 }

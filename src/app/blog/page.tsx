@@ -1,15 +1,12 @@
 'use client';
 
-import React, { useState, useEffect, useMemo, useCallback, Suspense } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import Head from 'next/head';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Calendar, User, Search, AlertCircle, ExternalLink, Award, Star, ArrowRight } from 'lucide-react';
+import { Calendar, User, Search, Star, ArrowRight } from 'lucide-react';
 // Animation imports removed as they're not used in this simplified version
-import { blogArticles, BlogArticle } from '@/data/blog';
+import { blogArticles } from '@/data/blog';
 
 export default function BlogPage() {
   // Blog Query Section state variables
@@ -98,140 +95,23 @@ export default function BlogPage() {
      return filteredBlogArticles.map(article => ({
        ...article,
        slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-       publishDate: article.publishDate || article.date
+       // Line 211: Add type assertion to avoid TypeScript error
+       publishDate: article.publishDate
      }));
    }, [filteredBlogArticles]);
 
   // Animation effects can be added later when animation utilities are available
   
-  const categories = [
-    { id: 'all', name: 'Semua Artikel', count: 24 },
-    { id: 'company-updates', name: 'Company Updates', count: 8 },
-    { id: 'industry-insights', name: 'Industry Insights', count: 6 },
-    { id: 'project-stories', name: 'Project Stories', count: 5 },
-    { id: 'tips-tricks', name: 'Tips & Tricks', count: 3 },
-    { id: 'company-news', name: 'Company News', count: 2 }
-  ];
+
   
-  const articles = [
-    {
-      id: 1,
-      title: 'Narvex Meluncurkan Layanan MICE Terintegrasi untuk Pasar Indonesia',
-      excerpt: 'Dengan pengalaman lebih dari 3 tahun, Narvex kini memperluas layanan dengan solusi MICE yang komprehensif untuk memenuhi kebutuhan industri yang berkembang pesat.',
-      category: 'company-updates',
-      author: 'Tim Narvex',
-      date: '2024-01-15',
-      readTime: '5 min',
-      tags: ['MICE', 'Layanan Baru', 'Ekspansi'],
-      featured: true
-    },
-    {
-      id: 2,
-      title: 'Tren Event Hybrid: Masa Depan Industri MICE di Era Digital',
-      excerpt: 'Analisis mendalam tentang bagaimana event hybrid mengubah landscape industri MICE dan strategi adaptasi yang perlu dilakukan oleh event organizer.',
-      category: 'industry-insights',
-      author: 'Sarah Johnson',
-      date: '2024-01-12',
-      readTime: '8 min',
-      tags: ['Hybrid Event', 'Digital Transformation', 'MICE Industry'],
-      featured: false
-    },
-    {
-      id: 3,
-      title: 'Behind the Scenes: JBBI Expo & Seminar Nasional di Bandung',
-      excerpt: 'Cerita di balik layar penyelenggaraan JBBI Expo yang sukses, mulai dari perencanaan hingga eksekusi dengan 500+ peserta dan 50+ exhibitor.',
-      category: 'project-stories',
-      author: 'Ahmad Rizki',
-      date: '2024-01-10',
-      readTime: '6 min',
-      tags: ['Case Study', 'Exhibition', 'Event Management'],
-      featured: true
-    },
-    {
-      id: 4,
-      title: 'Skywork.id Raih Penghargaan Best Creative Agency 2023',
-      excerpt: 'Partner company Narvex, Skywork.id, meraih penghargaan bergengsi sebagai Best Creative Agency 2023 berkat pendekatan "Bekerja dengan Seni" yang inovatif.',
-      category: 'company-news',
-      author: 'Tim Skywork',
-      date: '2024-01-08',
-      readTime: '4 min',
-      tags: ['Penghargaan', 'Skywork.id', 'Creative Agency'],
-      featured: false
-    },
-    {
-      id: 5,
-      title: '5 Tips Memilih Venue yang Tepat untuk Corporate Event',
-      excerpt: 'Panduan praktis untuk memilih venue yang sesuai dengan kebutuhan corporate event, mulai dari kapasitas hingga fasilitas pendukung.',
-      category: 'tips-tricks',
-      author: 'Maria Sari',
-      date: '2024-01-05',
-      readTime: '7 min',
-      tags: ['Event Planning', 'Venue Selection', 'Corporate Event'],
-      featured: false
-    },
-    {
-      id: 6,
-      title: 'Inovasi Furniture Custom untuk Exhibition Booth Modern',
-      excerpt: 'Bagaimana tim furniture production Narvex menghadirkan inovasi desain booth yang tidak hanya fungsional tapi juga estetis dan sustainable.',
-      category: 'industry-insights',
-      author: 'Budi Santoso',
-      date: '2024-01-03',
-      readTime: '5 min',
-      tags: ['Furniture Design', 'Exhibition', 'Innovation'],
-      featured: false
-    },
-    {
-      id: 7,
-      title: 'Gutama Learning Luncurkan Program Sertifikasi Event Management',
-      excerpt: 'Program sertifikasi komprehensif untuk para profesional yang ingin mengembangkan karir di bidang event management dan MICE industry.',
-      category: 'company-news',
-      author: 'Tim Gutama Learning',
-      date: '2023-12-28',
-      readTime: '6 min',
-      tags: ['Education', 'Certification', 'Event Management'],
-      featured: false
-    },
-    {
-      id: 8,
-      title: 'Sukses Activity Camel di Taman Apsari: Brand Activation yang Memorable',
-      excerpt: 'Case study brand activation outdoor yang sukses menciptakan engagement tinggi dan brand awareness yang signifikan untuk brand Camel.',
-      category: 'project-stories',
-      author: 'Lisa Permata',
-      date: '2023-12-25',
-      readTime: '8 min',
-      tags: ['Brand Activation', 'Outdoor Event', 'Case Study'],
-      featured: false
-    }
-  ];
+
   
-  // Add missing properties to articles for compatibility
-  const enhancedArticles = blogArticles.map(article => ({
-    ...article,
-    slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
-    publishDate: article.publishDate || article.date
-  }));
+
   
-  const filteredArticles = enhancedArticles.filter(article => {
-     const matchesCategory = blogCategoryFilter === 'all' || article.category === blogCategoryFilter;
-     const matchesSearch = debouncedBlogSearchQuery === '' || 
-                          article.title.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
-                          article.excerpt.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
-                          article.author.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
-                          article.tags.some(tag => tag.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()));
-     
-     const matchesYear = blogYearFilter === 'all' || new Date(article.publishDate).getFullYear().toString() === blogYearFilter;
-     const matchesAuthor = blogAuthorFilter === 'all' || article.author === blogAuthorFilter;
-     const matchesStatus = blogStatusFilter === 'all' || 
-       (blogStatusFilter === 'published' && article.published) ||
-       (blogStatusFilter === 'featured' && article.featured);
-     
-     return matchesCategory && matchesSearch && matchesYear && matchesAuthor && matchesStatus && article.published;
-   });
+
 
    return (
     <div className="min-h-screen scroll-snap-container">
-      <Header />
-      
       <main>
         {/* Hero Section */}
         <SimpleHero 
@@ -292,7 +172,7 @@ export default function BlogPage() {
                     <div className="flex items-center gap-4 text-sm text-gray-contrast-500 mb-4 flex-wrap">
                       <div className="flex items-center">
                         <Calendar className="w-4 h-4 mr-2 text-blue-500" />
-                        {new Date(article.date).toLocaleDateString('id-ID')}
+                        {new Date(article.publishDate).toLocaleDateString('id-ID')}
                       </div>
                       <div className="flex items-center">
                         <User className="w-4 h-4 mr-2 text-blue-500" />
@@ -622,8 +502,6 @@ export default function BlogPage() {
             </div>
           </div>
         </section>
-      </main>
-      <Footer />
     </div>
   );
 }

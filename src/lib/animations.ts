@@ -5,24 +5,210 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SplitText } from 'gsap/SplitText';
 import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 
-// Register GSAP plugins
+// Type definitions for better type safety
+interface NavigatorWithMemory extends Navigator {
+  deviceMemory?: number;
+  connection?: {
+    effectiveType?: string;
+  };
+}
+
+interface AnimationSettings {
+  duration: number;
+  stagger: number;
+  ease: string;
+  force3D: boolean;
+  enableComplexAnimations: boolean;
+}
+
+// Performance monitoring and device detection
+const PERFORMANCE_CONFIG = {
+  isMobile: typeof window !== 'undefined' && /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+  isLowEnd: typeof window !== 'undefined' && (navigator.hardwareConcurrency <= 2 || ((navigator as NavigatorWithMemory).deviceMemory ?? 4) <= 2),
+  prefersReducedMotion: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  supportsIntersectionObserver: typeof window !== 'undefined' && 'IntersectionObserver' in window,
+  reducedMotion: typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches,
+  lowEndDevice: typeof window !== 'undefined' && navigator.hardwareConcurrency <= 2,
+  slowConnection: typeof window !== 'undefined' && 'connection' in navigator && 
+    ((navigator as NavigatorWithMemory).connection?.effectiveType === 'slow-2g' || 
+    (navigator as NavigatorWithMemory).connection?.effectiveType === '2g'),
+  
+  // Device capability detection
+  isLowPerformanceDevice: function(): boolean {
+    if (typeof window === 'undefined') return false;
+    
+    // Check for low-end device indicators
+    const lowMemory = 'deviceMemory' in navigator && ((navigator as NavigatorWithMemory).deviceMemory ?? 4) <= 2;
+    const lowCores = navigator.hardwareConcurrency <= 2;
+    const oldBrowser = !window.CSS?.supports?.('transform', 'translateZ(0)');
+    
+    return lowMemory || lowCores || oldBrowser || this.reducedMotion;
+  },
+  
+  // Get optimized animation settings
+  getAnimationSettings: function(): AnimationSettings {
+    const isLowPerf = this.isLowPerformanceDevice();
+    
+    return {
+      duration: isLowPerf ? 0.3 : 0.6,
+      stagger: isLowPerf ? 0.05 : 0.1,
+      ease: isLowPerf ? 'power2.out' : 'power3.out',
+      force3D: !isLowPerf,
+      enableComplexAnimations: !isLowPerf && !this.reducedMotion
+    };
+  }
+};
+
+// Register GSAP plugins with enhanced configuration
 if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin);
   
-  // Performance optimizations
+  // Enhanced performance optimizations
   gsap.config({
     force3D: true,
-    nullTargetWarn: false
+    nullTargetWarn: false,
+    autoSleep: 60,
+    units: { rotation: 'rad' }
   });
   
-  // Mobile optimizations
-  const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-  if (isMobile) {
-    // Reduce animation complexity on mobile
+  // Adaptive performance settings
+  if (PERFORMANCE_CONFIG.isMobile || PERFORMANCE_CONFIG.isLowEnd) {
     ScrollTrigger.config({
       limitCallbacks: true,
-      syncInterval: 150
+      syncInterval: PERFORMANCE_CONFIG.isLowEnd ? 200 : 150,
+      ignoreMobileResize: true
     });
+  }
+}
+
+// Utility functions for performance optimization
+const throttle = <T extends (...args: Parameters<T>) => ReturnType<T>>(func: T, delay: number): T => {
+  let timeoutId: NodeJS.Timeout | null = null;
+  let lastExecTime = 0;
+  return ((...args: Parameters<T>) => {
+    const currentTime = Date.now();
+    if (currentTime - lastExecTime > delay) {
+      func(...args);
+      lastExecTime = currentTime;
+    } else {
+      if (timeoutId) clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => func(...args), delay);
+    }
+  }) as T;
+};
+
+// WeakMaps for memory management
+const animationInstances = new WeakMap<Element, (gsap.core.Timeline | gsap.core.Tween)[]>();
+const splitTextInstances = new WeakMap<Element, SplitText>();
+
+// Performance monitoring
+class PerformanceMonitor {
+  private static instance: PerformanceMonitor;
+  private frameCount = 0;
+  private lastTime = 0;
+  private fps = 60;
+  private isMonitoring = false;
+
+  static getInstance(): PerformanceMonitor {
+    if (!PerformanceMonitor.instance) {
+      PerformanceMonitor.instance = new PerformanceMonitor();
+    }
+    return PerformanceMonitor.instance;
+  }
+
+  startMonitoring() {
+    if (this.isMonitoring || typeof window === 'undefined') return;
+    this.isMonitoring = true;
+    this.lastTime = performance.now();
+    this.measureFPS();
+  }
+
+  private measureFPS() {
+    if (!this.isMonitoring) return;
+
+    const now = performance.now();
+    this.frameCount++;
+
+    if (now - this.lastTime >= 1000) {
+      this.fps = Math.round((this.frameCount * 1000) / (now - this.lastTime));
+      this.frameCount = 0;
+      this.lastTime = now;
+
+      // Adjust animation complexity based on performance
+      if (this.fps < 30) {
+        this.reduceAnimationComplexity();
+      }
+    }
+
+    requestAnimationFrame(() => this.measureFPS());
+  }
+
+  private reduceAnimationComplexity() {
+    // Disable complex animations on low-performance devices
+    gsap.globalTimeline.timeScale(0.8); // Slow down animations slightly
+    
+    // Reduce stagger amounts
+    const elements = document.querySelectorAll('[data-stagger]');
+    elements.forEach(el => {
+      const currentStagger = parseFloat(el.getAttribute('data-stagger') || '0');
+      el.setAttribute('data-stagger', (currentStagger * 0.5).toString());
+    });
+  }
+
+  getFPS(): number {
+    return this.fps;
+  }
+
+  stopMonitoring() {
+    this.isMonitoring = false;
+  }
+}
+
+// Animation pool for reusable timelines
+class AnimationPool {
+  private static instance: AnimationPool;
+  private pool: Map<string, gsap.core.Timeline[]> = new Map();
+  private maxPoolSize = 10;
+
+  static getInstance(): AnimationPool {
+    if (!AnimationPool.instance) {
+      AnimationPool.instance = new AnimationPool();
+    }
+    return AnimationPool.instance;
+  }
+
+  getTimeline(type: string): gsap.core.Timeline {
+    const poolKey = type;
+    const pool = this.pool.get(poolKey) || [];
+    
+    if (pool.length > 0) {
+      const timeline = pool.pop()!;
+      timeline.clear();
+      return timeline;
+    }
+    
+    return gsap.timeline({ paused: true });
+  }
+
+  returnTimeline(type: string, timeline: gsap.core.Timeline): void {
+    const poolKey = type;
+    const pool = this.pool.get(poolKey) || [];
+    
+    if (pool.length < this.maxPoolSize) {
+      timeline.clear();
+      timeline.pause();
+      pool.push(timeline);
+      this.pool.set(poolKey, pool);
+    } else {
+      timeline.kill();
+    }
+  }
+
+  clear(): void {
+    this.pool.forEach(pool => {
+      pool.forEach(timeline => timeline.kill());
+    });
+    this.pool.clear();
   }
 }
 
@@ -42,395 +228,297 @@ export type TextAnimationType =
   | 'glitch';
 
 /**
- * Text Animation Controller
- * Specialized controller for advanced text animations with SplitText
+ * Animation configuration interface with performance optimizations
+ */
+interface TextAnimationConfig {
+  delay: number;
+  duration: number;
+  stagger: number;
+  force3D?: boolean;
+  willChange?: boolean;
+  settings?: AnimationSettings;
+}
+
+
+
+/**
+ * Optimized Text Animation Controller
+ * Uses caching, pooling, and proper memory management
  */
 export class TextAnimationController {
-  private splitTexts: SplitText[] = [];
-  private animations: gsap.core.Timeline[] = [];
+  private elementCache = new Map<string, Element[]>();
+  private animationPool = AnimationPool.getInstance();
+  private intersectionObserver?: IntersectionObserver;
+  private isDestroyed = false;
 
   constructor() {
-    this.initializeTextAnimations();
+    if (PERFORMANCE_CONFIG.prefersReducedMotion) return;
+    this.initializeOptimizedAnimations();
   }
 
-  private initializeTextAnimations() {
-    // Initialize all text elements with animation data attributes
-    this.initializeFadeInAnimations();
-    this.initializeSlideUpAnimations();
-    this.initializeTypewriterAnimations();
-    this.initializeWaveAnimations();
-    this.initializeRotateInAnimations();
-    this.initializeScaleBounceAnimations();
-    this.initializeBlurFocusAnimations();
-    this.initializeElasticAnimations();
-    this.initializeFlipAnimations();
-    this.initializeGlitchAnimations();
+  private initializeOptimizedAnimations() {
+    // Use GSAP batch for better performance
+    this.setupIntersectionObserver();
+    this.batchInitializeAnimations();
   }
 
-  private initializeFadeInAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="fade-in"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars,words' });
-      this.splitTexts.push(split);
+  private setupIntersectionObserver() {
+    if (!PERFORMANCE_CONFIG.supportsIntersectionObserver) return;
 
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.4');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.02');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      tl.fromTo(split.chars, {
-        opacity: 0,
-        y: 20
-      }, {
-        opacity: 1,
-        y: 0,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
-
-      this.animations.push(tl);
-    });
+    this.intersectionObserver = new IntersectionObserver(
+      throttle((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            this.animateElement(entry.target as Element);
+          }
+        });
+      }, 100),
+      { 
+        threshold: 0.1,
+        rootMargin: '50px'
+      }
+    );
   }
 
-  private initializeSlideUpAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="slide-up"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'words,lines' });
-      this.splitTexts.push(split);
+  private batchInitializeAnimations() {
+    // Cache all animation elements by type
+    const animationTypes: TextAnimationType[] = [
+      'fade-in', 'slide-up', 'typewriter', 'wave', 'rotate-in',
+      'scale-bounce', 'blur-focus', 'elastic', 'flip', 'glitch'
+    ];
 
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.6');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.05');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      tl.fromTo(split.words, {
-        opacity: 0,
-        y: 30,
-        rotationX: -15
-      }, {
-        opacity: 1,
-        y: 0,
-        rotationX: 0,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
-
-      this.animations.push(tl);
-    });
-  }
-
-  private initializeTypewriterAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="typewriter"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars' });
-      this.splitTexts.push(split);
-
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.02');
-
-      // Hide all characters initially
-      gsap.set(split.chars, { opacity: 0 });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      // Typewriter effect with cursor
-      split.chars.forEach((char, index) => {
-        tl.to(char, {
-          opacity: 1,
-          duration: 0.01,
-          ease: 'none'
-        }, index * duration);
-      });
-
-      this.animations.push(tl);
-    });
-  }
-
-  private initializeWaveAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="wave"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars' });
-      this.splitTexts.push(split);
-
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.8');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.03');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      tl.fromTo(split.chars, {
-        opacity: 0,
-        y: 15,
-        rotation: 5
-      }, {
-        opacity: 1,
-        y: 0,
-        rotation: 0,
-        duration,
-        ease: 'power2.out',
-        stagger: {
-          amount: stagger * split.chars.length,
-          from: 'center'
+    animationTypes.forEach(type => {
+      const elements = Array.from(document.querySelectorAll(`[data-text-animation="${type}"]`));
+      if (elements.length > 0) {
+        this.elementCache.set(type, elements);
+        
+        // Add to intersection observer
+        if (this.intersectionObserver) {
+          elements.forEach(el => this.intersectionObserver!.observe(el));
+        } else {
+          // Fallback for browsers without IntersectionObserver
+          this.batchAnimateElements(type, elements);
         }
-      });
-
-      this.animations.push(tl);
+      }
     });
   }
 
-  private initializeRotateInAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="rotate-in"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars,words' });
-      this.splitTexts.push(split);
+  private animateElement(element: Element) {
+    const animationType = element.getAttribute('data-text-animation') as TextAnimationType;
+    if (!animationType || this.isDestroyed) return;
 
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.6');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.03');
+    // Check if already animated
+    if (element.hasAttribute('data-animated')) return;
+    element.setAttribute('data-animated', 'true');
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
+    // Get animation configuration
+    const config = this.getAnimationConfig(element);
+    
+    // Create optimized animation
+    this.createOptimizedAnimation(element, animationType, config);
+  }
 
-      tl.fromTo(split.chars, {
-        opacity: 0,
-        rotation: 20,
-        scale: 0.9
-      }, {
-        opacity: 1,
-        rotation: 0,
-        scale: 1,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
+  private getAnimationConfig(element: Element) {
+    return {
+      delay: parseFloat(element.getAttribute('data-delay') || '0'),
+      duration: parseFloat(element.getAttribute('data-duration') || '0.6'),
+      stagger: parseFloat(element.getAttribute('data-stagger') || '0.03'),
+      force3D: !PERFORMANCE_CONFIG.isLowEnd
+    };
+  }
 
-      this.animations.push(tl);
+  private createOptimizedAnimation(element: Element, type: TextAnimationType, config: TextAnimationConfig) {
+    const settings = PERFORMANCE_CONFIG.getAnimationSettings();
+    
+    // Skip complex animations on low-performance devices
+    let animationType = type;
+    if (!settings.enableComplexAnimations && (type === 'wave' || type === 'glitch')) {
+      animationType = 'fade-in'; // Fallback to simple animation
+    }
+    
+    // Set will-change for better performance
+    gsap.set(element, { willChange: 'transform' });
+
+    // Create SplitText with memory tracking
+    const splitType = this.getSplitType(animationType);
+    const split = new SplitText(element, { type: splitType });
+    splitTextInstances.set(element, split);
+
+    // Get timeline from pool
+    const timeline = this.animationPool.getTimeline(animationType);
+    
+    // Configure animation based on type with performance settings
+    this.configureAnimation(timeline, split, animationType, { ...config, settings });
+
+    // Track timeline for cleanup
+    const existingTimelines = animationInstances.get(element) || [];
+    existingTimelines.push(timeline);
+    animationInstances.set(element, existingTimelines);
+
+    // Play animation
+    timeline.play();
+
+    // Cleanup after animation
+    timeline.eventCallback('onComplete', () => {
+      gsap.set(element, { willChange: 'auto' });
+      this.animationPool.returnTimeline(animationType, timeline);
     });
   }
 
-  private initializeScaleBounceAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="scale-bounce"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'words' });
-      this.splitTexts.push(split);
-
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.5');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.05');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      tl.fromTo(split.words, {
-        opacity: 0,
-        scale: 0.9,
-        y: 20
-      }, {
-        opacity: 1,
-        scale: 1,
-        y: 0,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
-
-      this.animations.push(tl);
-    });
+  private getSplitType(animationType: TextAnimationType): string {
+    switch (animationType) {
+      case 'typewriter':
+      case 'wave':
+      case 'rotate-in':
+      case 'blur-focus':
+      case 'glitch':
+        return 'chars';
+      case 'slide-up':
+      case 'scale-bounce':
+      case 'elastic':
+      case 'flip':
+        return 'words';
+      default:
+        return 'chars,words';
+    }
   }
 
-  private initializeBlurFocusAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="blur-focus"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars' });
-      this.splitTexts.push(split);
+  private configureAnimation(timeline: gsap.core.Timeline, split: SplitText, type: TextAnimationType, config: TextAnimationConfig) {
+    const { delay, duration, stagger, force3D, settings } = config;
+    const elements = type.includes('word') ? split.words : split.chars;
+    
+    // Use performance-aware settings if available
+    const animDuration = settings?.duration || duration;
+    const animStagger = settings?.stagger || stagger;
+    const animEase = settings?.ease || 'power2.out';
+    const useForce3D = settings?.force3D !== undefined ? settings.force3D : force3D;
 
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.7');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.03');
+    timeline.delay(delay);
 
-      // Apply initial blur
-      gsap.set(split.chars, { filter: 'blur(3px)', opacity: 0 });
+    switch (type) {
+      case 'fade-in':
+        timeline.fromTo(elements, 
+          { autoAlpha: 0, y: 20, force3D: useForce3D },
+          { autoAlpha: 1, y: 0, duration: animDuration, ease: animEase, stagger: animStagger }
+        );
+        break;
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
+      case 'slide-up':
+        timeline.fromTo(elements,
+          { autoAlpha: 0, y: 30, rotationX: -15, force3D: useForce3D },
+          { autoAlpha: 1, y: 0, rotationX: 0, duration: animDuration, ease: animEase, stagger: animStagger }
+        );
+        break;
 
-      tl.to(split.chars, {
-        filter: 'blur(0px)',
-        opacity: 1,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
+      case 'typewriter':
+        gsap.set(elements, { autoAlpha: 0 });
+        elements.forEach((char, index) => {
+          timeline.to(char, { autoAlpha: 1, duration: 0.01, ease: 'none' }, index * (animStagger * 2));
+        });
+        break;
 
-      this.animations.push(tl);
-    });
+      case 'wave':
+        timeline.fromTo(elements,
+          { autoAlpha: 0, y: 15, rotation: 5, force3D: useForce3D },
+          { 
+            autoAlpha: 1, y: 0, rotation: 0, duration: animDuration, ease: animEase,
+            stagger: { amount: animStagger * elements.length, from: 'center' }
+          }
+        );
+        break;
+
+      case 'rotate-in':
+        timeline.fromTo(elements,
+          { autoAlpha: 0, rotation: 20, scale: 0.9, force3D },
+          { autoAlpha: 1, rotation: 0, scale: 1, duration, ease: 'power2.out', stagger }
+        );
+        break;
+
+      case 'scale-bounce':
+        timeline.fromTo(elements,
+          { autoAlpha: 0, scale: 0.9, y: 20, force3D },
+          { autoAlpha: 1, scale: 1, y: 0, duration, ease: 'power2.out', stagger }
+        );
+        break;
+
+      case 'blur-focus':
+        // Use transform-based blur alternative for better performance
+        gsap.set(elements, { autoAlpha: 0, scale: 1.1 });
+        timeline.to(elements, {
+          autoAlpha: 1, scale: 1, duration, ease: 'power2.out', stagger
+        });
+        break;
+
+      case 'elastic':
+        timeline.fromTo(elements,
+          { autoAlpha: 0, scaleY: 0.8, transformOrigin: 'bottom', force3D },
+          { autoAlpha: 1, scaleY: 1, duration, ease: 'power2.out', stagger }
+        );
+        break;
+
+      case 'flip':
+        timeline.fromTo(elements,
+          { autoAlpha: 0, rotationY: -25, transformOrigin: 'center', force3D },
+          { autoAlpha: 1, rotationY: 0, duration, ease: 'power2.out', stagger }
+        );
+        break;
+
+      case 'glitch':
+        timeline.fromTo(elements,
+          { 
+            autoAlpha: 0, 
+            x: () => gsap.utils.random(-5, 5),
+            y: () => gsap.utils.random(-3, 3),
+            force3D 
+          },
+          { autoAlpha: 1, x: 0, y: 0, duration, ease: 'power2.out', stagger }
+        );
+        break;
+    }
   }
 
-  private initializeElasticAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="elastic"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars' });
-      this.splitTexts.push(split);
-
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.7');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.03');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
+  private batchAnimateElements(type: TextAnimationType, elements: Element[]) {
+    // Use ScrollTrigger batch for better performance
+    ScrollTrigger.batch(elements, {
+        onEnter: (elements: Element[]) => {
+          elements.forEach((el: Element) => this.animateElement(el));
         },
-        delay
+        start: 'top 85%'
       });
-
-      tl.fromTo(split.chars, {
-        opacity: 0,
-        scaleY: 0.8,
-        transformOrigin: 'bottom'
-      }, {
-        opacity: 1,
-        scaleY: 1,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
-
-      this.animations.push(tl);
-    });
-  }
-
-  private initializeFlipAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="flip"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'words' });
-      this.splitTexts.push(split);
-
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.6');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.05');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      tl.fromTo(split.words, {
-        opacity: 0,
-        rotationY: -25,
-        transformOrigin: 'center'
-      }, {
-        opacity: 1,
-        rotationY: 0,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
-
-      this.animations.push(tl);
-    });
-  }
-
-  private initializeGlitchAnimations() {
-    const elements = gsap.utils.toArray('[data-text-animation="glitch"]') as Element[];
-    elements.forEach((element) => {
-      const split = new SplitText(element, { type: 'chars' });
-      this.splitTexts.push(split);
-
-      const delay = parseFloat(element.getAttribute('data-delay') || '0');
-      const duration = parseFloat(element.getAttribute('data-duration') || '0.6');
-      const stagger = parseFloat(element.getAttribute('data-stagger') || '0.02');
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 85%',
-          toggleActions: 'play none none reverse'
-        },
-        delay
-      });
-
-      // Simplified glitch effect with subtle movements
-      tl.fromTo(split.chars, {
-        opacity: 0,
-        x: () => gsap.utils.random(-5, 5),
-        y: () => gsap.utils.random(-3, 3)
-      }, {
-        opacity: 1,
-        x: 0,
-        y: 0,
-        duration,
-        ease: 'power2.out',
-        stagger
-      });
-
-      this.animations.push(tl);
-    });
   }
 
   public destroy() {
-    // Kill all animations
-    this.animations.forEach(animation => animation.kill());
-    this.animations = [];
+    this.isDestroyed = true;
+    
+    // Disconnect intersection observer
+    if (this.intersectionObserver) {
+      this.intersectionObserver.disconnect();
+    }
 
-    // Revert all SplitText instances
-    this.splitTexts.forEach(split => split.revert());
-    this.splitTexts = [];
+    // Clean up all tracked instances
+    this.elementCache.forEach((elements) => {
+      elements.forEach((element) => {
+        // Clean up SplitText instances
+        const split = splitTextInstances.get(element);
+        if (split) {
+          split.revert();
+          splitTextInstances.delete(element);
+        }
+
+        // Clean up animation timelines
+        const timelines = animationInstances.get(element);
+        if (timelines) {
+          timelines.forEach(timeline => timeline.kill());
+          animationInstances.delete(element);
+        }
+
+        // Remove will-change
+        gsap.set(element, { willChange: 'auto' });
+      });
+    });
+
+    // Clear caches
+    this.elementCache.clear();
   }
 }
 
@@ -509,8 +597,8 @@ export class GSAPAnimationController {
       });
 
       tl.fromTo(element,
-        { opacity: 0, x: -100 },
-        { opacity: 1, x: 0, duration: 0.3, ease: 'power2.out' }
+        { autoAlpha: 0, x: -100, force3D: true },
+        { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' }
       );
 
       this.animations.push(tl);
@@ -528,8 +616,8 @@ export class GSAPAnimationController {
       });
 
       tl.fromTo(element,
-        { opacity: 0, x: 100 },
-        { opacity: 1, x: 0, duration: 0.8, ease: 'power2.out' }
+        { autoAlpha: 0, x: 100, force3D: true },
+        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power2.out' }
       );
 
       this.animations.push(tl);
@@ -547,8 +635,8 @@ export class GSAPAnimationController {
       });
 
       tl.fromTo(element,
-        { opacity: 0, scale: 0.95 },
-        { opacity: 1, scale: 1, duration: 0.6, ease: 'power2.out' }
+        { autoAlpha: 0, scale: 0.95, force3D: true },
+        { autoAlpha: 1, scale: 1, duration: 0.6, ease: 'power2.out' }
       );
 
       this.animations.push(tl);
@@ -759,9 +847,9 @@ export const sectionAnimationConfigs = {
 };
 
 /**
- * Animation configuration interface
+ * Section-specific animation configuration interface
  */
-interface AnimationConfig {
+interface SectionAnimationConfig {
   animation: string;
   delay: number;
   duration: number;
@@ -769,7 +857,7 @@ interface AnimationConfig {
 }
 
 interface SectionConfig {
-  [key: string]: AnimationConfig;
+  [key: string]: SectionAnimationConfig;
 }
 
 /**
@@ -779,7 +867,7 @@ export function applySectionAnimations(sectionId: string, config: SectionConfig)
   const section = document.querySelector(`#${sectionId}`);
   if (!section) return;
 
-  Object.entries(config).forEach(([elementType, animConfig]: [string, AnimationConfig]) => {
+  Object.entries(config).forEach(([elementType, animConfig]: [string, SectionAnimationConfig]) => {
     const elements = section.querySelectorAll(`[data-element="${elementType}"]`);
     elements.forEach((element) => {
       element.setAttribute('data-text-animation', animConfig.animation);
@@ -797,6 +885,10 @@ export function initializeAnimations() {
   if (typeof window === 'undefined') return null;
 
   const controller = new GSAPAnimationController();
+  
+  // Start performance monitoring
+  const monitor = PerformanceMonitor.getInstance();
+  monitor.startMonitoring();
 
   // Apply section-specific animations
   gsap.delayedCall(0.1, () => {
@@ -857,68 +949,130 @@ export function initializeAnimations() {
 }
 
 /**
- * GSAP Parallax Effect Helper
- * Enhanced parallax scrolling effect using GSAP
+ * Optimized GSAP Parallax Effect Helper
+ * Enhanced parallax scrolling effect using GSAP with performance optimizations
  */
 export function addGSAPParallaxEffect(element: Element, speed: number = 0.5) {
-  if (typeof window === 'undefined') return;
+  if (typeof window === 'undefined' || PERFORMANCE_CONFIG.prefersReducedMotion) return;
 
-  gsap.to(element, {
+  // Set will-change for better performance
+  gsap.set(element, { willChange: 'transform' });
+
+  const animation = gsap.to(element, {
     yPercent: -50 * speed,
     ease: 'none',
+    force3D: true,
     scrollTrigger: {
       trigger: element,
       start: 'top bottom',
       end: 'bottom top',
-      scrub: true
+      scrub: PERFORMANCE_CONFIG.isMobile ? 1 : true, // Add slight delay on mobile for better performance
+      invalidateOnRefresh: true
     }
   });
+
+  // Track for cleanup
+  const timelines = animationInstances.get(element) || [];
+  timelines.push(animation);
+  animationInstances.set(element, timelines);
 }
 
 /**
- * GSAP Pulse Animation for CTA Buttons
+ * Optimized GSAP Pulse Animation for CTA Buttons
  */
 export function addGSAPPulseAnimation(element: Element) {
-  gsap.to(element, {
+  if (PERFORMANCE_CONFIG.prefersReducedMotion) return;
+
+  // Set will-change for better performance
+  gsap.set(element, { willChange: 'transform' });
+
+  const animation = gsap.to(element, {
     scale: 1.02,
     duration: 1.5,
     ease: 'power2.inOut',
     yoyo: true,
-    repeat: -1
+    repeat: -1,
+    force3D: true
   });
+
+  // Track for cleanup
+  const timelines = animationInstances.get(element) || [];
+  timelines.push(animation);
+  animationInstances.set(element, timelines);
 }
 
 /**
- * GSAP Hover Animations
+ * Optimized GSAP Hover Animations with caching and batch operations
  */
 export function addGSAPHoverAnimations() {
-  // Button hover effects
-  const buttons = gsap.utils.toArray('button, .btn') as Element[];
-  buttons.forEach((button) => {
-    const tl = gsap.timeline({ paused: true });
-    tl.to(button, {
-      scale: 1.02,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
+  if (PERFORMANCE_CONFIG.prefersReducedMotion) return;
 
-    button.addEventListener('mouseenter', () => tl.play());
-    button.addEventListener('mouseleave', () => tl.reverse());
+  // Cache DOM queries
+  const buttonSelectors = ['button', '.btn'];
+  const cardSelectors = ['.card', '.service-card', '.portfolio-item'];
+  
+  // Batch button hover effects
+  buttonSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    if (elements.length === 0) return;
+
+    elements.forEach((button) => {
+      // Use animation pool for timeline reuse
+      const pool = AnimationPool.getInstance();
+      const tl = pool.getTimeline('button-hover');
+      
+      tl.clear();
+      tl.to(button, {
+        scale: 1.02,
+        duration: 0.3,
+        ease: 'power2.out',
+        force3D: true,
+        willChange: 'transform'
+      });
+
+      const throttledEnter = throttle(() => tl.play(), 16);
+      const throttledLeave = throttle(() => tl.reverse(), 16);
+
+      button.addEventListener('mouseenter', throttledEnter, { passive: true });
+      button.addEventListener('mouseleave', throttledLeave, { passive: true });
+      
+      // Track for cleanup
+      const timelines = animationInstances.get(button) || [];
+      timelines.push(tl);
+      animationInstances.set(button, timelines);
+    });
   });
 
-  // Card hover effects
-  const cards = gsap.utils.toArray('.card, .service-card, .portfolio-item') as Element[];
-  cards.forEach((card) => {
-    const tl = gsap.timeline({ paused: true });
-    tl.to(card, {
-      y: -5,
-      scale: 1.01,
-      duration: 0.3,
-      ease: 'power2.out'
-    });
+  // Batch card hover effects
+  cardSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    if (elements.length === 0) return;
 
-    card.addEventListener('mouseenter', () => tl.play());
-    card.addEventListener('mouseleave', () => tl.reverse());
+    elements.forEach((card) => {
+      const pool = AnimationPool.getInstance();
+      const tl = pool.getTimeline('card-hover');
+      
+      tl.clear();
+      tl.to(card, {
+        y: -5,
+        scale: 1.01,
+        duration: 0.3,
+        ease: 'power2.out',
+        force3D: true,
+        willChange: 'transform'
+      });
+
+      const throttledEnter = throttle(() => tl.play(), 16);
+      const throttledLeave = throttle(() => tl.reverse(), 16);
+
+      card.addEventListener('mouseenter', throttledEnter, { passive: true });
+      card.addEventListener('mouseleave', throttledLeave, { passive: true });
+      
+      // Track for cleanup
+      const timelines = animationInstances.get(card) || [];
+      timelines.push(tl);
+      animationInstances.set(card, timelines);
+    });
   });
 }
 
@@ -970,11 +1124,14 @@ export class DepthAnimationController {
   }
 
   private setupMouseTracking() {
-    document.addEventListener('mousemove', (e) => {
+    // Throttle mouse events for better performance
+    const throttledMouseMove = throttle((e: MouseEvent) => {
       this.mousePosition.x = (e.clientX / window.innerWidth) * 2 - 1;
       this.mousePosition.y = (e.clientY / window.innerHeight) * 2 - 1;
       this.updateMouseParallax();
-    });
+    }, 16); // ~60fps
+
+    document.addEventListener('mousemove', throttledMouseMove, { passive: true });
   }
 
   private initializeParallaxElements() {

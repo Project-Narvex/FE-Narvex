@@ -1,8 +1,6 @@
 'use client';
 
 import React, { useEffect } from 'react';
-import Header from '@/components/layout/Header';
-import Footer from '@/components/layout/Footer';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
 import { 
@@ -59,8 +57,6 @@ export default function TermsPage() {
 
   return (
     <div className="min-h-screen scroll-snap-container">
-      <Header />
-      
       <main>
         {/* Hero Section */}
         <SimpleHero
@@ -143,9 +139,6 @@ export default function TermsPage() {
             </div>
           </div>
         </section>
-      </main>
-      
-      <Footer />
     </div>
   );
 }
