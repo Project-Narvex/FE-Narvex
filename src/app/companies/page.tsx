@@ -494,6 +494,7 @@ export default function CompaniesPage() {
             </div>
           </div>
         </section>
+      </main>
     </div>
   );
 }
