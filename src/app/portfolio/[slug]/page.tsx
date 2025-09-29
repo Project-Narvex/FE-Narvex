@@ -14,14 +14,17 @@ import {
 import { projects, Project } from '@/data/projects';
 
 interface PortfolioDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
+export default async function PortfolioDetailPage({ params }: PortfolioDetailPageProps) {
+  // Await params in Next.js 15
+  const { slug } = await params;
+  
   // Find project by slug
-  const project = projects.find(p => p.slug === params.slug);
+  const project = projects.find(p => p.slug === slug);
   if (!project) {
     notFound();
   }
@@ -455,6 +458,7 @@ export default function PortfolioDetailPage({ params }: PortfolioDetailPageProps
             </div>
           </div>
         </section>
+      </main>
     </div>
   );
 }
@@ -468,7 +472,9 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: PortfolioDetailPageProps) {
-  const project = projects.find(p => p.slug === params.slug);
+  // Await params in Next.js 15
+  const { slug } = await params;
+  const project = projects.find(p => p.slug === slug);
   
   if (!project) {
     return {

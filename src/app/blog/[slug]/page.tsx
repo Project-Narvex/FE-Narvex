@@ -16,14 +16,15 @@ import {
 import { blogArticles } from '@/data/blog';
 
 interface BlogDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
-export default function BlogDetailPage({ params }: BlogDetailPageProps) {
+export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
   // Find article by slug
-  const article = blogArticles.find(a => a.slug === params.slug);
+  const { slug } = await params;
+  const article = blogArticles.find(a => a.slug === slug);
   if (!article) {
     notFound();
   }
@@ -304,6 +305,7 @@ export default function BlogDetailPage({ params }: BlogDetailPageProps) {
             </div>
           </div>
         </section>
+      </main>
     </div>
   );
 }
@@ -319,7 +321,8 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: BlogDetailPageProps) {
-  const article = blogArticles.find(a => a.slug === params.slug);
+  const { slug } = await params;
+  const article = blogArticles.find(a => a.slug === slug);
   
   if (!article) {
     return {
