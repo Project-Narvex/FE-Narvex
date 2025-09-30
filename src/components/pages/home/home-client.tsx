@@ -150,7 +150,7 @@ export default function HomeClient({
         id: slide.id,
         title: slide.title,
         subtitle: slide.subtitle,
-        imageUrl: getImageUrl(slide.image, 'large'),
+        imageUrl: slide.image ? getImageUrl(slide.image, 'large') : '',
         imageData: slide.image
       });
     });
@@ -841,7 +841,7 @@ export default function HomeClient({
                       <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
                         {company.logo ? (
                           <Image
-                            src={getImageUrl(company.logo, 'medium')}
+                            src={company.logo ? getImageUrl(company.logo, 'medium') : '/placeholder-image.jpg'}
                             alt={company.name}
                             width={64}
                             height={64}
@@ -966,7 +966,7 @@ export default function HomeClient({
                     <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300">
                       {service.icon ? (
                         <Image
-                          src={getImageUrl(service.icon, 'medium')}
+                          src={service.icon ? getImageUrl(service.icon, 'medium') : '/placeholder-image.jpg'}
                           alt={`${service.title} icon`}
                           width={32}
                           height={32}
@@ -1156,7 +1156,7 @@ export default function HomeClient({
                   <div className="relative overflow-hidden rounded-2xl">
                     <div className="relative w-full h-64">
                       <Image
-                        src={getImageUrl(project.cover, 'large')}
+                        src={project.cover ? getImageUrl(project.cover, 'large') : '/placeholder-image.jpg'}
                         alt={project.title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -1309,7 +1309,7 @@ export default function HomeClient({
                     <div className="relative w-16 h-16 mr-4">
                       {testimonial.avatar ? (
                         <Image
-                          src={getImageUrl(testimonial.avatar, 'medium')}
+                          src={testimonial.avatar ? getImageUrl(testimonial.avatar, 'medium') : '/placeholder-image.jpg'}
                           alt={`${testimonial.clientName}, ${testimonial.clientTitle} at ${testimonial.companyName}`}
                           fill
                           className="rounded-full object-cover"
@@ -1386,7 +1386,7 @@ export default function HomeClient({
                   clients={testimonialCarousel?.clients?.map(client => ({
                     id: client.id.toString(),
                     name: client.name,
-                    logo: getImageUrl(client.logo, 'medium'),
+                    logo: client.logo ? getImageUrl(client.logo, 'medium') : '/placeholder-image.jpg',
                     website: client.website || '#'
                   })) || defaultClients} 
                   autoScroll={true} 
@@ -1447,7 +1447,7 @@ export default function HomeClient({
                       <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
                         <div className="h-40 bg-gray-contrast-200 flex items-center justify-center relative overflow-hidden">
                           <Image
-                            src={getImageUrl(article.cover, 'medium')}
+                            src={article.cover ? getImageUrl(article.cover, 'medium') : '/placeholder-image.jpg'}
                             alt={article.title}
                             fill
                             className="object-cover"

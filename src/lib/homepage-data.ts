@@ -428,7 +428,13 @@ export function getCollaborationSection(data: HomepageData): CollaborationSectio
 }
 
 // Helper method to get image URL
-export function getImageUrl(image: StrapiImage, format: 'large' | 'medium' | 'small' | 'thumbnail' = 'medium'): string {
+export function getImageUrl(image: StrapiImage | null | undefined, format: 'large' | 'medium' | 'small' | 'thumbnail' = 'medium'): string {
+  // Return empty string if image is null or undefined
+  if (!image) {
+    console.warn('⚠️ Image is null or undefined, returning empty string');
+    return '';
+  }
+
   // Use environment variable or fallback to production domain
   const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.narvex.id';
   
@@ -436,8 +442,17 @@ export function getImageUrl(image: StrapiImage, format: 'large' | 'medium' | 'sm
     baseUrl,
     envVar: process.env.NEXT_PUBLIC_STRAPI_URL,
     imageFormat: format,
-    imageUrl: image.url
+    imageUrl: image.url,
+    hasFormats: !!image.formats
   });
+  
+  // Check if formats exist
+  if (!image.formats) {
+    console.warn('⚠️ Image formats not available, using original URL');
+    const fullUrl = `${baseUrl}${image.url}`;
+    console.log('🖼️ Generated image URL (no formats):', fullUrl);
+    return fullUrl;
+  }
   
   const formatData = image.formats[format];
   
