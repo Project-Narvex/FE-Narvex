@@ -314,6 +314,10 @@ export async function getHomepageData(): Promise<HomepageData | null> {
     
     console.log('🚀 Fetching data from Strapi API:', `${apiUrl}/api/home-page`);
     console.log('🔑 Using API Token:', apiToken.substring(0, 20) + '...');
+    console.log('🌐 Environment Variables:', {
+      NEXT_PUBLIC_STRAPI_URL: process.env.NEXT_PUBLIC_STRAPI_URL,
+      STRAPI_API_TOKEN: process.env.STRAPI_API_TOKEN ? 'Set' : 'Not Set'
+    });
     
     // Fetch data from Strapi API with deep population
     const response = await fetch(`${apiUrl}/api/home-page?populate=deep`, {
@@ -425,14 +429,25 @@ export function getCollaborationSection(data: HomepageData): CollaborationSectio
 
 // Helper method to get image URL
 export function getImageUrl(image: StrapiImage, format: 'large' | 'medium' | 'small' | 'thumbnail' = 'medium'): string {
-  // Use environment variable or fallback to localhost:7245 (your API port)
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:7245';
+  // Use environment variable or fallback to production domain
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.narvex.id';
+  
+  console.log('🖼️ Image URL generation:', {
+    baseUrl,
+    envVar: process.env.NEXT_PUBLIC_STRAPI_URL,
+    imageFormat: format,
+    imageUrl: image.url
+  });
   
   const formatData = image.formats[format];
   
   if (formatData) {
-    return `${baseUrl}${formatData.url}`;
+    const fullUrl = `${baseUrl}${formatData.url}`;
+    console.log('🖼️ Generated image URL:', fullUrl);
+    return fullUrl;
   }
   
-  return `${baseUrl}${image.url}`;
+  const fullUrl = `${baseUrl}${image.url}`;
+  console.log('🖼️ Generated image URL (fallback):', fullUrl);
+  return fullUrl;
 }
