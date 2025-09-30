@@ -1,19 +1,27 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter } from "next/font/google";
 import { headers } from "next/headers";
 import { connection } from "next/server";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+// Optimized font loading with Next.js
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["100", "300", "400", "500", "600", "700", "800", "900"],
+  preload: true,
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+// Use Inter for both primary and secondary fonts to avoid Open Sans loading issues
+const openSans = Inter({
+  variable: "--font-open-sans",
   subsets: ["latin"],
+  display: "swap",
+  weight: ["300", "400", "500", "600", "700", "800"],
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -42,7 +50,7 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${inter.variable} ${openSans.variable} antialiased`}
         {...(nonce && { 'data-nonce': nonce })}
       >
         <Header />
