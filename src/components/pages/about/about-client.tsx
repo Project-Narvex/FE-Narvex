@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useEffect } from 'react';
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/Card';
 import { 
   initializeAnimations, 
@@ -10,13 +11,34 @@ import {
   addEnhancedParallax,
   createMorphingBackground
 } from '@/lib/animations';
+import { TeamMember } from '@/data/team';
+import { Company } from '@/data/companies';
 
 interface AboutClientProps {
-  // Add props here for future data integration
-  [key: string]: unknown;
+  parentCompany?: Company;
+  leadershipTeam: TeamMember[];
+  companyStats: {
+    totalCompanies: number;
+    establishedYear: string;
+    totalTeamMembers: number;
+    leadershipCount: number;
+  };
+  companyInfo: {
+    vision: string;
+    mission: string[];
+    values: Array<{
+      title: string;
+      description: string;
+    }>;
+  };
 }
 
-export default function AboutClient(_props: AboutClientProps) {
+export default function AboutClient({
+  parentCompany,
+  leadershipTeam,
+  companyStats,
+  companyInfo
+}: AboutClientProps) {
   useEffect(() => {
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
@@ -115,11 +137,11 @@ export default function AboutClient(_props: AboutClientProps) {
           {/* Content */}
           <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
             <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
-              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
                 <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
                 <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
               </h1>
-              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.2" data-duration="0.3" data-stagger="0.015" data-mouse-parallax="0.05">
                 CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing
               </p>
             </div>
@@ -162,18 +184,17 @@ export default function AboutClient(_props: AboutClientProps) {
             </div>
             
             <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
+              <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Perjalanan Kami
               </h2>
-              <p className="body-large text-gray-contrast-700 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015">
-                Didirikan dengan visi untuk menjadi partner terpercaya dalam creative services, 
-                Narvex menggabungkan kreativitas, teknologi, dan strategi bisnis untuk membantu klien mencapai tujuan mereka.
+              <p className="body-large text-gray-contrast-700 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
+                {parentCompany ? `Didirikan pada tahun ${parentCompany.established}, ${parentCompany.description}` : 'Didirikan dengan visi untuk menjadi partner terpercaya dalam creative services, Narvex menggabungkan kreativitas, teknologi, dan strategi bisnis untuk membantu klien mencapai tujuan mereka.'}
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
               <div className="scroll-animate-left">
-                <h3 className="heading-3 mb-8 text-blue-900" data-element="heading" data-text-animation="slide-up" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
+                <h3 className="heading-3 mb-8 text-blue-900" data-element="heading" data-text-animation="slide-up" data-delay="0.05" data-duration="0.35" data-stagger="0.02">
                   Nilai-Nilai Perusahaan
                 </h3>
                 <div className="space-y-6 stagger-children">
@@ -256,7 +277,7 @@ export default function AboutClient(_props: AboutClientProps) {
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
             <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
+              <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Visi, Misi & Tujuan
               </h2>
             </div>
@@ -271,8 +292,7 @@ export default function AboutClient(_props: AboutClientProps) {
                     Visi
                   </h3>
                   <p className="text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                    Menjadi perusahaan creative services terdepan di Indonesia yang memberikan solusi inovatif 
-                    dan berkualitas tinggi untuk membantu klien mencapai kesuksesan bisnis mereka.
+                    {companyInfo.vision}
                   </p>
                   <div className="mt-6 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </CardContent>
@@ -287,22 +307,12 @@ export default function AboutClient(_props: AboutClientProps) {
                     Misi
                   </h3>
                   <ul className="text-left text-gray-contrast-600 space-y-3 flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300 leading-relaxed list-none" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
-                      <span>Memberikan layanan creative services berkualitas tinggi dengan pendekatan profesional dan inovatif</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
-                      <span>Membantu klien membangun brand identity yang kuat dan memorable</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
-                      <span>Menghadirkan event production yang memorable dan impactful</span>
-                    </li>
-                    <li className="flex items-start">
-                      <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
-                      <span>Mengoptimalkan digital presence klien melalui strategi digital marketing yang efektif</span>
-                    </li>
+                    {companyInfo.mission.map((missionItem, index) => (
+                      <li key={index} className="flex items-start">
+                        <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
+                        <span>{missionItem}</span>
+                      </li>
+                    ))}
                   </ul>
                   <div className="mt-6 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </CardContent>
@@ -364,17 +374,84 @@ export default function AboutClient(_props: AboutClientProps) {
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
-          <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+          <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
+            <div className="text-center mb-16 scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Tim Kami
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                Showcase key personnel dengan professional photos akan ditampilkan di sini.
+                Tim profesional yang berpengalaman dan berdedikasi untuk memberikan layanan terbaik.
               </p>
-              <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-blue-50 shadow-depth-2 hover-depth-subtle">
-                <span className="text-4xl mr-4">👥</span>
-                <span className="text-lg font-medium text-blue-900">Coming Soon</span>
+            </div>
+            
+            {/* Leadership Team */}
+            {leadershipTeam.length > 0 && (
+              <div className="mb-16">
+                <h3 className="text-2xl font-bold text-blue-900 text-center mb-8" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
+                  Tim Kepemimpinan
+                </h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {leadershipTeam.slice(0, 6).map((member, index) => (
+                    <Card key={member.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <CardContent className="px-6 py-8 flex flex-col h-full">
+                        <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-blue-depth overflow-hidden">
+                          <Image 
+                            src={member.avatar} 
+                            alt={member.name}
+                            width={96}
+                            height={96}
+                            className="w-full h-full object-cover rounded-full"
+                            onError={(e) => {
+                              const target = e.target as HTMLImageElement;
+                              target.style.display = 'none';
+                              const parent = target.parentElement;
+                              if (parent) {
+                                parent.innerHTML = '<span class="text-2xl">👤</span>';
+                              }
+                            }}
+                          />
+                        </div>
+                        <h4 className="text-xl font-bold text-blue-900 mb-2 group-hover:text-blue-800 transition-colors duration-300" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
+                          {member.name}
+                        </h4>
+                        <p className="text-gold-600 font-medium mb-3 text-sm">
+                          {member.position}
+                        </p>
+                        <p className="text-gray-contrast-600 text-sm leading-relaxed flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4">
+                          {member.bio}
+                        </p>
+                        <div className="mt-4 flex flex-wrap gap-1 justify-center">
+                          {member.skills.slice(0, 3).map((skill, skillIndex) => (
+                            <span key={skillIndex} className="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">
+                              {skill}
+                            </span>
+                          ))}
+                        </div>
+                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Team Statistics */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalTeamMembers}</div>
+                <div className="text-sm text-gray-contrast-600">Total Tim</div>
+              </div>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.leadershipCount}</div>
+                <div className="text-sm text-gray-contrast-600">Pemimpin</div>
+              </div>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalCompanies}</div>
+                <div className="text-sm text-gray-contrast-600">Perusahaan</div>
+              </div>
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.establishedYear}</div>
+                <div className="text-sm text-gray-contrast-600">Didirikan</div>
               </div>
             </div>
           </div>

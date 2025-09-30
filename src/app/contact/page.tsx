@@ -194,7 +194,7 @@ export default function ContactPage() {
           {/* Content */}
           <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
             {/* Breadcrumb */}
-            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.1" data-duration="0.4">
+            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
               <ol className="flex items-center justify-center space-x-2 text-sm text-gray-300">
                 <li className="flex items-center">
                   <Link href="/" className="hover:text-gold-400 transition-colors duration-200">Home</Link>
@@ -207,11 +207,11 @@ export default function ContactPage() {
             </nav>
 
             <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
-              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.2" data-duration="0.8" data-stagger="0.05">
+              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
                 <span className="block transform-3d break-words" data-tilt="8">{pageContent.hero.title}</span>
                 <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{pageContent.hero.subtitle}</span>
               </h1>
-              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.4" data-duration="0.4" data-stagger="0.02" data-mouse-parallax="0.05">
+              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.2" data-duration="0.3" data-stagger="0.015" data-mouse-parallax="0.05">
                 {pageContent.hero.description}
               </p>
             </div>
@@ -235,10 +235,10 @@ export default function ContactPage() {
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             
             <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16 scroll-animate">
-              <h2 className="heading-2 mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
+              <h2 className="heading-2 mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 {pageContent.serviceSelection.title}
               </h2>
-              <p className="body-large text-gray-contrast-700 leading-relaxed px-4" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.3" data-stagger="0.015">
+              <p className="body-large text-gray-contrast-700 leading-relaxed px-4" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.25" data-stagger="0.01">
                 {pageContent.serviceSelection.description}
               </p>
             </div>
@@ -256,7 +256,7 @@ export default function ContactPage() {
                   data-element="service-card"
                   data-animation="slide-up"
                   data-delay="0.1"
-                  data-duration="0.5"
+                  data-duration="0.35"
                 >
                   <div className={`w-12 h-12 sm:w-16 sm:h-16 ${selectedService === service.id ? 'bg-gold-500' : service.color} rounded-2xl flex items-center justify-center mb-4 sm:mb-6 transition-all duration-300 shadow-depth-2 mx-auto`}>
                     <span className="text-white text-xl sm:text-2xl">{service.icon}</span>

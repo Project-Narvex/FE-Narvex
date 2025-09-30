@@ -1,795 +1,91 @@
-'use client';
+import React from 'react';
+import PortfolioClient from '@/components/pages/portofolio/portofolio-client';
+import { projects, getFeaturedProjects } from '@/data/projects';
 
-import React, { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import SimpleHero from '@/components/ui/SimpleHero';
-import { Card, CardContent } from '@/components/ui/Card';
-import { MapPin, Calendar, Users, Award, ExternalLink, Search } from 'lucide-react';
-import { 
-  initializeAnimations, 
-  addGSAPHoverAnimations,
-  DepthAnimationController,
-  add3DCardEffect,
-  addEnhancedParallax,
-  createMorphingBackground
-} from '@/lib/animations';
-
-// Custom hook for debounced search
-function useDebounce<T>(value: T, delay: number): T {
-  const [debouncedValue, setDebouncedValue] = useState<T>(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
-
+// This is now a Server Component
 export default function PortfolioPage() {
-  // Portfolio Query Section state variables
-  const [portfolioSearchQuery, setPortfolioSearchQuery] = useState('');
-  const [portfolioCategoryFilter, setPortfolioCategoryFilter] = useState('all');
-  const [portfolioYearFilter, setPortfolioYearFilter] = useState('all');
-  const [portfolioClientFilter, setPortfolioClientFilter] = useState('all');
-  const [portfolioStatusFilter, setPortfolioStatusFilter] = useState('all');
+  // Pre-compute data on the server
+  const allProjects = projects;
   
-  // Debounced search term for performance
-  const debouncedPortfolioSearchQuery = useDebounce(portfolioSearchQuery, 300);
+  // Get featured projects
+  const featuredProjects = getFeaturedProjects();
   
-  const narvexProjects = useMemo(() => [
-    {
-      id: 'tech-startup-branding',
-      title: 'Tech Startup Complete Branding',
-      category: 'branding',
-      location: 'Jakarta',
-      date: '2023',
-      client: 'InnovateTech Solutions',
-      description: 'Pengembangan identitas brand lengkap untuk startup teknologi, mulai dari logo hingga brand guidelines.',
-      services: ['Brand Strategy', 'Logo Design', 'Brand Guidelines', 'Marketing Collaterals'],
-      results: {
-        recognition: '300%',
-        engagement: '250%',
-        satisfaction: '98%'
-      },
-      featured: true
-    },
-    {
-      id: 'corporate-event-production',
-      title: 'Annual Corporate Summit',
-      category: 'event',
-      location: 'Bali International Convention Centre',
-      date: '2023',
-      client: 'Global Finance Corp',
-      description: 'Produksi event corporate summit tahunan dengan 500+ peserta dan teknologi hybrid streaming.',
-      services: ['Event Production', 'Stage Design', 'Audio Visual', 'Live Streaming'],
-      results: {
-        participants: '500+',
-        online_viewers: '2000+',
-        satisfaction: '96%'
-      },
-      featured: true
-    },
-    {
-      id: 'digital-campaign',
-      title: 'E-commerce Digital Campaign',
-      category: 'digital',
-      location: 'Multi-platform',
-      date: '2023',
-      client: 'FashionForward',
-      description: 'Kampanye digital marketing terintegrasi untuk brand fashion dengan fokus pada Gen Z audience.',
-      services: ['Social Media Strategy', 'Content Creation', 'Influencer Marketing', 'Performance Ads'],
-      results: {
-        reach: '1M+',
-        engagement: '15%',
-        conversion: '8.5%'
-      },
-      featured: true
-    },
-    {
-      id: 'brand-consultation',
-      title: 'Restaurant Chain Rebranding',
-      category: 'consultation',
-      location: 'Surabaya',
-      date: '2023',
-      client: 'Nusantara Flavors',
-      description: 'Konsultasi dan implementasi rebranding untuk chain restaurant dengan 15 cabang.',
-      services: ['Brand Audit', 'Market Research', 'Brand Strategy', 'Implementation Support'],
-      results: {
-        sales_increase: '40%',
-        brand_awareness: '60%',
-        satisfaction: '94%'
-      },
-      featured: true
-    }
-  ], []);
-  
-  const serviceHighlights = useMemo(() => [
-    {
-      id: 'branding-showcase',
-      title: 'Creative Design & Branding',
-      category: 'branding',
-      description: 'Identitas visual yang kuat dan memorable untuk berbagai jenis bisnis.',
-      count: '50+ Brands',
-      icon: '🎨'
-    },
-    {
-      id: 'event-showcase',
-      title: 'Event Production',
-      category: 'event',
-      description: 'Produksi event berkualitas tinggi dari konsep hingga eksekusi sempurna.',
-      count: '100+ Events',
-      icon: '🎪'
-    },
-    {
-      id: 'digital-showcase',
-      title: 'Digital Marketing',
-      category: 'digital',
-      description: 'Strategi digital marketing yang efektif untuk meningkatkan brand awareness.',
-      count: '75+ Campaigns',
-      icon: '📱'
-    },
-    {
-      id: 'consultation-showcase',
-      title: 'Brand Consultation',
-      category: 'consultation',
-      description: 'Konsultasi strategis untuk pengembangan dan transformasi brand.',
-      count: '30+ Consultations',
-      icon: '💡'
-    }
-  ], []);
-  
-  // Portfolio query filtering options
+  // Pre-compute filter options
   const portfolioCategories = [
     { id: 'all', name: 'All Categories' },
-    { id: 'branding', name: 'Creative Design & Branding' },
-    { id: 'event', name: 'Event Production' },
-    { id: 'digital', name: 'Digital Marketing' },
-    { id: 'consultation', name: 'Brand Consultation' }
+    { id: 'exhibition', name: 'Exhibition' },
+    { id: 'booth', name: 'Booth Design' },
+    { id: 'activation', name: 'Brand Activation' },
+    { id: 'tour', name: 'Tour & Travel' },
+    { id: 'corporate', name: 'Corporate Events' },
+    { id: 'creative', name: 'Creative Services' },
+    { id: 'education', name: 'Education & Training' },
+    { id: 'wedding', name: 'Wedding Services' }
   ];
   
   // Get unique years from projects
-  const availableYears = useMemo(() => {
-    const years = [...new Set(narvexProjects.map(project => parseInt(project.date)))];
-    return years.sort((a, b) => b - a);
-  }, [narvexProjects]);
-  
+  const availableYears = [...new Set(allProjects.map(project => project.year))]
+    .sort((a, b) => b - a);
+   
   // Get unique clients from projects
-  const availableClients = useMemo(() => {
-    return [...new Set(narvexProjects.map(project => project.client))];
-  }, [narvexProjects]);
+  const availableClients = [...new Set(allProjects.map(project => project.client))];
+  
+  // Get unique companies from projects
+  const availableCompanies = [...new Set(allProjects.map(project => project.companyId))];
   
   const statusOptions = [
     { id: 'all', name: 'All Status' },
     { id: 'completed', name: 'Completed' },
+    { id: 'ongoing', name: 'Ongoing' },
+    { id: 'upcoming', name: 'Upcoming' },
     { id: 'featured', name: 'Featured' }
   ];
-  
-  // Portfolio query filtering logic
-  const filteredProjects = useMemo(() => {
-    const filtered = narvexProjects.filter(project => {
-      const matchesSearch = debouncedPortfolioSearchQuery === '' || 
-        project.title.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()) ||
-        project.client.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()) ||
-        project.services.some(service => service.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()));
-      
-      const matchesCategory = portfolioCategoryFilter === 'all' || project.category === portfolioCategoryFilter;
-      const matchesYear = portfolioYearFilter === 'all' || project.date === portfolioYearFilter;
-      const matchesClient = portfolioClientFilter === 'all' || project.client === portfolioClientFilter;
-      const matchesStatus = portfolioStatusFilter === 'all' || 
-        (portfolioStatusFilter === 'completed') ||
-        (portfolioStatusFilter === 'featured' && project.featured);
-      
-      return matchesSearch && matchesCategory && matchesYear && matchesClient && matchesStatus;
-    });
-    
-    return filtered;
-  }, [debouncedPortfolioSearchQuery, portfolioCategoryFilter, portfolioYearFilter, portfolioClientFilter, portfolioStatusFilter, narvexProjects]);
-    
-  const filteredServiceHighlights = useMemo(() => {
-    return portfolioCategoryFilter === 'all'
-      ? serviceHighlights
-      : serviceHighlights.filter(service => service.category === portfolioCategoryFilter);
-  }, [portfolioCategoryFilter, serviceHighlights]);
 
-  useEffect(() => {
-    // Initialize GSAP scroll animations
-    const animationController = initializeAnimations();
-    
-    // Initialize depth animation controller
-    const depthController = new DepthAnimationController();
-    
-    // Add hover animations
-    addGSAPHoverAnimations();
-    
-    // Add depth effects to specific elements after a delay
-    const depthEffectsTimeout = setTimeout(() => {
-      // Add 3D card effects to portfolio cards
-      document.querySelectorAll('.portfolio-card').forEach(card => {
-        add3DCardEffect(card, {
-          maxRotation: 8,
-          perspective: 1000,
-          shadowIntensity: 0.2,
-          liftHeight: 12
-        });
-      });
-      
-      // Add 3D effects to service highlight cards
-      document.querySelectorAll('.service-highlight-card').forEach(card => {
-        add3DCardEffect(card, {
-          maxRotation: 6,
-          perspective: 800,
-          shadowIntensity: 0.15,
-          liftHeight: 8
-        });
-      });
-      
-      // Add 3D effects to filter buttons
-      document.querySelectorAll('.filter-button').forEach(button => {
-        add3DCardEffect(button, {
-          maxRotation: 4,
-          perspective: 600,
-          shadowIntensity: 0.1,
-          liftHeight: 4
-        });
-      });
-      
-      // Create morphing background for sections
-      const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
-      sectionsWithMorphing.forEach(section => {
-        createMorphingBackground(section);
-      });
-      
-      // Add enhanced parallax to background elements
-      document.querySelectorAll('[data-parallax]').forEach(element => {
-        const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
-        const depth = parseFloat(element.getAttribute('data-depth') || '1');
-        addEnhancedParallax(element, {
-          speed,
-          depth,
-          blur: Math.max(0, (depth - 1) * 1.5),
-          opacity: Math.max(0.4, 1 - (depth - 1) * 0.15)
-        });
-      });
-    }, 500);
-    
-    // Cleanup on unmount
-    return () => {
-      clearTimeout(depthEffectsTimeout);
-      if (animationController) {
-        animationController.destroy();
-      }
-      if (depthController) {
-        depthController.destroy();
-      }
-    };
-  }, []);
+  // Create service highlights based on categories
+  const serviceHighlights = [
+    {
+      id: 'exhibition-showcase',
+      title: 'Exhibition & Events',
+      category: 'exhibition',
+      description: 'Penyelenggaraan exhibition dan event berskala besar dengan standar internasional.',
+      count: `${allProjects.filter(p => p.category === 'exhibition').length}+ Events`,
+      icon: '🎪'
+    },
+    {
+      id: 'booth-showcase',
+      title: 'Booth Design & Construction',
+      category: 'booth',
+      description: 'Desain dan konstruksi booth yang menarik dan fungsional untuk berbagai kebutuhan.',
+      count: `${allProjects.filter(p => p.category === 'booth').length}+ Booths`,
+      icon: '🏗️'
+    },
+    {
+      id: 'activation-showcase',
+      title: 'Brand Activation',
+      category: 'activation',
+      description: 'Aktivasi brand yang engaging dan memorable untuk meningkatkan brand awareness.',
+      count: `${allProjects.filter(p => p.category === 'activation').length}+ Activations`,
+      icon: '🚀'
+    },
+    {
+      id: 'corporate-showcase',
+      title: 'Corporate Services',
+      category: 'corporate',
+      description: 'Layanan korporat komprehensif untuk berbagai kebutuhan perusahaan.',
+      count: `${allProjects.filter(p => p.category === 'corporate').length}+ Projects`,
+      icon: '🏢'
+    }
+  ];
 
+  // Pass all pre-computed data to the client component
   return (
-    <div className="min-h-screen scroll-snap-container">
-      <main>
-        {/* Hero Section */}
-        <SimpleHero
-          title="Portfolio & Case Studies"
-          subtitle="Narvex Showcase"
-          description="Showcase project-project terbaik dari creative services, event production, dan digital marketing kami"
-          breadcrumb={[
-            { label: 'Home', href: '/' },
-            { label: 'Portfolio' }
-          ]}
-          className="scroll-snap-section"
-        />
-
-        {/* Narvex Portfolio */}
-        <section className="section-padding bg-gradient-to-br from-white via-gray-50 to-white scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
-          {/* Enhanced floating background elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {/* Original circles */}
-            <div className="absolute top-1/4 left-1/6 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
-            <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
-            <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
-            <div className="absolute top-20 left-10 w-28 h-28 bg-blue-300/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
-            <div className="absolute bottom-10 right-20 w-36 h-36 bg-gold-300/12 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
-            
-            {/* Additional circles for enhanced visual depth */}
-            <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/18 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
-            <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
-            <div className="absolute top-3/5 right-1/3 w-20 h-20 bg-blue-200/10 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
-            <div className="absolute bottom-2/5 left-1/8 w-32 h-32 bg-gold-200/12 rounded-full filter blur-3xl" data-parallax="0.2" data-float="true" data-float-amplitude="22" data-float-duration="11"></div>
-          </div>
-          
-          {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
-          
-          <div className="relative container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Narvex Portfolio</h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Project-project unggulan yang telah kami kerjakan dengan detail case study dan hasil yang dicapai.
-              </p>
-            </div>
-            
-            {filteredProjects.length > 0 ? (
-              <div className="space-y-16 scroll-animate" data-animation-delay="0.6">
-                {filteredProjects.map((project, index) => (
-                  <Card 
-                    key={project.id} 
-                    variant="service" 
-                    className={`portfolio-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50 grid lg:grid-cols-2 gap-12 items-center hover:shadow-2xl transition-all duration-500 ${
-                      index % 2 === 1 ? 'lg:grid-flow-col-dense' : ''
-                    }`}
-                    style={{
-                      animationDelay: `${index * 0.2}s`
-                    }}
-                  >
-                    <CardContent className={`p-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
-                      {project.featured && (
-                        <div className="inline-flex items-center bg-gradient-to-r from-gold-100 to-gold-200 text-gold-700 px-3 py-1 rounded-full text-sm font-medium mb-4 shadow-sm">
-                          <Award className="w-4 h-4 mr-2" />
-                          Featured Project
-                        </div>
-                      )}
-                      
-                      <h3 className="heading-3 text-blue-900 mb-4">{project.title}</h3>
-                      
-                      <div className="flex flex-wrap gap-4 mb-6 text-sm text-gray-600">
-                        <div className="flex items-center transition-colors duration-300 hover:text-blue-600">
-                          <MapPin className="w-4 h-4 mr-2" />
-                          {project.location}
-                        </div>
-                        <div className="flex items-center transition-colors duration-300 hover:text-blue-600">
-                          <Calendar className="w-4 h-4 mr-2" />
-                          {project.date}
-                        </div>
-                        <div className="flex items-center transition-colors duration-300 hover:text-blue-600">
-                          <Users className="w-4 h-4 mr-2" />
-                          {project.client}
-                        </div>
-                      </div>
-                      
-                      <p className="body-large text-gray-600 mb-6">{project.description}</p>
-                      
-                      <div className="mb-6">
-                        <h4 className="font-semibold text-blue-900 mb-3">Services Provided:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.services.map((service, idx) => (
-                            <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm transition-all duration-300 hover:from-blue-100 hover:to-blue-200 hover:text-blue-700 hover:scale-105">
-                              {service}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                      
-                      <div className="grid grid-cols-3 gap-4 mb-6">
-                        {Object.entries(project.results).map(([key, value]) => (
-                          <div key={key} className="text-center p-3 rounded-xl bg-gradient-to-br from-gold-50 to-gold-100 border border-gold-200 transition-all duration-300 hover:scale-105 hover:shadow-md">
-                            <div className="text-2xl font-bold text-gold-600 mb-1">{value}</div>
-                            <div className="text-sm text-gray-600 capitalize">{key.replace('_', ' ')}</div>
-                          </div>
-                        ))}
-                      </div>
-                      
-                      <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform">
-                        Lihat Detail Case Study
-                        <ExternalLink className="w-4 h-4 ml-2" />
-                      </button>
-                    </CardContent>
-                    
-                    <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
-                      <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-80 flex items-center justify-center transition-all duration-500 hover:scale-105 hover:shadow-lg overflow-hidden relative group">
-                        <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
-                          <div className="text-4xl mb-4 transition-transform duration-300 group-hover:rotate-12">📸</div>
-                          <p className="font-semibold mb-2">Project Image Gallery</p>
-                          <p className="text-sm">{project.title}</p>
-                        </div>
-                        
-                        {/* Hover overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-gold-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                      </div>
-                    </div>
-                  </Card>
-                ))}
-              </div>
-            ) : (
-              /* No Results Message */
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-2xl font-bold text-gray-700 mb-2">No projects found</h3>
-                <p className="text-gray-500 mb-6">Try adjusting your search criteria or filters to find more projects.</p>
-                <button
-                  onClick={() => {
-                    setPortfolioSearchQuery('');
-                    setPortfolioCategoryFilter('all');
-                    setPortfolioYearFilter('all');
-                    setPortfolioClientFilter('all');
-                    setPortfolioStatusFilter('all');
-                  }}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
-                >
-                  Clear All Filters
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Portfolio Query Section */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
-          {/* Enhanced floating background elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {/* Original circles */}
-            <div className="absolute top-1/5 right-1/4 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
-            <div className="absolute bottom-1/4 left-1/6 w-28 h-28 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
-            <div className="absolute top-3/5 left-3/4 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.25" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
-            
-            {/* Additional circles for enhanced visual depth */}
-            <div className="absolute top-1/8 left-1/8 w-20 h-20 bg-gold-300/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="14" data-float-duration="7"></div>
-            <div className="absolute bottom-1/8 right-1/8 w-24 h-24 bg-blue-300/10 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="18" data-float-duration="10"></div>
-            <div className="absolute top-2/3 right-1/3 w-16 h-16 bg-gold-200/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
-          </div>
-          
-          {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-            
-          <div className="relative container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Explore Our Portfolio</h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Discover our complete collection of projects across all categories. Use the search and filters below to find specific work.
-              </p>
-            </div>
-            
-            {/* Search and Filter Controls */}
-            <div className="bg-white/90 backdrop-blur-sm rounded-2xl p-8 mb-12 shadow-lg border border-white/50" data-animation-delay="0.6">
-              {/* Search Bar */}
-              <div className="relative mb-6">
-                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <input
-                  type="text"
-                  placeholder="Search projects by title, description, client, or services..."
-                  value={portfolioSearchQuery}
-                  onChange={(e) => setPortfolioSearchQuery(e.target.value)}
-                  className="w-full pl-12 pr-4 py-4 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700 placeholder-gray-400"
-                />
-              </div>
-              
-              {/* Filter Controls */}
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-                {/* Category Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
-                  <select
-                    value={portfolioCategoryFilter}
-                    onChange={(e) => setPortfolioCategoryFilter(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
-                  >
-                    {portfolioCategories.map(category => (
-                      <option key={category.id} value={category.id}>{category.name}</option>
-                    ))}
-                  </select>
-                </div>
-                
-                {/* Year Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Year</label>
-                  <select
-                    value={portfolioYearFilter}
-                    onChange={(e) => setPortfolioYearFilter(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
-                  >
-                    <option value="all">All Years</option>
-                    {availableYears.map(year => (
-                      <option key={year} value={year.toString()}>{year}</option>
-                    ))}
-                  </select>
-                </div>
-                
-                {/* Client Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Client</label>
-                  <select
-                    value={portfolioClientFilter}
-                    onChange={(e) => setPortfolioClientFilter(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
-                  >
-                    <option value="all">All Clients</option>
-                    {availableClients.map(client => (
-                      <option key={client} value={client}>{client}</option>
-                    ))}
-                  </select>
-                </div>
-                
-                {/* Status Filter */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Status</label>
-                  <select
-                    value={portfolioStatusFilter}
-                    onChange={(e) => setPortfolioStatusFilter(e.target.value)}
-                    className="w-full p-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all duration-300 text-gray-700"
-                  >
-                    {statusOptions.map(status => (
-                      <option key={status.id} value={status.id}>{status.name}</option>
-                    ))}
-                  </select>
-                </div>
-              </div>
-              
-              {/* Results Counter */}
-              <div className="flex items-center justify-between">
-                <div className="text-gray-600">
-                  <span className="font-semibold text-blue-600">{filteredProjects.length}</span> projects found
-                </div>
-                <button
-                  onClick={() => {
-                    setPortfolioSearchQuery('');
-                    setPortfolioCategoryFilter('all');
-                    setPortfolioYearFilter('all');
-                    setPortfolioClientFilter('all');
-                    setPortfolioStatusFilter('all');
-                  }}
-                  className="text-sm text-gray-500 hover:text-blue-600 transition-colors duration-300"
-                >
-                  Clear all filters
-                </button>
-              </div>
-            </div>
-            
-            {/* Query Results Section */}
-            {filteredProjects.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
-                {filteredProjects.map((project, index) => (
-                  <Link 
-                    key={project.id}
-                    href={`/portfolio/${project.id}`}
-                    className="block group cursor-pointer"
-                  >
-                    <Card 
-                      variant="service" 
-                      className="portfolio-query-card h-full glass-morphism depth-4 bg-white/95 backdrop-blur-lg border-white/30 hover:shadow-2xl transition-all duration-700 hover:scale-105 hover:-translate-y-2 relative overflow-hidden"
-                      style={{
-                        animationDelay: `${index * 0.1}s`
-                      }}
-                    >
-                      {project.featured && (
-                        <div className="absolute top-3 right-3 z-20">
-                          <div className="bg-gradient-to-r from-gold-500 to-gold-600 text-white px-2.5 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-lg">
-                            <Award className="w-3 h-3" />
-                            Featured
-                          </div>
-                        </div>
-                      )}
-                      
-                      <CardContent className="p-0 flex flex-col h-full">
-                        {/* Project Thumbnail */}
-                        <div className="h-56 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center overflow-hidden relative group-hover:scale-110 transition-transform duration-700">
-                          <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
-                            <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">🎨</div>
-                            <p className="text-sm font-semibold uppercase tracking-wide">{project.category.replace('-', ' ')}</p>
-                          </div>
-                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-gold-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                          
-                          {/* Hover overlay with text */}
-                          <div className="absolute inset-0 bg-black/60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                            <span className="text-white font-semibold text-sm px-4 py-2 bg-white/20 rounded-lg backdrop-blur-sm">
-                              Click to view details
-                            </span>
-                          </div>
-                          
-                          {/* Floating particles effect */}
-                          <div className="absolute top-4 left-4 w-2 h-2 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
-                          <div className="absolute bottom-6 right-6 w-3 h-3 bg-blue-400 rounded-full opacity-60 animate-pulse animation-delay-1000" data-float="true" data-float-amplitude="4" data-float-duration="3"></div>
-                        </div>
-                        
-                        <div className="p-6 flex flex-col flex-grow space-y-4">
-                          {/* Category Badge */}
-                          <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium capitalize w-fit">
-                            {project.category.replace('-', ' ')}
-                          </div>
-                          
-                          {/* Project Title */}
-                          <h3 className="text-xl font-bold text-blue-900 line-clamp-2 group-hover:text-blue-800 transition-colors duration-300 leading-tight">
-                            {project.title}
-                          </h3>
-                          
-                          {/* Project Meta */}
-                          <div className="flex flex-wrap gap-3 text-sm text-gray-600">
-                            <div className="flex items-center min-w-0">
-                              <Users className="w-4 h-4 mr-1.5 flex-shrink-0 text-blue-500" />
-                              <span className="truncate">{project.client}</span>
-                            </div>
-                            <div className="flex items-center">
-                              <Calendar className="w-4 h-4 mr-1.5 flex-shrink-0 text-blue-500" />
-                              <span>{project.date}</span>
-                            </div>
-                            <div className="flex items-center min-w-0">
-                              <MapPin className="w-4 h-4 mr-1.5 flex-shrink-0 text-blue-500" />
-                              <span className="truncate">{project.location}</span>
-                            </div>
-                          </div>
-                          
-                          {/* Brief Description */}
-                          <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed group-hover:text-gray-700 transition-colors duration-300 flex-grow">
-                            {project.description}
-                          </p>
-                          
-                          {/* Services Tags */}
-                          <div className="flex flex-wrap gap-2">
-                            {project.services.slice(0, 2).map((service, idx) => (
-                              <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
-                                {service}
-                              </span>
-                            ))}
-                            {project.services.length > 2 && (
-                              <span className="text-xs text-gray-400 self-center font-medium">+{project.services.length - 2} more</span>
-                            )}
-                          </div>
-                          
-                          {/* Results Metrics */}
-                          <div className="grid grid-cols-3 gap-3 pt-2">
-                            {Object.entries(project.results).slice(0, 3).map(([key, value]) => (
-                              <div key={key} className="text-center p-3 rounded-lg bg-gradient-to-br from-gold-50 to-gold-100 border border-gold-200 transition-all duration-300 hover:scale-105">
-                                <div className="text-sm font-bold text-gold-600 mb-1 leading-tight">{value}</div>
-                                <div className="text-xs text-gray-600 capitalize leading-tight">{key.replace('_', ' ')}</div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                        
-                        {/* Bottom accent line */}
-                        <div className="h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-700 rounded-b-xl"></div>
-                      </CardContent>
-                    </Card>
-                  </Link>
-                ))}
-              </div>
-            ) : (
-              /* No Results Message */
-              <div className="text-center py-16">
-                <div className="text-6xl mb-4 opacity-60">🔍</div>
-                <h3 className="text-2xl font-bold text-gray-700 mb-2">No projects found</h3>
-                <p className="text-gray-500 mb-6">Try adjusting your search criteria or filters to find more projects.</p>
-                <button
-                  onClick={() => {
-                    setPortfolioSearchQuery('');
-                    setPortfolioCategoryFilter('all');
-                    setPortfolioYearFilter('all');
-                    setPortfolioClientFilter('all');
-                    setPortfolioStatusFilter('all');
-                  }}
-                  className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
-                >
-                  Clear All Filters
-                </button>
-              </div>
-            )}
-          </div>
-        </section>
-
-        {/* Service Highlights */}
-        {filteredServiceHighlights.length > 0 && (
-          <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute top-20 right-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-              <div className="absolute bottom-20 left-20 w-48 h-48 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
-            </div>
-            
-            {/* Decorative divider */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-            
-            <div className="relative container mx-auto px-6">
-              <div className="text-center mb-16">
-                <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Service Highlights</h2>
-                <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                  Showcase keahlian kami dalam berbagai layanan creative services yang telah terbukti memberikan hasil optimal.
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
-                {filteredServiceHighlights.map((service, index) => (
-                  <Card 
-                    key={service.id} 
-                    variant="service" 
-                    className="service-highlight-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500 hover:scale-105"
-                    style={{
-                      animationDelay: `${index * 0.1}s`
-                    }}
-                  >
-                    <CardContent className="p-6">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                          <span className="text-2xl">{service.icon}</span>
-                        </div>
-                        <h3 className="text-xl font-bold mb-2 transition-colors duration-300" style={{color: '#6382b4'}}>{service.title}</h3>
-                      </div>
-                      
-                      <p className="text-gray-600 mb-4 text-sm">{service.description}</p>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold mb-3 transition-colors duration-300" style={{color: '#dbc48a'}}>{service.count}</div>
-                        <button className="w-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-100 hover:to-blue-200 text-gray-700 hover:text-blue-700 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md transform">
-                          Lihat Detail
-                        </button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-      <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
-          {/* Enhanced floating background elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/6 left-1/8 w-40 h-40 bg-gold-300/15 rounded-full filter blur-2xl" data-parallax="0.4" data-float="true" data-float-amplitude="25" data-float-duration="12"></div>
-            <div className="absolute bottom-1/5 right-1/6 w-32 h-32 bg-blue-300/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
-            <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
-            <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
-          </div>
-          
-          <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 scroll-animate-scale">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
-                Siap Memulai Project Anda?
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
-                mewujudkan visi kreatif Anda menjadi kenyataan.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
-              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
-                <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
-              </a>
-              
-              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
-              </a>
-              
-              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
-              </a>
-              
-              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
-              </a>
-            </div>
-            
-            <div className="text-center scroll-animate animate-stagger-4">
-              <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
-                Konsultasi Gratis
-              </Link>
-              <Link href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
-                Lihat Portfolio
-              </Link>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
+    <PortfolioClient 
+      initialProjects={allProjects}
+      portfolioCategories={portfolioCategories}
+      availableYears={availableYears}
+      availableClients={availableClients}
+      statusOptions={statusOptions}
+      serviceHighlights={serviceHighlights}
+    />
   );
 }

@@ -50,8 +50,8 @@ const PERFORMANCE_CONFIG = {
     const isLowPerf = this.isLowPerformanceDevice();
     
     return {
-      duration: isLowPerf ? 0.3 : 0.6,
-      stagger: isLowPerf ? 0.05 : 0.1,
+      duration: isLowPerf ? 0.2 : 0.4,
+      stagger: isLowPerf ? 0.02 : 0.03,
       ease: isLowPerf ? 'power2.out' : 'power3.out',
       force3D: !isLowPerf,
       enableComplexAnimations: !isLowPerf && !this.reducedMotion
@@ -577,7 +577,7 @@ export class GSAPAnimationController {
           opacity: 1, 
           y: 0,
           scale: 1,
-          duration: 0.4,
+          duration: 0.3,
           ease: 'power2.out'
         }
       );
@@ -598,7 +598,7 @@ export class GSAPAnimationController {
 
       tl.fromTo(element,
         { autoAlpha: 0, x: -100, force3D: true },
-        { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' }
+        { autoAlpha: 1, x: 0, duration: 0.25, ease: 'power2.out' }
       );
 
       this.animations.push(tl);
@@ -617,7 +617,7 @@ export class GSAPAnimationController {
 
       tl.fromTo(element,
         { autoAlpha: 0, x: 100, force3D: true },
-        { autoAlpha: 1, x: 0, duration: 0.8, ease: 'power2.out' }
+        { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' }
       );
 
       this.animations.push(tl);
@@ -636,7 +636,7 @@ export class GSAPAnimationController {
 
       tl.fromTo(element,
         { autoAlpha: 0, scale: 0.95, force3D: true },
-        { autoAlpha: 1, scale: 1, duration: 0.6, ease: 'power2.out' }
+        { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power2.out' }
       );
 
       this.animations.push(tl);
@@ -669,10 +669,10 @@ export class GSAPAnimationController {
           opacity: 1,
           y: 0,
           rotationX: 0,
-          duration: 0.6,
+          duration: 0.4,
           ease: 'power2.out',
           stagger: {
-            amount: 0.4,
+            amount: 0.25,
             from: 'start'
           }
         }
@@ -816,33 +816,33 @@ export function smoothScrollToSection(targetId: string) {
  */
 export const sectionAnimationConfigs = {
   hero: {
-    title: { animation: 'wave', delay: 0.3, duration: 0.8, stagger: 0.03 },
-    subtitle: { animation: 'fade-in', delay: 0.6, duration: 0.6, stagger: 0.03 },
-    description: { animation: 'slide-up', delay: 0.9, duration: 0.6, stagger: 0.05 }
+    title: { animation: 'wave', delay: 0.15, duration: 0.5, stagger: 0.02 },
+    subtitle: { animation: 'fade-in', delay: 0.3, duration: 0.4, stagger: 0.02 },
+    description: { animation: 'slide-up', delay: 0.45, duration: 0.4, stagger: 0.03 }
   },
   about: {
-    heading: { animation: 'typewriter', delay: 0, duration: 0.03, stagger: 0 },
-    content: { animation: 'fade-in', delay: 0.3, duration: 0.6, stagger: 0.03 },
-    cards: { animation: 'scale-bounce', delay: 0.6, duration: 0.5, stagger: 0.05 }
+    heading: { animation: 'typewriter', delay: 0, duration: 0.02, stagger: 0 },
+    content: { animation: 'fade-in', delay: 0.15, duration: 0.4, stagger: 0.02 },
+    cards: { animation: 'scale-bounce', delay: 0.3, duration: 0.3, stagger: 0.03 }
   },
   services: {
-    heading: { animation: 'rotate-in', delay: 0, duration: 0.6, stagger: 0.03 },
-    description: { animation: 'blur-focus', delay: 0.3, duration: 0.7, stagger: 0.03 },
-    cards: { animation: 'flip', delay: 0.6, duration: 0.6, stagger: 0.05 }
+    heading: { animation: 'rotate-in', delay: 0, duration: 0.4, stagger: 0.02 },
+    description: { animation: 'blur-focus', delay: 0.15, duration: 0.4, stagger: 0.02 },
+    cards: { animation: 'flip', delay: 0.3, duration: 0.4, stagger: 0.03 }
   },
   portfolio: {
-    heading: { animation: 'elastic', delay: 0, duration: 0.7, stagger: 0.03 },
-    filters: { animation: 'slide-up', delay: 0.3, duration: 0.6, stagger: 0.05 },
-    items: { animation: 'scale-bounce', delay: 0.6, duration: 0.5, stagger: 0.05 }
+    heading: { animation: 'elastic', delay: 0, duration: 0.4, stagger: 0.02 },
+    filters: { animation: 'slide-up', delay: 0.15, duration: 0.4, stagger: 0.03 },
+    items: { animation: 'scale-bounce', delay: 0.3, duration: 0.3, stagger: 0.03 }
   },
   testimonials: {
-    heading: { animation: 'glitch', delay: 0, duration: 0.6, stagger: 0.02 },
-    content: { animation: 'fade-in', delay: 0.3, duration: 0.6, stagger: 0.03 }
+    heading: { animation: 'glitch', delay: 0, duration: 0.4, stagger: 0.015 },
+    content: { animation: 'fade-in', delay: 0.15, duration: 0.4, stagger: 0.02 }
   },
   contact: {
-    heading: { animation: 'wave', delay: 0, duration: 0.8, stagger: 0.03 },
-    form: { animation: 'slide-up', delay: 0.3, duration: 0.6, stagger: 0.05 },
-    info: { animation: 'fade-in', delay: 0.6, duration: 0.6, stagger: 0.05 }
+    heading: { animation: 'wave', delay: 0, duration: 0.5, stagger: 0.02 },
+    form: { animation: 'slide-up', delay: 0.15, duration: 0.4, stagger: 0.03 },
+    info: { animation: 'fade-in', delay: 0.3, duration: 0.4, stagger: 0.03 }
   }
 };
 

@@ -48,7 +48,7 @@ export default function SimpleHero({
         <div className="max-w-4xl mx-auto text-center">
           {/* Breadcrumb */}
           {breadcrumb && breadcrumb.length > 0 && (
-            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.1" data-duration="0.4">
+            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
               <ol className="flex items-center justify-center space-x-2 text-sm text-gray-300">
                 {breadcrumb.map((item, index) => (
                   <li key={index} className="flex items-center">
@@ -76,9 +76,9 @@ export default function SimpleHero({
             className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight scroll-animate"
             data-element="title" 
             data-text-animation="wave" 
-            data-delay="0.2" 
-            data-duration="0.6" 
-            data-stagger="0.04"
+            data-delay="0.1"
+            data-duration="0.4"
+            data-stagger="0.025"
           >
             {title.split(' ').map((word, index) => (
               <span key={index} className={`inline-block ${word.toLowerCase().includes('narvex') || word.toLowerCase().includes('indonesia') ? 'text-gold-400' : ''}`}>
@@ -94,8 +94,8 @@ export default function SimpleHero({
               className="text-xl md:text-2xl text-gold-300 mb-4 font-medium scroll-animate"
               data-element="subtitle" 
               data-text-animation="fade-in" 
-              data-delay="0.4" 
-              data-duration="0.4"
+              data-delay="0.2"
+            data-duration="0.3"
             >
               {subtitle}
             </p>
@@ -107,8 +107,8 @@ export default function SimpleHero({
               className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed scroll-animate"
               data-element="description" 
               data-text-animation="fade-in" 
-              data-delay="0.6" 
-              data-duration="0.4"
+              data-delay="0.3"
+            data-duration="0.3"
             >
               {description}
             </p>
