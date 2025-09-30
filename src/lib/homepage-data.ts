@@ -305,13 +305,72 @@ export interface ImageFormat {
   sizeInBytes: number;
 }
 
-// Function to get homepage data from imported JSON
-export function getHomepageData(): HomepageData | null {
+// Function to get homepage data from Strapi API
+export async function getHomepageData(): Promise<HomepageData | null> {
   try {
-    return homepageDataJson as HomepageData;
+    // Use environment variables for API configuration
+    const apiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.narvex.id';
+    const apiToken = process.env.STRAPI_API_TOKEN || '73c1029c3d809e1708c993bbc11ae8adefdbd7064e1342082135c0c1db8995795665357264f328c5eb7f6ed3fc90ba8bbf568ea9dbef8f8ba66b86ea80f3c56d142200d5e8030c3ce305fecffa7c6ab57b0aae74b33ca36dcd395c729aa935a2ce01a21a3bf4305a812d11cf88466b6213f8f521211a9dba4ccc17bdcce0b642';
+    
+    console.log('🚀 Fetching data from Strapi API:', `${apiUrl}/api/home-page`);
+    console.log('🔑 Using API Token:', apiToken.substring(0, 20) + '...');
+    
+    // Fetch data from Strapi API with deep population
+    const response = await fetch(`${apiUrl}/api/home-page?populate=deep`, {
+      headers: {
+        'Authorization': `Bearer ${apiToken}`,
+        'Content-Type': 'application/json',
+      },
+      // Add cache control for development
+      cache: 'no-store',
+      next: { revalidate: 0 }
+    });
+
+    console.log('📡 API Response Status:', response.status, response.statusText);
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('❌ API request failed:', {
+        status: response.status,
+        statusText: response.statusText,
+        error: errorText
+      });
+      throw new Error(`API request failed: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    
+    // Log the response for debugging
+    console.log('✅ API Response received:', {
+      status: response.status,
+      hasData: !!data.data,
+      dataKeys: data.data ? Object.keys(data.data) : 'No data',
+      hasPageContent: !!data.data?.pageContent,
+      pageContentLength: data.data?.pageContent?.length || 0
+    });
+    
+    // Return the data in the expected format
+    const result = data.data || data;
+    console.log('📦 Returning data:', {
+      id: result.id,
+      pageContentCount: result.pageContent?.length || 0
+    });
+    
+    return result as HomepageData;
+    
   } catch (error) {
-    console.error('Error reading homepage data:', error);
-    return null;
+    console.error('❌ Error fetching homepage data from API:', error);
+    
+    // Fallback to local JSON file
+    try {
+      console.log('🔄 Falling back to local JSON file...');
+      const fallbackData = homepageDataJson as HomepageData;
+      console.log('✅ Successfully loaded fallback data');
+      return fallbackData;
+    } catch (fallbackError) {
+      console.error('❌ Error reading fallback data:', fallbackError);
+      return null;
+    }
   }
 }
 

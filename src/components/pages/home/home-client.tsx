@@ -82,8 +82,8 @@ interface HomeClientProps {
   defaultClients: ClientLogo[];
 }
 
-// Data
-const services: Service[] = [
+// Default services data (fallback only) - will be replaced by API data
+const defaultServices: Service[] = [
   {
     id: 'creative-design',
     icon: <Palette className="w-8 h-8 text-white" />,
@@ -165,7 +165,7 @@ export default function HomeClient({
         title: service.title,
         description: service.description,
         iconUrl: service.icon ? getImageUrl(service.icon, 'medium') : 'No icon',
-        features: service.description.split('\n\n').slice(1).filter(f => f.trim())
+        features: service.description ? service.description.split('\n\n').slice(1).filter(f => f.trim()) : []
       });
     });
   }
@@ -200,8 +200,15 @@ export default function HomeClient({
     });
   }
 
-  // State for portfolio filter - now using API categories
-  const [activeFilter, setActiveFilter] = useState<string>('all');
+  // Get services from API or fallback
+  const getServicesData = () => {
+    if (serviceHighlight?.services && serviceHighlight.services.length > 0) {
+      return serviceHighlight.services;
+    }
+    return defaultServices;
+  };
+
+  const servicesData = getServicesData();
   
   // State for contact form
   const [formData, setFormData] = useState<ContactFormData>({
@@ -352,6 +359,9 @@ export default function HomeClient({
     }
   };
 
+  // State for portfolio filter - now using API categories
+  const [activeFilter, setActiveFilter] = useState<string>('all');
+  
   // Get unique categories from API data
   const getUniqueCategories = () => {
     if (!projectHighlights?.featuredProjects) return [];
@@ -975,12 +985,12 @@ export default function HomeClient({
                     </h3>
                     
                     <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
-                      {service.description.split('\n\n')[0]}
+                      {service.description ? service.description.split('\n\n')[0] : service.title}
                     </p>
                     
                     {/* Features List */}
                     <ul className="space-y-3 mb-6 flex-1 list-none">
-                      {service.description.split('\n\n').slice(1).filter(feature => 
+                      {service.description ? service.description.split('\n\n').slice(1).filter(feature => 
                         feature.trim() && 
                         !feature.includes('Pelajari Lebih Lanjut') && 
                         !feature.includes('Lainnya')
@@ -997,7 +1007,7 @@ export default function HomeClient({
                             <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{trimmedFeature}</span>
                           </li>
                         );
-                      })}
+                      }) : []}
                     </ul>
                     
                     {/* CTA Button */}
@@ -1012,7 +1022,7 @@ export default function HomeClient({
                 </Card>
               )) || (
                 // Fallback services
-                services.map((service, index) => (
+                servicesData.map((service, index) => (
                   <Card
                     key={service.id}
                     variant="service"
@@ -1024,7 +1034,7 @@ export default function HomeClient({
                     {/* Icon */}
                     <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
                       <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300">
-                        {service.icon}
+                        {typeof service.icon === 'object' ? <Palette className="w-8 h-8 text-white" /> : service.icon || <Palette className="w-8 h-8 text-white" />}
                       </div>
                     </div>
                     
@@ -1040,12 +1050,12 @@ export default function HomeClient({
                       
                       {/* Features List */}
                       <ul className="space-y-3 mb-6 flex-1 list-none">
-                        {service.features.map((feature, idx) => (
+                        {(service as Service & { features?: string[] }).features?.map((feature: string, idx: number) => (
                           <li key={idx} className="flex items-start text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
                             <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
                             <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
                           </li>
-                        ))}
+                        )) || []}
                       </ul>
                       
                       {/* CTA Button */}
