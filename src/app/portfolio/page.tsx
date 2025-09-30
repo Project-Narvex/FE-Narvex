@@ -41,42 +41,6 @@ export default function PortfolioPage() {
     { id: 'featured', name: 'Featured' }
   ];
 
-  // Create service highlights based on categories
-  const serviceHighlights = [
-    {
-      id: 'exhibition-showcase',
-      title: 'Exhibition & Events',
-      category: 'exhibition',
-      description: 'Penyelenggaraan exhibition dan event berskala besar dengan standar internasional.',
-      count: `${allProjects.filter(p => p.category === 'exhibition').length}+ Events`,
-      icon: '🎪'
-    },
-    {
-      id: 'booth-showcase',
-      title: 'Booth Design & Construction',
-      category: 'booth',
-      description: 'Desain dan konstruksi booth yang menarik dan fungsional untuk berbagai kebutuhan.',
-      count: `${allProjects.filter(p => p.category === 'booth').length}+ Booths`,
-      icon: '🏗️'
-    },
-    {
-      id: 'activation-showcase',
-      title: 'Brand Activation',
-      category: 'activation',
-      description: 'Aktivasi brand yang engaging dan memorable untuk meningkatkan brand awareness.',
-      count: `${allProjects.filter(p => p.category === 'activation').length}+ Activations`,
-      icon: '🚀'
-    },
-    {
-      id: 'corporate-showcase',
-      title: 'Corporate Services',
-      category: 'corporate',
-      description: 'Layanan korporat komprehensif untuk berbagai kebutuhan perusahaan.',
-      count: `${allProjects.filter(p => p.category === 'corporate').length}+ Projects`,
-      icon: '🏢'
-    }
-  ];
-
   // Pass all pre-computed data to the client component
   return (
     <PortfolioClient 
@@ -85,7 +49,6 @@ export default function PortfolioPage() {
       availableYears={availableYears}
       availableClients={availableClients}
       statusOptions={statusOptions}
-      serviceHighlights={serviceHighlights}
     />
   );
 }

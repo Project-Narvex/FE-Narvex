@@ -141,7 +141,7 @@ export default function AboutClient({
                 <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
                 <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
               </h1>
-              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.2" data-duration="0.3" data-stagger="0.015" data-mouse-parallax="0.05">
+              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth">
                 CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing
               </p>
             </div>

@@ -6,14 +6,14 @@ import Link from 'next/link';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
 import { MapPin, Calendar, Users, Award, ExternalLink, Search } from 'lucide-react';
-import { 
-  initializeAnimations, 
-  addGSAPHoverAnimations,
-  DepthAnimationController,
-  add3DCardEffect,
-  addEnhancedParallax,
-  createMorphingBackground
-} from '@/lib/animations';
+// import { 
+//   initializeAnimations, 
+//   addGSAPHoverAnimations,
+//   DepthAnimationController,
+//   add3DCardEffect,
+//   addEnhancedParallax,
+//   createMorphingBackground
+// } from '@/lib/animations';
 import { Project } from '@/data/projects';
 
 // Custom hook for debounced search
@@ -39,14 +39,6 @@ interface PortfolioClientProps {
   availableYears: number[];
   availableClients: string[];
   statusOptions: Array<{ id: string; name: string }>;
-  serviceHighlights: Array<{
-    id: string;
-    title: string;
-    category: string;
-    description: string;
-    count: string;
-    icon: string;
-  }>;
 }
 
 export default function PortofolioClient({
@@ -54,9 +46,29 @@ export default function PortofolioClient({
   portfolioCategories,
   availableYears,
   availableClients,
-  statusOptions,
-  serviceHighlights
+  statusOptions
 }: PortfolioClientProps) {
+  // Early defensive checks
+  if (!initialProjects || !Array.isArray(initialProjects)) {
+    return <div>Loading portfolio...</div>;
+  }
+  
+  if (!portfolioCategories || !Array.isArray(portfolioCategories)) {
+    return <div>Loading portfolio categories...</div>;
+  }
+  
+  if (!availableYears || !Array.isArray(availableYears)) {
+    return <div>Loading portfolio years...</div>;
+  }
+  
+  if (!availableClients || !Array.isArray(availableClients)) {
+    return <div>Loading portfolio clients...</div>;
+  }
+  
+  if (!statusOptions || !Array.isArray(statusOptions)) {
+    return <div>Loading status options...</div>;
+  }
+
   // Portfolio Query Section state variables
   const [portfolioSearchQuery, setPortfolioSearchQuery] = useState('');
   const [portfolioCategoryFilter, setPortfolioCategoryFilter] = useState('all');
@@ -64,109 +76,147 @@ export default function PortofolioClient({
   const [portfolioClientFilter, setPortfolioClientFilter] = useState('all');
   const [portfolioStatusFilter, setPortfolioStatusFilter] = useState('all');
   
+  // Pagination state variables
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage] = useState(9); // 3x3 grid for optimal performance
+  const [isPageTransitioning, setIsPageTransitioning] = useState(false);
+  
   // Debounced search term for performance
   const debouncedPortfolioSearchQuery = useDebounce(portfolioSearchQuery, 300);
   
   // Portfolio query filtering logic
   const filteredProjects = useMemo(() => {
-    const filtered = initialProjects.filter((project: Project) => {
-      const matchesSearch = debouncedPortfolioSearchQuery === '' || 
-        project.title.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()) ||
-        project.description.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()) ||
-        project.client.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()) ||
-        project.services.some((service: string) => service.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase()));
-      
-      const matchesCategory = portfolioCategoryFilter === 'all' || project.category === portfolioCategoryFilter;
-      const matchesYear = portfolioYearFilter === 'all' || project.date === portfolioYearFilter;
-      const matchesClient = portfolioClientFilter === 'all' || project.client === portfolioClientFilter;
-      const matchesStatus = portfolioStatusFilter === 'all' || 
-        (portfolioStatusFilter === 'completed') ||
-        (portfolioStatusFilter === 'featured' && project.featured);
-      
-      return matchesSearch && matchesCategory && matchesYear && matchesClient && matchesStatus;
-    });
+    if (!initialProjects || !Array.isArray(initialProjects)) {
+      return [];
+    }
     
-    return filtered;
+    try {
+      return initialProjects.filter((project: Project) => {
+        if (!project) return false;
+        
+        const matchesSearch = debouncedPortfolioSearchQuery === '' || 
+          (project.title?.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase())) ||
+          (project.description?.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase())) ||
+          (project.client?.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase())) ||
+          (project.services?.some?.((service: string) => service?.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase())));
+        
+        const matchesCategory = portfolioCategoryFilter === 'all' || project.category === portfolioCategoryFilter;
+        const matchesYear = portfolioYearFilter === 'all' || project.date === portfolioYearFilter;
+        const matchesClient = portfolioClientFilter === 'all' || project.client === portfolioClientFilter;
+        const matchesStatus = portfolioStatusFilter === 'all' || 
+          (portfolioStatusFilter === 'completed') ||
+          (portfolioStatusFilter === 'featured' && project.featured);
+        
+        return matchesSearch && matchesCategory && matchesYear && matchesClient && matchesStatus;
+      });
+    } catch (error) {
+      console.error('Error filtering projects:', error);
+      return [];
+    }
   }, [debouncedPortfolioSearchQuery, portfolioCategoryFilter, portfolioYearFilter, portfolioClientFilter, portfolioStatusFilter, initialProjects]);
-    
-  const filteredServiceHighlights = useMemo(() => {
-    return portfolioCategoryFilter === 'all'
-      ? serviceHighlights
-      : serviceHighlights.filter(service => service.category === portfolioCategoryFilter);
-  }, [portfolioCategoryFilter, serviceHighlights]);
 
+  // Pagination calculations
+  const totalPages = Math.ceil((filteredProjects?.length || 0) / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentProjects = filteredProjects?.slice(startIndex, endIndex) || [];
+
+  // Pagination handlers
+  const handlePageChange = (page: number) => {
+    if (page >= 1 && page <= totalPages && page !== currentPage) {
+      setIsPageTransitioning(true);
+      setCurrentPage(page);
+      
+      // Scroll to top of results section
+      setTimeout(() => {
+        const resultsSection = document.querySelector('.portfolio-results-section');
+        if (resultsSection) {
+          resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+        setIsPageTransitioning(false);
+      }, 100);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    handlePageChange(currentPage - 1);
+  };
+
+  const handleNextPage = () => {
+    handlePageChange(currentPage + 1);
+  };
+
+  const handleGoToPage = (page: number) => {
+    handlePageChange(page);
+  };
+
+  // Reset to page 1 when filters change
   useEffect(() => {
-    // Initialize GSAP scroll animations
-    const animationController = initializeAnimations();
-    
-    // Initialize depth animation controller
-    const depthController = new DepthAnimationController();
-    
-    // Add hover animations
-    addGSAPHoverAnimations();
-    
-    // Add depth effects to specific elements after a delay
-    const depthEffectsTimeout = setTimeout(() => {
-      // Add 3D card effects to portfolio cards
-      document.querySelectorAll('.portfolio-card').forEach(card => {
-        add3DCardEffect(card, {
-          maxRotation: 8,
-          perspective: 1000,
-          shadowIntensity: 0.2,
-          liftHeight: 12
-        });
-      });
-      
-      // Add 3D effects to service highlight cards
-      document.querySelectorAll('.service-highlight-card').forEach(card => {
-        add3DCardEffect(card, {
-          maxRotation: 6,
-          perspective: 800,
-          shadowIntensity: 0.15,
-          liftHeight: 8
-        });
-      });
-      
-      // Add 3D effects to filter buttons
-      document.querySelectorAll('.filter-button').forEach(button => {
-        add3DCardEffect(button, {
-          maxRotation: 4,
-          perspective: 600,
-          shadowIntensity: 0.1,
-          liftHeight: 4
-        });
-      });
-      
-      // Create morphing background for sections
-      const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
-      sectionsWithMorphing.forEach(section => {
-        createMorphingBackground(section);
-      });
-      
-      // Add enhanced parallax to background elements
-      document.querySelectorAll('[data-parallax]').forEach(element => {
-        const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
-        const depth = parseFloat(element.getAttribute('data-depth') || '1');
-        addEnhancedParallax(element, {
-          speed,
-          depth,
-          blur: Math.max(0, (depth - 1) * 1.5),
-          opacity: Math.max(0.4, 1 - (depth - 1) * 0.15)
-        });
-      });
-    }, 500);
-    
-    // Cleanup on unmount
-    return () => {
-      clearTimeout(depthEffectsTimeout);
-      if (animationController) {
-        animationController.destroy();
-      }
-      if (depthController) {
-        depthController.destroy();
-      }
-    };
-  }, []);
+    setCurrentPage(1);
+  }, [debouncedPortfolioSearchQuery, portfolioCategoryFilter, portfolioYearFilter, portfolioClientFilter, portfolioStatusFilter]);
+
+  // useEffect(() => {
+  //   // Initialize GSAP scroll animations
+  //   const animationController = initializeAnimations();
+  //   
+  //   // Initialize depth animation controller
+  //   const depthController = new DepthAnimationController();
+  //   
+  //   // Add hover animations
+  //   addGSAPHoverAnimations();
+  //   
+  //   // Add depth effects to specific elements after a delay
+  //   const depthEffectsTimeout = setTimeout(() => {
+  //     // Add 3D card effects to portfolio cards
+  //     document.querySelectorAll('.portfolio-card').forEach(card => {
+  //       add3DCardEffect(card, {
+  //         maxRotation: 8,
+  //         perspective: 1000,
+  //         shadowIntensity: 0.2,
+  //         liftHeight: 12
+  //       });
+  //     });
+  //     
+  //     // Add 3D effects to filter buttons
+  //     document.querySelectorAll('.filter-button').forEach(button => {
+  //       add3DCardEffect(button, {
+  //         maxRotation: 4,
+  //         perspective: 600,
+  //         shadowIntensity: 0.1,
+  //         liftHeight: 4
+  //       });
+  //     });
+  //     
+  //     // Create morphing background for sections
+  //     const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
+  //     sectionsWithMorphing.forEach(section => {
+  //       createMorphingBackground(section);
+  //     });
+  //     
+  //     // Add enhanced parallax to background elements
+  //     document.querySelectorAll('[data-parallax]').forEach(element => {
+  //       const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
+  //       const depth = parseFloat(element.getAttribute('data-depth') || '1');
+  //       addEnhancedParallax(element, {
+  //         speed,
+  //         depth,
+  //         blur: Math.max(0, (depth - 1) * 1.5),
+  //         opacity: Math.max(0.4, 1 - (depth - 1) * 0.15)
+  //       });
+  //     });
+  //   }, 500);
+  //   
+  //   // Cleanup on unmount
+  //   return () => {
+  //     clearTimeout(depthEffectsTimeout);
+  //     if (animationController && typeof animationController.destroy === 'function') {
+  //       animationController.destroy();
+  //     }
+  //     if (depthController && typeof depthController.destroy === 'function') {
+  //       depthController.destroy();
+  //     }
+  //   };
+  // }, []);
 
   return (
     <div className="min-h-screen scroll-snap-container">
@@ -212,7 +262,7 @@ export default function PortofolioClient({
               </p>
             </div>
             
-            {filteredProjects.length > 0 ? (
+            {(filteredProjects?.length || 0) > 0 ? (
               <div className="space-y-16 scroll-animate" data-animation-delay="0.6">
                 {filteredProjects.map((project, index) => (
                   <Card 
@@ -251,17 +301,6 @@ export default function PortofolioClient({
                       </div>
                       
                       <p className="body-large text-gray-600 mb-6">{project.description}</p>
-                      
-                      <div className="mb-6">
-                        <h4 className="font-semibold text-blue-900 mb-3">Services Provided:</h4>
-                        <div className="flex flex-wrap gap-2">
-                          {project.services.map((service, idx) => (
-                            <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm transition-all duration-300 hover:from-blue-100 hover:to-blue-200 hover:text-blue-700 hover:scale-105">
-                              {service}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
                       
                       {project.results && (
                         <div className="grid grid-cols-3 gap-4 mb-6">
@@ -422,7 +461,12 @@ export default function PortofolioClient({
               {/* Results Counter */}
               <div className="flex items-center justify-between">
                 <div className="text-gray-600">
-                  <span className="font-semibold text-blue-600">{filteredProjects.length}</span> projects found
+                  <span className="font-semibold text-blue-600">{filteredProjects?.length || 0}</span> projects found
+                  {totalPages > 1 && (
+                    <span className="ml-2 text-sm">
+                      (Showing {startIndex + 1}-{Math.min(endIndex, filteredProjects?.length || 0)} of {filteredProjects?.length || 0})
+                    </span>
+                  )}
                 </div>
                 <button
                   onClick={() => {
@@ -440,9 +484,11 @@ export default function PortofolioClient({
             </div>
             
             {/* Query Results Section */}
-            {filteredProjects.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
-                {filteredProjects.map((project, index) => (
+            <div className="portfolio-results-section">
+              {(filteredProjects?.length || 0) > 0 ? (
+                <>
+                  <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate transition-opacity duration-300 ${isPageTransitioning ? 'opacity-50' : 'opacity-100'}`} data-animation-delay="0.8">
+                    {currentProjects.map((project, index) => (
                   <Link 
                     key={project.id}
                     href={`/portfolio/${project.id}`}
@@ -517,18 +563,6 @@ export default function PortofolioClient({
                             {project.description}
                           </p>
                           
-                          {/* Services Tags */}
-                          <div className="flex flex-wrap gap-2">
-                            {project.services.slice(0, 2).map((service, idx) => (
-                              <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
-                                {service}
-                              </span>
-                            ))}
-                            {project.services.length > 2 && (
-                              <span className="text-xs text-gray-400 self-center font-medium">+{project.services.length - 2} more</span>
-                            )}
-                          </div>
-                          
                           {/* Results Metrics */}
                           {project.results && (
                             <div className="grid grid-cols-3 gap-3 pt-2">
@@ -548,9 +582,102 @@ export default function PortofolioClient({
                     </Card>
                   </Link>
                 ))}
-              </div>
-            ) : (
-              /* No Results Message */
+                  </div>
+                  
+                  {/* Pagination Controls */}
+                  {totalPages > 1 && (
+                    <div className="mt-12 flex flex-col items-center space-y-6">
+                      {/* Pagination Info */}
+                      <div className="text-center text-gray-600">
+                        <span className="text-sm">
+                          Page {currentPage} of {totalPages}
+                        </span>
+                      </div>
+                      
+                      {/* Pagination Navigation */}
+                      <div className="flex flex-col sm:flex-row items-center gap-4">
+                        {/* Previous Button */}
+                        <button
+                          onClick={handlePreviousPage}
+                          disabled={currentPage === 1}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                            currentPage === 1
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                              : 'bg-white text-gray-700 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600'
+                          }`}
+                        >
+                          Previous
+                        </button>
+                        
+                        {/* Page Numbers */}
+                        <div className="flex items-center gap-2">
+                          {Array.from({ length: Math.min(5, totalPages) }, (_, i) => {
+                            let pageNum;
+                            if (totalPages <= 5) {
+                              pageNum = i + 1;
+                            } else if (currentPage <= 3) {
+                              pageNum = i + 1;
+                            } else if (currentPage >= totalPages - 2) {
+                              pageNum = totalPages - 4 + i;
+                            } else {
+                              pageNum = currentPage - 2 + i;
+                            }
+                            
+                            return (
+                              <button
+                                key={pageNum}
+                                onClick={() => handleGoToPage(pageNum)}
+                                className={`w-10 h-10 rounded-lg font-medium transition-all duration-300 ${
+                                  currentPage === pageNum
+                                    ? 'bg-blue-500 text-white shadow-lg'
+                                    : 'bg-white text-gray-700 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600'
+                                }`}
+                              >
+                                {pageNum}
+                              </button>
+                            );
+                          })}
+                        </div>
+                        
+                        {/* Next Button */}
+                        <button
+                          onClick={handleNextPage}
+                          disabled={currentPage === totalPages}
+                          className={`px-4 py-2 rounded-lg font-medium transition-all duration-300 ${
+                            currentPage === totalPages
+                              ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                              : 'bg-white text-gray-700 border border-gray-200 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-600'
+                          }`}
+                        >
+                          Next
+                        </button>
+                      </div>
+                      
+                      {/* Go to Page Input */}
+                      <div className="flex items-center gap-2 text-sm">
+                        <span className="text-gray-600">Go to page:</span>
+                        <input
+                          type="number"
+                          min="1"
+                          max={totalPages}
+                          value={currentPage}
+                          onChange={(e) => {
+                            const page = parseInt(e.target.value);
+                            if (page >= 1 && page <= totalPages) {
+                              handleGoToPage(page);
+                            }
+                          }}
+                          className="w-16 px-2 py-1 border border-gray-200 rounded text-center focus:border-blue-500 focus:ring-1 focus:ring-blue-200"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : null}
+            </div>
+            
+            {/* No Results Message */}
+            {(filteredProjects?.length || 0) === 0 && (
               <div className="text-center py-16">
                 <div className="text-6xl mb-4 opacity-60">🔍</div>
                 <h3 className="text-2xl font-bold text-gray-700 mb-2">No projects found</h3>
@@ -569,124 +696,6 @@ export default function PortofolioClient({
                 </button>
               </div>
             )}
-          </div>
-        </section>
-
-        {/* Service Highlights */}
-        {filteredServiceHighlights.length > 0 && (
-          <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section">
-            {/* Background pattern */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="absolute top-20 right-20 w-64 h-64 bg-blue-400 rounded-full blur-3xl animate-float"></div>
-              <div className="absolute bottom-20 left-20 w-48 h-48 bg-gold-400 rounded-full blur-2xl animate-float-delayed"></div>
-            </div>
-            
-            {/* Decorative divider */}
-            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-            
-            <div className="relative container mx-auto px-6">
-              <div className="text-center mb-16">
-                <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Service Highlights</h2>
-                <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                  Showcase keahlian kami dalam berbagai layanan creative services yang telah terbukti memberikan hasil optimal.
-                </p>
-              </div>
-              
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
-                {filteredServiceHighlights.map((service, index) => (
-                  <Card 
-                    key={service.id} 
-                    variant="service" 
-                    className="service-highlight-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500 hover:scale-105"
-                    style={{
-                      animationDelay: `${index * 0.1}s`
-                    }}
-                  >
-                    <CardContent className="p-6">
-                      <div className="text-center mb-6">
-                        <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                          <span className="text-2xl">{service.icon}</span>
-                        </div>
-                        <h3 className="text-xl font-bold mb-2 transition-colors duration-300" style={{color: '#6382b4'}}>{service.title}</h3>
-                      </div>
-                      
-                      <p className="text-gray-600 mb-4 text-sm">{service.description}</p>
-                      
-                      <div className="text-center">
-                        <div className="text-lg font-bold mb-3 transition-colors duration-300" style={{color: '#dbc48a'}}>{service.count}</div>
-                        <button className="w-full bg-gradient-to-r from-gray-100 to-gray-200 hover:from-blue-100 hover:to-blue-200 text-gray-700 hover:text-blue-700 py-2 rounded-xl text-sm font-medium transition-all duration-300 hover:scale-105 hover:shadow-md transform">
-                          Lihat Detail
-                        </button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
-      <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
-          {/* Enhanced floating background elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/6 left-1/8 w-40 h-40 bg-gold-300/15 rounded-full filter blur-2xl" data-parallax="0.4" data-float="true" data-float-amplitude="25" data-float-duration="12"></div>
-            <div className="absolute bottom-1/5 right-1/6 w-32 h-32 bg-blue-300/20 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
-            <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
-            <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
-          </div>
-          
-          <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 scroll-animate-scale">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
-                Siap Memulai Project Anda?
-              </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
-                mewujudkan visi kreatif Anda menjadi kenyataan.
-              </p>
-            </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
-              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
-                <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
-              </a>
-              
-              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
-              </a>
-              
-              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
-              </a>
-              
-              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
-              </a>
-            </div>
-            
-            <div className="text-center scroll-animate animate-stagger-4">
-              <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
-                Konsultasi Gratis
-              </Link>
-              <Link href="/portfolio" className="border-2 border-white text-white hover:bg-white hover:text-[#27364d] px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block animate-pulse-hover">
-                Lihat Portfolio
-              </Link>
-            </div>
           </div>
         </section>
       </main>

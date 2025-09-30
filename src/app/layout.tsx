@@ -33,7 +33,8 @@ export const metadata: Metadata = {
 export const viewport = {
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
+  // Removed maximumScale to allow users to zoom for accessibility
+  // This follows WCAG 2.1 guidelines for text resizing
 };
 
 export default async function RootLayout({

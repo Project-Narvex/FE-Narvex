@@ -461,12 +461,6 @@ export default function HomeClient({
                 
                 <p 
                   className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" 
-                  data-element="subtitle" 
-                  data-text-animation="fade-in" 
-                  data-delay={animationAttrs.delay} 
-                  data-duration={animationAttrs.duration} 
-                  data-stagger={animationAttrs.stagger} 
-                  data-mouse-parallax="0.05"
                   suppressHydrationWarning
                 >
                   CV. Nara Exhibition Indonesia
@@ -474,12 +468,6 @@ export default function HomeClient({
                 
                 <p 
                   className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" 
-                  data-element="trust-badge" 
-                  data-text-animation="fade-in" 
-                  data-delay={animationAttrs.delay} 
-                  data-duration={animationAttrs.duration} 
-                  data-stagger={animationAttrs.stagger} 
-                  data-mouse-parallax="0.05"
                   suppressHydrationWarning
                 >
                   Trusted by Government & Fortune 500 Companies
