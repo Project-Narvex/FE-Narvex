@@ -59,8 +59,23 @@ interface ContactFormData {
   message: string;
 }
 
+// Import homepage data types
+import { 
+  HomepageData, 
+  getHeroSection,
+  getCompanyHighlights,
+  getServiceHighlight,
+  getProjectHighlights,
+  getTestimonialCarousel,
+  getArticleSection,
+  getContactSection,
+  getCollaborationSection,
+  getImageUrl
+} from '@/lib/homepage-data';
+
 // Props interface for HomeClient component
 interface HomeClientProps {
+  homepageData: HomepageData | null;
   recentArticles: BlogArticle[];
   defaultProjects: Project[];
   defaultTestimonials: Testimonial[];
@@ -92,41 +107,101 @@ const services: Service[] = [
   }
 ];
 
-const coverflowServices = [
-  {
-    image: 'https://picsum.photos/800/600?random=1',
-    title: 'Creative Design',
-    subtitle: 'Branding & Visual Identity'
-  },
-  {
-    image: 'https://picsum.photos/800/600?random=2',
-    title: 'Digital Marketing',
-    subtitle: 'Social Media & SEO'
-  },
-  {
-    image: 'https://picsum.photos/800/600?random=3',
-    title: 'Event Production',
-    subtitle: 'Planning & Coordination'
-  },
-  {
-    image: 'https://picsum.photos/800/600?random=4',
-    title: 'Consultation',
-    subtitle: 'Strategy & Planning'
-  }
-];
+// Coverflow services will be generated from API data
 
 
 
 
 
 export default function HomeClient({ 
+  homepageData,
   recentArticles, 
   defaultProjects, 
   defaultTestimonials, 
   defaultClients 
 }: HomeClientProps) {
-  // State for portfolio filter
-  const [activeFilter, setActiveFilter] = useState<'all' | 'creative' | 'exhibition' | 'corporate' | 'wedding'>('all');
+  // Extract sections from homepage data
+  console.log('HomepageData received:', homepageData);
+  const heroSection = homepageData ? getHeroSection(homepageData) : null;
+  const companyHighlights = homepageData ? getCompanyHighlights(homepageData) : null;
+  const serviceHighlight = homepageData ? getServiceHighlight(homepageData) : null;
+  const projectHighlights = homepageData ? getProjectHighlights(homepageData) : null;
+  const testimonialCarousel = homepageData ? getTestimonialCarousel(homepageData) : null;
+  const articleSection = homepageData ? getArticleSection(homepageData) : null;
+  const contactSection = homepageData ? getContactSection(homepageData) : null;
+  const collaborationSection = homepageData ? getCollaborationSection(homepageData) : null;
+  
+  console.log('Extracted sections:', {
+    heroSection,
+    companyHighlights,
+    serviceHighlight,
+    projectHighlights,
+    testimonialCarousel,
+    articleSection,
+    contactSection,
+    collaborationSection
+  });
+
+  // Debug hero slides specifically
+  console.log('Hero slides data:', heroSection?.hero_slides);
+  if (heroSection?.hero_slides) {
+    heroSection.hero_slides.forEach((slide, index) => {
+      console.log(`Slide ${index}:`, {
+        id: slide.id,
+        title: slide.title,
+        subtitle: slide.subtitle,
+        imageUrl: getImageUrl(slide.image, 'large'),
+        imageData: slide.image
+      });
+    });
+  }
+
+  // Debug services data
+  console.log('Services data:', serviceHighlight?.services);
+  if (serviceHighlight?.services) {
+    serviceHighlight.services.forEach((service, index) => {
+      console.log(`Service ${index}:`, {
+        id: service.id,
+        title: service.title,
+        description: service.description,
+        iconUrl: service.icon ? getImageUrl(service.icon, 'medium') : 'No icon',
+        features: service.description.split('\n\n').slice(1).filter(f => f.trim())
+      });
+    });
+  }
+
+  // Debug portfolio data
+  console.log('Portfolio data:', projectHighlights?.featuredProjects);
+  if (projectHighlights?.featuredProjects) {
+    projectHighlights.featuredProjects.forEach((project, index) => {
+      console.log(`Project ${index}:`, {
+        id: project.id,
+        title: project.title,
+        slug: project.slug,
+        excerpt: project.excerpt,
+        categories: project.portfolio_categories?.map(cat => cat.name) || 'No categories',
+        coverUrl: project.cover ? getImageUrl(project.cover, 'large') : 'No cover'
+      });
+    });
+  }
+
+  // Debug blog data
+  console.log('Blog data:', articleSection?.blog_articles);
+  if (articleSection?.blog_articles) {
+    articleSection.blog_articles.forEach((article, index) => {
+      console.log(`Article ${index}:`, {
+        id: article.id,
+        title: article.title,
+        slug: article.slug,
+        category: article.blog_category?.name || 'No category',
+        tags: article.tags?.map(tag => tag.name) || 'No tags',
+        coverUrl: article.cover ? getImageUrl(article.cover, 'medium') : 'No cover'
+      });
+    });
+  }
+
+  // State for portfolio filter - now using API categories
+  const [activeFilter, setActiveFilter] = useState<string>('all');
   
   // State for contact form
   const [formData, setFormData] = useState<ContactFormData>({
@@ -277,18 +352,37 @@ export default function HomeClient({
     }
   };
 
-  // Portfolio filter
+  // Get unique categories from API data
+  const getUniqueCategories = () => {
+    if (!projectHighlights?.featuredProjects) return [];
+    
+    const categories = new Set<string>();
+    projectHighlights.featuredProjects.forEach(project => {
+      project.portfolio_categories.forEach(category => {
+        categories.add(category.name);
+      });
+    });
+    return Array.from(categories);
+  };
+
+  const uniqueCategories = getUniqueCategories();
+  
+  // Portfolio filter - now using API categories
   const filters = [
-    { key: 'all' as const, label: 'Semua' },
-    { key: 'creative' as const, label: 'Creative' },
-    { key: 'exhibition' as const, label: 'Exhibition' },
-    { key: 'corporate' as const, label: 'Corporate' },
-    { key: 'wedding' as const, label: 'Wedding' }
+    { key: 'all', label: 'Semua' },
+    ...uniqueCategories.map(category => ({
+      key: category.toLowerCase(),
+      label: category
+    }))
   ];
 
-  const filteredProjects = defaultProjects.filter(project => 
-    activeFilter === 'all' || project.category === activeFilter
-  );
+  // Filter projects based on API categories
+  const filteredProjects = projectHighlights?.featuredProjects?.filter(project => {
+    if (activeFilter === 'all') return true;
+    return project.portfolio_categories.some(category => 
+      category.name.toLowerCase() === activeFilter
+    );
+  }) || [];
 
   // Testimonials helper
   const renderStars = (rating: number) => {
@@ -318,25 +412,29 @@ export default function HomeClient({
     {
       icon: <MapPin className="w-6 h-6 text-gold-500" />,
       label: 'Alamat',
-      value: 'Jakarta, Indonesia',
+      value: collaborationSection?.address ? 
+        `${collaborationSection.address.address}, ${collaborationSection.address.city}, ${collaborationSection.address.province}` : 
+        'Jakarta, Indonesia',
       description: 'Lokasi kantor pusat kami'
     },
     {
       icon: <Phone className="w-6 h-6 text-gold-500" />,
       label: 'Telepon',
-      value: '+62 xxx xxxx xxxx',
+      value: contactSection?.phone_number || '+62 xxx xxxx xxxx',
       description: 'Hubungi kami langsung'
     },
     {
       icon: <Mail className="w-6 h-6 text-gold-500" />,
       label: 'Email',
-      value: 'narvex.ind@gmail.com',
+      value: contactSection?.email || 'narvex.ind@gmail.com',
       description: 'Kirim email untuk inquiry'
     },
     {
       icon: <Instagram className="w-6 h-6 text-gold-500" />,
       label: 'Instagram',
-      value: '@narvex.id',
+      value: contactSection?.socialLinks?.instagram ? 
+        contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : 
+        '@narvex.id',
       description: 'Follow untuk update terbaru'
     }
   ];
@@ -454,9 +552,17 @@ export default function HomeClient({
                   data-stagger={animationAttrs.stagger}
                   suppressHydrationWarning
                 >
-                  <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
-                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
-                  <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                  {heroSection ? (
+                    <>
+                      <span className="block transform-3d break-words" data-tilt="8">{heroSection.title}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
+                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
+                      <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                    </>
+                  )}
                 </h1>
                 
                 <p 
@@ -469,7 +575,7 @@ export default function HomeClient({
                   data-mouse-parallax="0.05"
                   suppressHydrationWarning
                 >
-                  CV. Nara Exhibition Indonesia
+                  {heroSection?.subtitleLine1 || 'CV. Nara Exhibition Indonesia'}
                 </p>
                 
                 <p 
@@ -482,7 +588,7 @@ export default function HomeClient({
                   data-mouse-parallax="0.05"
                   suppressHydrationWarning
                 >
-                  Trusted by Government & Fortune 500 Companies
+                  {heroSection?.subtitleLine2 || 'Trusted by Government & Fortune 500 Companies'}
                 </p>
                 
                 <div className="hero-buttons flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
@@ -512,16 +618,28 @@ export default function HomeClient({
                 {/* Stats */}
                 <div className="hero-stats grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 stagger-children" data-mouse-parallax="0.06">
                   <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                      {heroSection?.statistic1 ? `${heroSection.statistic1.value}${heroSection.statistic1.suffix}` : '75+'}
+                    </div>
+                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
+                      {heroSection?.statistic1?.label || 'Projects Completed'}
+                    </div>
                   </div>
                   <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                      {heroSection?.statistic2 ? `${heroSection.statistic2.value}${heroSection.statistic2.suffix}` : '50+'}
+                    </div>
+                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
+                      {heroSection?.statistic2?.label || 'Happy Clients'}
+                    </div>
                   </div>
                   <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
+                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                      {heroSection?.statistic3 ? `${heroSection.statistic3.value}${heroSection.statistic3.suffix}` : '3+'}
+                    </div>
+                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
+                      {heroSection?.statistic3?.label || 'Years Experience'}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -546,17 +664,21 @@ export default function HomeClient({
                   modules={[EffectCoverflow, Pagination, Navigation]}
                   className="mySwiper perspective-1500"
                 >
-                  {coverflowServices.map((service, index) => (
-                    <SwiperSlide key={index} style={{ width: '300px' }}>
-                      <div 
-                        className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
-                        style={{
-                          backgroundImage: `url(${service.image})`,
-                          backgroundSize: 'cover',
-                          backgroundPosition: 'center'
-                        }}
-                        data-tilt="12"
-                      >
+                  {heroSection?.hero_slides?.map((slide, index) => {
+                    const imageUrl = slide.image ? getImageUrl(slide.image, 'large') : '';
+                    console.log(`Rendering slide ${index} with image:`, imageUrl);
+                    
+                    return (
+                      <SwiperSlide key={slide.id} style={{ width: '300px' }}>
+                        <div 
+                          className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
+                          style={{
+                            backgroundImage: imageUrl ? `url(${imageUrl})` : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                          data-tilt="12"
+                        >
                         {/* Enhanced overlay with depth */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
                         
@@ -565,15 +687,77 @@ export default function HomeClient({
                         
                         {/* Text content with depth */}
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
-                          <h3 className="font-semibold text-lg mb-2 text-depth-lg">{service.title}</h3>
-                          <p className="text-gray-200 text-sm text-depth">{service.subtitle}</p>
+                          <h3 className="font-semibold text-lg mb-2 text-depth-lg">{slide.title}</h3>
+                          <p className="text-gray-200 text-sm text-depth line-clamp-3">{slide.subtitle}</p>
                         </div>
                         
                         {/* Floating accent */}
                         <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
+                        </div>
+                      </SwiperSlide>
+                    );
+                  }) || (
+                    // Fallback coverflow services
+                    <>
+                      <SwiperSlide style={{ width: '300px' }}>
+                        <div 
+                          className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
+                          style={{
+                            backgroundImage: `url('https://picsum.photos/800/600?random=1')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                          data-tilt="12"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
+                          <div className="absolute inset-0 glass-morphism-dark opacity-20 hover:opacity-30 transition-opacity duration-300"></div>
+                          <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
+                            <h3 className="font-semibold text-lg mb-2 text-depth-lg">Creative Design</h3>
+                            <p className="text-gray-200 text-sm text-depth">Branding & Visual Identity</p>
+                          </div>
+                          <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide style={{ width: '300px' }}>
+                        <div 
+                          className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
+                          style={{
+                            backgroundImage: `url('https://picsum.photos/800/600?random=2')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                          data-tilt="12"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
+                          <div className="absolute inset-0 glass-morphism-dark opacity-20 hover:opacity-30 transition-opacity duration-300"></div>
+                          <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
+                            <h3 className="font-semibold text-lg mb-2 text-depth-lg">Digital Marketing</h3>
+                            <p className="text-gray-200 text-sm text-depth">Social Media & SEO</p>
+                          </div>
+                          <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
+                        </div>
+                      </SwiperSlide>
+                      <SwiperSlide style={{ width: '300px' }}>
+                        <div 
+                          className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
+                          style={{
+                            backgroundImage: `url('https://picsum.photos/800/600?random=3')`,
+                            backgroundSize: 'cover',
+                            backgroundPosition: 'center'
+                          }}
+                          data-tilt="12"
+                        >
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
+                          <div className="absolute inset-0 glass-morphism-dark opacity-20 hover:opacity-30 transition-opacity duration-300"></div>
+                          <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
+                            <h3 className="font-semibold text-lg mb-2 text-depth-lg">Event Production</h3>
+                            <p className="text-gray-200 text-sm text-depth">Planning & Coordination</p>
+                          </div>
+                          <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
+                        </div>
+                      </SwiperSlide>
+                    </>
+                  )}
                 </Swiper>
               </div>
             </div>
@@ -630,71 +814,99 @@ export default function HomeClient({
                 data-tilt="4"
                 suppressHydrationWarning
               >
-                CV. Nara Exhibition Indonesia
+                {companyHighlights?.title || 'CV. Nara Exhibition Indonesia'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.03">
-                Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
-                mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
-                komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan 
-                layanan end-to-end untuk kesuksesan setiap project Anda.
+                {companyHighlights?.description || 'Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, mengkhususkan diri dalam MICE services, event production, dan solusi kreatif komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan layanan end-to-end untuk kesuksesan setiap project Anda.'}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-12 sm:mt-16 animate-stagger">
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
-                  data-stagger="0"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎨</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
-                  data-stagger="50"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎬</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
-                  data-stagger="100"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">📱</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
-                  data-stagger="150"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">💼</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
+                {companyHighlights?.selected_companies?.map((company, index) => (
+                  <Card 
+                    key={company.id}
+                    variant="service" 
+                    className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                    data-stagger={index * 50}
+                  >
+                    <CardContent className="px-4 py-8 flex flex-col h-full">
+                      <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                        {company.logo ? (
+                          <Image
+                            src={getImageUrl(company.logo, 'medium')}
+                            alt={company.name}
+                            width={64}
+                            height={64}
+                            className="w-16 h-16 object-contain group-hover:scale-110 transition-transform duration-300"
+                          />
+                        ) : (
+                          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🏢</span>
+                        )}
+                      </div>
+                      <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">{company.name}</h3>
+                      <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Partner company dalam ekosistem Narvex</p>
+                      <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                    </CardContent>
+                  </Card>
+                )) || (
+                  // Fallback companies
+                  <>
+                    <Card 
+                      variant="service" 
+                      className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                      data-stagger="0"
+                    >
+                      <CardContent className="px-4 py-8 flex flex-col h-full">
+                        <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎨</span>
+                        </div>
+                        <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
+                        <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
+                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                      </CardContent>
+                    </Card>
+                    <Card 
+                      variant="service" 
+                      className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                      data-stagger="50"
+                    >
+                      <CardContent className="px-4 py-8 flex flex-col h-full">
+                        <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎬</span>
+                        </div>
+                        <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
+                        <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
+                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                      </CardContent>
+                    </Card>
+                    <Card 
+                      variant="service" 
+                      className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                      data-stagger="100"
+                    >
+                      <CardContent className="px-4 py-8 flex flex-col h-full">
+                        <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">📱</span>
+                        </div>
+                        <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
+                        <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
+                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                      </CardContent>
+                    </Card>
+                    <Card 
+                      variant="service" 
+                      className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                      data-stagger="150"
+                    >
+                      <CardContent className="px-4 py-8 flex flex-col h-full">
+                        <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
+                          <span className="text-3xl group-hover:scale-110 transition-transform duration-300">💼</span>
+                        </div>
+                        <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
+                        <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
+                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                      </CardContent>
+                    </Card>
+                  </>
+                )}
               </div>
               
               {/* Bottom Decorative Element */}
@@ -730,7 +942,7 @@ export default function HomeClient({
             
             {/* Services Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
-              {services.map((service, index) => (
+              {serviceHighlight?.services?.map((service, index) => (
                 <Card
                   key={service.id}
                   variant="service"
@@ -742,7 +954,17 @@ export default function HomeClient({
                   {/* Icon */}
                   <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
                     <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300">
-                      {service.icon}
+                      {service.icon ? (
+                        <Image
+                          src={getImageUrl(service.icon, 'medium')}
+                          alt={`${service.title} icon`}
+                          width={32}
+                          height={32}
+                          className="w-8 h-8 object-contain"
+                        />
+                      ) : (
+                        <Palette className="w-8 h-8 text-white" />
+                      )}
                     </div>
                   </div>
                   
@@ -753,17 +975,29 @@ export default function HomeClient({
                     </h3>
                     
                     <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
-                      {service.description}
+                      {service.description.split('\n\n')[0]}
                     </p>
                     
                     {/* Features List */}
                     <ul className="space-y-3 mb-6 flex-1 list-none">
-                      {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
-                          <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
-                          <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
-                        </li>
-                      ))}
+                      {service.description.split('\n\n').slice(1).filter(feature => 
+                        feature.trim() && 
+                        !feature.includes('Pelajari Lebih Lanjut') && 
+                        !feature.includes('Lainnya')
+                      ).map((feature, idx) => {
+                        const trimmedFeature = feature.trim();
+                        const isNumber = /^\d+\./.test(trimmedFeature);
+                        const isSymbol = /^[^\w\s]/.test(trimmedFeature);
+                        
+                        return (
+                          <li key={idx} className="flex items-start text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                            <span className={`w-2 h-2 mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150 ${
+                              isNumber || isSymbol ? 'bg-gold-500 rounded-full' : 'bg-gold-500 rounded-full'
+                            }`} aria-hidden="true"></span>
+                            <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{trimmedFeature}</span>
+                          </li>
+                        );
+                      })}
                     </ul>
                     
                     {/* CTA Button */}
@@ -776,7 +1010,56 @@ export default function HomeClient({
                     </button>
                   </div>
                 </Card>
-              ))}
+              )) || (
+                // Fallback services
+                services.map((service, index) => (
+                  <Card
+                    key={service.id}
+                    variant="service"
+                    className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform`}
+                    data-stagger={index * 150}
+                    data-tilt="8"
+                    data-mouse-parallax="0.12"
+                  >
+                    {/* Icon */}
+                    <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
+                      <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300">
+                        {service.icon}
+                      </div>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="flex-1 flex flex-col">
+                      <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
+                        {service.title}
+                      </h3>
+                      
+                      <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
+                        {service.description}
+                      </p>
+                      
+                      {/* Features List */}
+                      <ul className="space-y-3 mb-6 flex-1 list-none">
+                        {service.features.map((feature, idx) => (
+                          <li key={idx} className="flex items-start text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                            <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
+                            <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+                      
+                      {/* CTA Button */}
+                      <button 
+                        onClick={scrollToContact}
+                        className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50 mt-auto" style={{color: 'var(--gold-700)'}}
+                      >
+                        Pelajari Lebih Lanjut
+                        <ArrowRight className="ml-2 w-4 h-4 group-hover:translate-x-2 transition-transform" />
+                      </button>
+                    </div>
+                  </Card>
+                ))
+              )}
             </div>
             
             {/* Bottom CTA */}
@@ -851,7 +1134,7 @@ export default function HomeClient({
             
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
-              {filteredProjects.map((project, index) => (
+              {projectHighlights?.featuredProjects?.map((project, index) => (
                 <Card
                   key={project.id}
                   variant="portfolio"
@@ -863,7 +1146,7 @@ export default function HomeClient({
                   <div className="relative overflow-hidden rounded-2xl">
                     <div className="relative w-full h-64">
                       <Image
-                        src={project.images[0] || '/placeholder-image.jpg'}
+                        src={getImageUrl(project.cover, 'large')}
                         alt={project.title}
                         fill
                         className="object-cover group-hover:scale-110 transition-transform duration-500"
@@ -875,23 +1158,70 @@ export default function HomeClient({
                     <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                       <div className="p-6 text-white w-full">
                         <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">{project.description}</p>
-                        <div className="flex flex-wrap gap-2 mb-3">
-                          {project.tags.slice(0, 2).map((tag, idx) => (
-                            <span key={idx} className="bg-gold-500 px-3 py-1 rounded-full text-xs font-medium">
-                              {tag}
-                            </span>
-                          ))}
-                        </div>
+                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">{project.excerpt}</p>
+                        {project.portfolio_categories && project.portfolio_categories.length > 0 && (
+                          <div className="flex flex-wrap gap-2 mb-3">
+                            {project.portfolio_categories.slice(0, 2).map((category, idx) => (
+                              <span key={idx} className="bg-gold-500 px-3 py-1 rounded-full text-xs font-medium">
+                                {category.name}
+                              </span>
+                            ))}
+                          </div>
+                        )}
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-300">{project.client}</span>
+                          <span className="text-xs text-gray-300">{project.slug}</span>
                           <ExternalLink className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
                   </div>
                 </Card>
-              ))}
+              )) || (
+                // Fallback projects
+                filteredProjects.map((project, index) => (
+                  <Card
+                    key={project.id}
+                    variant="portfolio"
+                    className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
+                    data-stagger={index * 150}
+                    data-tilt="6"
+                    data-mouse-parallax="0.15"
+                  >
+                    <div className="relative overflow-hidden rounded-2xl">
+                      <div className="relative w-full h-64">
+                        <Image
+                          src={project.cover ? getImageUrl(project.cover, 'large') : '/placeholder-image.jpg'}
+                          alt={project.title}
+                          fill
+                          className="object-cover group-hover:scale-110 transition-transform duration-500"
+                          sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                        />
+                      </div>
+                      
+                      {/* Overlay */}
+                      <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
+                        <div className="p-6 text-white w-full">
+                          <h3 className="text-xl font-bold mb-2">{project.title}</h3>
+                          <p className="text-gray-200 text-sm mb-3 line-clamp-2">{project.excerpt}</p>
+                          {project.portfolio_categories && project.portfolio_categories.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {project.portfolio_categories.slice(0, 2).map((category, idx) => (
+                                <span key={idx} className="bg-gold-500 px-3 py-1 rounded-full text-xs font-medium">
+                                  {category.name}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-gray-300">{project.slug}</span>
+                            <ExternalLink className="w-4 h-4" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              )}
             </div>
             
             {/* Bottom CTA */}
@@ -945,7 +1275,7 @@ export default function HomeClient({
             
             {/* Testimonials Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16 stagger-children" data-mouse-parallax="0.08">
-              {defaultTestimonials.map((testimonial, index) => (
+              {testimonialCarousel?.selected_testimonials?.map((testimonial, index) => (
                 <Card
                   key={testimonial.id}
                   className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
@@ -955,37 +1285,85 @@ export default function HomeClient({
                   hover={true}
                 >
                   {/* Rating */}
-                  <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
-                    {renderStars(testimonial.rating)}
+                  <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating || 5} out of 5 stars`}>
+                    {renderStars(testimonial.rating || 5)}
                   </div>
                   
                   {/* Quote */}
                   <blockquote className="quote font-normal text-medium-contrast text-lg mb-6 italic leading-relaxed">
-                    &ldquo;{testimonial.quote}&rdquo;
+                    &ldquo;{testimonial.content}&rdquo;
                   </blockquote>
                   
                   {/* Author Info */}
                   <div className="flex items-center">
                     <div className="relative w-16 h-16 mr-4">
-                      <Image
-                        src={testimonial.avatar}
-                        alt={`${testimonial.name}, ${testimonial.position} at ${testimonial.company}`}
-                        fill
-                        className="rounded-full object-cover"
-                        sizes="64px"
-                      />
+                      {testimonial.avatar ? (
+                        <Image
+                          src={getImageUrl(testimonial.avatar, 'medium')}
+                          alt={`${testimonial.clientName}, ${testimonial.clientTitle} at ${testimonial.companyName}`}
+                          fill
+                          className="rounded-full object-cover"
+                          sizes="64px"
+                        />
+                      ) : (
+                        <div className="w-16 h-16 bg-gray-200 rounded-full flex items-center justify-center">
+                          <span className="text-gray-500 text-lg font-semibold">
+                            {testimonial.clientName.charAt(0)}
+                          </span>
+                        </div>
+                      )}
                     </div>
                     <div>
-                      <h4 className="author-name font-bold text-lg text-high-contrast">{testimonial.name}</h4>
-                      <p className="author-position text-gray-contrast-600 text-sm font-medium">{testimonial.position}</p>
-                      <p className="author-company text-sm font-semibold author-company-gold">{testimonial.company}</p>
-                      {testimonial.project && (
-                        <p className="author-project text-gray-contrast-500 text-xs mt-1 font-medium">{testimonial.project}</p>
-                      )}
+                      <h4 className="author-name font-bold text-lg text-high-contrast">{testimonial.clientName}</h4>
+                      <p className="author-position text-gray-contrast-600 text-sm font-medium">{testimonial.clientTitle}</p>
+                      <p className="author-company text-sm font-semibold author-company-gold">{testimonial.companyName}</p>
                     </div>
                   </div>
                 </Card>
-              ))}
+              )) || (
+                // Fallback testimonials
+                defaultTestimonials.map((testimonial, index) => (
+                  <Card
+                    key={testimonial.id}
+                    className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
+                    data-stagger={index * 200}
+                    data-tilt="8"
+                    data-mouse-parallax="0.12"
+                    hover={true}
+                  >
+                    {/* Rating */}
+                    <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
+                      {renderStars(testimonial.rating)}
+                    </div>
+                    
+                    {/* Quote */}
+                    <blockquote className="quote font-normal text-medium-contrast text-lg mb-6 italic leading-relaxed">
+                      &ldquo;{testimonial.quote}&rdquo;
+                    </blockquote>
+                    
+                    {/* Author Info */}
+                    <div className="flex items-center">
+                      <div className="relative w-16 h-16 mr-4">
+                        <Image
+                          src={testimonial.avatar}
+                          alt={`${testimonial.name}, ${testimonial.position} at ${testimonial.company}`}
+                          fill
+                          className="rounded-full object-cover"
+                          sizes="64px"
+                        />
+                      </div>
+                      <div>
+                        <h4 className="author-name font-bold text-lg text-high-contrast">{testimonial.name}</h4>
+                        <p className="author-position text-gray-contrast-600 text-sm font-medium">{testimonial.position}</p>
+                        <p className="author-company text-sm font-semibold author-company-gold">{testimonial.company}</p>
+                        {testimonial.project && (
+                          <p className="author-project text-gray-contrast-500 text-xs mt-1 font-medium">{testimonial.project}</p>
+                        )}
+                      </div>
+                    </div>
+                  </Card>
+                ))
+              )}
             </div>
             
             {/* Client Logos Carousel */}
@@ -994,27 +1372,44 @@ export default function HomeClient({
                 Dipercaya oleh:
               </p>
               <div className="no-shadow">
-                <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />
+                <ClientCarousel 
+                  clients={testimonialCarousel?.clients?.map(client => ({
+                    id: client.id.toString(),
+                    name: client.name,
+                    logo: getImageUrl(client.logo, 'medium'),
+                    website: client.website || '#'
+                  })) || defaultClients} 
+                  autoScroll={true} 
+                  scrollSpeed={25} 
+                />
               </div>
             </div>
             
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>98%</div>
-                <div className="text-gray-300">Client Satisfaction</div>
+                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>
+                  {testimonialCarousel?.statistic1 ? `${testimonialCarousel.statistic1.value}${testimonialCarousel.statistic1.suffix}` : '98%'}
+                </div>
+                <div className="text-gray-300">{testimonialCarousel?.statistic1?.label || 'Client Satisfaction'}</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>50+</div>
-                <div className="text-gray-300">Projects Delivered</div>
+                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>
+                  {testimonialCarousel?.statistic2 ? `${testimonialCarousel.statistic2.value}${testimonialCarousel.statistic2.suffix}` : '50+'}
+                </div>
+                <div className="text-gray-300">{testimonialCarousel?.statistic2?.label || 'Projects Delivered'}</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>25+</div>
-                <div className="text-gray-300">Happy Clients</div>
+                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>
+                  {testimonialCarousel?.statistic3 ? `${testimonialCarousel.statistic3.value}${testimonialCarousel.statistic3.suffix}` : '25+'}
+                </div>
+                <div className="text-gray-300">{testimonialCarousel?.statistic3?.label || 'Happy Clients'}</div>
               </div>
               <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>3+</div>
-                <div className="text-gray-300">Years Experience</div>
+                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>
+                  {testimonialCarousel?.statistic4 ? `${testimonialCarousel.statistic4.value}${testimonialCarousel.statistic4.suffix}` : '3+'}
+                </div>
+                <div className="text-gray-300">{testimonialCarousel?.statistic4?.label || 'Years Experience'}</div>
               </div>
             </div>
           </div>
@@ -1024,9 +1419,11 @@ export default function HomeClient({
         <section className="section-padding bg-white scroll-snap-section">
           <div className="container mx-auto px-6">
             <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">Latest Updates</h2>
+              <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">
+                {articleSection?.title || 'Latest Updates'}
+              </h2>
               <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto scroll-animate animate-stagger-2">
-                Berita terbaru, insights industri, dan stories dari project-project terbaru kami.
+                {articleSection?.description || 'Berita terbaru, insights industri, dan stories dari project-project terbaru kami.'}
               </p>
             </div>
             
@@ -1036,20 +1433,36 @@ export default function HomeClient({
                 {/* Blog Articles */}
                 <div className="scroll-animate-left">
                   <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
-                    {recentArticles.map((article, index) => (
+                    {articleSection?.blog_articles?.map((article, index) => (
                       <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
-                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
-                          <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center relative overflow-hidden">
+                          <Image
+                            src={getImageUrl(article.cover, 'medium')}
+                            alt={article.title}
+                            fill
+                            className="object-cover"
+                            sizes="(max-width: 768px) 100vw, 50vw"
+                          />
+                          <div className="absolute inset-0 bg-black/20"></div>
                         </div>
                         <div className="p-6">
                           <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
-                            {article.category.replace('-', ' ')}
+                            {article.blog_category.name}
                           </div>
                           <h3 className="text-lg font-bold mb-3 line-clamp-2 text-high-contrast">
                             {article.title}
                           </h3>
+                          {article.tags && article.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {article.tags.slice(0, 3).map((tag, idx) => (
+                                <span key={idx} className="bg-gold-100 text-gold-700 px-2 py-1 rounded-full text-xs font-medium">
+                                  {tag.name}
+                                </span>
+                              ))}
+                            </div>
+                          )}
                           <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
-                            {article.excerpt}
+                            {article.title} - Read more about this article
                           </p>
                           <a 
                             href={`/blog/${article.slug}`}
@@ -1059,7 +1472,33 @@ export default function HomeClient({
                           </a>
                         </div>
                       </article>
-                    ))}
+                    )) || (
+                      // Fallback articles
+                      recentArticles.map((article, index) => (
+                        <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
+                          <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
+                            <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                          </div>
+                          <div className="p-6">
+                            <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
+                              {article.category.replace('-', ' ')}
+                            </div>
+                            <h3 className="text-lg font-bold mb-3 line-clamp-2 text-high-contrast">
+                              {article.title}
+                            </h3>
+                            <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
+                              {article.excerpt}
+                            </p>
+                            <a 
+                              href={`/blog/${article.slug}`}
+                              className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
+                            >
+                              Baca Selengkapnya →
+                            </a>
+                          </div>
+                        </article>
+                      ))
+                    )}
                   </div>
                 </div>
               </div>
@@ -1095,36 +1534,36 @@ export default function HomeClient({
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
-              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
+              <a href={`mailto:${contactSection?.email || 'narvex.ind@gmail.com'}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+                <p className="text-gray-300 text-sm">{contactSection?.email || 'narvex.ind@gmail.com'}</p>
               </a>
               
-              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="50">
+              <a href={`https://wa.me/${contactSection?.phone_number?.replace(/[^0-9]/g, '') || '62xxx'}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="50">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">{contactSection?.phone_number || '+62 xxx xxxx xxxx'}</p>
               </a>
               
-              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
+              <a href={contactSection?.socialLinks?.instagram || "https://instagram.com/narvex.id"} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
+                <p className="text-gray-300 text-sm">{contactSection?.socialLinks?.instagram ? contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : '@narvex.id'}</p>
               </a>
               
-              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="150">
+              <a href={`tel:${contactSection?.phone_number || '+62xxx'}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="150">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">{contactSection?.phone_number || '+62 xxx xxxx xxxx'}</p>
               </a>
             </div>
             
@@ -1168,10 +1607,10 @@ export default function HomeClient({
                   {/* Contact Form */}
                   <div className="scroll-animate">
                     <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                      Mari Wujudkan Project Impian Anda
+                      {collaborationSection?.title || 'Mari Wujudkan Project Impian Anda'}
                     </h2>
                     <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                      Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
+                      {collaborationSection?.description || 'Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.'}
                     </p>
                     
                     <form onSubmit={handleSubmit} className="space-y-6 scroll-animate animate-stagger-3">
@@ -1307,7 +1746,15 @@ export default function HomeClient({
                     
                     {/* Interactive Map */}
                     <div className="rounded-lg overflow-hidden shadow-lg scroll-animate animate-stagger-7">
-                      <MapComponent height="h-64" className="w-full" />
+                      <MapComponent 
+                        height="h-64" 
+                        className="w-full"
+                        center={collaborationSection?.address ? 
+                          [collaborationSection.address.Lat, collaborationSection.address.long] : 
+                          [-7.27, 112.72]
+                        }
+                        zoom={collaborationSection?.address ? 15 : 13}
+                      />
                     </div>
                   </div>
                 </div>

@@ -20,15 +20,19 @@ const DynamicMap = dynamic(() => import('./LeafletMap'), {
 interface MapComponentProps {
   height?: string;
   className?: string;
+  center?: [number, number];
+  zoom?: number;
 }
 
 const MapComponent: React.FC<MapComponentProps> = ({ 
   height = "h-48", 
-  className = "" 
+  className = "",
+  center,
+  zoom
 }) => {
   return (
     <div className={`${height} ${className} rounded-lg overflow-hidden`}>
-      <DynamicMap />
+      <DynamicMap center={center} zoom={zoom} />
     </div>
   );
 };

@@ -3,7 +3,10 @@
 // Import your new client component
 import HomeClient from '@/components/pages/home/home-client';
 
-// Import your data-fetching functions and data arrays
+// Import homepage data reader
+import { getHomepageData } from '@/lib/homepage-data';
+
+// Import your data-fetching functions and data arrays as fallback
 import { getRecentArticles } from '@/data/blog';
 import { projects } from '@/data/projects';
 import { teamMembers } from '@/data/team';
@@ -11,7 +14,10 @@ import { clientLogos } from '@/data/clients';
 
 // This is now an async Server Component
 export default async function Home() {
-  // Fetch data directly on the server
+  // Fetch homepage data from JSON file
+  const homepageData = getHomepageData();
+  
+  // Fallback data
   const recentArticles = getRecentArticles(4);
   const defaultProjects = projects;
   const defaultClients = clientLogos;
@@ -30,6 +36,7 @@ export default async function Home() {
   // Render the client component and pass the data down
   return (
     <HomeClient 
+      homepageData={homepageData}
       recentArticles={recentArticles}
       defaultProjects={defaultProjects}
       defaultTestimonials={defaultTestimonials}

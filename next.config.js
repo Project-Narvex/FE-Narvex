@@ -14,6 +14,42 @@ const nextConfig = {
         port: '',
         pathname: '/**',
       },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '1337',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'http',
+        hostname: 'localhost',
+        port: '7245',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'admin.narvex.id',
+        port: '',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'narvex.id',
+        port: '',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'api.narvex.id',
+        port: '',
+        pathname: '/uploads/**',
+      },
+      {
+        protocol: 'https',
+        hostname: 'picsum.photos',
+        port: '',
+        pathname: '/**',
+      },
     ],
     // Enhanced image optimization
     formats: ['image/avif', 'image/webp'],
@@ -74,6 +110,12 @@ const nextConfig = {
         },
       };
     }
+
+    // Support JSON imports
+    config.module.rules.push({
+      test: /\.json$/,
+      type: 'json',
+    });
 
     // Optimize imports
     config.resolve.alias = {

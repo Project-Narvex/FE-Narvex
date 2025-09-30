@@ -83,11 +83,16 @@ const MapUpdater: React.FC<{ center: [number, number]; zoom: number }> = ({ cent
   return null;
 };
 
-const LeafletMap: React.FC = () => {
+interface LeafletMapProps {
+  center?: [number, number];
+  zoom?: number;
+}
+
+const LeafletMap: React.FC<LeafletMapProps> = ({ center, zoom = 13 }) => {
   // Jakarta coordinates as fallback
   const jakartaPosition: [number, number] = useMemo(() => [-6.2088, 106.8456], []);
   const [userPosition, setUserPosition] = useState<[number, number] | null>(null);
-  const [mapCenter, setMapCenter] = useState<[number, number]>(jakartaPosition);
+  const [mapCenter, setMapCenter] = useState<[number, number]>(center || jakartaPosition);
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isTracking, setIsTracking] = useState<boolean>(false);
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
@@ -143,11 +148,11 @@ const LeafletMap: React.FC = () => {
   return (
     <MapContainer
       center={mapCenter}
-      zoom={userPosition ? 15 : 13}
+      zoom={userPosition ? 15 : zoom}
       style={{ height: '100%', width: '100%' }}
       className="leaflet-container"
     >
-      <MapUpdater center={mapCenter} zoom={userPosition ? 15 : 13} />
+      <MapUpdater center={mapCenter} zoom={userPosition ? 15 : zoom} />
       <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
