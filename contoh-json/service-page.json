@@ -1,0 +1,527 @@
+{
+    "data": {
+        "id": 7,
+        "documentId": "qgw30gb60l0iebams9ru5zg5",
+        "createdAt": "2025-10-03T06:43:02.064Z",
+        "updatedAt": "2025-10-03T07:40:58.494Z",
+        "publishedAt": "2025-10-03T07:40:58.523Z",
+        "pageContent": [
+            {
+                "__component": "service.hero",
+                "id": 7,
+                "title": "LayananKami",
+                "subtitle": "Narvex Creative Services",
+                "description": "Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"
+            },
+            {
+                "__component": "service.services",
+                "id": 6,
+                "title": "Portfolio Layanan Lengkap",
+                "description": "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda.",
+                "services": [
+                    {
+                        "id": 11,
+                        "documentId": "d9kmq97scfxqhlwdfam2ppw9",
+                        "title": "Creative Design",
+                        "description": "Branding, logo design, dan visual identity yang memorable untuk membuat brand Anda tampil menonjol.\n\n- Logo Design\n- Brand Guidelines\n- Print Design\n- Packaging Design\n- Pelajari Lebih Lanjut",
+                        "orderNo": null,
+                        "createdAt": "2025-09-30T18:41:08.424Z",
+                        "updatedAt": "2025-10-03T08:02:27.935Z",
+                        "publishedAt": "2025-10-03T08:02:27.966Z",
+                        "Subtitle": "Brand Identity, Graphic Design, Visual Communication",
+                        "icon": {
+                            "id": 4,
+                            "documentId": "oiyumxvdyxfja3xnclp2s3ow",
+                            "name": "134q3992.jpeg",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 7680,
+                            "height": 4320,
+                            "formats": {
+                                "large": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/large_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "large_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "large_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 58.26,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 58258
+                                },
+                                "small": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/small_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "small_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "small_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 25.63,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 25628
+                                },
+                                "medium": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/medium_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "medium_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "medium_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 41.43,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 41434
+                                },
+                                "thumbnail": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/thumbnail_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "thumbnail_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "thumbnail_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 10.37,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 10369
+                                }
+                            },
+                            "hash": "134q3992_f4af2ae71e",
+                            "ext": ".jpeg",
+                            "mime": "image/jpeg",
+                            "size": 127.42,
+                            "url": "/uploads/134q3992_f4af2ae71e.jpeg",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-25T18:50:24.387Z",
+                            "updatedAt": "2025-09-25T18:50:24.387Z",
+                            "publishedAt": "2025-09-25T18:50:24.387Z"
+                        },
+                        "image_placeholder": {
+                            "id": 9,
+                            "documentId": "wnscpi2lvbwuzmbtbta7qi23",
+                            "name": "1376377.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376377_b29794d97c.png",
+                                    "hash": "large_1376377_b29794d97c",
+                                    "mime": "image/png",
+                                    "name": "large_1376377.png",
+                                    "path": null,
+                                    "size": 799.67,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 799673
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376377_b29794d97c.png",
+                                    "hash": "small_1376377_b29794d97c",
+                                    "mime": "image/png",
+                                    "name": "small_1376377.png",
+                                    "path": null,
+                                    "size": 218.77,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 218769
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376377_b29794d97c.png",
+                                    "hash": "medium_1376377_b29794d97c",
+                                    "mime": "image/png",
+                                    "name": "medium_1376377.png",
+                                    "path": null,
+                                    "size": 468.7,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 468704
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376377_b29794d97c.png",
+                                    "hash": "thumbnail_1376377_b29794d97c",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376377.png",
+                                    "path": null,
+                                    "size": 58.49,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 58492
+                                }
+                            },
+                            "hash": "1376377_b29794d97c",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 631.31,
+                            "url": "/uploads/1376377_b29794d97c.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:51.445Z",
+                            "updatedAt": "2025-09-30T18:42:13.825Z",
+                            "publishedAt": "2025-09-30T18:37:51.445Z"
+                        }
+                    },
+                    {
+                        "id": 12,
+                        "documentId": "vtvzwt5g7jhqob7830jxewy7",
+                        "title": "Digital Marketing",
+                        "description": "Strategi digital yang efektif untuk growth bisnis Anda di era digital yang kompetitif.\n\n- Social Media Management\n- Content Creation\n- SEO Optimization\n- Digital Advertising\n- Pelajari Lebih Lanjut",
+                        "orderNo": null,
+                        "createdAt": "2025-09-30T18:42:17.977Z",
+                        "updatedAt": "2025-10-03T08:03:41.501Z",
+                        "publishedAt": "2025-10-03T08:03:41.527Z",
+                        "Subtitle": "Social Media, SEO, Digital Advertising, Website Development",
+                        "icon": {
+                            "id": 4,
+                            "documentId": "oiyumxvdyxfja3xnclp2s3ow",
+                            "name": "134q3992.jpeg",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 7680,
+                            "height": 4320,
+                            "formats": {
+                                "large": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/large_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "large_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "large_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 58.26,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 58258
+                                },
+                                "small": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/small_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "small_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "small_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 25.63,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 25628
+                                },
+                                "medium": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/medium_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "medium_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "medium_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 41.43,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 41434
+                                },
+                                "thumbnail": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/thumbnail_134q3992_f4af2ae71e.jpeg",
+                                    "hash": "thumbnail_134q3992_f4af2ae71e",
+                                    "mime": "image/jpeg",
+                                    "name": "thumbnail_134q3992.jpeg",
+                                    "path": null,
+                                    "size": 10.37,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 10369
+                                }
+                            },
+                            "hash": "134q3992_f4af2ae71e",
+                            "ext": ".jpeg",
+                            "mime": "image/jpeg",
+                            "size": 127.42,
+                            "url": "/uploads/134q3992_f4af2ae71e.jpeg",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-25T18:50:24.387Z",
+                            "updatedAt": "2025-09-25T18:50:24.387Z",
+                            "publishedAt": "2025-09-25T18:50:24.387Z"
+                        },
+                        "image_placeholder": {
+                            "id": 2,
+                            "documentId": "u33hgedv1n9lsnmte9nnpn1n",
+                            "name": "13579d98.jpeg",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 2048,
+                            "height": 1234,
+                            "formats": {
+                                "large": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/large_13579d98_75f7d3e409.jpeg",
+                                    "hash": "large_13579d98_75f7d3e409",
+                                    "mime": "image/jpeg",
+                                    "name": "large_13579d98.jpeg",
+                                    "path": null,
+                                    "size": 95.05,
+                                    "width": 1000,
+                                    "height": 603,
+                                    "sizeInBytes": 95045
+                                },
+                                "small": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/small_13579d98_75f7d3e409.jpeg",
+                                    "hash": "small_13579d98_75f7d3e409",
+                                    "mime": "image/jpeg",
+                                    "name": "small_13579d98.jpeg",
+                                    "path": null,
+                                    "size": 29.12,
+                                    "width": 500,
+                                    "height": 301,
+                                    "sizeInBytes": 29122
+                                },
+                                "medium": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/medium_13579d98_75f7d3e409.jpeg",
+                                    "hash": "medium_13579d98_75f7d3e409",
+                                    "mime": "image/jpeg",
+                                    "name": "medium_13579d98.jpeg",
+                                    "path": null,
+                                    "size": 56.87,
+                                    "width": 750,
+                                    "height": 452,
+                                    "sizeInBytes": 56872
+                                },
+                                "thumbnail": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/thumbnail_13579d98_75f7d3e409.jpeg",
+                                    "hash": "thumbnail_13579d98_75f7d3e409",
+                                    "mime": "image/jpeg",
+                                    "name": "thumbnail_13579d98.jpeg",
+                                    "path": null,
+                                    "size": 9.44,
+                                    "width": 245,
+                                    "height": 147,
+                                    "sizeInBytes": 9435
+                                }
+                            },
+                            "hash": "13579d98_75f7d3e409",
+                            "ext": ".jpeg",
+                            "mime": "image/jpeg",
+                            "size": 431.46,
+                            "url": "/uploads/13579d98_75f7d3e409.jpeg",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-25T18:50:22.082Z",
+                            "updatedAt": "2025-09-25T18:50:22.082Z",
+                            "publishedAt": "2025-09-25T18:50:22.082Z"
+                        }
+                    },
+                    {
+                        "id": 13,
+                        "documentId": "vedb4t3pp3mwielza70xdti8",
+                        "title": "Event Production",
+                        "description": "Event planning dan production dari konsep hingga eksekusi untuk menciptakan pengalaman yang tak terlupakan.\n\n- Event Planning\n- Stage Design\n- Audio Visual\n- Event Coordination\n- Pelajari Lebih Lanjut",
+                        "orderNo": null,
+                        "createdAt": "2025-09-30T18:41:50.920Z",
+                        "updatedAt": "2025-10-03T08:03:54.879Z",
+                        "publishedAt": "2025-10-03T08:03:54.904Z",
+                        "Subtitle": "Corporate Events, Product Launches, Conferences",
+                        "icon": {
+                            "id": 10,
+                            "documentId": "rowl7j62tk96hiosafns8f6h",
+                            "name": "1376373.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376373_72c2752917.png",
+                                    "hash": "large_1376373_72c2752917",
+                                    "mime": "image/png",
+                                    "name": "large_1376373.png",
+                                    "path": null,
+                                    "size": 656.72,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 656720
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376373_72c2752917.png",
+                                    "hash": "small_1376373_72c2752917",
+                                    "mime": "image/png",
+                                    "name": "small_1376373.png",
+                                    "path": null,
+                                    "size": 182.28,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 182275
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376373_72c2752917.png",
+                                    "hash": "medium_1376373_72c2752917",
+                                    "mime": "image/png",
+                                    "name": "medium_1376373.png",
+                                    "path": null,
+                                    "size": 392.1,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 392104
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376373_72c2752917.png",
+                                    "hash": "thumbnail_1376373_72c2752917",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376373.png",
+                                    "path": null,
+                                    "size": 46.91,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 46905
+                                }
+                            },
+                            "hash": "1376373_72c2752917",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 678.56,
+                            "url": "/uploads/1376373_72c2752917.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:51.457Z",
+                            "updatedAt": "2025-09-30T18:55:10.218Z",
+                            "publishedAt": "2025-09-30T18:37:51.457Z"
+                        },
+                        "image_placeholder": {
+                            "id": 6,
+                            "documentId": "qfn79oxvp8dwq2mnki80ld8k",
+                            "name": "1376375.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376375_e0e85ea9a5.png",
+                                    "hash": "large_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "large_1376375.png",
+                                    "path": null,
+                                    "size": 514.23,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 514226
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376375_e0e85ea9a5.png",
+                                    "hash": "small_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "small_1376375.png",
+                                    "path": null,
+                                    "size": 147.06,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 147055
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376375_e0e85ea9a5.png",
+                                    "hash": "medium_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "medium_1376375.png",
+                                    "path": null,
+                                    "size": 304.01,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 304011
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376375_e0e85ea9a5.png",
+                                    "hash": "thumbnail_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376375.png",
+                                    "path": null,
+                                    "size": 42.19,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 42188
+                                }
+                            },
+                            "hash": "1376375_e0e85ea9a5",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 482.73,
+                            "url": "/uploads/1376375_e0e85ea9a5.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:49.215Z",
+                            "updatedAt": "2025-09-30T18:37:49.215Z",
+                            "publishedAt": "2025-09-30T18:37:49.215Z"
+                        }
+                    }
+                ]
+            },
+            {
+                "__component": "service.strengths",
+                "id": 3,
+                "title": "Mengapa Memilih Narvex?",
+                "description": "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya",
+                "statistic1": {
+                    "id": 180,
+                    "value": null,
+                    "suffix": "Berpengalaman",
+                    "label": "Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing"
+                },
+                "statistic2": {
+                    "id": 181,
+                    "value": null,
+                    "suffix": "Tim Profesional",
+                    "label": "Tim ahli yang berpengalaman dan berdedikasi tinggi"
+                },
+                "statistic3": {
+                    "id": 182,
+                    "value": null,
+                    "suffix": "Tepat Waktu",
+                    "label": "Komitmen untuk menyelesaikan setiap project sesuai timeline"
+                },
+                "statistic4": {
+                    "id": 183,
+                    "value": null,
+                    "suffix": "Kualitas Terjamin",
+                    "label": "Standar kualitas tinggi dalam setiap layanan yang kami berikan"
+                }
+            },
+            {
+                "__component": "sections.contact",
+                "id": 9,
+                "title": "Siap Memulai Project Anda?",
+                "description": "Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan.",
+                "phone_number": "0800000",
+                "email": "narvex@gmail.com",
+                "socialLinks": {
+                    "id": 11,
+                    "instagram": "https://www.instagram.com/jasonsusantoo",
+                    "tiktok": "https://www.instagram.com/jasonsusantoo",
+                    "facebook": "https://www.instagram.com/jasonsusantoo",
+                    "x": "https://www.instagram.com/jasonsusantoo",
+                    "linkedin": "https://www.instagram.com/jasonsusantoo",
+                    "youtube": "https://www.instagram.com/jasonsusantoo"
+                }
+            }
+        ]
+    },
+    "meta": {}
+}

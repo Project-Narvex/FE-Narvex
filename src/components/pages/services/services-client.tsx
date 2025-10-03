@@ -15,6 +15,7 @@ import {
   addEnhancedParallax,
   createMorphingBackground
 } from '@/lib/animations';
+import { ServicePageData, ServicePageContent, ServiceItem, getImageUrl } from '@/lib/service-page-data';
 
 interface Service {
   icon: string;
@@ -23,9 +24,15 @@ interface Service {
   description: string;
   features: string[];
   color: string;
+  apiData?: ServiceItem; // Keep original API data for icon and image placeholder access
 }
 
 interface ServicesClientProps {
+  servicePageData: ServicePageData;
+  heroSection?: ServicePageContent | null;
+  servicesSection?: ServicePageContent | null;
+  strengthsSection?: ServicePageContent | null;
+  contactSection?: ServicePageContent | null;
   services: Service[];
 }
 
@@ -40,7 +47,14 @@ const getIconComponent = (iconName: string): LucideIcon => {
   return iconMap[iconName] || Palette; // fallback to Palette if icon not found
 };
 
-export default function ServicesClient({ services }: ServicesClientProps) {
+export default function ServicesClient({ 
+  servicePageData,
+  heroSection,
+  servicesSection,
+  strengthsSection,
+  contactSection,
+  services 
+}: ServicesClientProps) {
   useEffect(() => {
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
@@ -108,9 +122,9 @@ export default function ServicesClient({ services }: ServicesClientProps) {
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
         {/* Hero Section */}
         <SimpleHero
-          title="Layanan Kami"
-          subtitle="Narvex Creative Services"
-          description="Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"
+          title={heroSection?.title || "Layanan Kami"}
+          subtitle={heroSection?.subtitle || "Narvex Creative Services"}
+          description={heroSection?.description || "Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"}
           breadcrumb={[
             { label: 'Home', href: '/' },
             { label: 'Layanan' }
@@ -146,10 +160,11 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Portfolio Layanan Lengkap</h2>
+              <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {servicesSection?.title || "Portfolio Layanan Lengkap"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi 
-                untuk kesuksesan setiap project Anda.
+                {servicesSection?.description || "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda."}
               </p>
             </div>
             
@@ -169,8 +184,18 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   >
                     <CardContent className={`p-6 sm:p-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
                       <div className="flex items-center mb-6">
-                        <div className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110 hover:rotate-6`}>
-                          <IconComponent className="w-8 h-8 text-white" />
+                        <div className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110 hover:rotate-6 overflow-hidden`}>
+                          {service.apiData?.icon ? (
+                            <Image
+                              src={getImageUrl(service.apiData.icon, 'medium')}
+                              alt={service.title}
+                              width={32}
+                              height={32}
+                              className="w-8 h-8 object-contain"
+                            />
+                          ) : (
+                            <IconComponent className="w-8 h-8 text-white" />
+                          )}
                         </div>
                         <div>
                           <h3 className="heading-3 text-blue-900">{service.title}</h3>
@@ -200,10 +225,20 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                     
                     <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
                       <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-80 flex items-center justify-center transition-all duration-500 hover:scale-105 hover:shadow-lg overflow-hidden relative group">
-                        <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
-                          <IconComponent className="w-24 h-24 mx-auto mb-4 opacity-50 transition-all duration-300 group-hover:opacity-70 group-hover:rotate-12" />
-                          <p className="font-semibold">Service Image Placeholder</p>
-                        </div>
+                        {service.apiData?.image_placeholder ? (
+                          <Image
+                            src={getImageUrl(service.apiData.image_placeholder, 'large')}
+                            alt={service.title}
+                            width={800}
+                            height={400}
+                            className="w-full h-full object-cover transition-all duration-300 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
+                            <IconComponent className="w-24 h-24 mx-auto mb-4 opacity-50 transition-all duration-300 group-hover:opacity-70 group-hover:rotate-12" />
+                            <p className="font-semibold">Service Image Placeholder</p>
+                          </div>
+                        )}
                         
                         {/* Hover overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-gold-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -241,9 +276,11 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Mengapa Memilih Narvex?</h2>
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {strengthsSection?.title || "Mengapa Memilih Narvex?"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya
+                {strengthsSection?.description || "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya"}
               </p>
             </div>
             
@@ -253,8 +290,12 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
                     <span className="text-3xl">🏆</span>
                   </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
-                  <p className="text-gray-600">Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing</p>
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    {strengthsSection?.statistic1?.suffix || "Berpengalaman"}
+                  </h3>
+                  <p className="text-gray-600">
+                    {strengthsSection?.statistic1?.label || "Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing"}
+                  </p>
                 </CardContent>
               </Card>
               
@@ -263,8 +304,12 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
                     <span className="text-3xl">⚡</span>
                   </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Tim Profesional</h3>
-                  <p className="text-gray-600">Tim ahli yang berpengalaman dan berdedikasi tinggi</p>
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    {strengthsSection?.statistic2?.suffix || "Tim Profesional"}
+                  </h3>
+                  <p className="text-gray-600">
+                    {strengthsSection?.statistic2?.label || "Tim ahli yang berpengalaman dan berdedikasi tinggi"}
+                  </p>
                 </CardContent>
               </Card>
               
@@ -273,8 +318,12 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
                     <span className="text-3xl">🎯</span>
                   </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Tepat Waktu</h3>
-                  <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    {strengthsSection?.statistic3?.suffix || "Tepat Waktu"}
+                  </h3>
+                  <p className="text-gray-600">
+                    {strengthsSection?.statistic3?.label || "Komitmen untuk menyelesaikan setiap project sesuai timeline"}
+                  </p>
                 </CardContent>
               </Card>
               
@@ -283,8 +332,12 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
                     <span className="text-3xl">💎</span>
                   </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Kualitas Terjamin</h3>
-                  <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
+                  <h3 className="text-xl font-bold text-blue-900 mb-3">
+                    {strengthsSection?.statistic4?.suffix || "Kualitas Terjamin"}
+                  </h3>
+                  <p className="text-gray-600">
+                    {strengthsSection?.statistic4?.label || "Standar kualitas tinggi dalam setiap layanan yang kami berikan"}
+                  </p>
                 </CardContent>
               </Card>
             </div>
@@ -304,11 +357,10 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           <div className="container mx-auto px-6 relative z-depth-2">
             <div className="text-center mb-12 scroll-animate-scale">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
-                Siap Memulai Project Anda?
+                {contactSection?.title || "Siap Memulai Project Anda?"}
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
-                mewujudkan visi kreatif Anda menjadi kenyataan.
+                {contactSection?.description || "Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan."}
               </p>
             </div>
             
@@ -318,7 +370,7 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+                <p className="text-gray-300 text-sm">{contactSection?.email || "narvex.ind@gmail.com"}</p>
               </a>
               
               <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
@@ -342,7 +394,7 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">{contactSection?.phone_number || "+62 xxx xxxx xxxx"}</p>
               </a>
             </div>
             

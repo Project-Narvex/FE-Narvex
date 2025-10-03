@@ -1,0 +1,1145 @@
+{
+    "data": {
+        "id": 15,
+        "documentId": "sd5a5ysefvaqrw9ml07q2n5u",
+        "createdAt": "2025-10-03T05:19:46.942Z",
+        "updatedAt": "2025-10-03T06:08:28.327Z",
+        "publishedAt": "2025-10-03T06:08:28.405Z",
+        "pageContent": [
+            {
+                "__component": "about.hero",
+                "id": 15,
+                "title": "Tentang Narvex",
+                "description": "CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing"
+            },
+            {
+                "__component": "about.aspect",
+                "id": 14,
+                "title": "Perjalanan Kami",
+                "description": "Didirikan pada tahun 2020, Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, mengkhususkan diri dalam MICE services, event production, dan solusi kreatif komprehensif.",
+                "Subtitle": "Nilai-Nilai Perusahaan",
+                "aspect1": {
+                    "id": 45,
+                    "title": "Kreativitas",
+                    "description": "Kami percaya bahwa kreativitas adalah kunci untuk menciptakan solusi yang unik dan memorable."
+                },
+                "aspect2": {
+                    "id": 46,
+                    "title": "Profesionalisme",
+                    "description": "Kami berkomitmen untuk memberikan layanan dengan standar profesional tertinggi."
+                },
+                "aspect3": {
+                    "id": 47,
+                    "title": " Kolaborasi",
+                    "description": "Kami membangun partnership yang kuat dengan klien melalui komunikasi yang terbuka."
+                },
+                "aspect4": {
+                    "id": 48,
+                    "title": "Inovasi",
+                    "description": "Kami selalu mengikuti perkembangan tren dan teknologi terbaru."
+                },
+                "card_highlight": {
+                    "id": 12,
+                    "title": "Narvex Creative Services ",
+                    "description": "Perusahaan creative services yang mengkhususkan diri dalam branding, event production, dan digital marketing.  ",
+                    "media": {
+                        "id": 6,
+                        "documentId": "qfn79oxvp8dwq2mnki80ld8k",
+                        "name": "1376375.png",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 1920,
+                        "height": 1080,
+                        "formats": {
+                            "large": {
+                                "ext": ".png",
+                                "url": "/uploads/large_1376375_e0e85ea9a5.png",
+                                "hash": "large_1376375_e0e85ea9a5",
+                                "mime": "image/png",
+                                "name": "large_1376375.png",
+                                "path": null,
+                                "size": 514.23,
+                                "width": 1000,
+                                "height": 563,
+                                "sizeInBytes": 514226
+                            },
+                            "small": {
+                                "ext": ".png",
+                                "url": "/uploads/small_1376375_e0e85ea9a5.png",
+                                "hash": "small_1376375_e0e85ea9a5",
+                                "mime": "image/png",
+                                "name": "small_1376375.png",
+                                "path": null,
+                                "size": 147.06,
+                                "width": 500,
+                                "height": 281,
+                                "sizeInBytes": 147055
+                            },
+                            "medium": {
+                                "ext": ".png",
+                                "url": "/uploads/medium_1376375_e0e85ea9a5.png",
+                                "hash": "medium_1376375_e0e85ea9a5",
+                                "mime": "image/png",
+                                "name": "medium_1376375.png",
+                                "path": null,
+                                "size": 304.01,
+                                "width": 750,
+                                "height": 422,
+                                "sizeInBytes": 304011
+                            },
+                            "thumbnail": {
+                                "ext": ".png",
+                                "url": "/uploads/thumbnail_1376375_e0e85ea9a5.png",
+                                "hash": "thumbnail_1376375_e0e85ea9a5",
+                                "mime": "image/png",
+                                "name": "thumbnail_1376375.png",
+                                "path": null,
+                                "size": 42.19,
+                                "width": 245,
+                                "height": 138,
+                                "sizeInBytes": 42188
+                            }
+                        },
+                        "hash": "1376375_e0e85ea9a5",
+                        "ext": ".png",
+                        "mime": "image/png",
+                        "size": 482.73,
+                        "url": "/uploads/1376375_e0e85ea9a5.png",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-30T18:37:49.215Z",
+                        "updatedAt": "2025-09-30T18:37:49.215Z",
+                        "publishedAt": "2025-09-30T18:37:49.215Z"
+                    },
+                    "statistic1": {
+                        "id": 134,
+                        "value": 70,
+                        "suffix": "+",
+                        "label": "Projects"
+                    },
+                    "statistic2": {
+                        "id": 135,
+                        "value": 50,
+                        "suffix": "+ ",
+                        "label": "Happy Clients"
+                    }
+                }
+            },
+            {
+                "__component": "about.vision-mission",
+                "id": 11,
+                "title": "Visi, Misi & Tujuan",
+                "description": null,
+                "vision": {
+                    "id": 21,
+                    "title": "visi",
+                    "description": [
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "Menjadi perusahaan creative services terdepan di Indonesia yang memberikan solusi inovatif dan berkualitas tinggi untuk membantu klien mencapai kesuksesan bisnis mereka.",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    ],
+                    "logo": {
+                        "id": 13,
+                        "documentId": "vmbczm2e646m5byqlbwycegu",
+                        "name": "1337733.png",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 3869,
+                        "height": 3220,
+                        "formats": {
+                            "large": {
+                                "ext": ".png",
+                                "url": "/uploads/large_1337733_9a1c58a345.png",
+                                "hash": "large_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "large_1337733.png",
+                                "path": null,
+                                "size": 1056.57,
+                                "width": 1000,
+                                "height": 832,
+                                "sizeInBytes": 1056570
+                            },
+                            "small": {
+                                "ext": ".png",
+                                "url": "/uploads/small_1337733_9a1c58a345.png",
+                                "hash": "small_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "small_1337733.png",
+                                "path": null,
+                                "size": 312.38,
+                                "width": 500,
+                                "height": 416,
+                                "sizeInBytes": 312377
+                            },
+                            "medium": {
+                                "ext": ".png",
+                                "url": "/uploads/medium_1337733_9a1c58a345.png",
+                                "hash": "medium_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "medium_1337733.png",
+                                "path": null,
+                                "size": 638.16,
+                                "width": 750,
+                                "height": 624,
+                                "sizeInBytes": 638162
+                            },
+                            "thumbnail": {
+                                "ext": ".png",
+                                "url": "/uploads/thumbnail_1337733_9a1c58a345.png",
+                                "hash": "thumbnail_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "thumbnail_1337733.png",
+                                "path": null,
+                                "size": 52.73,
+                                "width": 187,
+                                "height": 156,
+                                "sizeInBytes": 52730
+                            }
+                        },
+                        "hash": "1337733_9a1c58a345",
+                        "ext": ".png",
+                        "mime": "image/png",
+                        "size": 2919.75,
+                        "url": "/uploads/1337733_9a1c58a345.png",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-30T18:37:52.225Z",
+                        "updatedAt": "2025-09-30T18:37:52.225Z",
+                        "publishedAt": "2025-09-30T18:37:52.226Z"
+                    }
+                },
+                "mission": {
+                    "id": 22,
+                    "title": "misi",
+                    "description": [
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        {
+                            "type": "list",
+                            "format": "unordered",
+                            "children": [
+                                {
+                                    "type": "list-item",
+                                    "children": [
+                                        {
+                                            "text": "Memberikan layanan creative services berkualitas tinggi dengan pendekatan profesional dan inovatif",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "list",
+                            "format": "unordered",
+                            "children": [
+                                {
+                                    "type": "list-item",
+                                    "children": [
+                                        {
+                                            "text": "Membantu klien membangun brand identity yang kuat dan memorable",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "list",
+                            "format": "unordered",
+                            "children": [
+                                {
+                                    "type": "list-item",
+                                    "children": [
+                                        {
+                                            "text": "Menghadirkan event production yang memorable dan impactful",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "list",
+                            "format": "unordered",
+                            "children": [
+                                {
+                                    "type": "list-item",
+                                    "children": [
+                                        {
+                                            "text": "Mengoptimalkan digital presence klien melalui strategi digital marketing yang efektif",
+                                            "type": "text"
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    ],
+                    "logo": {
+                        "id": 10,
+                        "documentId": "rowl7j62tk96hiosafns8f6h",
+                        "name": "1376373.png",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 1920,
+                        "height": 1080,
+                        "formats": {
+                            "large": {
+                                "ext": ".png",
+                                "url": "/uploads/large_1376373_72c2752917.png",
+                                "hash": "large_1376373_72c2752917",
+                                "mime": "image/png",
+                                "name": "large_1376373.png",
+                                "path": null,
+                                "size": 656.72,
+                                "width": 1000,
+                                "height": 563,
+                                "sizeInBytes": 656720
+                            },
+                            "small": {
+                                "ext": ".png",
+                                "url": "/uploads/small_1376373_72c2752917.png",
+                                "hash": "small_1376373_72c2752917",
+                                "mime": "image/png",
+                                "name": "small_1376373.png",
+                                "path": null,
+                                "size": 182.28,
+                                "width": 500,
+                                "height": 281,
+                                "sizeInBytes": 182275
+                            },
+                            "medium": {
+                                "ext": ".png",
+                                "url": "/uploads/medium_1376373_72c2752917.png",
+                                "hash": "medium_1376373_72c2752917",
+                                "mime": "image/png",
+                                "name": "medium_1376373.png",
+                                "path": null,
+                                "size": 392.1,
+                                "width": 750,
+                                "height": 422,
+                                "sizeInBytes": 392104
+                            },
+                            "thumbnail": {
+                                "ext": ".png",
+                                "url": "/uploads/thumbnail_1376373_72c2752917.png",
+                                "hash": "thumbnail_1376373_72c2752917",
+                                "mime": "image/png",
+                                "name": "thumbnail_1376373.png",
+                                "path": null,
+                                "size": 46.91,
+                                "width": 245,
+                                "height": 138,
+                                "sizeInBytes": 46905
+                            }
+                        },
+                        "hash": "1376373_72c2752917",
+                        "ext": ".png",
+                        "mime": "image/png",
+                        "size": 678.56,
+                        "url": "/uploads/1376373_72c2752917.png",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-30T18:37:51.457Z",
+                        "updatedAt": "2025-09-30T18:55:10.218Z",
+                        "publishedAt": "2025-09-30T18:37:51.457Z"
+                    }
+                }
+            },
+            {
+                "__component": "about.legal",
+                "id": 10,
+                "title": "Dokumentasi Legal",
+                "description": "NIB, izin usaha, dan sertifikasi akan ditampilkan di sini.",
+                "legals": [
+                    {
+                        "id": 3,
+                        "documentId": "hk5qpoqv56fddgyhmajta9zz",
+                        "Document_Name": "Nomor Induk Berusaha (NIB)",
+                        "no": "8123456789123",
+                        "Issued_By": "OSS (Online Single Submission)",
+                        "Issue_Date": "2022-07-05",
+                        "Expiry_Date": "2026-10-28",
+                        "Statuses": true,
+                        "createdAt": "2025-10-03T05:44:25.441Z",
+                        "updatedAt": "2025-10-03T05:44:36.002Z",
+                        "publishedAt": "2025-10-03T05:44:36.013Z",
+                        "file": {
+                            "id": 8,
+                            "documentId": "cnllbnr44vkoagudial2xupb",
+                            "name": "1345041.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 4092,
+                            "height": 2160,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1345041_c55af5b8eb.png",
+                                    "hash": "large_1345041_c55af5b8eb",
+                                    "mime": "image/png",
+                                    "name": "large_1345041.png",
+                                    "path": null,
+                                    "size": 587.29,
+                                    "width": 1000,
+                                    "height": 528,
+                                    "sizeInBytes": 587292
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1345041_c55af5b8eb.png",
+                                    "hash": "small_1345041_c55af5b8eb",
+                                    "mime": "image/png",
+                                    "name": "small_1345041.png",
+                                    "path": null,
+                                    "size": 196.21,
+                                    "width": 500,
+                                    "height": 264,
+                                    "sizeInBytes": 196209
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1345041_c55af5b8eb.png",
+                                    "hash": "medium_1345041_c55af5b8eb",
+                                    "mime": "image/png",
+                                    "name": "medium_1345041.png",
+                                    "path": null,
+                                    "size": 371.04,
+                                    "width": 750,
+                                    "height": 396,
+                                    "sizeInBytes": 371035
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1345041_c55af5b8eb.png",
+                                    "hash": "thumbnail_1345041_c55af5b8eb",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1345041.png",
+                                    "path": null,
+                                    "size": 62.47,
+                                    "width": 245,
+                                    "height": 129,
+                                    "sizeInBytes": 62465
+                                }
+                            },
+                            "hash": "1345041_c55af5b8eb",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 1099.29,
+                            "url": "/uploads/1345041_c55af5b8eb.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:51.300Z",
+                            "updatedAt": "2025-09-30T18:37:51.300Z",
+                            "publishedAt": "2025-09-30T18:37:51.300Z"
+                        }
+                    },
+                    {
+                        "id": 5,
+                        "documentId": "abem2x35l2qqjw544v4ql7mh",
+                        "Document_Name": "Izin Usaha Perdagangan (SIUP)",
+                        "no": "010-IZIN-SIUP-2022",
+                        "Issued_By": "Dinas Penanaman Modal dan Pelayanan Terpadu Satu Pintu",
+                        "Issue_Date": "2025-10-01",
+                        "Expiry_Date": "2028-10-03",
+                        "Statuses": true,
+                        "createdAt": "2025-10-03T05:47:45.997Z",
+                        "updatedAt": "2025-10-03T05:47:45.997Z",
+                        "publishedAt": "2025-10-03T05:47:46.006Z",
+                        "file": {
+                            "id": 7,
+                            "documentId": "p24e2dl4yl76wgvqsh3qpml4",
+                            "name": "1376374.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376374_450fd8db38.png",
+                                    "hash": "large_1376374_450fd8db38",
+                                    "mime": "image/png",
+                                    "name": "large_1376374.png",
+                                    "path": null,
+                                    "size": 1062.7,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 1062699
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376374_450fd8db38.png",
+                                    "hash": "small_1376374_450fd8db38",
+                                    "mime": "image/png",
+                                    "name": "small_1376374.png",
+                                    "path": null,
+                                    "size": 284.61,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 284608
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376374_450fd8db38.png",
+                                    "hash": "medium_1376374_450fd8db38",
+                                    "mime": "image/png",
+                                    "name": "medium_1376374.png",
+                                    "path": null,
+                                    "size": 607.36,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 607355
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376374_450fd8db38.png",
+                                    "hash": "thumbnail_1376374_450fd8db38",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376374.png",
+                                    "path": null,
+                                    "size": 79.16,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 79158
+                                }
+                            },
+                            "hash": "1376374_450fd8db38",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 748.47,
+                            "url": "/uploads/1376374_450fd8db38.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:50.138Z",
+                            "updatedAt": "2025-09-30T18:37:50.138Z",
+                            "publishedAt": "2025-09-30T18:37:50.138Z"
+                        }
+                    },
+                    {
+                        "id": 7,
+                        "documentId": "zndfs5ysko9zpwor8buo6h60",
+                        "Document_Name": "Sertifikasi Halal",
+                        "no": "SH-2022-00987",
+                        "Issued_By": "Badan Penyelenggara Jaminan Produk Halal (BPJPH)",
+                        "Issue_Date": "2025-10-01",
+                        "Expiry_Date": "2029-10-01",
+                        "Statuses": true,
+                        "createdAt": "2025-10-03T05:49:02.041Z",
+                        "updatedAt": "2025-10-03T05:49:02.041Z",
+                        "publishedAt": "2025-10-03T05:49:02.049Z",
+                        "file": {
+                            "id": 5,
+                            "documentId": "yz1j2su537z7hxfl9dvvcjxi",
+                            "name": "1343089.jpeg",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 3840,
+                            "height": 2160,
+                            "formats": {
+                                "large": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/large_1343089_0c76cbcd1c.jpeg",
+                                    "hash": "large_1343089_0c76cbcd1c",
+                                    "mime": "image/jpeg",
+                                    "name": "large_1343089.jpeg",
+                                    "path": null,
+                                    "size": 102.6,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 102597
+                                },
+                                "small": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/small_1343089_0c76cbcd1c.jpeg",
+                                    "hash": "small_1343089_0c76cbcd1c",
+                                    "mime": "image/jpeg",
+                                    "name": "small_1343089.jpeg",
+                                    "path": null,
+                                    "size": 33.79,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 33789
+                                },
+                                "medium": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/medium_1343089_0c76cbcd1c.jpeg",
+                                    "hash": "medium_1343089_0c76cbcd1c",
+                                    "mime": "image/jpeg",
+                                    "name": "medium_1343089.jpeg",
+                                    "path": null,
+                                    "size": 63.73,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 63730
+                                },
+                                "thumbnail": {
+                                    "ext": ".jpeg",
+                                    "url": "/uploads/thumbnail_1343089_0c76cbcd1c.jpeg",
+                                    "hash": "thumbnail_1343089_0c76cbcd1c",
+                                    "mime": "image/jpeg",
+                                    "name": "thumbnail_1343089.jpeg",
+                                    "path": null,
+                                    "size": 10.3,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 10301
+                                }
+                            },
+                            "hash": "1343089_0c76cbcd1c",
+                            "ext": ".jpeg",
+                            "mime": "image/jpeg",
+                            "size": 767.7,
+                            "url": "/uploads/1343089_0c76cbcd1c.jpeg",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:49.212Z",
+                            "updatedAt": "2025-09-30T18:37:49.212Z",
+                            "publishedAt": "2025-09-30T18:37:49.212Z"
+                        }
+                    }
+                ]
+            },
+            {
+                "__component": "sections.team-highlight",
+                "id": 8,
+                "title": "Tim Kami",
+                "description": "Tim profesional yang berpengalaman dan berdedikasi untuk memberikan layanan terbaik.",
+                "Subtitle": "Tim Kepemimpinan",
+                "team_members": [
+                    {
+                        "id": 2,
+                        "documentId": "qt3m9emnjryjnyl3z1c5mk1v",
+                        "name": "Ahmad Rizki Pratama",
+                        "position": "Chief Executive Officer",
+                        "bio": "Visionary leader dengan pengalaman lebih dari 8 tahun di industri MICE dan event production. Memimpin transformasi Narvex menjadi ekosistem perusahaan terintegrasi.\n\n",
+                        "orderNo": null,
+                        "createdAt": "2025-10-03T05:56:39.423Z",
+                        "updatedAt": "2025-10-03T05:56:39.423Z",
+                        "publishedAt": "2025-10-03T05:56:39.435Z",
+                        "photo": null
+                    },
+                    {
+                        "id": 4,
+                        "documentId": "f9g85tgan4yy10p956ostqx6",
+                        "name": "Sarah Johnson",
+                        "position": "Chief Operating Officer",
+                        "bio": "Expert dalam operational excellence dan project management dengan track record mengelola event-event berskala besar dengan tingkat kepuasan klien 95%+.\n\n",
+                        "orderNo": null,
+                        "createdAt": "2025-10-03T05:59:08.799Z",
+                        "updatedAt": "2025-10-03T05:59:08.799Z",
+                        "publishedAt": "2025-10-03T05:59:08.812Z",
+                        "photo": {
+                            "id": 6,
+                            "documentId": "qfn79oxvp8dwq2mnki80ld8k",
+                            "name": "1376375.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376375_e0e85ea9a5.png",
+                                    "hash": "large_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "large_1376375.png",
+                                    "path": null,
+                                    "size": 514.23,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 514226
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376375_e0e85ea9a5.png",
+                                    "hash": "small_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "small_1376375.png",
+                                    "path": null,
+                                    "size": 147.06,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 147055
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376375_e0e85ea9a5.png",
+                                    "hash": "medium_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "medium_1376375.png",
+                                    "path": null,
+                                    "size": 304.01,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 304011
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376375_e0e85ea9a5.png",
+                                    "hash": "thumbnail_1376375_e0e85ea9a5",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376375.png",
+                                    "path": null,
+                                    "size": 42.19,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 42188
+                                }
+                            },
+                            "hash": "1376375_e0e85ea9a5",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 482.73,
+                            "url": "/uploads/1376375_e0e85ea9a5.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T18:37:49.215Z",
+                            "updatedAt": "2025-09-30T18:37:49.215Z",
+                            "publishedAt": "2025-09-30T18:37:49.215Z"
+                        }
+                    },
+                    {
+                        "id": 6,
+                        "documentId": "zgrcirg7pq3ft5vpbr4duhdk",
+                        "name": "Maria Sari Dewi",
+                        "position": "Creative Director",
+                        "bio": "Creative visionary yang memimpin tim Skywork.id dengan filosofi \"Bekerja dengan Seni\". Berpengalaman dalam brand identity dan visual design.",
+                        "orderNo": null,
+                        "createdAt": "2025-10-03T06:00:22.396Z",
+                        "updatedAt": "2025-10-03T06:00:22.396Z",
+                        "publishedAt": "2025-10-03T06:00:22.404Z",
+                        "photo": null
+                    }
+                ],
+                "statistic1": {
+                    "id": 130,
+                    "value": 8,
+                    "suffix": null,
+                    "label": "Total Tim"
+                },
+                "statistic2": {
+                    "id": 131,
+                    "value": 7,
+                    "suffix": null,
+                    "label": "Pemimpin"
+                },
+                "statistic3": {
+                    "id": 132,
+                    "value": 10,
+                    "suffix": null,
+                    "label": "Perusahaan"
+                },
+                "statistic4": {
+                    "id": 133,
+                    "value": 2020,
+                    "suffix": null,
+                    "label": "Tahun Didirikan"
+                }
+            },
+            {
+                "__component": "sections.awards-section",
+                "id": 4,
+                "title": "Pencapaian",
+                "description": "Awards, recognitions, dan milestones akan ditampilkan di sini.\n\n",
+                "Award": [
+                    {
+                        "id": 10,
+                        "title": "Best Startup Award",
+                        "issuer": "Kementerian Pariwisata & Ekonomi Kreatif",
+                        "year": "2021"
+                    },
+                    {
+                        "id": 11,
+                        "title": "Top 50 Growing Companies",
+                        "issuer": "Forbes Indonesia",
+                        "year": "2022"
+                    },
+                    {
+                        "id": 12,
+                        "title": "ISO 27001 Certification (Milestone)",
+                        "issuer": "SGS International",
+                        "year": "2022"
+                    }
+                ]
+            },
+            {
+                "__component": "about.company-culture",
+                "id": 3,
+                "title": "Budaya Perusahaan",
+                "description": "Values dan working principles akan ditampilkan di sini.\n\n",
+                "culture1": {
+                    "id": 9,
+                    "title": "Integrity",
+                    "description": [
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "Menjunjung tinggi kejujuran, transparansi, dan etika dalam setiap tindakan bisnis.",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    ],
+                    "media": {
+                        "id": 2,
+                        "documentId": "u33hgedv1n9lsnmte9nnpn1n",
+                        "name": "13579d98.jpeg",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 2048,
+                        "height": 1234,
+                        "formats": {
+                            "large": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/large_13579d98_75f7d3e409.jpeg",
+                                "hash": "large_13579d98_75f7d3e409",
+                                "mime": "image/jpeg",
+                                "name": "large_13579d98.jpeg",
+                                "path": null,
+                                "size": 95.05,
+                                "width": 1000,
+                                "height": 603,
+                                "sizeInBytes": 95045
+                            },
+                            "small": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/small_13579d98_75f7d3e409.jpeg",
+                                "hash": "small_13579d98_75f7d3e409",
+                                "mime": "image/jpeg",
+                                "name": "small_13579d98.jpeg",
+                                "path": null,
+                                "size": 29.12,
+                                "width": 500,
+                                "height": 301,
+                                "sizeInBytes": 29122
+                            },
+                            "medium": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/medium_13579d98_75f7d3e409.jpeg",
+                                "hash": "medium_13579d98_75f7d3e409",
+                                "mime": "image/jpeg",
+                                "name": "medium_13579d98.jpeg",
+                                "path": null,
+                                "size": 56.87,
+                                "width": 750,
+                                "height": 452,
+                                "sizeInBytes": 56872
+                            },
+                            "thumbnail": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/thumbnail_13579d98_75f7d3e409.jpeg",
+                                "hash": "thumbnail_13579d98_75f7d3e409",
+                                "mime": "image/jpeg",
+                                "name": "thumbnail_13579d98.jpeg",
+                                "path": null,
+                                "size": 9.44,
+                                "width": 245,
+                                "height": 147,
+                                "sizeInBytes": 9435
+                            }
+                        },
+                        "hash": "13579d98_75f7d3e409",
+                        "ext": ".jpeg",
+                        "mime": "image/jpeg",
+                        "size": 431.46,
+                        "url": "/uploads/13579d98_75f7d3e409.jpeg",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-25T18:50:22.082Z",
+                        "updatedAt": "2025-09-25T18:50:22.082Z",
+                        "publishedAt": "2025-09-25T18:50:22.082Z"
+                    }
+                },
+                "culture2": {
+                    "id": 10,
+                    "title": "Collaboration",
+                    "description": [
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "Mengutamakan kerja sama tim lintas divisi untuk mencapai tujuan bersama secara efektif.",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    ],
+                    "media": {
+                        "id": 1,
+                        "documentId": "s4n1jr2i54lvffgcitezh1ug",
+                        "name": "1344002.jpeg",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 3840,
+                        "height": 2160,
+                        "formats": {
+                            "large": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/large_1344002_80a5c71811.jpeg",
+                                "hash": "large_1344002_80a5c71811",
+                                "mime": "image/jpeg",
+                                "name": "large_1344002.jpeg",
+                                "path": null,
+                                "size": 112.12,
+                                "width": 1000,
+                                "height": 563,
+                                "sizeInBytes": 112115
+                            },
+                            "small": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/small_1344002_80a5c71811.jpeg",
+                                "hash": "small_1344002_80a5c71811",
+                                "mime": "image/jpeg",
+                                "name": "small_1344002.jpeg",
+                                "path": null,
+                                "size": 35.79,
+                                "width": 500,
+                                "height": 281,
+                                "sizeInBytes": 35794
+                            },
+                            "medium": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/medium_1344002_80a5c71811.jpeg",
+                                "hash": "medium_1344002_80a5c71811",
+                                "mime": "image/jpeg",
+                                "name": "medium_1344002.jpeg",
+                                "path": null,
+                                "size": 68.25,
+                                "width": 750,
+                                "height": 422,
+                                "sizeInBytes": 68250
+                            },
+                            "thumbnail": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/thumbnail_1344002_80a5c71811.jpeg",
+                                "hash": "thumbnail_1344002_80a5c71811",
+                                "mime": "image/jpeg",
+                                "name": "thumbnail_1344002.jpeg",
+                                "path": null,
+                                "size": 11.37,
+                                "width": 245,
+                                "height": 138,
+                                "sizeInBytes": 11370
+                            }
+                        },
+                        "hash": "1344002_80a5c71811",
+                        "ext": ".jpeg",
+                        "mime": "image/jpeg",
+                        "size": 1039.65,
+                        "url": "/uploads/1344002_80a5c71811.jpeg",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-25T18:50:10.326Z",
+                        "updatedAt": "2025-09-25T18:50:10.326Z",
+                        "publishedAt": "2025-09-25T18:50:10.326Z"
+                    }
+                },
+                "culture3": {
+                    "id": 11,
+                    "title": "Customer First",
+                    "description": [
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "Menempatkan kepuasan pelanggan sebagai prioritas utama dalam setiap layanan dan produk.",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    ],
+                    "media": {
+                        "id": 13,
+                        "documentId": "vmbczm2e646m5byqlbwycegu",
+                        "name": "1337733.png",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 3869,
+                        "height": 3220,
+                        "formats": {
+                            "large": {
+                                "ext": ".png",
+                                "url": "/uploads/large_1337733_9a1c58a345.png",
+                                "hash": "large_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "large_1337733.png",
+                                "path": null,
+                                "size": 1056.57,
+                                "width": 1000,
+                                "height": 832,
+                                "sizeInBytes": 1056570
+                            },
+                            "small": {
+                                "ext": ".png",
+                                "url": "/uploads/small_1337733_9a1c58a345.png",
+                                "hash": "small_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "small_1337733.png",
+                                "path": null,
+                                "size": 312.38,
+                                "width": 500,
+                                "height": 416,
+                                "sizeInBytes": 312377
+                            },
+                            "medium": {
+                                "ext": ".png",
+                                "url": "/uploads/medium_1337733_9a1c58a345.png",
+                                "hash": "medium_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "medium_1337733.png",
+                                "path": null,
+                                "size": 638.16,
+                                "width": 750,
+                                "height": 624,
+                                "sizeInBytes": 638162
+                            },
+                            "thumbnail": {
+                                "ext": ".png",
+                                "url": "/uploads/thumbnail_1337733_9a1c58a345.png",
+                                "hash": "thumbnail_1337733_9a1c58a345",
+                                "mime": "image/png",
+                                "name": "thumbnail_1337733.png",
+                                "path": null,
+                                "size": 52.73,
+                                "width": 187,
+                                "height": 156,
+                                "sizeInBytes": 52730
+                            }
+                        },
+                        "hash": "1337733_9a1c58a345",
+                        "ext": ".png",
+                        "mime": "image/png",
+                        "size": 2919.75,
+                        "url": "/uploads/1337733_9a1c58a345.png",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-30T18:37:52.225Z",
+                        "updatedAt": "2025-09-30T18:37:52.225Z",
+                        "publishedAt": "2025-09-30T18:37:52.226Z"
+                    }
+                },
+                "culture4": {
+                    "id": 12,
+                    "title": "Innovation",
+                    "description": [
+                        {
+                            "type": "paragraph",
+                            "children": [
+                                {
+                                    "text": "Mendorong ide-ide baru, kreativitas, dan adaptasi teknologi untuk mendukung pertumbuhan berkelanjutan.",
+                                    "type": "text"
+                                }
+                            ]
+                        }
+                    ],
+                    "media": {
+                        "id": 4,
+                        "documentId": "oiyumxvdyxfja3xnclp2s3ow",
+                        "name": "134q3992.jpeg",
+                        "alternativeText": null,
+                        "caption": null,
+                        "width": 7680,
+                        "height": 4320,
+                        "formats": {
+                            "large": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/large_134q3992_f4af2ae71e.jpeg",
+                                "hash": "large_134q3992_f4af2ae71e",
+                                "mime": "image/jpeg",
+                                "name": "large_134q3992.jpeg",
+                                "path": null,
+                                "size": 58.26,
+                                "width": 1000,
+                                "height": 563,
+                                "sizeInBytes": 58258
+                            },
+                            "small": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/small_134q3992_f4af2ae71e.jpeg",
+                                "hash": "small_134q3992_f4af2ae71e",
+                                "mime": "image/jpeg",
+                                "name": "small_134q3992.jpeg",
+                                "path": null,
+                                "size": 25.63,
+                                "width": 500,
+                                "height": 281,
+                                "sizeInBytes": 25628
+                            },
+                            "medium": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/medium_134q3992_f4af2ae71e.jpeg",
+                                "hash": "medium_134q3992_f4af2ae71e",
+                                "mime": "image/jpeg",
+                                "name": "medium_134q3992.jpeg",
+                                "path": null,
+                                "size": 41.43,
+                                "width": 750,
+                                "height": 422,
+                                "sizeInBytes": 41434
+                            },
+                            "thumbnail": {
+                                "ext": ".jpeg",
+                                "url": "/uploads/thumbnail_134q3992_f4af2ae71e.jpeg",
+                                "hash": "thumbnail_134q3992_f4af2ae71e",
+                                "mime": "image/jpeg",
+                                "name": "thumbnail_134q3992.jpeg",
+                                "path": null,
+                                "size": 10.37,
+                                "width": 245,
+                                "height": 138,
+                                "sizeInBytes": 10369
+                            }
+                        },
+                        "hash": "134q3992_f4af2ae71e",
+                        "ext": ".jpeg",
+                        "mime": "image/jpeg",
+                        "size": 127.42,
+                        "url": "/uploads/134q3992_f4af2ae71e.jpeg",
+                        "previewUrl": null,
+                        "provider": "local",
+                        "provider_metadata": null,
+                        "createdAt": "2025-09-25T18:50:24.387Z",
+                        "updatedAt": "2025-09-25T18:50:24.387Z",
+                        "publishedAt": "2025-09-25T18:50:24.387Z"
+                    }
+                }
+            }
+        ],
+        "seo": []
+    },
+    "meta": {}
+}

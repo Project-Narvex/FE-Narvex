@@ -436,11 +436,10 @@ export function getImageUrl(image: StrapiImage | null | undefined, format: 'larg
   }
 
   // Use environment variable or fallback to production domain
-  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://admin.narvex.id';
+  const baseUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:7245';
   
   console.log('🖼️ Image URL generation:', {
     baseUrl,
-    envVar: process.env.NEXT_PUBLIC_STRAPI_URL,
     imageFormat: format,
     imageUrl: image.url,
     hasFormats: !!image.formats

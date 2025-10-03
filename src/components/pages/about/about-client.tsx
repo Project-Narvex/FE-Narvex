@@ -13,8 +13,17 @@ import {
 } from '@/lib/animations';
 import { TeamMember } from '@/data/team';
 import { Company } from '@/data/companies';
+import { AboutPageData, AboutPageContent, getImageUrl, extractTextFromRichText, extractVisionText, extractMissionContent } from '@/lib/about-page-data';
 
 interface AboutClientProps {
+  aboutPageData: AboutPageData;
+  heroSection?: AboutPageContent | null;
+  aspectSection?: AboutPageContent | null;
+  visionMissionSection?: AboutPageContent | null;
+  teamSection?: AboutPageContent | null;
+  awardsSection?: AboutPageContent | null;
+  companyCultureSection?: AboutPageContent | null;
+  legalSection?: AboutPageContent | null;
   parentCompany?: Company;
   leadershipTeam: TeamMember[];
   companyStats: {
@@ -25,7 +34,7 @@ interface AboutClientProps {
   };
   companyInfo: {
     vision: string;
-    mission: string[];
+    mission: Array<{type: 'paragraph' | 'bullet', content: string}>;
     values: Array<{
       title: string;
       description: string;
@@ -34,6 +43,14 @@ interface AboutClientProps {
 }
 
 export default function AboutClient({
+  aboutPageData,
+  heroSection,
+  aspectSection,
+  visionMissionSection,
+  teamSection,
+  awardsSection,
+  companyCultureSection,
+  legalSection,
   parentCompany,
   leadershipTeam,
   companyStats,
@@ -138,11 +155,11 @@ export default function AboutClient({
           <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
             <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
               <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
-                <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
+                <span className="block transform-3d break-words" data-tilt="8">{heroSection?.title || 'Tentang'}</span>
                 <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
               </h1>
               <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth" data-element="subtitle" data-text-animation="fade-in" data-delay="0.2" data-duration="0.3" data-stagger="0.015" data-mouse-parallax="0.05">
-                CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing
+                {heroSection?.description || 'CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing'}
               </p>
             </div>
           </div>
@@ -185,67 +202,68 @@ export default function AboutClient({
             
             <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 scroll-animate">
               <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
-                Perjalanan Kami
+                {aspectSection?.title || 'Perjalanan Kami'}
               </h2>
               <p className="body-large text-gray-contrast-700 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
-                {parentCompany ? `Didirikan pada tahun ${parentCompany.established}, ${parentCompany.description}` : 'Didirikan dengan visi untuk menjadi partner terpercaya dalam creative services, Narvex menggabungkan kreativitas, teknologi, dan strategi bisnis untuk membantu klien mencapai tujuan mereka.'}
+                {aspectSection?.description || (parentCompany ? `Didirikan pada tahun ${parentCompany.established}, ${parentCompany.description}` : 'Didirikan dengan visi untuk menjadi partner terpercaya dalam creative services, Narvex menggabungkan kreativitas, teknologi, dan strategi bisnis untuk membantu klien mencapai tujuan mereka.')}
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
               <div className="scroll-animate-left">
                 <h3 className="heading-3 mb-8 text-blue-900" data-element="heading" data-text-animation="slide-up" data-delay="0.05" data-duration="0.35" data-stagger="0.02">
-                  Nilai-Nilai Perusahaan
+                  {aspectSection?.subtitle || 'Nilai-Nilai Perusahaan'}
                 </h3>
                 <div className="space-y-6 stagger-children">
-                  <div className="value-card flex items-start p-4 rounded-xl hover-depth-subtle glass-morphism backdrop-blur-sm transition-all duration-300">
-                    <div className="w-6 h-6 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full mt-1 mr-4 flex-shrink-0 shadow-gold-depth animate-pulse"></div>
-                    <div>
-                      <h4 className="font-semibold text-blue-900 mb-2 text-lg">Kreativitas</h4>
-                      <p className="text-gray-contrast-600 leading-relaxed">Kami percaya bahwa kreativitas adalah kunci untuk menciptakan solusi yang unik dan memorable.</p>
+                  {companyInfo.values.map((value, index) => (
+                    <div key={index} className="value-card flex items-start p-4 rounded-xl hover-depth-subtle glass-morphism backdrop-blur-sm transition-all duration-300">
+                      <div className="w-6 h-6 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full mt-1 mr-4 flex-shrink-0 shadow-gold-depth animate-pulse"></div>
+                      <div>
+                        <h4 className="font-semibold text-blue-900 mb-2 text-lg">{value.title}</h4>
+                        <p className="text-gray-contrast-600 leading-relaxed">{value.description}</p>
+                      </div>
                     </div>
-                  </div>
-                  <div className="value-card flex items-start p-4 rounded-xl hover-depth-subtle glass-morphism backdrop-blur-sm transition-all duration-300">
-                    <div className="w-6 h-6 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full mt-1 mr-4 flex-shrink-0 shadow-gold-depth animate-pulse"></div>
-                    <div>
-                      <h4 className="font-semibold text-blue-900 mb-2 text-lg">Profesionalisme</h4>
-                      <p className="text-gray-contrast-600 leading-relaxed">Kami berkomitmen untuk memberikan layanan dengan standar profesional tertinggi.</p>
-                    </div>
-                  </div>
-                  <div className="value-card flex items-start p-4 rounded-xl hover-depth-subtle glass-morphism backdrop-blur-sm transition-all duration-300">
-                    <div className="w-6 h-6 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full mt-1 mr-4 flex-shrink-0 shadow-gold-depth animate-pulse"></div>
-                    <div>
-                      <h4 className="font-semibold text-blue-900 mb-2 text-lg">Kolaborasi</h4>
-                      <p className="text-gray-contrast-600 leading-relaxed">Kami membangun partnership yang kuat dengan klien melalui komunikasi yang terbuka.</p>
-                    </div>
-                  </div>
-                  <div className="value-card flex items-start p-4 rounded-xl hover-depth-subtle glass-morphism backdrop-blur-sm transition-all duration-300">
-                    <div className="w-6 h-6 bg-gradient-to-br from-gold-400 to-gold-600 rounded-full mt-1 mr-4 flex-shrink-0 shadow-gold-depth animate-pulse"></div>
-                    <div>
-                      <h4 className="font-semibold text-blue-900 mb-2 text-lg">Inovasi</h4>
-                      <p className="text-gray-contrast-600 leading-relaxed">Kami selalu mengikuti perkembangan tren dan teknologi terbaru.</p>
-                    </div>
-                  </div>
+                  ))}
                 </div>
               </div>
               <div className="scroll-animate-right">
                 <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism">
                   <CardContent className="px-8 py-12 flex flex-col h-full">
-                    <div className="service-icon w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth">
-                      <span className="text-4xl group-hover:scale-110 transition-transform duration-300">🎨</span>
+                    <div className="service-icon w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth overflow-hidden">
+                      {aspectSection?.card_highlight?.media ? (
+                        <Image
+                          src={getImageUrl(aspectSection.card_highlight.media, 'medium')}
+                          alt={aspectSection.card_highlight.title || 'Narvex Creative Services'}
+                          width={96}
+                          height={96}
+                          className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <span className="text-4xl group-hover:scale-110 transition-transform duration-300">🎨</span>
+                      )}
                     </div>
-                    <h4 className="text-2xl font-bold text-blue-900 mb-6 group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Narvex Creative Services</h4>
+                    <h4 className="text-2xl font-bold text-blue-900 mb-6 group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">
+                      {aspectSection?.card_highlight?.title || 'Narvex Creative Services'}
+                    </h4>
                     <p className="text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-8">
-                      Perusahaan creative services yang mengkhususkan diri dalam branding, event production, dan digital marketing.
+                      {aspectSection?.card_highlight?.description || 'Perusahaan creative services yang mengkhususkan diri dalam branding, event production, dan digital marketing.'}
                     </p>
                     <div className="grid grid-cols-2 gap-6 text-center">
                       <div className="p-4 rounded-xl bg-gradient-to-br from-gold-50 to-gold-100 hover-depth-subtle">
-                        <div className="text-3xl font-bold text-gold-600 mb-2 text-depth">50+</div>
-                        <div className="text-sm text-gray-contrast-600 font-medium">Projects</div>
+                        <div className="text-3xl font-bold text-gold-600 mb-2 text-depth">
+                          {aspectSection?.card_highlight?.statistic1?.value || 50}{aspectSection?.card_highlight?.statistic1?.suffix || '+'}
+                        </div>
+                        <div className="text-sm text-gray-contrast-600 font-medium">
+                          {aspectSection?.card_highlight?.statistic1?.label || 'Projects'}
+                        </div>
                       </div>
                       <div className="p-4 rounded-xl bg-gradient-to-br from-gold-50 to-gold-100 hover-depth-subtle">
-                        <div className="text-3xl font-bold text-gold-600 mb-2 text-depth">25+</div>
-                        <div className="text-sm text-gray-contrast-600 font-medium">Happy Clients</div>
+                        <div className="text-3xl font-bold text-gold-600 mb-2 text-depth">
+                          {aspectSection?.card_highlight?.statistic2?.value || 25}{aspectSection?.card_highlight?.statistic2?.suffix || '+'}
+                        </div>
+                        <div className="text-sm text-gray-contrast-600 font-medium">
+                          {aspectSection?.card_highlight?.statistic2?.label || 'Happy Clients'}
+                        </div>
                       </div>
                     </div>
                     <div className="mt-6 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
@@ -278,15 +296,25 @@ export default function AboutClient({
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
             <div className="text-center mb-16 scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
-                Visi, Misi & Tujuan
+                {visionMissionSection?.title || 'Visi, Misi & Tujuan'}
               </h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
               <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate-left">
                 <CardContent className="px-8 py-12 flex flex-col h-full">
-                  <div className="service-icon w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth">
-                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎯</span>
+                  <div className="service-icon w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth overflow-hidden">
+                    {visionMissionSection?.vision?.logo ? (
+                      <Image
+                        src={getImageUrl(visionMissionSection.vision.logo, 'medium')}
+                        alt="Vision Logo"
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎯</span>
+                    )}
                   </div>
                   <h3 className="text-2xl font-bold text-blue-900 mb-6 group-hover:text-blue-800 transition-colors duration-300 leading-snug" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
                     Visi
@@ -300,20 +328,36 @@ export default function AboutClient({
               
               <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate-right">
                 <CardContent className="px-8 py-12 flex flex-col h-full">
-                  <div className="service-icon w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-gold-depth">
-                    <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🚀</span>
+                  <div className="service-icon w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-gold-depth overflow-hidden">
+                    {visionMissionSection?.mission?.logo ? (
+                      <Image
+                        src={getImageUrl(visionMissionSection.mission.logo, 'medium')}
+                        alt="Mission Logo"
+                        width={80}
+                        height={80}
+                        className="w-full h-full object-contain group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🚀</span>
+                    )}
                   </div>
                   <h3 className="text-2xl font-bold text-blue-900 mb-6 group-hover:text-blue-800 transition-colors duration-300 leading-snug" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
                     Misi
                   </h3>
-                  <ul className="text-left text-gray-contrast-600 space-y-3 flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300 leading-relaxed list-none" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
+                  <div className="text-left text-gray-contrast-600 space-y-3 flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
                     {companyInfo.mission.map((missionItem, index) => (
-                      <li key={index} className="flex items-start">
-                        <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
-                        <span>{missionItem}</span>
-                      </li>
+                      <div key={index}>
+                        {missionItem.type === 'paragraph' ? (
+                          <p className="mb-3">{missionItem.content}</p>
+                        ) : (
+                          <div className="flex items-start">
+                            <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0" aria-hidden="true"></span>
+                            <span>{missionItem.content}</span>
+                          </div>
+                        )}
+                      </div>
                     ))}
-                  </ul>
+                  </div>
                   <div className="mt-6 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                 </CardContent>
               </Card>
@@ -343,15 +387,51 @@ export default function AboutClient({
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             <div className="scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                Dokumentasi Legal
+                {legalSection?.title || 'Dokumentasi Legal'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                NIB, izin usaha, dan sertifikasi akan ditampilkan di sini.
+                {legalSection?.description || 'NIB, izin usaha, dan sertifikasi akan ditampilkan di sini.'}
               </p>
-              <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-gold-50 shadow-depth-2 hover-depth-subtle">
-                <span className="text-4xl mr-4">📋</span>
-                <span className="text-lg font-medium text-blue-900">Coming Soon</span>
-              </div>
+              {legalSection?.legals && legalSection.legals.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {legalSection.legals.map((legal, index) => (
+                    <Card key={legal.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism">
+                      <CardContent className="px-6 py-8 flex flex-col h-full">
+                        <div className="service-icon w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-blue-depth">
+                          <span className="text-2xl">📄</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-blue-900 mb-3 group-hover:text-blue-800 transition-colors duration-300">
+                          {legal.Document_Name}
+                        </h4>
+                        <p className="text-sm text-gray-contrast-600 mb-2">
+                          <strong>No:</strong> {legal.no}
+                        </p>
+                        <p className="text-sm text-gray-contrast-600 mb-2">
+                          <strong>Issued by:</strong> {legal.Issued_By}
+                        </p>
+                        <p className="text-sm text-gray-contrast-600 mb-2">
+                          <strong>Issue Date:</strong> {new Date(legal.Issue_Date).toLocaleDateString()}
+                        </p>
+                        <p className="text-sm text-gray-contrast-600 mb-4">
+                          <strong>Expiry Date:</strong> {new Date(legal.Expiry_Date).toLocaleDateString()}
+                        </p>
+                        <div className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-medium ${
+                          legal.Statuses 
+                            ? 'bg-green-100 text-green-800' 
+                            : 'bg-red-100 text-red-800'
+                        }`}>
+                          {legal.Statuses ? 'Active' : 'Inactive'}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-gold-50 shadow-depth-2 hover-depth-subtle">
+                  <span className="text-4xl mr-4">📋</span>
+                  <span className="text-lg font-medium text-blue-900">Coming Soon</span>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -377,15 +457,63 @@ export default function AboutClient({
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
             <div className="text-center mb-16 scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                Tim Kami
+                {teamSection?.title || 'Tim Kami'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                Tim profesional yang berpengalaman dan berdedikasi untuk memberikan layanan terbaik.
+                {teamSection?.description || 'Tim profesional yang berpengalaman dan berdedikasi untuk memberikan layanan terbaik.'}
               </p>
             </div>
             
-            {/* Leadership Team */}
-            {leadershipTeam.length > 0 && (
+            {/* Team Members from API */}
+            {teamSection?.team_members && teamSection.team_members.length > 0 && (
+              <div className="mb-16">
+                <h3 className="text-2xl font-bold text-blue-900 text-center mb-8" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
+                  {teamSection.subtitle || 'Tim Kepemimpinan'}
+                </h3>
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {teamSection.team_members.slice(0, 6).map((member, index) => (
+                    <Card key={member.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate" style={{ animationDelay: `${index * 0.1}s` }}>
+                      <CardContent className="px-6 py-8 flex flex-col h-full">
+                        <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-blue-depth overflow-hidden">
+                          {member.photo ? (
+                            <Image 
+                              src={getImageUrl(member.photo, 'medium')} 
+                              alt={member.name}
+                              width={96}
+                              height={96}
+                              className="w-full h-full object-cover rounded-full"
+                              onError={(e) => {
+                                const target = e.target as HTMLImageElement;
+                                target.style.display = 'none';
+                                const parent = target.parentElement;
+                                if (parent) {
+                                  parent.innerHTML = '<span class="text-2xl">👤</span>';
+                                }
+                              }}
+                            />
+                          ) : (
+                            <span className="text-2xl">👤</span>
+                          )}
+                        </div>
+                        <h4 className="text-xl font-bold text-blue-900 mb-2 group-hover:text-blue-800 transition-colors duration-300" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
+                          {member.name}
+                        </h4>
+                        <p className="text-gold-600 font-medium mb-3 text-sm">
+                          {member.position}
+                        </p>
+                        <p className="text-gray-contrast-600 text-sm leading-relaxed flex-1 group-hover:text-gray-contrast-700 transition-colors duration-300" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4">
+                          {member.bio}
+                        </p>
+                        <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            )}
+            
+            {/* Fallback to local team data if API data is not available */}
+            {(!teamSection?.team_members || teamSection.team_members.length === 0) && leadershipTeam.length > 0 && (
               <div className="mb-16">
                 <h3 className="text-2xl font-bold text-blue-900 text-center mb-8" data-element="heading" data-text-animation="scale-bounce" data-delay="0.1" data-duration="0.5">
                   Tim Kepemimpinan
@@ -438,20 +566,36 @@ export default function AboutClient({
             {/* Team Statistics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
               <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
-                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalTeamMembers}</div>
-                <div className="text-sm text-gray-contrast-600">Total Tim</div>
+                <div className="text-3xl font-bold text-blue-900 mb-2">
+                  {teamSection?.statistic1?.value || companyStats.totalTeamMembers}{teamSection?.statistic1?.suffix || ''}
+                </div>
+                <div className="text-sm text-gray-contrast-600">
+                  {teamSection?.statistic1?.label || 'Total Tim'}
+                </div>
               </div>
               <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
-                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.leadershipCount}</div>
-                <div className="text-sm text-gray-contrast-600">Pemimpin</div>
+                <div className="text-3xl font-bold text-blue-900 mb-2">
+                  {teamSection?.statistic2?.value || companyStats.leadershipCount}{teamSection?.statistic2?.suffix || ''}
+                </div>
+                <div className="text-sm text-gray-contrast-600">
+                  {teamSection?.statistic2?.label || 'Pemimpin'}
+                </div>
               </div>
               <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
-                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalCompanies}</div>
-                <div className="text-sm text-gray-contrast-600">Perusahaan</div>
+                <div className="text-3xl font-bold text-blue-900 mb-2">
+                  {teamSection?.statistic3?.value || companyStats.totalCompanies}{teamSection?.statistic3?.suffix || ''}
+                </div>
+                <div className="text-sm text-gray-contrast-600">
+                  {teamSection?.statistic3?.label || 'Perusahaan'}
+                </div>
               </div>
               <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
-                <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.establishedYear}</div>
-                <div className="text-sm text-gray-contrast-600">Didirikan</div>
+                <div className="text-3xl font-bold text-blue-900 mb-2">
+                  {teamSection?.statistic4?.value || companyStats.establishedYear}{teamSection?.statistic4?.suffix || ''}
+                </div>
+                <div className="text-sm text-gray-contrast-600">
+                  {teamSection?.statistic4?.label || 'Tahun Didirikan'}
+                </div>
               </div>
             </div>
           </div>
@@ -479,15 +623,43 @@ export default function AboutClient({
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             <div className="scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                Pencapaian
+                {awardsSection?.title || 'Pencapaian'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                Awards, recognitions, dan milestones akan ditampilkan di sini.
+                {awardsSection?.description || 'Awards, recognitions, dan milestones akan ditampilkan di sini.'}
               </p>
-              <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-gold-50 shadow-depth-2 hover-depth-subtle">
-                <span className="text-4xl mr-4">🏆</span>
-                <span className="text-lg font-medium text-blue-900">Coming Soon</span>
-              </div>
+              {awardsSection?.Award && awardsSection.Award.length > 0 ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {awardsSection.Award.map((award, index) => (
+                    <Card key={award.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism">
+                      <CardContent className="px-6 py-8 flex flex-col h-full">
+                        <div className="service-icon w-16 h-16 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-gold-depth">
+                          <span className="text-2xl">🏆</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-blue-900 mb-3 group-hover:text-blue-800 transition-colors duration-300">
+                          {award.title}
+                        </h4>
+                        <p className="text-sm text-gray-contrast-600 mb-2">
+                          <strong>Issuer:</strong> {award.issuer}
+                        </p>
+                        <p className="text-sm text-gray-contrast-600 mb-4">
+                          <strong>Year:</strong> {award.year}
+                        </p>
+                        <div className="mt-auto">
+                          <div className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-gold-100 text-gold-800">
+                            Award
+                          </div>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-gold-50 shadow-depth-2 hover-depth-subtle">
+                  <span className="text-4xl mr-4">🏆</span>
+                  <span className="text-lg font-medium text-blue-900">Coming Soon</span>
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -513,15 +685,37 @@ export default function AboutClient({
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             <div className="scroll-animate">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                Budaya Perusahaan
+                {companyCultureSection?.title || 'Budaya Perusahaan'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                Values dan working principles akan ditampilkan di sini.
+                {companyCultureSection?.description || 'Values dan working principles akan ditampilkan di sini.'}
               </p>
-              <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-blue-50 shadow-depth-2 hover-depth-subtle">
-                <span className="text-4xl mr-4">🌟</span>
-                <span className="text-lg font-medium text-blue-900">Coming Soon</span>
-              </div>
+              {companyCultureSection && (companyCultureSection.culture1 || companyCultureSection.culture2 || companyCultureSection.culture3 || companyCultureSection.culture4) ? (
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {[companyCultureSection.culture1, companyCultureSection.culture2, companyCultureSection.culture3, companyCultureSection.culture4]
+                    .filter(Boolean)
+                    .map((culture, index) => (
+                    <Card key={culture!.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism">
+                      <CardContent className="px-6 py-8 flex flex-col h-full">
+                        <div className="service-icon w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-blue-depth">
+                          <span className="text-2xl">🌟</span>
+                        </div>
+                        <h4 className="text-lg font-bold text-blue-900 mb-3 group-hover:text-blue-800 transition-colors duration-300">
+                          {culture!.title}
+                        </h4>
+                        <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300">
+                          {extractTextFromRichText(culture!.description)}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              ) : (
+                <div className="inline-flex items-center justify-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-blue-50 shadow-depth-2 hover-depth-subtle">
+                  <span className="text-4xl mr-4">🌟</span>
+                  <span className="text-lg font-medium text-blue-900">Coming Soon</span>
+                </div>
+              )}
             </div>
           </div>
         </section>
