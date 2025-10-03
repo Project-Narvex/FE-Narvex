@@ -629,7 +629,7 @@ export default function HomeClient({
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-12 sm:mt-16 animate-stagger">
                 <Card 
                   variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="0"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
@@ -643,7 +643,7 @@ export default function HomeClient({
                 </Card>
                 <Card 
                   variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="50"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
@@ -657,7 +657,7 @@ export default function HomeClient({
                 </Card>
                 <Card 
                   variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="100"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
@@ -671,7 +671,7 @@ export default function HomeClient({
                 </Card>
                 <Card 
                   variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="150"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
@@ -706,7 +706,7 @@ export default function HomeClient({
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.05">
+            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.05">
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand" data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="4">
                 Layanan Kami
               </h2>
@@ -722,7 +722,7 @@ export default function HomeClient({
                 <Card
                   key={service.id}
                   variant="service"
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform`}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform`}
                   data-stagger={index * 150}
                   data-tilt="8"
                   data-mouse-parallax="0.12"
@@ -747,7 +747,7 @@ export default function HomeClient({
                     {/* Features List */}
                     <ul className="space-y-3 mb-6 flex-1 list-none">
                       {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start text-gray-contrast-700 scroll-animate animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                        <li key={idx} className="flex items-start text-gray-contrast-700  animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
                           <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
                           <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
                         </li>
@@ -768,7 +768,7 @@ export default function HomeClient({
             </div>
             
             {/* Bottom CTA */}
-            <div className="text-center scroll-animate animate-stagger-4">
+            <div className="text-center  animate-stagger-4">
               <p className="body-large mb-8 text-gray-contrast-600">
                 Siap untuk mengembangkan bisnis Anda? Mari diskusikan project impian Anda bersama tim ahli kami.
               </p>
@@ -810,7 +810,7 @@ export default function HomeClient({
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.04">
+            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.04">
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Portfolio Terpilih
               </h2>
@@ -883,7 +883,7 @@ export default function HomeClient({
             </div>
             
             {/* Bottom CTA */}
-            <div className="text-center scroll-animate animate-stagger-4">
+            <div className="text-center  animate-stagger-4">
               <p className="body-large mb-8 text-gray-contrast-600">
                 Tertarik dengan hasil kerja kami? Mari diskusikan project Anda dan wujudkan visi kreatif bersama.
               </p>
@@ -922,7 +922,7 @@ export default function HomeClient({
           
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16 scroll-animate depth-layer-1" data-mouse-parallax="0.03">
+            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.03">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Kata Mereka
               </h2>
@@ -936,7 +936,7 @@ export default function HomeClient({
               {defaultTestimonials.map((testimonial, index) => (
                 <Card
                   key={testimonial.id}
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px] scroll-animate-scale rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
                   data-stagger={index * 200}
                   data-tilt="8"
                   data-mouse-parallax="0.12"
@@ -1011,9 +1011,9 @@ export default function HomeClient({
         {/* Latest Updates - Blog/News Integration */}
         <section className="section-padding bg-white scroll-snap-section">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-16 scroll-animate">
-              <h2 className="heading-2 mb-6 scroll-animate animate-stagger-1">Latest Updates</h2>
-              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto scroll-animate animate-stagger-2">
+            <div className="text-center mb-16 ">
+              <h2 className="heading-2 mb-6  animate-stagger-1">Latest Updates</h2>
+              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto  animate-stagger-2">
                 Berita terbaru, insights industri, dan stories dari project-project terbaru kami.
               </p>
             </div>
@@ -1022,10 +1022,10 @@ export default function HomeClient({
             <div className="flex justify-center">
               <div className="w-full max-w-5xl">
                 {/* Blog Articles */}
-                <div className="scroll-animate-left">
+                <div className="">
                   <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
                     {recentArticles.map((article, index) => (
-                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow scroll-animate-scale card-accessible" data-stagger={index * 200}>
+                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow  card-accessible" data-stagger={index * 200}>
                         <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
                           <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
                         </div>
@@ -1072,17 +1072,17 @@ export default function HomeClient({
           </div>
           
           <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 scroll-animate-scale">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
+            <div className="text-center mb-12 ">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6  animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
                 Siap Memulai Project Anda?
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto  animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
                 Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
                 mewujudkan visi kreatif Anda menjadi kenyataan.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
@@ -1116,7 +1116,7 @@ export default function HomeClient({
               </a>
             </div>
             
-            <div className="text-center scroll-animate animate-stagger-4">
+            <div className="text-center  animate-stagger-4">
               <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
               </Link>
@@ -1154,7 +1154,7 @@ export default function HomeClient({
               <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-12">
                   {/* Contact Form */}
-                  <div className="scroll-animate">
+                  <div className="">
                     <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
                       Mari Wujudkan Project Impian Anda
                     </h2>
@@ -1162,7 +1162,7 @@ export default function HomeClient({
                       Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
                     </p>
                     
-                    <form onSubmit={handleSubmit} className="space-y-6 scroll-animate animate-stagger-3">
+                    <form onSubmit={handleSubmit} className="space-y-6  animate-stagger-3">
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <input
@@ -1274,12 +1274,12 @@ export default function HomeClient({
                   </div>
                   
                   {/* Contact Info & Map */}
-                  <div className="scroll-animate-right">
-                    <Card className="p-8 mb-8 scroll-animate animate-stagger-4">
+                  <div className="">
+                    <Card className="p-8 mb-8  animate-stagger-4">
                       <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">Hubungi Kami</h3>
                       <div className="space-y-6">
                         {contactInfo.map((info, index) => (
-                          <div key={index} className="flex items-start scroll-animate animate-stagger-6" data-stagger={index * 100}>
+                          <div key={index} className="flex items-start  animate-stagger-6" data-stagger={index * 100}>
                             <div className="w-12 h-12 bg-gold-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                               {info.icon}
                             </div>
@@ -1294,7 +1294,7 @@ export default function HomeClient({
                     </Card>
                     
                     {/* Interactive Map */}
-                    <div className="rounded-lg overflow-hidden shadow-lg scroll-animate animate-stagger-7">
+                    <div className="rounded-lg overflow-hidden shadow-lg  animate-stagger-7">
                       <MapComponent height="h-64" className="w-full" />
                     </div>
                   </div>
