@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useEffect, useMemo } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
@@ -48,27 +47,7 @@ export default function PortofolioClient({
   availableClients,
   statusOptions
 }: PortfolioClientProps) {
-  // Early defensive checks
-  if (!initialProjects || !Array.isArray(initialProjects)) {
-    return <div>Loading portfolio...</div>;
-  }
-  
-  if (!portfolioCategories || !Array.isArray(portfolioCategories)) {
-    return <div>Loading portfolio categories...</div>;
-  }
-  
-  if (!availableYears || !Array.isArray(availableYears)) {
-    return <div>Loading portfolio years...</div>;
-  }
-  
-  if (!availableClients || !Array.isArray(availableClients)) {
-    return <div>Loading portfolio clients...</div>;
-  }
-  
-  if (!statusOptions || !Array.isArray(statusOptions)) {
-    return <div>Loading status options...</div>;
-  }
-
+  // All hooks must be called at the top level, before any early returns
   // Portfolio Query Section state variables
   const [portfolioSearchQuery, setPortfolioSearchQuery] = useState('');
   const [portfolioCategoryFilter, setPortfolioCategoryFilter] = useState('all');
@@ -154,6 +133,27 @@ export default function PortofolioClient({
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedPortfolioSearchQuery, portfolioCategoryFilter, portfolioYearFilter, portfolioClientFilter, portfolioStatusFilter]);
+
+  // Defensive checks after all hooks are declared
+  if (!initialProjects || !Array.isArray(initialProjects)) {
+    return <div>Loading portfolio...</div>;
+  }
+  
+  if (!portfolioCategories || !Array.isArray(portfolioCategories)) {
+    return <div>Loading portfolio categories...</div>;
+  }
+  
+  if (!availableYears || !Array.isArray(availableYears)) {
+    return <div>Loading portfolio years...</div>;
+  }
+  
+  if (!availableClients || !Array.isArray(availableClients)) {
+    return <div>Loading portfolio clients...</div>;
+  }
+  
+  if (!statusOptions || !Array.isArray(statusOptions)) {
+    return <div>Loading status options...</div>;
+  }
 
   // useEffect(() => {
   //   // Initialize GSAP scroll animations
