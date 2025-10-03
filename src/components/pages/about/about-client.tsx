@@ -183,7 +183,7 @@ export default function AboutClient({
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
-            <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 scroll-animate">
+            <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 ">
               <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Perjalanan Kami
               </h2>
@@ -193,7 +193,7 @@ export default function AboutClient({
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
-              <div className="scroll-animate-left">
+              <div className="">
                 <h3 className="heading-3 mb-8 text-blue-900" data-element="heading" data-text-animation="slide-up" data-delay="0.05" data-duration="0.35" data-stagger="0.02">
                   Nilai-Nilai Perusahaan
                 </h3>
@@ -228,7 +228,7 @@ export default function AboutClient({
                   </div>
                 </div>
               </div>
-              <div className="scroll-animate-right">
+              <div className="">
                 <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism">
                   <CardContent className="px-8 py-12 flex flex-col h-full">
                     <div className="service-icon w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth">
@@ -276,14 +276,14 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
-            <div className="text-center mb-16 scroll-animate">
+            <div className="text-center mb-16 ">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Visi, Misi & Tujuan
               </h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate-left">
+              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism ">
                 <CardContent className="px-8 py-12 flex flex-col h-full">
                   <div className="service-icon w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth">
                     <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎯</span>
@@ -298,7 +298,7 @@ export default function AboutClient({
                 </CardContent>
               </Card>
               
-              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate-right">
+              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism ">
                 <CardContent className="px-8 py-12 flex flex-col h-full">
                   <div className="service-icon w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-gold-depth">
                     <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🚀</span>
@@ -341,7 +341,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+            <div className="">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Dokumentasi Legal
               </h2>
@@ -375,7 +375,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
-            <div className="text-center mb-16 scroll-animate">
+            <div className="text-center mb-16 ">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Tim Kami
               </h2>
@@ -392,7 +392,7 @@ export default function AboutClient({
                 </h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {leadershipTeam.slice(0, 6).map((member, index) => (
-                    <Card key={member.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <Card key={member.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism " style={{ animationDelay: `${index * 0.1}s` }}>
                       <CardContent className="px-6 py-8 flex flex-col h-full">
                         <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-blue-depth overflow-hidden">
                           <Image 
@@ -437,19 +437,19 @@ export default function AboutClient({
             
             {/* Team Statistics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalTeamMembers}</div>
                 <div className="text-sm text-gray-contrast-600">Total Tim</div>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.leadershipCount}</div>
                 <div className="text-sm text-gray-contrast-600">Pemimpin</div>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalCompanies}</div>
                 <div className="text-sm text-gray-contrast-600">Perusahaan</div>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.establishedYear}</div>
                 <div className="text-sm text-gray-contrast-600">Didirikan</div>
               </div>
@@ -477,7 +477,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+            <div className="">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Pencapaian
               </h2>
@@ -511,7 +511,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+            <div className="">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Budaya Perusahaan
               </h2>

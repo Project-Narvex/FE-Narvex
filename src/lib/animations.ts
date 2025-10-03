@@ -554,94 +554,94 @@ export class GSAPAnimationController {
     return window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   }
 
-  private initializeScrollAnimations() {
-    // Basic scroll animations
-    const scrollElements = gsap.utils.toArray('.scroll-animate') as Element[];
-    scrollElements.forEach((element) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 80%',
-          end: 'bottom 20%',
-          toggleActions: 'play none none reverse'
-        }
-      });
+  // private initializeScrollAnimations() {
+  //   // Basic scroll animations
+  //   const scrollElements = gsap.utils.toArray('.scroll-animate') as Element[];
+  //   scrollElements.forEach((element) => {
+  //     const tl = gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: element,
+  //         start: 'top 80%',
+  //         end: 'bottom 20%',
+  //         toggleActions: 'play none none reverse'
+  //       }
+  //     });
 
-      tl.fromTo(element, 
-        { 
-          opacity: 0, 
-          y: 50,
-          scale: 0.95
-        },
-        { 
-          opacity: 1, 
-          y: 0,
-          scale: 1,
-          duration: 0.3,
-          ease: 'power2.out'
-        }
-      );
+  //     tl.fromTo(element, 
+  //       { 
+  //         opacity: 0, 
+  //         y: 50,
+  //         scale: 0.95
+  //       },
+  //       { 
+  //         opacity: 1, 
+  //         y: 0,
+  //         scale: 1,
+  //         duration: 0.3,
+  //         ease: 'power2.out'
+  //       }
+  //     );
 
-      this.animations.push(tl);
-    });
+  //     this.animations.push(tl);
+  //   });
 
-    // Left slide animations
-    const leftElements = gsap.utils.toArray('.scroll-animate-left') as Element[];
-    leftElements.forEach((element) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse'
-        }
-      });
+  //   // Left slide animations
+  //   const leftElements = gsap.utils.toArray('.scroll-animate-left') as Element[];
+  //   leftElements.forEach((element) => {
+  //     const tl = gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: element,
+  //         start: 'top 80%',
+  //         toggleActions: 'play none none reverse'
+  //       }
+  //     });
 
-      tl.fromTo(element,
-        { autoAlpha: 0, x: -100, force3D: true },
-        { autoAlpha: 1, x: 0, duration: 0.25, ease: 'power2.out' }
-      );
+  //     tl.fromTo(element,
+  //       { autoAlpha: 0, x: -100, force3D: true },
+  //       { autoAlpha: 1, x: 0, duration: 0.25, ease: 'power2.out' }
+  //     );
 
-      this.animations.push(tl);
-    });
+  //     this.animations.push(tl);
+  //   });
 
-    // Right slide animations
-    const rightElements = gsap.utils.toArray('.scroll-animate-right') as Element[];
-    rightElements.forEach((element) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse'
-        }
-      });
+  //   // Right slide animations
+  //   const rightElements = gsap.utils.toArray('.scroll-animate-right') as Element[];
+  //   rightElements.forEach((element) => {
+  //     const tl = gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: element,
+  //         start: 'top 80%',
+  //         toggleActions: 'play none none reverse'
+  //       }
+  //     });
 
-      tl.fromTo(element,
-        { autoAlpha: 0, x: 100, force3D: true },
-        { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' }
-      );
+  //     tl.fromTo(element,
+  //       { autoAlpha: 0, x: 100, force3D: true },
+  //       { autoAlpha: 1, x: 0, duration: 0.3, ease: 'power2.out' }
+  //     );
 
-      this.animations.push(tl);
-    });
+  //     this.animations.push(tl);
+  //   });
 
-    // Scale animations
-    const scaleElements = gsap.utils.toArray('.scroll-animate-scale') as Element[];
-    scaleElements.forEach((element) => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: element,
-          start: 'top 80%',
-          toggleActions: 'play none none reverse'
-        }
-      });
+  //   // Scale animations
+  //   const scaleElements = gsap.utils.toArray('.scroll-animate-scale') as Element[];
+  //   scaleElements.forEach((element) => {
+  //     const tl = gsap.timeline({
+  //       scrollTrigger: {
+  //         trigger: element,
+  //         start: 'top 80%',
+  //         toggleActions: 'play none none reverse'
+  //       }
+  //     });
 
-      tl.fromTo(element,
-        { autoAlpha: 0, scale: 0.95, force3D: true },
-        { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power2.out' }
-      );
+  //     tl.fromTo(element,
+  //       { autoAlpha: 0, scale: 0.95, force3D: true },
+  //       { autoAlpha: 1, scale: 1, duration: 0.35, ease: 'power2.out' }
+  //     );
 
-      this.animations.push(tl);
-    });
-  }
+  //     this.animations.push(tl);
+  //   });
+  // }
 
   private initializeTextAnimations() {
     // SplitText animations for headings

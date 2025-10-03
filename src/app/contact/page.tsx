@@ -194,7 +194,7 @@ export default function ContactPage() {
           {/* Content */}
           <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
             {/* Breadcrumb */}
-            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
+            <nav className="mb-6 " data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
               <ol className="flex items-center justify-center space-x-2 text-sm text-gray-300">
                 <li className="flex items-center">
                   <Link href="/" className="hover:text-gold-400 transition-colors duration-200">Home</Link>
@@ -234,7 +234,7 @@ export default function ContactPage() {
           
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             
-            <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16 scroll-animate">
+            <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16 ">
               <h2 className="heading-2 mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 {pageContent.serviceSelection.title}
               </h2>
@@ -284,13 +284,13 @@ export default function ContactPage() {
               {/* Contact Form */}
               <Card variant="service" className="contact-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50">
                 <CardContent className="p-6 sm:p-8">
-                  <div className="mb-6 sm:mb-8 scroll-animate" data-element="form-header" data-text-animation="fade-in" data-delay="0.2">
+                  <div className="mb-6 sm:mb-8 " data-element="form-header" data-text-animation="fade-in" data-delay="0.2">
                     <h3 className="heading-3 mb-3 text-blue-900">{pageContent.contactForm.title} {selectedServiceData?.name}</h3>
                     <p className="body-normal text-gray-contrast-600">{pageContent.contactForm.description}</p>
                   </div>
                   
                   {submitSuccess ? (
-                    <div className="text-center py-8 scroll-animate" data-element="success-message" data-text-animation="fade-in" data-delay="0.1">
+                    <div className="text-center py-8 " data-element="success-message" data-text-animation="fade-in" data-delay="0.1">
                       <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                         <CheckCircle className="w-8 h-8 text-green-500" />
                       </div>
@@ -304,7 +304,7 @@ export default function ContactPage() {
                       </button>
                     </div>
                   ) : (
-                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 scroll-animate" data-element="contact-form" data-animation="fade-in" data-delay="0.4">
+                    <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-6 " data-element="contact-form" data-animation="fade-in" data-delay="0.4">
                       {submitError && (
                         <div className="p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 text-sm">
                           {submitError}
@@ -553,7 +553,7 @@ export default function ContactPage() {
         {/* Social Media Contact Section */}
         <section className="section-padding bg-gradient-to-b from-blue-900 to-blue-800 text-white scroll-snap-section">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            <div className="text-center mb-8 sm:mb-12 scroll-animate" data-element="social-header" data-text-animation="fade-in" data-delay="0.2">
+            <div className="text-center mb-8 sm:mb-12 " data-element="social-header" data-text-animation="fade-in" data-delay="0.2">
               <h2 className="heading-2 mb-4 text-white">{pageContent.socialSection.title}</h2>
               <p className="body-large text-blue-100 max-w-2xl mx-auto px-4">{pageContent.socialSection.description}</p>
             </div>

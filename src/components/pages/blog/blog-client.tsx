@@ -119,7 +119,7 @@ export default function BlogClient({
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
-            <div className="text-center mb-12 sm:mb-16 scroll-animate">
+            <div className="text-center mb-12 sm:mb-16 ">
               <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Artikel Unggulan
               </h2>
@@ -130,7 +130,7 @@ export default function BlogClient({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
               {featuredArticles.map((article, index) => (
-                <Card key={article.id} variant="service" className={`article-card group flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden ${index % 2 === 0 ? 'scroll-animate-left' : 'scroll-animate-right'}`}>
+                <Card key={article.id} variant="service" className={`article-card group flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden ${index % 2 === 0 ? '' : ''}`}>
                   <div className="h-48 bg-gradient-to-br from-blue-100 to-gold-100 flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10"></div>
                     <div className="text-center text-blue-600 relative z-10">
@@ -305,7 +305,7 @@ export default function BlogClient({
             
             {/* Query Results Section */}
             {filteredBlogArticlesEnhanced.length > 0 ? (
-              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 " data-animation-delay="0.8">
                  {filteredBlogArticlesEnhanced.map((article, index) => (
                   <Link 
                     key={article.id}
@@ -440,7 +440,7 @@ export default function BlogClient({
           </div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10 flex items-center justify-center min-h-full">
-            <div className="max-w-2xl mx-auto scroll-animate">
+            <div className="max-w-2xl mx-auto ">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 text-depth-lg" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Stay Updated
               </h2>

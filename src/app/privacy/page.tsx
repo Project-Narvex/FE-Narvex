@@ -94,7 +94,7 @@ export default function PrivacyPage() {
               <Card variant="service" className="glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50 hover:shadow-2xl transition-all duration-500">
                 <CardContent className="p-12">
                   <h2 className="heading-2 mb-8 text-center" data-text-animation="fade-in" data-animation-delay="0.2">Kebijakan Privasi</h2>
-                  <div className="prose prose-lg max-w-none scroll-animate" data-animation-delay="0.4">
+                  <div className="prose prose-lg max-w-none " data-animation-delay="0.4">
                     <p className="body-large text-gray-600 mb-8 text-center">
                       Narvex berkomitmen untuk melindungi privasi dan data pribadi klien kami.
                     </p>

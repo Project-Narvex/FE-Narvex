@@ -259,7 +259,7 @@
     transition: scroll-margin 0.3s ease;
   }
 
-  /* Scroll Animation States */
+  /* Scroll Animation States
   .scroll-animate {
     @apply opacity-0 translate-y-8 transition-all duration-700 ease-out;
   }
@@ -290,7 +290,7 @@
 
   .scroll-animate-scale.animate-in {
     @apply opacity-100 scale-100;
-  }
+  } */
 
   /* Hover Effects */
   .hover-depth {

@@ -263,7 +263,7 @@ export default function PortofolioClient({
             </div>
             
             {(filteredProjects?.length || 0) > 0 ? (
-              <div className="space-y-16 scroll-animate" data-animation-delay="0.6">
+              <div className="space-y-16 " data-animation-delay="0.6">
                 {filteredProjects.map((project, index) => (
                   <Card 
                     key={project.id} 
@@ -487,7 +487,7 @@ export default function PortofolioClient({
             <div className="portfolio-results-section">
               {(filteredProjects?.length || 0) > 0 ? (
                 <>
-                  <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate transition-opacity duration-300 ${isPageTransitioning ? 'opacity-50' : 'opacity-100'}`} data-animation-delay="0.8">
+                  <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8  transition-opacity duration-300 ${isPageTransitioning ? 'opacity-50' : 'opacity-100'}`} data-animation-delay="0.8">
                     {currentProjects.map((project, index) => (
                   <Link 
                     key={project.id}
