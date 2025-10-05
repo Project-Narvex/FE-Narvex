@@ -48,7 +48,7 @@ export default function SimpleHero({
         <div className="max-w-4xl mx-auto text-center">
           {/* Breadcrumb */}
           {breadcrumb && breadcrumb.length > 0 && (
-            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
+            <nav className="mb-6 " data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
               <ol className="flex items-center justify-center space-x-2 text-sm text-gray-300">
                 {breadcrumb.map((item, index) => (
                   <li key={index} className="flex items-center">
@@ -73,7 +73,7 @@ export default function SimpleHero({
 
           {/* Title */}
           <h1 
-            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight scroll-animate"
+            className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight "
             data-element="title" 
             data-text-animation="wave" 
             data-delay="0.1"
@@ -91,7 +91,7 @@ export default function SimpleHero({
           {/* Subtitle */}
           {subtitle && (
             <p 
-              className="text-xl md:text-2xl text-gold-300 mb-4 font-medium scroll-animate"
+              className="text-xl md:text-2xl text-gold-300 mb-4 font-medium "
               data-element="subtitle" 
               data-text-animation="fade-in" 
               data-delay="0.2"
@@ -104,7 +104,7 @@ export default function SimpleHero({
           {/* Description */}
           {description && (
             <p 
-              className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed scroll-animate"
+              className="text-lg text-gray-300 max-w-2xl mx-auto leading-relaxed "
               data-element="description" 
               data-text-animation="fade-in" 
               data-delay="0.3"

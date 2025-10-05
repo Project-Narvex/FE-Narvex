@@ -13,6 +13,7 @@ import {
 } from '@/lib/animations';
 import { TeamMember } from '@/data/team';
 import { Company } from '@/data/companies';
+import SimpleHero from '@/components/ui/SimpleHero';
 
 interface AboutClientProps {
   parentCompany?: Company;
@@ -105,55 +106,16 @@ export default function AboutClient({
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
         {/* Hero Section */}
-        <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
-          {/* Enhanced Background Layers */}
-          <div className="absolute inset-0 gradient-hero">
-            {/* Depth Layer 1 - Furthest back */}
-            <div className="absolute inset-0 opacity-15" data-depth-layer="3" data-parallax="0.8">
-              <div className="absolute top-0 left-0 w-full h-full">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse bg-gold-500" data-float="true" data-float-amplitude="15" data-float-duration="4"></div>
-                <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000 bg-blue-500" data-float="true" data-float-amplitude="20" data-float-duration="5"></div>
-                <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500" data-float="true" data-float-amplitude="12" data-float-duration="3.5"></div>
-              </div>
-            </div>
-            
-            {/* Depth Layer 2 - Middle */}
-            <div className="absolute inset-0 opacity-25" data-depth-layer="2" data-parallax="0.5">
-              <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-blue-400/20 to-gold-400/20 filter blur-lg" data-float="true" data-float-amplitude="10" data-float-duration="6"></div>
-              <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-gradient-to-tr from-gold-400/15 to-blue-400/15 filter blur-lg" data-float="true" data-float-amplitude="18" data-float-duration="4.5"></div>
-            </div>
-            
-            {/* Depth Layer 3 - Closest */}
-            <div className="absolute inset-0 opacity-30" data-depth-layer="1" data-parallax="0.2">
-              <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-white/10 filter blur-sm" data-float="true" data-float-amplitude="8" data-float-duration="3" data-mouse-parallax="0.3"></div>
-              <div className="absolute top-1/4 right-1/2 w-24 h-24 rounded-full bg-gold-300/20 filter blur-sm" data-float="true" data-float-amplitude="12" data-float-duration="4" data-mouse-parallax="0.2"></div>
-              <div className="absolute bottom-1/2 right-1/4 w-40 h-40 rounded-full bg-blue-300/15 filter blur-sm" data-float="true" data-float-amplitude="15" data-float-duration="5.5" data-mouse-parallax="0.25"></div>
-            </div>
-            
-            {/* Morphing Gradient Overlay */}
-            <div className="absolute inset-0 morphing-gradient opacity-60"></div>
-          </div>
-
-          {/* Content */}
-          <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
-            <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
-              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
-                <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
-                <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
-              </h1>
-              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth">
-                CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing
-              </p>
-            </div>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
-            </div>
-          </div>
-        </section>
+        <SimpleHero
+          title="About Us"
+          subtitle="Discover Narvex"
+          description="A leading creative services company dedicated to transforming brands through innovative design, strategic marketing, and cutting-edge technology solutions."
+          breadcrumb={[
+            { label: 'Home', href: '/' },
+            { label: 'About' }
+          ]}
+          className="scroll-snap-section"
+        />
 
         {/* Company History */}
         <section className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
@@ -183,7 +145,7 @@ export default function AboutClient({
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
             
-            <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 scroll-animate">
+            <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 ">
               <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Perjalanan Kami
               </h2>
@@ -193,7 +155,7 @@ export default function AboutClient({
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
-              <div className="scroll-animate-left">
+              <div className="">
                 <h3 className="heading-3 mb-8 text-blue-900" data-element="heading" data-text-animation="slide-up" data-delay="0.05" data-duration="0.35" data-stagger="0.02">
                   Nilai-Nilai Perusahaan
                 </h3>
@@ -228,7 +190,7 @@ export default function AboutClient({
                   </div>
                 </div>
               </div>
-              <div className="scroll-animate-right">
+              <div className="">
                 <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism">
                   <CardContent className="px-8 py-12 flex flex-col h-full">
                     <div className="service-icon w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-8 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth">
@@ -276,14 +238,14 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
-            <div className="text-center mb-16 scroll-animate">
+            <div className="text-center mb-16 ">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Visi, Misi & Tujuan
               </h2>
             </div>
             
             <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
-              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate-left">
+              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism ">
                 <CardContent className="px-8 py-12 flex flex-col h-full">
                   <div className="service-icon w-20 h-20 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-blue-depth">
                     <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎯</span>
@@ -298,7 +260,7 @@ export default function AboutClient({
                 </CardContent>
               </Card>
               
-              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate-right">
+              <Card variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism ">
                 <CardContent className="px-8 py-12 flex flex-col h-full">
                   <div className="service-icon w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 rounded-3xl flex items-center justify-center mx-auto mb-8 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-gold-depth">
                     <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🚀</span>
@@ -341,7 +303,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+            <div className="">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Dokumentasi Legal
               </h2>
@@ -375,7 +337,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
-            <div className="text-center mb-16 scroll-animate">
+            <div className="text-center mb-16 ">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Tim Kami
               </h2>
@@ -392,7 +354,7 @@ export default function AboutClient({
                 </h3>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {leadershipTeam.slice(0, 6).map((member, index) => (
-                    <Card key={member.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism scroll-animate" style={{ animationDelay: `${index * 0.1}s` }}>
+                    <Card key={member.id} variant="service" className="service-card group text-center flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism " style={{ animationDelay: `${index * 0.1}s` }}>
                       <CardContent className="px-6 py-8 flex flex-col h-full">
                         <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 rounded-full flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 shadow-blue-depth overflow-hidden">
                           <Image 
@@ -437,19 +399,19 @@ export default function AboutClient({
             
             {/* Team Statistics */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-12">
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalTeamMembers}</div>
                 <div className="text-sm text-gray-contrast-600">Total Tim</div>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.leadershipCount}</div>
                 <div className="text-sm text-gray-contrast-600">Pemimpin</div>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.totalCompanies}</div>
                 <div className="text-sm text-gray-contrast-600">Perusahaan</div>
               </div>
-              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle scroll-animate">
+              <div className="text-center p-6 rounded-2xl bg-gradient-to-br from-gold-50 to-gold-100 shadow-depth-2 hover-depth-subtle ">
                 <div className="text-3xl font-bold text-blue-900 mb-2">{companyStats.establishedYear}</div>
                 <div className="text-sm text-gray-contrast-600">Didirikan</div>
               </div>
@@ -477,7 +439,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+            <div className="">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Pencapaian
               </h2>
@@ -511,7 +473,7 @@ export default function AboutClient({
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
           
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
-            <div className="scroll-animate">
+            <div className="">
               <h2 className="heading-2 mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
                 Budaya Perusahaan
               </h2>

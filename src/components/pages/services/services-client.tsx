@@ -153,7 +153,7 @@ export default function ServicesClient({ services }: ServicesClientProps) {
               </p>
             </div>
             
-            <div className="space-y-12 sm:space-y-16 scroll-animate" data-animation-delay="0.6">
+            <div className="space-y-12 sm:space-y-16 " data-animation-delay="0.6">
               {services.map((service, index) => {
                 const IconComponent = getIconComponent(service.icon);
                 return (
@@ -247,7 +247,7 @@ export default function ServicesClient({ services }: ServicesClientProps) {
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 " data-animation-delay="0.6">
               <Card variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
                 <CardContent className="p-6">
                   <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
@@ -302,17 +302,17 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           </div>
           
           <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 scroll-animate-scale">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
+            <div className="text-center mb-12 ">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6  animate-stagger-1">
                 Siap Memulai Project Anda?
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto  animate-stagger-2">
                 Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
                 mewujudkan visi kreatif Anda menjadi kenyataan.
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
@@ -346,7 +346,7 @@ export default function ServicesClient({ services }: ServicesClientProps) {
               </a>
             </div>
             
-            <div className="text-center scroll-animate animate-stagger-4">
+            <div className="text-center  animate-stagger-4">
               <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
               </Link>

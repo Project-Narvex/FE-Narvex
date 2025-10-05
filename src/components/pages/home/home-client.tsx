@@ -5,6 +5,7 @@ import { BlogArticle } from '@/data/blog';
 import { Project } from '@/data/projects';
 import { ClientLogo } from '@/data/clients';
 import Image from 'next/image';
+import CMSImage from '@/components/ui/CMSImage';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
@@ -13,11 +14,10 @@ import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import ClientCarousel from '@/components/ui/ClientCarousel';
 import MapComponent from '@/components/ui/MapComponent';
-import AnimatedSection from '@/components/ui/AnimatedSection';
 
-import {
-  initializeAnimations,
-  initializeHeroAnimation,
+import { 
+  initializeAnimations, 
+  initializeHeroAnimation, 
   addGSAPHoverAnimations,
   DepthAnimationController,
   add3DCardEffect,
@@ -120,15 +120,15 @@ const coverflowServices = [
 
 
 
-export default function HomeClient({
-  recentArticles,
-  defaultProjects,
-  defaultTestimonials,
-  defaultClients
+export default function HomeClient({ 
+  recentArticles, 
+  defaultProjects, 
+  defaultTestimonials, 
+  defaultClients 
 }: HomeClientProps) {
   // State for portfolio filter
   const [activeFilter, setActiveFilter] = useState<'all' | 'creative' | 'exhibition' | 'corporate' | 'wedding'>('all');
-
+  
   // State for contact form
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -141,31 +141,56 @@ export default function HomeClient({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
-
-
-  const [isMounted, setIsMounted] = useState(false);
-
+  // State for animation attributes to prevent hydration mismatch
+  const [animationAttrs, setAnimationAttrs] = useState({
+    delay: "0",
+    duration: "0.3", 
+    stagger: "0.02"
+  });
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true);
+    // Set client-side flag to prevent hydration mismatch
+    setIsClient(true);
+    
+    // Set standardized animation attributes
+    setAnimationAttrs({
+      delay: "0",
+      duration: "0.3",
+      stagger: "0.02"
+    });
+
+    // Update all animation attributes client-side to prevent hydration mismatch
+    const updateAnimationAttributes = () => {
+      const animatedElements = document.querySelectorAll('[data-delay], [data-duration], [data-stagger]');
+      animatedElements.forEach(element => {
+        element.setAttribute('data-delay', '0');
+        element.setAttribute('data-duration', '0.3');
+        element.setAttribute('data-stagger', '0.02');
+      });
+    };
+
+    // Apply updates after a short delay to ensure DOM is ready
+    const timeoutId = setTimeout(updateAnimationAttributes, 100);
+    
+    return () => clearTimeout(timeoutId);
   }, []);
 
   useEffect(() => {
-    if (!isMounted) {
-      return; // Don't run animations until the component is mounted
-    }
+    // Only initialize animations on client-side after hydration
+    if (!isClient) return;
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
-
+    
     // Initialize hero entrance animation
     const heroAnimation = initializeHeroAnimation();
-
+    
     // Initialize depth animation controller
     const depthController = new DepthAnimationController();
-
+    
     // Add hover animations
     addGSAPHoverAnimations();
-
+    
     // Add depth effects to specific elements after a delay
     const depthEffectsTimeout = setTimeout(() => {
       // Add 3D card effects to service cards
@@ -177,7 +202,7 @@ export default function HomeClient({
           liftHeight: 15
         });
       });
-
+      
       // Add 3D effects to portfolio items
       document.querySelectorAll('.portfolio-item').forEach(item => {
         add3DCardEffect(item, {
@@ -187,7 +212,7 @@ export default function HomeClient({
           liftHeight: 12
         });
       });
-
+      
       // Add 3D effects to testimonial cards
       document.querySelectorAll('.testimonial-card').forEach(card => {
         add3DCardEffect(card, {
@@ -197,19 +222,19 @@ export default function HomeClient({
           liftHeight: 18
         });
       });
-
+      
       // Create floating shapes in hero section
       const heroSection = document.querySelector('.hero-section');
       if (heroSection) {
         depthController.createFloatingShapes(heroSection, 8);
       }
-
+      
       // Create morphing background for sections
       const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
       sectionsWithMorphing.forEach(section => {
         createMorphingBackground(section);
       });
-
+      
       // Add enhanced parallax to background elements
       document.querySelectorAll('[data-parallax]').forEach(element => {
         const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
@@ -222,7 +247,7 @@ export default function HomeClient({
         });
       });
     }, 500);
-
+    
     // Cleanup on unmount
     return () => {
       clearTimeout(depthEffectsTimeout);
@@ -236,7 +261,7 @@ export default function HomeClient({
         depthController.destroy();
       }
     };
-  }, [isMounted]);
+  }, [isClient]);
 
   // Helper functions
   const scrollToSection = (sectionId: string) => {
@@ -262,7 +287,7 @@ export default function HomeClient({
     { key: 'wedding' as const, label: 'Wedding' }
   ];
 
-  const filteredProjects = defaultProjects.filter(project =>
+  const filteredProjects = defaultProjects.filter(project => 
     activeFilter === 'all' || project.category === activeFilter
   );
 
@@ -349,7 +374,7 @@ export default function HomeClient({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-
+    
     // Clear error when user starts typing
     if (errors[name as keyof ContactFormData]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
@@ -358,17 +383,17 @@ export default function HomeClient({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-
+    
     try {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 2000));
-
+      
       setIsSubmitted(true);
       setFormData({
         name: '',
@@ -398,20 +423,20 @@ export default function HomeClient({
                 <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500" data-float="true" data-float-amplitude="12" data-float-duration="3.5"></div>
               </div>
             </div>
-
+            
             {/* Depth Layer 2 - Middle */}
             <div className="absolute inset-0 opacity-25" data-depth-layer="2" data-parallax="0.5">
               <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-blue-400/20 to-gold-400/20 filter blur-lg" data-float="true" data-float-amplitude="10" data-float-duration="6"></div>
               <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-gradient-to-tr from-gold-400/15 to-blue-400/15 filter blur-lg" data-float="true" data-float-amplitude="18" data-float-duration="4.5"></div>
             </div>
-
+            
             {/* Depth Layer 3 - Closest */}
             <div className="absolute inset-0 opacity-30" data-depth-layer="1" data-parallax="0.2">
               <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-white/10 filter blur-sm" data-float="true" data-float-amplitude="8" data-float-duration="3" data-mouse-parallax="0.3"></div>
               <div className="absolute top-1/4 right-1/2 w-24 h-24 rounded-full bg-gold-300/20 filter blur-sm" data-float="true" data-float-amplitude="12" data-float-duration="4" data-mouse-parallax="0.2"></div>
               <div className="absolute bottom-1/2 right-1/4 w-40 h-40 rounded-full bg-blue-300/15 filter blur-sm" data-float="true" data-float-amplitude="15" data-float-duration="5.5" data-mouse-parallax="0.25"></div>
             </div>
-
+            
             {/* Morphing Gradient Overlay */}
             <div className="absolute inset-0 morphing-gradient opacity-60"></div>
           </div>
@@ -421,31 +446,34 @@ export default function HomeClient({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Text Content */}
               <div className="text-center lg:text-left depth-layer-2 w-full" data-mouse-parallax="0.1">
-                <h1
-                  className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight"
-                  data-element="title"
-                  data-text-animation="wave"
+                <h1 
+                  className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" 
+                  data-element="title" 
+                  data-text-animation="wave" 
+                  data-delay={animationAttrs.delay} 
+                  data-duration={animationAttrs.duration} 
+                  data-stagger={animationAttrs.stagger}
                   suppressHydrationWarning
                 >
                   <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
                   <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
                   <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
                 </h1>
-
-                <p
-                  className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth"
+                
+                <p 
+                  className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" 
                   suppressHydrationWarning
                 >
                   CV. Nara Exhibition Indonesia
                 </p>
-
-                <p
-                  className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium"
+                
+                <p 
+                  className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" 
                   suppressHydrationWarning
                 >
                   Trusted by Government & Fortune 500 Companies
                 </p>
-
+                
                 <div className="hero-buttons flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
                   <Button
                     variant="secondary"
@@ -457,7 +485,7 @@ export default function HomeClient({
                     Lihat Portfolio
                     <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-
+                  
                   <Button
                     variant="outline"
                     size="normal"
@@ -489,7 +517,6 @@ export default function HomeClient({
 
               {/* Visual Content - Service Coverflow */}
               <div className="relative hidden lg:block w-full coverflow-container depth-layer-1 overflow-hidden" data-mouse-parallax="0.15">
-                {isMounted && (
                 <Swiper
                   effect={'coverflow'}
                   grabCursor={true}
@@ -510,7 +537,7 @@ export default function HomeClient({
                 >
                   {coverflowServices.map((service, index) => (
                     <SwiperSlide key={index} style={{ width: '300px' }}>
-                      <div
+                      <div 
                         className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
                         style={{
                           backgroundImage: `url(${service.image})`,
@@ -521,23 +548,22 @@ export default function HomeClient({
                       >
                         {/* Enhanced overlay with depth */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
-
+                        
                         {/* Glass morphism overlay */}
                         <div className="absolute inset-0 glass-morphism-dark opacity-20 hover:opacity-30 transition-opacity duration-300"></div>
-
+                        
                         {/* Text content with depth */}
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
                           <h3 className="font-semibold text-lg mb-2 text-depth-lg">{service.title}</h3>
                           <p className="text-gray-200 text-sm text-depth">{service.subtitle}</p>
                         </div>
-
+                        
                         {/* Floating accent */}
                         <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
                       </div>
                     </SwiperSlide>
                   ))}
                 </Swiper>
-                )}
               </div>
             </div>
           </div>
@@ -549,12 +575,9 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-
+        
         {/* Company Introduction - CV. Nara Exhibition Indonesia */}
-        <AnimatedSection
-          id="about"
-          animation="slide-up"
-          className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
+        <section id="about" className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
           {/* Enhanced floating background elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Original circles */}
@@ -564,7 +587,7 @@ export default function HomeClient({
             <div className="absolute top-10 left-10 w-28 h-28 bg-blue-300/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
             <div className="absolute bottom-20 right-20 w-36 h-36 bg-gold-300/12 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
             <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-blue-200/15 rounded-full blur-xl" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
-
+            
             {/* Additional circles for enhanced visual depth */}
             <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/18 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
             <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
@@ -573,10 +596,10 @@ export default function HomeClient({
             <div className="absolute top-1/8 left-2/3 w-18 h-18 bg-blue-100/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
             <div className="absolute bottom-1/8 right-2/5 w-28 h-28 bg-gold-300/10 rounded-full filter blur-2xl" data-parallax="0.15" data-float="true" data-float-amplitude="20" data-float-duration="9"></div>
           </div>
-
+          
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-
+          
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl text-center relative z-10">
             {/* Decorative Top Divider */}
             <div className="flex items-center justify-center mb-8 sm:mb-12">
@@ -584,82 +607,101 @@ export default function HomeClient({
               <div className="mx-3 sm:mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
-
+            
             <div className="max-w-7xl mx-auto z-depth-2">
-              <h2
-                className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand"
-                data-element="heading"
-                data-text-animation="rotate-in"
+              <h2 
+                className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand"  
+                data-element="heading" 
+                data-text-animation="rotate-in" 
+                data-delay={animationAttrs.delay} 
+                data-duration={animationAttrs.duration} 
+                data-stagger={animationAttrs.stagger} 
                 data-tilt="4"
                 suppressHydrationWarning
               >
                 CV. Nara Exhibition Indonesia
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.03">
-                Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi,
-                mengkhususkan diri dalam MICE services, event production, dan solusi kreatif
-                komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan
+                Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
+                mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
+                komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan 
                 layanan end-to-end untuk kesuksesan setiap project Anda.
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-12 sm:mt-16 animate-stagger">
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="0"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">耳</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Creative Design & Branding"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                   </CardContent>
                 </Card>
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="50"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">汐</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Event Production"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                   </CardContent>
                 </Card>
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="100"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">導</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Digital Marketing"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                   </CardContent>
                 </Card>
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
+                <Card 
+                  variant="service" 
+                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
                   data-stagger="150"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">直</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Brand Consultation"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
                   </CardContent>
                 </Card>
               </div>
-
+              
               {/* Bottom Decorative Element */}
               <div className="flex items-center justify-center mt-16">
                 <div className="h-px bg-gradient-to-r from-transparent via-gold-300 to-transparent w-32"></div>
@@ -668,8 +710,8 @@ export default function HomeClient({
               </div>
             </div>
           </div>
-        </AnimatedSection>
-
+        </section>
+        
         {/* Services Section */}
         <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
           {/* Floating background elements */}
@@ -678,10 +720,10 @@ export default function HomeClient({
             <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
             <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/15 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
           </div>
-
+          
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16 depth-layer-1" data-mouse-parallax="0.05">
+            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.05">
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand" data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="4">
                 Layanan Kami
               </h2>
@@ -690,14 +732,14 @@ export default function HomeClient({
               </p>
             </div>
 
-
+            
             {/* Services Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
               {services.map((service, index) => (
                 <Card
                   key={service.id}
                   variant="service"
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform`}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform`}
                   data-stagger={index * 150}
                   data-tilt="8"
                   data-mouse-parallax="0.12"
@@ -708,29 +750,29 @@ export default function HomeClient({
                       {service.icon}
                     </div>
                   </div>
-
+                  
                   {/* Content */}
                   <div className="flex-1 flex flex-col">
                     <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
                       {service.title}
                     </h3>
-
+                    
                     <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
                       {service.description}
                     </p>
-
+                    
                     {/* Features List */}
                     <ul className="space-y-3 mb-6 flex-1 list-none">
                       {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start text-gray-contrast-700 animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                        <li key={idx} className="flex items-start text-gray-contrast-700  animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
                           <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
                           <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
                         </li>
                       ))}
                     </ul>
-
+                    
                     {/* CTA Button */}
-                    <button
+                    <button 
                       onClick={scrollToContact}
                       className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50 mt-auto" style={{color: 'var(--gold-700)'}}
                     >
@@ -741,9 +783,9 @@ export default function HomeClient({
                 </Card>
               ))}
             </div>
-
+            
             {/* Bottom CTA */}
-            <div className="text-center animate-stagger-4">
+            <div className="text-center  animate-stagger-4">
               <p className="body-large mb-8 text-gray-contrast-600">
                 Siap untuk mengembangkan bisnis Anda? Mari diskusikan project impian Anda bersama tim ahli kami.
               </p>
@@ -759,7 +801,7 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-
+        
         {/* Portfolio Section */}
         <section id="portfolio" className="section-padding bg-white scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
           {/* Enhanced floating background elements */}
@@ -770,7 +812,7 @@ export default function HomeClient({
             <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
             <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
             <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
-
+            
             {/* Additional circles for enhanced visual depth */}
             <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
             <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
@@ -779,20 +821,20 @@ export default function HomeClient({
             <div className="absolute top-1/6 right-1/6 w-20 h-20 bg-blue-200/12 rounded-full filter blur-2xl" data-parallax="0.45" data-float="true" data-float-amplitude="16" data-float-duration="7"></div>
             <div className="absolute bottom-1/6 left-2/3 w-24 h-24 bg-gold-300/15 rounded-full filter blur-xl" data-parallax="0.2" data-float="true" data-float-amplitude="15" data-float-duration="9"></div>
           </div>
-
+          
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
-
+          
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16 depth-layer-1" data-mouse-parallax="0.04">
+            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.04">
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Portfolio Terpilih
               </h2>
               <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.02">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
-
+              
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 sm:gap-4" data-mouse-parallax="0.06">
                 {filters.map((filter) => (
@@ -811,7 +853,7 @@ export default function HomeClient({
                 ))}
               </div>
             </div>
-
+            
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
               {filteredProjects.map((project, index) => (
@@ -833,7 +875,7 @@ export default function HomeClient({
                         sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                       />
                     </div>
-
+                    
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                       <div className="p-6 text-white w-full">
@@ -856,9 +898,9 @@ export default function HomeClient({
                 </Card>
               ))}
             </div>
-
+            
             {/* Bottom CTA */}
-            <div className="text-center animate-stagger-4">
+            <div className="text-center  animate-stagger-4">
               <p className="body-large mb-8 text-gray-contrast-600">
                 Tertarik dengan hasil kerja kami? Mari diskusikan project Anda dan wujudkan visi kreatif bersama.
               </p>
@@ -884,7 +926,7 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-
+        
         {/* Testimonials Section */}
         <section id="testimonials" className="section-padding bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
           {/* Enhanced floating background elements */}
@@ -894,10 +936,10 @@ export default function HomeClient({
             <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
             <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
           </div>
-
+          
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16 depth-layer-1" data-mouse-parallax="0.03">
+            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.03">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Kata Mereka
               </h2>
@@ -905,13 +947,13 @@ export default function HomeClient({
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
-
+            
             {/* Testimonials Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16 stagger-children" data-mouse-parallax="0.08">
               {defaultTestimonials.map((testimonial, index) => (
                 <Card
                   key={testimonial.id}
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
                   data-stagger={index * 200}
                   data-tilt="8"
                   data-mouse-parallax="0.12"
@@ -921,12 +963,12 @@ export default function HomeClient({
                   <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
                     {renderStars(testimonial.rating)}
                   </div>
-
+                  
                   {/* Quote */}
                   <blockquote className="quote font-normal text-medium-contrast text-lg mb-6 italic leading-relaxed">
                     &ldquo;{testimonial.quote}&rdquo;
                   </blockquote>
-
+                  
                   {/* Author Info */}
                   <div className="flex items-center">
                     <div className="relative w-16 h-16 mr-4">
@@ -950,17 +992,17 @@ export default function HomeClient({
                 </Card>
               ))}
             </div>
-
+            
             {/* Client Logos Carousel */}
             <div className="animate-fade-in animation-delay-600 no-shadow">
               <p className="text-center mb-8 text-lg client-carousel-text">
                 Dipercaya oleh:
               </p>
               <div className="no-shadow">
-                {isMounted && <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />}
+                <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />
               </div>
             </div>
-
+            
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
               <div className="text-center">
@@ -982,27 +1024,25 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-
+        
         {/* Latest Updates - Blog/News Integration */}
-        <AnimatedSection
-          animation="fade-in"
-          className="section-padding bg-white scroll-snap-section">
+        <section className="section-padding bg-white scroll-snap-section">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6">Latest Updates</h2>
-              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto">
+            <div className="text-center mb-16 ">
+              <h2 className="heading-2 mb-6  animate-stagger-1">Latest Updates</h2>
+              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto  animate-stagger-2">
                 Berita terbaru, insights industri, dan stories dari project-project terbaru kami.
               </p>
             </div>
-
+            
             {/* Centered Blog Articles Container */}
             <div className="flex justify-center">
               <div className="w-full max-w-5xl">
                 {/* Blog Articles */}
-                <div >
+                <div className="">
                   <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
                     {recentArticles.map((article, index) => (
-                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow card-accessible" data-stagger={index * 200}>
+                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow  card-accessible" data-stagger={index * 200}>
                         <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
                           <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
                         </div>
@@ -1016,11 +1056,12 @@ export default function HomeClient({
                           <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
                             {article.excerpt}
                           </p>
-                          <a
+                          <a 
                             href={`/blog/${article.slug}`}
                             className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
                           >
-                            Baca Selengkapnya 竊                          </a>
+                            Baca Selengkapnya →
+                          </a>
                         </div>
                       </article>
                     ))}
@@ -1028,15 +1069,15 @@ export default function HomeClient({
                 </div>
               </div>
             </div>
-
+            
             <div className="text-center mt-12">
               <Link href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 btn-accessible-primary blog-button">
                 Lihat Semua Artikel
               </Link>
             </div>
           </div>
-        </AnimatedSection>
-
+        </section>
+        
         {/* Multi-Channel Contact CTA */}
         <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
           {/* Enhanced floating background elements */}
@@ -1046,19 +1087,19 @@ export default function HomeClient({
             <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
             <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
           </div>
-
+          
           <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 scroll-animate-scale">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
+            <div className="text-center mb-12 ">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6  animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
                 Siap Memulai Project Anda?
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto  animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
+                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
                 mewujudkan visi kreatif Anda menjadi kenyataan.
               </p>
             </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
@@ -1066,7 +1107,7 @@ export default function HomeClient({
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
                 <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
               </a>
-
+              
               <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="50">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
@@ -1074,7 +1115,7 @@ export default function HomeClient({
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
                 <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
               </a>
-
+              
               <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
@@ -1082,7 +1123,7 @@ export default function HomeClient({
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
                 <p className="text-gray-300 text-sm">@narvex.id</p>
               </a>
-
+              
               <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="150">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
@@ -1091,8 +1132,8 @@ export default function HomeClient({
                 <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
               </a>
             </div>
-
-            <div className="text-center animate-stagger-4">
+            
+            <div className="text-center  animate-stagger-4">
               <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
               </Link>
@@ -1102,7 +1143,7 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-
+        
         {/* Contact Section */}
         <div className="scroll-snap-section">
           {isSubmitted ? (
@@ -1130,15 +1171,15 @@ export default function HomeClient({
               <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-12">
                   {/* Contact Form */}
-                  <div >
+                  <div className="">
                     <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
                       Mari Wujudkan Project Impian Anda
                     </h2>
                     <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015">
                       Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
                     </p>
-
-                    <form onSubmit={handleSubmit} className="space-y-6 animate-stagger-3">
+                    
+                    <form onSubmit={handleSubmit} className="space-y-6  animate-stagger-3">
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <input
@@ -1155,7 +1196,7 @@ export default function HomeClient({
                             <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                           )}
                         </div>
-
+                        
                         <div>
                           <input
                             type="email"
@@ -1172,7 +1213,7 @@ export default function HomeClient({
                           )}
                         </div>
                       </div>
-
+                      
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <input
@@ -1189,7 +1230,7 @@ export default function HomeClient({
                             <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
                           )}
                         </div>
-
+                        
                         <div>
                           <select
                             name="service"
@@ -1210,7 +1251,7 @@ export default function HomeClient({
                           )}
                         </div>
                       </div>
-
+                      
                       <div>
                         <textarea
                           name="message"
@@ -1226,7 +1267,7 @@ export default function HomeClient({
                           <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                         )}
                       </div>
-
+                      
                       <Button
                         type="submit"
                         variant="primary"
@@ -1248,14 +1289,14 @@ export default function HomeClient({
                       </Button>
                     </form>
                   </div>
-
+                  
                   {/* Contact Info & Map */}
-                  <div >
-                    <Card className="p-8 mb-8 animate-stagger-4">
+                  <div className="">
+                    <Card className="p-8 mb-8  animate-stagger-4">
                       <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">Hubungi Kami</h3>
                       <div className="space-y-6">
                         {contactInfo.map((info, index) => (
-                          <div key={index} className="flex items-start animate-stagger-6" data-stagger={index * 100}>
+                          <div key={index} className="flex items-start  animate-stagger-6" data-stagger={index * 100}>
                             <div className="w-12 h-12 bg-gold-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                               {info.icon}
                             </div>
@@ -1268,10 +1309,10 @@ export default function HomeClient({
                         ))}
                       </div>
                     </Card>
-
+                    
                     {/* Interactive Map */}
-                    <div className="rounded-lg overflow-hidden shadow-lg animate-stagger-7">
-                      <MapComponent height="h-64" className="w-full" />
+                    <div className="rounded-lg shadow-lg relative z-10">
+                      <MapComponent height="h-64" className="w-full overflow-hidden" />
                     </div>
                   </div>
                 </div>
