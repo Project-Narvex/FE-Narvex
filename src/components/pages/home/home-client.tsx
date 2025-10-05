@@ -1311,8 +1311,8 @@ export default function HomeClient({
                     </Card>
                     
                     {/* Interactive Map */}
-                    <div className="rounded-lg overflow-hidden shadow-lg  animate-stagger-7">
-                      <MapComponent height="h-64" className="w-full" />
+                    <div className="rounded-lg shadow-lg relative z-10">
+                      <MapComponent height="h-64" className="w-full overflow-hidden" />
                     </div>
                   </div>
                 </div>
