@@ -40,25 +40,29 @@ export interface BlogPageContent {
 }
 
 // Transform Strapi blog article to our format
-export function transformBlogArticle(article: BlogArticleItem): TransformedBlogArticle {
+export function transformBlogArticle(article: any): TransformedBlogArticle {
+  console.log('Transforming article:', article.title, 'Cover:', article.cover);
+  
   // Build full image URL
   const getImageUrl = (url: string) => {
     if (url.startsWith('http')) return url;
-    return `https://admin.narvex.id${url}`;
+    const fullUrl = `https://admin.narvex.id${url}`;
+    console.log('Image URL transformation:', url, '->', fullUrl);
+    return fullUrl;
   };
 
   return {
     id: article.id,
     title: article.title,
     slug: article.slug,
-    excerpt: article.content ? extractExcerpt(article.content) : 'No excerpt available',
+    excerpt: article.content ? extractExcerpt(article.content) : 'Artikel menarik dari tim Narvex...',
     content: article.content,
-    category: article.blog_category?.name || 'None',
-    author: 'Narvex Team', // Default author since it's not in the API
-    publishDate: article.createdAt,
+    category: article.blog_category?.name || 'No Category',
+    author: article.users_permissions_user?.username || 'Narvex Team',
+    publishDate: article.publishDate || article.createdAt,
     readTime: calculateReadTime(article.content),
-    tags: article.tags?.map(tag => tag.name) || [],
-    featured: false, // We'll determine this based on highlight section
+    tags: article.tags?.map((tag: any) => tag.name || tag) || [],
+    featured: article.featured || false,
     cover: article.cover ? {
       url: getImageUrl(article.cover.url),
       alternativeText: article.cover.alternativeText,
@@ -117,27 +121,41 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
   console.log('Transforming blog page data:', data);
   console.log('All blog articles from API:', allBlogArticles);
   
+  // Transform featured articles from Highlight_Article section
+  console.log('Highlight_Article data:', data.Highlight_Article);
+  console.log('Data structure check:', {
+    hasHighlightArticle: !!data.Highlight_Article,
+    hasBlogArticles: !!data.Highlight_Article?.blog_articles,
+    blogArticlesLength: data.Highlight_Article?.blog_articles?.length || 0
+  });
   const featuredArticles = data.Highlight_Article?.blog_articles?.map(transformBlogArticle) || [];
   
-  // Use all blog articles from API if provided, otherwise fallback to Article section
-  let allArticles: any[] = [];
-  if (allBlogArticles?.data) {
-    allArticles = allBlogArticles.data.map(transformBlogArticle);
-  } else {
-    allArticles = data.Article?.blog_articles?.map(transformBlogArticle) || [];
-  }
+  console.log('Featured articles after transform:', featuredArticles);
   
-  console.log('Featured articles:', featuredArticles);
-  console.log('All articles:', allArticles);
+  // Transform all articles from API
+  const allArticles = allBlogArticles?.data?.map(transformBlogArticle) || [];
   
   // Mark featured articles
   featuredArticles.forEach(article => {
     article.featured = true;
   });
   
-  // Don't remove duplicates - show all articles including featured ones
-  // This allows users to see all articles in the filter section
-  const allArticlesCombined = [...featuredArticles, ...allArticles];
+  console.log('Featured articles from Highlight_Article:', featuredArticles);
+  console.log('All articles:', allArticles);
+  
+  // Remove duplicates - if an article is in featured, don't include it in allArticles
+  const featuredIds = new Set(featuredArticles.map(article => article.id));
+  const uniqueAllArticles = allArticles.filter(article => !featuredIds.has(article.id));
+  
+  console.log('Featured IDs:', Array.from(featuredIds));
+  console.log('Unique all articles (after removing featured):', uniqueAllArticles);
+  
+  // Combine featured and unique all articles
+  const allArticlesCombined = [...featuredArticles, ...uniqueAllArticles];
+  
+  console.log('All articles combined (no duplicates):', allArticlesCombined);
+  
+  // Get unique categories
   const uniqueCategories = Array.from(new Set(allArticlesCombined.map(article => article.category)));
   const categories = [
     { id: 'all', name: 'All Categories' },
@@ -162,7 +180,7 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
       description: data.hero?.description || 'Temukan artikel terbaru, tips, dan insights dari dunia creative services dan event production'
     },
     featuredArticles,
-    allArticles: allArticles, // Use all articles including featured ones
+    allArticles: allArticlesCombined, // This now contains no duplicates
     categories,
     years,
     authors
@@ -170,6 +188,6 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
 }
 
 // Transform blog list data for filtering
-export function transformBlogListData(data: BlogListData): TransformedBlogArticle[] {
+export function transformBlogListData(data: any): TransformedBlogArticle[] {
   return data.data?.map(transformBlogArticle) || [];
 }

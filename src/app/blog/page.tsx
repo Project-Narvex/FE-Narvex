@@ -19,7 +19,10 @@ export default async function BlogPage() {
     ]);
     
     // Transform the data to our expected format
+    console.log('Blog page data from API:', JSON.stringify(blogPageData, null, 2));
+    console.log('All blog articles from API:', JSON.stringify(allBlogArticles, null, 2));
     const transformedData = transformBlogPageData(blogPageData, allBlogArticles);
+    console.log('Transformed data:', JSON.stringify(transformedData, null, 2));
     
     const statusOptions = [
       { id: 'all', name: 'All Status' },

@@ -203,72 +203,98 @@ export default function BlogClient({
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 lg:gap-12">
               {featuredArticles.map((article, index) => (
-                <Card key={article.id} variant="service" className={`article-card group flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden ${index % 2 === 0 ? 'scroll-animate-left' : 'scroll-animate-right'}`}>
-                  <div className="h-48 bg-gradient-to-br from-blue-100 to-gold-100 flex items-center justify-center relative overflow-hidden">
-                    {article.cover?.url ? (
-                      <img 
-                        src={article.cover.url} 
-                        alt={article.cover.alternativeText || article.title}
-                        className="w-full h-full object-cover"
-                      />
-                    ) : (
-                      <>
-                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10"></div>
-                        <div className="text-center text-blue-600 relative z-10">
-                          <div className="text-5xl mb-2 group-hover:scale-110 transition-transform duration-300">📰</div>
-                          <p className="text-sm font-medium">Featured Article</p>
-                        </div>
-                      </>
-                    )}
-                    <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
-                  </div>
-                  
-                  <CardContent className="p-6 flex flex-col flex-1">
-                    <div className="flex items-center gap-4 text-sm text-gray-contrast-500 mb-4 flex-wrap">
-                      <div className="flex items-center">
-                        <Calendar className="w-4 h-4 mr-2 text-blue-500" />
-                        {new Date(article.publishDate).toLocaleDateString('id-ID')}
-                      </div>
-                      <div className="flex items-center">
-                        <User className="w-4 h-4 mr-2 text-blue-500" />
-                        {article.author}
-                      </div>
-                      <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">{article.readTime} read</span>
-                      {article.category !== 'None' && (
-                        <span className="bg-gold-100 text-gold-700 px-2 py-1 rounded-full text-xs">{article.category}</span>
-                      )}
-                    </div>
-                    
-                    <h3 className="text-xl font-bold text-blue-900 mb-3 line-clamp-2 group-hover:text-blue-800 transition-colors duration-300 leading-snug">
-                      {article.title}
-                    </h3>
-                    
-                    <p className="text-gray-contrast-600 mb-4 line-clamp-3 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300">
-                      {article.excerpt}
-                    </p>
-                    
-                    <div className="flex flex-wrap gap-2 mb-6">
-                      {article.tags.length > 0 ? (
-                        article.tags.slice(0, 3).map((tag, idx) => (
-                          <span key={idx} className="bg-gradient-to-r from-gold-100 to-gold-200 text-gold-700 px-3 py-1 rounded-full text-xs font-medium hover-depth-subtle">
-                            {tag}
-                          </span>
-                        ))
+                <Link 
+                  key={`featured-${article.id}-${index}`}
+                  href={`/blog/${article.slug || article.id}`}
+                  className="block h-full cursor-pointer"
+                >
+                  <Card variant="service" className={`article-card group flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 hover:scale-105 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden cursor-pointer ${index % 2 === 0 ? 'scroll-animate-left' : 'scroll-animate-right'}`}>
+                    <div className="h-48 relative overflow-hidden">
+                      {article.cover?.url ? (
+                        <>
+                          {console.log('Featured article cover URL:', article.cover.url)}
+                          <img 
+                            src={article.cover.url} 
+                            alt={article.cover.alternativeText || article.title}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              console.error('Image failed to load:', article.cover.url);
+                              // Hide the image and show fallback
+                              e.currentTarget.style.display = 'none';
+                              const fallback = e.currentTarget.nextElementSibling;
+                              if (fallback) {
+                                fallback.style.display = 'flex';
+                              }
+                            }}
+                          />
+                          {/* Hidden fallback for when image fails to load */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10 hidden items-center justify-center">
+                            <div className="text-center text-blue-600">
+                              <div className="text-5xl mb-2">📰</div>
+                              <p className="text-sm font-medium">{article.category || 'Featured Article'}</p>
+                            </div>
+                          </div>
+                        </>
                       ) : (
-                        <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-medium">
-                          No Tags
-                        </span>
+                        <div className="w-full h-full bg-gradient-to-br from-blue-100 to-gold-100 flex items-center justify-center">
+                          <div className="text-center text-blue-600">
+                            <div className="text-5xl mb-2 group-hover:scale-110 transition-transform duration-300">📰</div>
+                            <p className="text-sm font-medium">{article.category || 'Featured Article'}</p>
+                          </div>
+                        </div>
                       )}
+                      <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
                     </div>
                     
-                    <button className="text-gold-600 hover:text-gold-700 font-semibold inline-flex items-center transition-all duration-300 group-hover:translate-x-1">
-                      Baca Selengkapnya
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform duration-300" />
-                    </button>
+                    <CardContent className="p-6 flex flex-col flex-1">
+                      <div className="flex items-center gap-4 text-sm text-gray-contrast-500 mb-4 flex-wrap">
+                        <div className="flex items-center">
+                          <Calendar className="w-4 h-4 mr-2 text-blue-500" />
+                          {new Date(article.publishDate || article.createdAt).toLocaleDateString('id-ID')}
+                        </div>
+                        <div className="flex items-center">
+                          <User className="w-4 h-4 mr-2 text-blue-500" />
+                          {article.author || 'Narvex Team'}
+                        </div>
+                        <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">{article.readTime || '5 min'} read</span>
+                        {article.category && article.category !== 'No Category' && (
+                          <span className="bg-gold-100 text-gold-700 px-2 py-1 rounded-full text-xs">{article.category}</span>
+                        )}
+                      </div>
+                      
+                      <h3 className="text-xl font-bold text-blue-900 mb-3 line-clamp-2 group-hover:text-blue-800 transition-colors duration-300 leading-snug">
+                        {article.title}
+                      </h3>
+                      
+                      <p className="text-gray-contrast-600 mb-4 line-clamp-3 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300">
+                        {article.excerpt || 'Artikel menarik dari tim Narvex...'}
+                      </p>
+                      
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {article.tags && article.tags.length > 0 ? (
+                          article.tags.slice(0, 3).map((tag, idx) => (
+                            <span key={idx} className="bg-gradient-to-r from-gold-100 to-gold-200 text-gold-700 px-3 py-1 rounded-full text-xs font-medium hover-depth-subtle">
+                              {tag.name || tag}
+                            </span>
+                          ))
+                        ) : (
+                          <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-medium">
+                            No Tags
+                          </span>
+                        )}
+                      </div>
+                      
+                      <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full"></div>
+                    </CardContent>
                     
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full"></div>
-                  </CardContent>
-                </Card>
+                    {/* Hover overlay with "Click to read" */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center pointer-events-none">
+                      <div className="bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full text-blue-900 font-semibold text-sm shadow-lg transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                        Click to read article
+                      </div>
+                    </div>
+                  </Card>
+                </Link>
               ))}
             </div>
           </div>
@@ -408,12 +434,12 @@ export default function BlogClient({
               </div>
             ) : filteredBlogArticlesEnhanced.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
-                 {filteredBlogArticlesEnhanced.map((article, index) => (
-                  <Link 
-                    key={article.id}
-                    href={`/blog/${article.slug || article.id}`}
-                    className="block h-full cursor-pointer"
-                  >
+                  {filteredBlogArticlesEnhanced.map((article, index) => (
+                    <Link 
+                      key={`query-${article.id}-${index}`}
+                      href={`/blog/${article.slug || article.id}`}
+                      className="block h-full cursor-pointer"
+                    >
                     <Card 
                       variant="service" 
                       className="blog-query-card group glass-morphism depth-4 bg-white/95 backdrop-blur-lg border-white/30 hover:shadow-2xl transition-all duration-700 hover:scale-105 hover:-translate-y-2 relative overflow-hidden h-full"
@@ -432,7 +458,7 @@ export default function BlogClient({
                       
                       <CardContent className="p-0 flex flex-col h-full">
                         {/* Article Thumbnail */}
-                        <div className="h-48 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center overflow-hidden relative group-hover:scale-110 transition-transform duration-700">
+                        <div className="h-48 relative overflow-hidden group-hover:scale-110 transition-transform duration-700">
                           {article.cover?.url ? (
                             <img 
                               src={article.cover.url} 
@@ -440,9 +466,11 @@ export default function BlogClient({
                               className="w-full h-full object-cover"
                             />
                           ) : (
-                            <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
-                              <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">📰</div>
-                              <p className="text-sm font-semibold uppercase tracking-wide">{article.category.replace('-', ' ')}</p>
+                            <div className="w-full h-full bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center">
+                              <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
+                                <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">📰</div>
+                                <p className="text-sm font-semibold uppercase tracking-wide">{article.category.replace('-', ' ')}</p>
+                              </div>
                             </div>
                           )}
                           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-gold-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
@@ -455,7 +483,7 @@ export default function BlogClient({
                         <div className="p-6 flex flex-col flex-grow">
                           {/* Category Badge */}
                           <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium capitalize w-fit mb-3">
-                            {article.category === 'None' ? 'No Category' : article.category.replace('-', ' ')}
+                            {article.blog_category?.name || 'No Category'}
                           </div>
                           
                           {/* Article Title */}
@@ -467,14 +495,14 @@ export default function BlogClient({
                           <div className="flex flex-wrap gap-3 text-sm text-gray-600 min-w-0 mb-4">
                             <div className="flex items-center min-w-0">
                               <User className="w-4 h-4 mr-1 flex-shrink-0 text-blue-500" />
-                              <span className="truncate">{article.author}</span>
+                              <span className="truncate">{article.author || 'Narvex Team'}</span>
                             </div>
                             <div className="flex items-center">
                               <Calendar className="w-4 h-4 mr-1 flex-shrink-0 text-blue-500" />
-                              <span>{new Date(article.publishDate).toLocaleDateString('id-ID')}</span>
+                              <span>{new Date(article.publishDate || article.createdAt).toLocaleDateString('id-ID')}</span>
                             </div>
                             <div className="flex items-center">
-                              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">{article.readTime}</span>
+                              <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs font-medium">{article.readTime || '5 min'}</span>
                             </div>
                           </div>
                           
@@ -485,11 +513,11 @@ export default function BlogClient({
                           
                           {/* Tags */}
                           <div className="flex flex-wrap gap-2 mt-auto">
-                            {article.tags.length > 0 ? (
+                            {article.tags && article.tags.length > 0 ? (
                               <>
                                 {article.tags.slice(0, 2).map((tag, idx) => (
                                   <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
-                                    {tag}
+                                    {tag.name || tag}
                                   </span>
                                 ))}
                                 {article.tags.length > 2 && (
