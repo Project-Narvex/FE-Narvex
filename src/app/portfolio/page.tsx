@@ -1,6 +1,6 @@
 import React from 'react';
 import PortfolioClient from '@/components/pages/portofolio/portofolio-client';
-import { strapi, PortfolioPageData, PortfolioListData, PortfolioItem } from '@/lib/strapi';
+import { strapi, PortfolioPageData, PortfolioListData, PortfolioItem, getStrapiImageUrl } from '@/lib/strapi';
 
 // This is now a Server Component
 export default async function PortfolioPage() {
@@ -21,15 +21,40 @@ export default async function PortfolioPage() {
       })
     ]);
 
-    const portfolioPageData: PortfolioPageData | null = portfolioPageResponse?.data || null;
-    const portfolioListData: PortfolioListData = portfolioListResponse || { data: [], meta: { pagination: { page: 1, pageSize: 100, pageCount: 0, total: 0 } } };
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const portfolioPageData: PortfolioPageData | null = (portfolioPageResponse as any)?.data || null;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const portfolioListData: PortfolioListData = (portfolioListResponse as any) || { data: [], meta: { pagination: { page: 1, pageSize: 100, pageCount: 0, total: 0 } } };
 
-    // Transform portfolio items to match the expected format
+    // Helper function to map project categories to valid types
+    const mapProjectCategory = (categoryName: string | null | undefined): 'exhibition' | 'booth' | 'activation' | 'tour' | 'corporate' | 'creative' | 'education' | 'wedding' => {
+      switch (categoryName) {
+        case 'Fun':
+          return 'creative';
+        case 'Party':
+          return 'activation';
+        case 'Exhibition':
+          return 'exhibition';
+        case 'Booth':
+          return 'booth';
+        case 'Tour':
+          return 'tour';
+        case 'Corporate':
+          return 'corporate';
+        case 'Education':
+          return 'education';
+        case 'Wedding':
+          return 'wedding';
+        default:
+          return 'creative';
+      }
+    };
     const transformedProjects = portfolioListData.data.map((item: PortfolioItem) => ({
-      id: item.id,
+      id: item.id.toString(),
       title: item.title,
       slug: item.slug,
-      category: item.portfolio_categories?.[0]?.name?.toLowerCase().replace(' ', '-') || 'general',
+      category: mapProjectCategory(item.portfolio_categories?.[0]?.name),
+      companyId: 'narvex-main', // Default company ID as required by interface
       company: item.company?.name || 'Unknown Company',
       client: item.client?.name || 'Unknown Client',
       location: item.company?.address ? `${item.company.address.city}, ${item.company.address.province}` : 'Unknown Location',
@@ -38,11 +63,12 @@ export default async function PortfolioPage() {
       description: item.excerpt,
       longDescription: item.excerpt,
       services: item.services?.map(service => service.title) || [],
-      images: item.gallery || [],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      images: item.gallery?.map((img: any) => getStrapiImageUrl(img, 'medium')) || [],
       tags: item.portfolio_categories?.map(cat => cat.name) || [],
       results: {}, // Will be populated from detailed project data if needed
       featured: item.Highlight || false,
-      status: 'completed',
+      status: 'completed' as const,
       budget: '',
       duration: '',
       teamSize: 0,
@@ -51,11 +77,13 @@ export default async function PortfolioPage() {
     }));
 
     // Get featured projects from portfolio page data
-    const featuredProjects = portfolioPageData.highlight_portofolio?.featuredProjects?.map(project => ({
-      id: project.id,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const featuredProjects = portfolioPageData?.highlight_portofolio?.featuredProjects?.map((project: any) => ({
+      id: project.id.toString(),
       title: project.title,
       slug: project.slug,
-      category: project.portfolio_categories?.[0]?.name?.toLowerCase().replace(' ', '-') || 'general',
+      category: mapProjectCategory(project.portfolio_categories?.[0]?.name),
+      companyId: 'narvex-main', // Default company ID as required by interface
       company: project.company?.name || 'Unknown Company',
       client: project.client?.name || 'Unknown Client',
       location: project.company?.address ? `${project.company.address.city}, ${project.company.address.province}` : 'Unknown Location',
@@ -63,12 +91,15 @@ export default async function PortfolioPage() {
       year: project.date ? parseInt(project.date.split('-')[0]) : new Date(project.createdAt).getFullYear(),
       description: project.excerpt,
       longDescription: project.excerpt,
-      services: project.services?.map(service => service.title) || [],
-      images: project.gallery || [],
-      tags: project.portfolio_categories?.map(cat => cat.name) || [],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      services: project.services?.map((service: any) => service.title) || [],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      images: project.gallery?.map((img: any) => getStrapiImageUrl(img, 'medium')) || [],
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      tags: project.portfolio_categories?.map((cat: any) => cat.name) || [],
       results: {}, // Will be populated from detailed project data if needed
       featured: project.Highlight || false,
-      status: 'completed',
+      status: 'completed' as const,
       budget: '',
       duration: '',
       teamSize: 0,
@@ -80,7 +111,6 @@ export default async function PortfolioPage() {
     const portfolioCategories = [
       { id: 'all', name: 'All Categories' },
       ...Array.from(new Set(transformedProjects.map(project => project.category)))
-        .filter(category => category && category !== 'all')
         .map(category => ({ 
           id: category, 
           name: category.charAt(0).toUpperCase() + category.slice(1).replace('-', ' ').replace('_', ' ')

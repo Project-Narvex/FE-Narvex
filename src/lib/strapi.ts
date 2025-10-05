@@ -13,7 +13,6 @@ export * from './strapi/helpers';
 export * from './strapi/base';
 
 // Create service instances
-const pageService = new StrapiPageService();
 const contentService = new StrapiContentService();
 
 // Combined API client that provides all services

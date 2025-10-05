@@ -27,7 +27,8 @@ import { clientLogos } from '@/data/clients';
 export default async function Home() {
   try {
     // Fetch homepage data from Strapi
-    const strapiResponse = await strapi.getHomepage();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const strapiResponse = await strapi.getHomepage() as any;
     
     // Check if response exists
     if (!strapiResponse) {
@@ -184,7 +185,7 @@ export default async function Home() {
       const apiClients = testimonialSection?.clients?.map(client => ({
         id: client.id.toString(),
         name: client.name,
-        logo: client.logo as any, // Cast to any to satisfy interface
+        logo: client.logo,
         website: client.website,
         category: 'Client'
       })) || [];

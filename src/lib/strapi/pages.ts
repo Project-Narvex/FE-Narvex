@@ -26,7 +26,7 @@ export class StrapiPageService extends StrapiAPI {
     try {
       const servicePageEndpoint = STRAPI_SERVICE_PAGE_URL.replace(process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', '').replace('/api', '') || '/service-page?populate=*';
       
-      console.log('Fetching service page from:', `${this.baseURL}/api${servicePageEndpoint}`);
+      console.log('Fetching service page from:', `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api${servicePageEndpoint}`);
       
       const data = await this.requestPage(`${servicePageEndpoint}`);
       console.log('Service page API response:', data);
@@ -42,7 +42,7 @@ export class StrapiPageService extends StrapiAPI {
     try {
       const companyPageEndpoint = STRAPI_COMPANY_PAGE_URL.replace(process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', '').replace('/api', '') || '/company-page?populate=*';
       
-      console.log('Fetching company page from:', `${this.baseURL}/api${companyPageEndpoint}`);
+      console.log('Fetching company page from:', `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api${companyPageEndpoint}`);
       
       const data = await this.requestPage(`${companyPageEndpoint}`);
       console.log('Company page API response:', data);
@@ -58,7 +58,7 @@ export class StrapiPageService extends StrapiAPI {
     try {
       const portfolioPageEndpoint = STRAPI_PORTOFOLIO_PAGE_URL.replace(process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337', '').replace('/api', '') || '/portofolio-page?populate=*';
       
-      console.log('Fetching portfolio page from:', `${this.baseURL}/api${portfolioPageEndpoint}`);
+      console.log('Fetching portfolio page from:', `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api${portfolioPageEndpoint}`);
       
       const data = await this.requestPage(`${portfolioPageEndpoint}`);
       console.log('Portfolio page API response:', data);

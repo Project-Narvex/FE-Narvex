@@ -51,14 +51,14 @@ export function getStrapiImageUrl(image: StrapiImage, size: 'thumbnail' | 'small
 }
 
 // Helper function for automatic logo mapping with better error handling
-export function mapStrapiLogo(logoData: any, size: 'thumbnail' | 'small' | 'medium' | 'large' | 'original' = 'medium', fallbackText?: string): {
+export function mapStrapiLogo(logoData: unknown, size: 'thumbnail' | 'small' | 'medium' | 'large' | 'original' = 'medium', fallbackText?: string): {
   logoUrl: string | null;
   hasLogo: boolean;
   altText: string;
   fallbackText?: string;
 } {
   // Check if logo exists and has proper structure
-  if (!logoData || !logoData.url) {
+  if (!logoData || typeof logoData !== 'object' || !(logoData as Record<string, unknown>).url) {
     return {
       logoUrl: null,
       hasLogo: false,
@@ -68,11 +68,12 @@ export function mapStrapiLogo(logoData: any, size: 'thumbnail' | 'small' | 'medi
   }
 
   try {
+    const logoObj = logoData as Record<string, unknown>;
     const logoUrl = getStrapiImageUrl(logoData as StrapiImage, size);
     return {
       logoUrl,
       hasLogo: true,
-      altText: logoData.alternativeText || logoData.name || fallbackText || 'Logo',
+      altText: (logoObj.alternativeText as string) || (logoObj.name as string) || fallbackText || 'Logo',
       fallbackText: fallbackText || '司'
     };
   } catch (error) {
@@ -87,129 +88,135 @@ export function mapStrapiLogo(logoData: any, size: 'thumbnail' | 'small' | 'medi
 }
 
 // Helper function for client logo mapping specifically for carousel
-export function mapClientLogo(client: any): {
+export function mapClientLogo(client: unknown): {
   logoUrl: string | null;
   hasLogo: boolean;
   altText: string;
   fallbackInitials: string;
 } {
-  const fallbackInitials = client.name 
-    ? client.name.split(' ').map((word: string) => word.charAt(0)).join('').toUpperCase().slice(0, 3)
+  const clientObj = client as Record<string, unknown>;
+  const fallbackInitials = clientObj.name && typeof clientObj.name === 'string'
+    ? clientObj.name.split(' ').map((word: string) => word.charAt(0)).join('').toUpperCase().slice(0, 3)
     : 'LOGO';
 
-  if (!client.logo || !client.logo.url) {
+  if (!clientObj.logo || typeof clientObj.logo !== 'object' || !(clientObj.logo as Record<string, unknown>).url) {
     return {
       logoUrl: null,
       hasLogo: false,
-      altText: `${client.name || 'Client'} logo`,
+      altText: `${(clientObj.name as string) || 'Client'} logo`,
       fallbackInitials
     };
   }
 
   try {
-    const logoUrl = getStrapiImageUrl(client.logo as StrapiImage, 'medium');
+    const logoUrl = getStrapiImageUrl(clientObj.logo as StrapiImage, 'medium');
     return {
       logoUrl,
       hasLogo: true,
-      altText: client.logo.alternativeText || client.logo.name || `${client.name} logo`,
+      altText: (clientObj.logo as Record<string, unknown>).alternativeText as string || (clientObj.logo as Record<string, unknown>).name as string || `${(clientObj.name as string) || 'Client'} logo`,
       fallbackInitials
     };
   } catch (error) {
-    console.warn('Error mapping client logo:', client, error);
+    console.warn('Error mapping client logo:', clientObj, error);
     return {
       logoUrl: null,
       hasLogo: false,
-      altText: `${client.name || 'Client'} logo`,
+      altText: `${(clientObj.name as string) || 'Client'} logo`,
       fallbackInitials
     };
   }
 }
 
 // Helper function to transform homepage component based on its type
-export function transformHomepageComponent(component: any): HomepageComponent {
-  switch (component.__component) {
+export function transformHomepageComponent(component: unknown): HomepageComponent {
+  const comp = component as Record<string, unknown>;
+  switch (comp.__component) {
     case 'sections.hero-section':
-      return component as HeroSection;
+      return comp as HeroSection;
     case 'components.company-highlights':
-      return component as CompanyHighlight;
+      return comp as CompanyHighlight;
     case 'components.service-highlight':
-      return component as ServiceHighlight;
+      return comp as ServiceHighlight;
     case 'sections.project-highlights':
-      return component as ProjectHighlight;
+      return comp as ProjectHighlight;
     case 'sections.testimonial-carousel':
-      return component as TestimonialCarousel;
+      return comp as TestimonialCarousel;
     case 'sections.article':
-      return component as ArticleSection;
+      return comp as ArticleSection;
     case 'sections.contact':
-      return component as ContactSection;
+      return comp as ContactSection;
     case 'sections.collaboration':
-      return component as CollaborationSection;
+      return comp as CollaborationSection;
     default:
-      return component as HomepageComponent;
+      return comp as HomepageComponent;
   }
 }
 
 // Helper function to transform about page component based on its type
-export function transformAboutPageComponent(component: any): AboutPageComponent {
-  switch (component.__component) {
+export function transformAboutPageComponent(component: unknown): AboutPageComponent {
+  const comp = component as Record<string, unknown>;
+  switch (comp.__component) {
     case 'about.hero':
-      return component as AboutHero;
+      return comp as AboutHero;
     case 'about.aspect':
-      return component as AboutAspect;
+      return comp as AboutAspect;
     case 'about.vision-mission':
-      return component as AboutVisionMission;
+      return comp as AboutVisionMission;
     case 'about.legal':
-      return component as AboutLegal;
+      return comp as AboutLegal;
     case 'sections.team-highlight':
-      return component as AboutTeamHighlight;
+      return comp as AboutTeamHighlight;
     case 'sections.awards-section':
-      return component as AboutAwardsSection;
+      return comp as AboutAwardsSection;
     case 'about.company-culture':
-      return component as AboutCompanyCulture;
+      return comp as AboutCompanyCulture;
     default:
-      return component as AboutPageComponent;
+      return comp as AboutPageComponent;
   }
 }
 
 // Helper function to transform service page component based on its type
-export function transformServicePageComponent(component: any): ServicePageComponent {
-  switch (component.__component) {
+export function transformServicePageComponent(component: unknown): ServicePageComponent {
+  const comp = component as Record<string, unknown>;
+  switch (comp.__component) {
     case 'service.hero':
-      return component as ServiceHero;
+      return comp as ServiceHero;
     case 'service.services':
-      return component as ServiceServices;
+      return comp as ServiceServices;
     case 'service.strengths':
-      return component as ServiceStrengths;
+      return comp as ServiceStrengths;
     case 'sections.contact':
-      return component as ServiceContact;
+      return comp as ServiceContact;
     default:
-      return component as ServicePageComponent;
+      return comp as ServicePageComponent;
   }
 }
 
 // Helper function to transform company page component based on its type
-export function transformCompanyPageComponent(component: any): CompanyPageComponent {
-  switch (component.__component) {
+export function transformCompanyPageComponent(component: unknown): CompanyPageComponent {
+  const comp = component as Record<string, unknown>;
+  switch (comp.__component) {
     case 'service.hero':
-      return component as CompanyHero;
+      return comp as CompanyHero;
     case 'company.company-highlight':
-      return component as CompanyPageHighlight;
+      return comp as CompanyPageHighlight;
     default:
-      return component as CompanyPageComponent;
+      return comp as CompanyPageComponent;
   }
 }
 
 // Helper function to transform portfolio page component based on its type
-export function transformPortfolioPageComponent(component: any): PortfolioPageComponent {
-  switch (component.__component) {
+export function transformPortfolioPageComponent(component: unknown): PortfolioPageComponent {
+  const comp = component as Record<string, unknown>;
+  switch (comp.__component) {
     case 'portfolio.hero':
-      return component as PortfolioHero;
+      return comp as PortfolioHero;
     case 'portfolio.highlight-portofolio':
-      return component as PortfolioHighlight;
+      return comp as PortfolioHighlight;
     case 'portfolio.portofolio':
-      return component as PortfolioExplore;
+      return comp as PortfolioExplore;
     default:
-      return component as PortfolioPageComponent;
+      return comp as PortfolioPageComponent;
   }
 }
 
@@ -232,12 +239,12 @@ export function getCompanyLogoUrl(image: StrapiImage, size: 'thumbnail' | 'small
 }
 
 // Helper function to validate and process service images
-export function processServiceImage(imageData: any): {
+export function processServiceImage(imageData: unknown): {
   hasImage: boolean;
   imageUrl: string | null;
   altText: string;
 } {
-  if (!imageData || !imageData.url) {
+  if (!imageData || typeof imageData !== 'object' || !(imageData as Record<string, unknown>).url) {
     return {
       hasImage: false,
       imageUrl: null,
@@ -250,7 +257,7 @@ export function processServiceImage(imageData: any): {
     return {
       hasImage: true,
       imageUrl,
-      altText: imageData.alternativeText || imageData.name || 'Service Image'
+      altText: (imageData as Record<string, unknown>).alternativeText as string || (imageData as Record<string, unknown>).name as string || 'Service Image'
     };
   } catch (error) {
     console.warn('Error processing service image:', imageData, error);

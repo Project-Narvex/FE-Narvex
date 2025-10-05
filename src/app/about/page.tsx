@@ -1,6 +1,6 @@
 import React from 'react';
 import AboutPageClient from '@/components/pages/about/about-client-api';
-import { strapi } from '@/lib/strapi';
+import { strapi, StrapiResponse } from '@/lib/strapi';
 import { AboutPageData } from '@/lib/strapi';
 
 // This is now a Server Component
@@ -9,7 +9,7 @@ export default async function AboutPage() {
   
   try {
     // Fetch about page data from Strapi API
-    const response = await strapi.getAboutPage();
+    const response = await strapi.getAboutPage() as StrapiResponse<AboutPageData>;
     aboutData = response.data;
   } catch (error) {
     console.error('Error fetching about page data:', error);

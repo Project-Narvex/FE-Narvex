@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import Image from 'next/image';
 import { Building2, ImageIcon } from 'lucide-react';
 
 interface SafeLogoImageProps {
-  src: string | any;
+  src: string | unknown;
   alt: string;
   fallbackText?: string;
   className?: string;
@@ -32,23 +32,24 @@ export function SafeLogoImage({
   const [imageAspectRatio, setImageAspectRatio] = useState<number | null>(null);
 
   // Handle both string URLs and StrapiImage objects
-  const getImageUrl = (imageSrc: string | any): string | null => {
+  const getImageUrl = (imageSrc: string | unknown): string | null => {
     if (typeof imageSrc === 'string') {
       return imageSrc;
     }
     
     if (imageSrc && typeof imageSrc === 'object') {
       // Handle StrapiImage object
-      if (imageSrc.url) {
+      const imageObj = imageSrc as Record<string, unknown>;
+      if (imageObj.url && typeof imageObj.url === 'string') {
         const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
         
         // Check if it's already a full URL
-        if (imageSrc.url.startsWith('http')) {
-          return imageSrc.url;
+        if (imageObj.url.startsWith('http')) {
+          return imageObj.url;
         }
         
         // Build full URL
-        return `${STRAPI_URL}${imageSrc.url}`;
+        return `${STRAPI_URL}${imageObj.url}`;
       }
     }
     
@@ -164,7 +165,7 @@ export function SafeCompanyLogoImage({
   className = '',
   size = 80
 }: {
-  src: string | any;
+  src: string | unknown;
   alt: string;
   fallbackText?: string;
   className?: string;
@@ -193,7 +194,7 @@ export function SafeClientLogoImage({
   className = '',
   size = 120
 }: {
-  src: string | any;
+  src: string | unknown;
   alt: string;
   fallbackText?: string;
   className?: string;
@@ -222,7 +223,7 @@ export function SafeServiceIconImage({
   className = '',
   size = 32
 }: {
-  src: string | any;
+  src: string | unknown;
   alt: string;
   fallbackText?: string;
   className?: string;

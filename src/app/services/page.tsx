@@ -1,11 +1,23 @@
 import React from 'react';
 import ServicesClient from '@/components/pages/services/services-client';
-import { strapi, transformServicePageComponent, getStrapiImageUrl, processServiceImage, ServicePageData } from '@/lib/strapi';
+import { strapi, transformServicePageComponent, processServiceImage } from '@/lib/strapi';
+import type { StrapiResponse, ServicePageData, ServiceItem } from '@/lib/strapi';
+
+interface ContactSectionData {
+  title?: string;
+  description?: string;
+  email?: string;
+  phone_number?: string;
+  socialLinks?: {
+    instagram?: string;
+    facebook?: string;
+  };
+}
 
 // This is now a Server Component
 export default async function ServicesPage() {
   try {
-    const servicePageData: any = await strapi.getServicePage();
+    const servicePageData = await strapi.getServicePage() as StrapiResponse<ServicePageData>;
     
     // Debug: Log the API response structure
     console.log('Service Page API Response:', JSON.stringify(servicePageData, null, 2));
@@ -39,7 +51,8 @@ export default async function ServicesPage() {
     const contactSection = components.find(comp => comp.__component === 'sections.contact');
     
     // Transform services data to match the expected format
-    const services = servicesSection?.services?.map((service: any, index: number) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const services = (servicesSection as any)?.services?.map((service: ServiceItem) => {
       // Extract features from description (assuming they're separated by newlines)
       const features = service.description
         ?.split('\n')
@@ -93,7 +106,7 @@ export default async function ServicesPage() {
         services={services}
         heroSection={heroSection}
         strengthsSection={strengthsSection}
-        contactSection={contactSection}
+        contactSection={contactSection as ContactSectionData}
       />
     );
   } catch (error) {

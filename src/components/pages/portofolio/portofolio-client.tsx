@@ -357,10 +357,11 @@ export default function PortofolioClient({
                     
                     <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
                       <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-80 flex items-center justify-center transition-all duration-500 hover:scale-105 hover:shadow-lg overflow-hidden relative group">
-                        {project.cover ? (
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {(project as any).cover ? (
                           <Image
-                            src={getStrapiImageUrl(project.cover, 'large')}
-                            alt={project.cover.alternativeText || project.title}
+                            src={getStrapiImageUrl((project as any).cover, 'large')} // eslint-disable-line @typescript-eslint/no-explicit-any
+                            alt={(project as any).cover.alternativeText || project.title} // eslint-disable-line @typescript-eslint/no-explicit-any
                             width={800}
                             height={600}
                             className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
@@ -561,10 +562,11 @@ export default function PortofolioClient({
                       <CardContent className="p-0 flex flex-col h-full">
                         {/* Project Thumbnail */}
                         <div className="h-56 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center overflow-hidden relative group-hover:scale-110 transition-transform duration-700">
-                          {project.cover ? (
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(project as any).cover ? (
                             <Image
-                              src={getStrapiImageUrl(project.cover, 'medium')}
-                              alt={project.cover.alternativeText || project.title}
+                              src={getStrapiImageUrl((project as any).cover, 'medium')} // eslint-disable-line @typescript-eslint/no-explicit-any
+                              alt={(project as any).cover.alternativeText || project.title} // eslint-disable-line @typescript-eslint/no-explicit-any
                               width={400}
                               height={300}
                               className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"

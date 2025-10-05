@@ -37,7 +37,7 @@ export interface StrapiImage {
   url: string;
   previewUrl?: string;
   provider: string;
-  provider_metadata?: any;
+  provider_metadata?: Record<string, unknown>;
   folderPath: string;
   createdAt: string;
   updatedAt: string;
@@ -75,7 +75,10 @@ export interface ProjectCategory {
   locale?: string;
 }
 
-export interface ProjectGalleryItem extends StrapiImage {}
+export interface ProjectGalleryItem extends StrapiImage {
+  // Gallery-specific properties
+  orderNo?: number;
+}
 
 export interface FeaturedProject {
   id: number;
@@ -119,7 +122,7 @@ export interface Address {
 export interface BaseComponent {
   __component: string;
   id: number;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 // Homepage Types
@@ -224,7 +227,10 @@ export interface BlogArticleItem {
 }
 
 // Homepage Component Types
-export interface HomepageComponent extends BaseComponent {}
+export interface HomepageComponent extends BaseComponent {
+  // Homepage-specific properties
+  orderNo?: number;
+}
 
 export interface HeroSection extends HomepageComponent {
   __component: "sections.hero-section";
@@ -291,7 +297,7 @@ export interface CollaborationSection extends HomepageComponent {
   title: string;
   description: string;
   phone: string;
-  contact_messages: any[];
+  contact_messages: Array<Record<string, unknown>>;
   address: Address;
   socialLinks?: SocialLink | null;
 }
@@ -307,7 +313,10 @@ export interface HomepageData {
 }
 
 // About Page Types
-export interface AboutPageComponent extends BaseComponent {}
+export interface AboutPageComponent extends BaseComponent {
+  // About page-specific properties
+  orderNo?: number;
+}
 
 export interface AboutHero extends AboutPageComponent {
   __component: "about.hero";
@@ -501,11 +510,14 @@ export interface AboutPageData {
   publishedAt?: string;
   locale?: string;
   pageContent: AboutPageComponent[];
-  seo: any[];
+  seo: Array<Record<string, unknown>>;
 }
 
 // Service Page Types
-export interface ServicePageComponent extends BaseComponent {}
+export interface ServicePageComponent extends BaseComponent {
+  // Service page-specific properties
+  orderNo?: number;
+}
 
 export interface ServiceHero extends ServicePageComponent {
   __component: "service.hero";
@@ -585,7 +597,10 @@ export interface ServicePageData {
 }
 
 // Company Page Types
-export interface CompanyPageComponent extends BaseComponent {}
+export interface CompanyPageComponent extends BaseComponent {
+  // Company page-specific properties
+  orderNo?: number;
+}
 
 export interface CompanyHero extends CompanyPageComponent {
   __component: "service.hero";
@@ -680,7 +695,7 @@ export interface CompanyPageHighlight extends CompanyPageComponent {
           updatedAt: string;
           publishedAt: string;
         }>;
-        seo: any[];
+        seo: Array<Record<string, unknown>>;
       }>;
       clients: Array<{
         id: number;
@@ -709,7 +724,10 @@ export interface CompanyPageData {
 }
 
 // Portfolio Page Types
-export interface PortfolioPageComponent extends BaseComponent {}
+export interface PortfolioPageComponent extends BaseComponent {
+  // Portfolio page-specific properties
+  orderNo?: number;
+}
 
 export interface PortfolioHero extends PortfolioPageComponent {
   __component: "portfolio.hero";
@@ -824,7 +842,7 @@ export interface PortfolioItem {
     publishedAt?: string;
     Subtitle?: string;
   }>;
-  seo?: any[];
+  seo?: Array<Record<string, unknown>>;
 }
 
 export interface PortfolioListData {

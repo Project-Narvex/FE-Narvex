@@ -139,7 +139,8 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
               <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
             </h1>
             <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth">
-              {heroComponent?.description || 'CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing'}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {(heroComponent as any)?.description || 'CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing'}
             </p>
           </div>
         </div>
@@ -175,17 +176,19 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
             
             <div className="max-w-4xl mx-auto text-center mb-12 sm:mb-16 scroll-animate">
               <h2 className="heading-2 mb-6 sm:mb-8 text-blue-900" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
-                {aspectComponent.title}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(aspectComponent as any).title}
               </h2>
               <p className="body-large text-gray-contrast-700 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
-                {aspectComponent.description}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(aspectComponent as any).description}
               </p>
             </div>
             
-            <CompanyAspects 
-              aspects={aspectComponent}
-              cardHighlight={aspectComponent.card_highlight}
-            />
+             <CompanyAspects 
+               aspects={aspectComponent as any} // eslint-disable-line @typescript-eslint/no-explicit-any
+               cardHighlight={(aspectComponent as any).card_highlight} // eslint-disable-line @typescript-eslint/no-explicit-any
+             />
           </div>
         </section>
       )}
@@ -205,19 +208,22 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
             <div className="text-center mb-16 scroll-animate">
               <h2 className="heading-2 mb-8 text-blue-900" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
-                {visionMissionComponent.title}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(visionMissionComponent as any).title}
               </h2>
-              {visionMissionComponent.description && (
+               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+               {(visionMissionComponent as any).description && (
                 <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
-                  {visionMissionComponent.description}
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(visionMissionComponent as any).description}
                 </p>
               )}
             </div>
             
-            <VisionMission 
-              vision={visionMissionComponent.vision}
-              mission={visionMissionComponent.mission}
-            />
+             <VisionMission 
+               vision={(visionMissionComponent as any).vision} // eslint-disable-line @typescript-eslint/no-explicit-any
+               mission={(visionMissionComponent as any).mission} // eslint-disable-line @typescript-eslint/no-explicit-any
+             />
           </div>
         </section>
       )}
@@ -237,14 +243,17 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             <div className="scroll-animate">
               <h2 className="heading-2 mb-8 text-blue-900" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                {legalComponent.title}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(legalComponent as any).title}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                {legalComponent.description}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(legalComponent as any).description}
               </p>
               
               <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                {legalComponent.legals.map((document) => (
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(legalComponent as any).legals.map((document: any) => (
                   <LegalDocument key={document.id} document={document} />
                 ))}
               </div>
@@ -268,17 +277,19 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 relative z-10">
             <div className="text-center mb-16 scroll-animate">
               <h2 className="heading-2 mb-8 text-blue-900" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                {teamComponent.title}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(teamComponent as any).title}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                {teamComponent.description}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(teamComponent as any).description}
               </p>
             </div>
             
-            <TeamMembers 
-              teamMembers={teamComponent.team_members}
-              statistics={teamComponent}
-            />
+             <TeamMembers 
+               teamMembers={(teamComponent as any).team_members} // eslint-disable-line @typescript-eslint/no-explicit-any
+               statistics={teamComponent as any} // eslint-disable-line @typescript-eslint/no-explicit-any
+             />
           </div>
         </section>
       )}
@@ -298,14 +309,17 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             <div className="scroll-animate">
               <h2 className="heading-2 mb-8 text-blue-900" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                {awardsComponent.title}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(awardsComponent as any).title}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                {awardsComponent.description}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(awardsComponent as any).description}
               </p>
               
               <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
-                {awardsComponent.Award.map((award) => (
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(awardsComponent as any).Award.map((award: any) => (
                   <Award key={award.id} award={award} />
                 ))}
               </div>
@@ -329,17 +343,23 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
           <div className="container mx-auto px-4 lg:px-6 xl:px-8 text-center relative z-10">
             <div className="scroll-animate">
               <h2 className="heading-2 mb-8 text-blue-900" data-element="heading" data-text-animation="wave" data-delay="0.2" data-duration="0.6" data-stagger="0.04">
-                {cultureComponent.title}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(cultureComponent as any).title}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
-                {cultureComponent.description}
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 {(cultureComponent as any).description}
               </p>
               
               <div className="grid md:grid-cols-2 gap-8 max-w-6xl mx-auto">
-                <CompanyCulture culture={cultureComponent.culture1} />
-                <CompanyCulture culture={cultureComponent.culture2} />
-                <CompanyCulture culture={cultureComponent.culture3} />
-                <CompanyCulture culture={cultureComponent.culture4} />
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 <CompanyCulture culture={(cultureComponent as any).culture1} />
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 <CompanyCulture culture={(cultureComponent as any).culture2} />
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 <CompanyCulture culture={(cultureComponent as any).culture3} />
+                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                 <CompanyCulture culture={(cultureComponent as any).culture4} />
               </div>
             </div>
           </div>

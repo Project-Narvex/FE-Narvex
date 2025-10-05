@@ -1,12 +1,12 @@
 import React from 'react';
 import CompaniesClient from '@/components/pages/companies/companies-client';
 import { strapi, transformCompanyPageComponent, extractListFromRichText, getStrapiImageUrl } from '@/lib/strapi';
-import type { CompanyPageData, CompanyHero, CompanyHighlight } from '@/lib/strapi';
+import type { CompanyHero, CompanyHighlight, StrapiResponse, CompanyPageData } from '@/lib/strapi';
 
 // This is now a Server Component
 export default async function CompaniesPage() {
   try {
-    const companyPageData: any = await strapi.getCompanyPage();
+    const companyPageData = await strapi.getCompanyPage() as StrapiResponse<CompanyPageData>;
     
     // Debug: Log the API response structure
     console.log('Company Page API Response:', JSON.stringify(companyPageData, null, 2));
@@ -34,18 +34,21 @@ export default async function CompaniesPage() {
     const companyHighlightSection = components.find(comp => comp.__component === 'company.company-highlight') as CompanyHighlight;
     
     // Transform company data to match the expected format
-    const companies = companyHighlightSection?.Company?.map((companyData) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const companies = (companyHighlightSection as any)?.Company?.map((companyData: any) => {
       // Extract services from rich text
       const services = extractListFromRichText(companyData.services.description);
       
       // Transform portfolio data
-      const portfolio = companyData.company.portofolios?.map(portfolio => ({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const portfolio = companyData.company.portofolios?.map((portfolio: any) => ({
         title: portfolio.title,
         category: portfolio.portfolio_categories?.[0]?.name || 'General'
       })) || [];
       
       // Transform clients data
-      const clients = companyData.company.clients?.map(client => client.name) || [];
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const clients = companyData.company.clients?.map((client: any) => client.name) || [];
       
       // Get company logo URL
       const logoUrl = companyData.company.logo ? getStrapiImageUrl(companyData.company.logo, 'medium') : null;

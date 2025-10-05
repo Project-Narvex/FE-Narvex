@@ -37,7 +37,7 @@ export default function TeamMembers({ teamMembers, statistics }: TeamMembersProp
               <div key={member.id} className="bg-white rounded-xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism p-6 text-center">
                 <div className="w-24 h-24 bg-gradient-to-br from-blue-100 to-blue-200 rounded-full flex items-center justify-center mx-auto mb-6 shadow-blue-depth overflow-hidden">
                   <TeamMemberPhoto
-                    photo={member.photo}
+                    photo={member.photo || null}
                     name={member.name}
                     size={96}
                   />

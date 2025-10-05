@@ -52,7 +52,7 @@ export class StrapiContentService extends StrapiAPI {
       const query = this.buildQueryParams(params);
       const url = `${portfolioEndpoint}${query ? `?${query}` : ''}`;
       
-      console.log('Fetching portfolios from:', `${this.baseURL}/api${url}`);
+      console.log('Fetching portfolios from:', `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api${url}`);
       
       const data = await this.requestPage(url);
       console.log('Portfolios API response:', data);
