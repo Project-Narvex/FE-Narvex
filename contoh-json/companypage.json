@@ -1,0 +1,458 @@
+{
+    "data": {
+        "id": 4,
+        "documentId": "bzgkyt9yx7dfn342u28ay7np",
+        "createdAt": "2025-10-05T09:31:27.690Z",
+        "updatedAt": "2025-10-05T09:33:12.432Z",
+        "publishedAt": "2025-10-05T09:33:12.496Z",
+        "pageContent": [
+            {
+                "__component": "service.hero",
+                "id": 11,
+                "title": "Companies Kami",
+                "subtitle": "Narvex Ecosystem",
+                "description": "Ekosistem perusahaan yang terintegrasi untuk memberikan solusi kreatif dan layanan terbaik"
+            },
+            {
+                "__component": "company.company-highlight",
+                "id": 4,
+                "title": "Keluarga Besar Narvex",
+                "description": "Setiap company memiliki keahlian khusus yang saling melengkapi untuk memberikan solusi komprehensif bagi klien.",
+                "Company": [
+                    {
+                        "id": 3,
+                        "title": "Skywork.id",
+                        "Subtitle": "Bekerja dengan Seni",
+                        "description": "Platform kreatif yang menghadirkan solusi desain dan branding dengan pendekatan artistik yang unik.",
+                        "services": {
+                            "id": 3,
+                            "title": "Layanan",
+                            "description": [
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Brand Identity Design",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Logo & Visual Identity",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Print Design",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Digital Design",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Packaging Design",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Marketing Materials",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Social Media Design",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                },
+                                {
+                                    "type": "list",
+                                    "format": "unordered",
+                                    "children": [
+                                        {
+                                            "type": "list-item",
+                                            "children": [
+                                                {
+                                                    "text": "Creative Consultation",
+                                                    "type": "text"
+                                                }
+                                            ]
+                                        }
+                                    ]
+                                }
+                            ]
+                        },
+                        "company": {
+                            "id": 18,
+                            "documentId": "ffrmpwuh4octnufcdk9htxux",
+                            "name": "Creative Work",
+                            "slug": "company_2",
+                            "createdAt": "2025-09-23T17:37:58.168Z",
+                            "updatedAt": "2025-10-05T09:35:06.949Z",
+                            "publishedAt": "2025-10-05T09:35:07.053Z",
+                            "phone_number": "0800000",
+                            "logo": {
+                                "id": 16,
+                                "documentId": "srtalsyyoj16o4vog741fhcq",
+                                "name": "1337733.png",
+                                "alternativeText": null,
+                                "caption": null,
+                                "width": 3869,
+                                "height": 3220,
+                                "formats": {
+                                    "large": {
+                                        "ext": ".png",
+                                        "url": "/uploads/large_1337733_453f1a35fa.png",
+                                        "hash": "large_1337733_453f1a35fa",
+                                        "mime": "image/png",
+                                        "name": "large_1337733.png",
+                                        "path": null,
+                                        "size": 1056.57,
+                                        "width": 1000,
+                                        "height": 832,
+                                        "sizeInBytes": 1056570
+                                    },
+                                    "small": {
+                                        "ext": ".png",
+                                        "url": "/uploads/small_1337733_453f1a35fa.png",
+                                        "hash": "small_1337733_453f1a35fa",
+                                        "mime": "image/png",
+                                        "name": "small_1337733.png",
+                                        "path": null,
+                                        "size": 312.38,
+                                        "width": 500,
+                                        "height": 416,
+                                        "sizeInBytes": 312377
+                                    },
+                                    "medium": {
+                                        "ext": ".png",
+                                        "url": "/uploads/medium_1337733_453f1a35fa.png",
+                                        "hash": "medium_1337733_453f1a35fa",
+                                        "mime": "image/png",
+                                        "name": "medium_1337733.png",
+                                        "path": null,
+                                        "size": 638.16,
+                                        "width": 750,
+                                        "height": 624,
+                                        "sizeInBytes": 638162
+                                    },
+                                    "thumbnail": {
+                                        "ext": ".png",
+                                        "url": "/uploads/thumbnail_1337733_453f1a35fa.png",
+                                        "hash": "thumbnail_1337733_453f1a35fa",
+                                        "mime": "image/png",
+                                        "name": "thumbnail_1337733.png",
+                                        "path": null,
+                                        "size": 52.73,
+                                        "width": 187,
+                                        "height": 156,
+                                        "sizeInBytes": 52730
+                                    }
+                                },
+                                "hash": "1337733_453f1a35fa",
+                                "ext": ".png",
+                                "mime": "image/png",
+                                "size": 2919.75,
+                                "url": "/uploads/1337733_453f1a35fa.png",
+                                "previewUrl": null,
+                                "provider": "local",
+                                "provider_metadata": null,
+                                "createdAt": "2025-09-30T22:43:18.377Z",
+                                "updatedAt": "2025-09-30T22:43:18.377Z",
+                                "publishedAt": "2025-09-30T22:43:18.378Z"
+                            },
+                            "address": {
+                                "id": 9,
+                                "address": "Jl. Gunawangsa",
+                                "city": "Surabya",
+                                "province": "Jawa Timur",
+                                "country": "Indonesia",
+                                "postalCode": "602xxx",
+                                "long": null,
+                                "Lat": null
+                            },
+                            "socials": {
+                                "id": 10,
+                                "instagram": "https://www.instagram.com/alteregoesports",
+                                "tiktok": "https://www.instagram.com/alteregoesports",
+                                "facebook": "https://www.instagram.com/alteregoesports",
+                                "x": "https://www.instagram.com/alteregoesports",
+                                "linkedin": "https://www.instagram.com/alteregoesports",
+                                "youtube": "https://www.instagram.com/alteregoesports"
+                            },
+                            "tag": {
+                                "id": 4,
+                                "documentId": "df6m2s1s9oqcm6ma1zhp7q9f",
+                                "name": "Happy",
+                                "slug": "happy",
+                                "createdAt": "2025-09-30T22:58:49.734Z",
+                                "updatedAt": "2025-09-30T22:58:49.734Z",
+                                "publishedAt": "2025-09-30T22:58:50.092Z"
+                            },
+                            "portofolios": [
+                                {
+                                    "id": 16,
+                                    "documentId": "z5kviowu70t0qia7ur3x1f4e",
+                                    "createdAt": "2025-09-30T22:49:32.301Z",
+                                    "updatedAt": "2025-10-05T09:35:30.577Z",
+                                    "publishedAt": "2025-10-05T09:35:30.672Z",
+                                    "title": "Final Battle with Demon King",
+                                    "slug": "portofolio-3",
+                                    "excerpt": "Successful completion of world-saving mission\nLorem ipsum dolor sit amet, magna victoria, cooperatio cum amicis, et memoria quae ultra tempus manet.",
+                                    "linkURL": "#",
+                                    "orderNo": null,
+                                    "Highlight": true,
+                                    "date": null,
+                                    "cover": {
+                                        "id": 5,
+                                        "documentId": "ed4fc3xhlmpbez3pdc1mo2wl",
+                                        "name": "1344002.jpeg",
+                                        "alternativeText": null,
+                                        "caption": null,
+                                        "width": 3840,
+                                        "height": 2160,
+                                        "formats": {
+                                            "large": {
+                                                "ext": ".jpeg",
+                                                "url": "/uploads/large_1344002_1d96f5504f.jpeg",
+                                                "hash": "large_1344002_1d96f5504f",
+                                                "mime": "image/jpeg",
+                                                "name": "large_1344002.jpeg",
+                                                "path": null,
+                                                "size": 112.12,
+                                                "width": 1000,
+                                                "height": 563,
+                                                "sizeInBytes": 112115
+                                            },
+                                            "small": {
+                                                "ext": ".jpeg",
+                                                "url": "/uploads/small_1344002_1d96f5504f.jpeg",
+                                                "hash": "small_1344002_1d96f5504f",
+                                                "mime": "image/jpeg",
+                                                "name": "small_1344002.jpeg",
+                                                "path": null,
+                                                "size": 35.79,
+                                                "width": 500,
+                                                "height": 281,
+                                                "sizeInBytes": 35794
+                                            },
+                                            "medium": {
+                                                "ext": ".jpeg",
+                                                "url": "/uploads/medium_1344002_1d96f5504f.jpeg",
+                                                "hash": "medium_1344002_1d96f5504f",
+                                                "mime": "image/jpeg",
+                                                "name": "medium_1344002.jpeg",
+                                                "path": null,
+                                                "size": 68.25,
+                                                "width": 750,
+                                                "height": 422,
+                                                "sizeInBytes": 68250
+                                            },
+                                            "thumbnail": {
+                                                "ext": ".jpeg",
+                                                "url": "/uploads/thumbnail_1344002_1d96f5504f.jpeg",
+                                                "hash": "thumbnail_1344002_1d96f5504f",
+                                                "mime": "image/jpeg",
+                                                "name": "thumbnail_1344002.jpeg",
+                                                "path": null,
+                                                "size": 11.37,
+                                                "width": 245,
+                                                "height": 138,
+                                                "sizeInBytes": 11370
+                                            }
+                                        },
+                                        "hash": "1344002_1d96f5504f",
+                                        "ext": ".jpeg",
+                                        "mime": "image/jpeg",
+                                        "size": 1039.65,
+                                        "url": "/uploads/1344002_1d96f5504f.jpeg",
+                                        "previewUrl": null,
+                                        "provider": "local",
+                                        "provider_metadata": null,
+                                        "createdAt": "2025-09-23T18:25:01.935Z",
+                                        "updatedAt": "2025-09-23T18:25:01.935Z",
+                                        "publishedAt": "2025-09-23T18:25:01.936Z"
+                                    },
+                                    "gallery": null,
+                                    "portfolio_categories": [
+                                        {
+                                            "id": 6,
+                                            "documentId": "t8hkujzv34414asbosp69aiy",
+                                            "name": "Fun",
+                                            "slug": "portfolio-category-2",
+                                            "createdAt": "2025-09-30T22:48:06.049Z",
+                                            "updatedAt": "2025-09-30T22:48:06.049Z",
+                                            "publishedAt": "2025-09-30T22:48:06.086Z"
+                                        },
+                                        {
+                                            "id": 8,
+                                            "documentId": "p3xthg8hhzzlwoceoeo54wkz",
+                                            "name": "Party",
+                                            "slug": "portfolio-category-3",
+                                            "createdAt": "2025-09-30T22:50:01.482Z",
+                                            "updatedAt": "2025-09-30T22:50:01.482Z",
+                                            "publishedAt": "2025-09-30T22:50:01.503Z"
+                                        }
+                                    ],
+                                    "seo": []
+                                }
+                            ],
+                            "clients": [
+                                {
+                                    "id": 2,
+                                    "documentId": "p4xqza13faptl4kg3pa56sz9",
+                                    "name": "cjjashdjchajlchas",
+                                    "website": "ckashdcjashcjas",
+                                    "type": "Client",
+                                    "orderNo": 12836,
+                                    "createdAt": "2025-09-22T19:21:36.367Z",
+                                    "updatedAt": "2025-09-22T19:21:36.367Z",
+                                    "publishedAt": "2025-09-22T19:21:36.502Z",
+                                    "logo": {
+                                        "id": 1,
+                                        "documentId": "jb8q98pmzqebr5h81kblj1re",
+                                        "name": "frieren.jpg",
+                                        "alternativeText": null,
+                                        "caption": null,
+                                        "width": 7680,
+                                        "height": 4320,
+                                        "formats": {
+                                            "large": {
+                                                "ext": ".jpg",
+                                                "url": "/uploads/large_frieren_4f255cf522.jpg",
+                                                "hash": "large_frieren_4f255cf522",
+                                                "mime": "image/jpeg",
+                                                "name": "large_frieren.jpg",
+                                                "path": null,
+                                                "size": 71.88,
+                                                "width": 1000,
+                                                "height": 563,
+                                                "sizeInBytes": 71878
+                                            },
+                                            "small": {
+                                                "ext": ".jpg",
+                                                "url": "/uploads/small_frieren_4f255cf522.jpg",
+                                                "hash": "small_frieren_4f255cf522",
+                                                "mime": "image/jpeg",
+                                                "name": "small_frieren.jpg",
+                                                "path": null,
+                                                "size": 23.54,
+                                                "width": 500,
+                                                "height": 281,
+                                                "sizeInBytes": 23539
+                                            },
+                                            "medium": {
+                                                "ext": ".jpg",
+                                                "url": "/uploads/medium_frieren_4f255cf522.jpg",
+                                                "hash": "medium_frieren_4f255cf522",
+                                                "mime": "image/jpeg",
+                                                "name": "medium_frieren.jpg",
+                                                "path": null,
+                                                "size": 44.44,
+                                                "width": 750,
+                                                "height": 422,
+                                                "sizeInBytes": 44441
+                                            },
+                                            "thumbnail": {
+                                                "ext": ".jpg",
+                                                "url": "/uploads/thumbnail_frieren_4f255cf522.jpg",
+                                                "hash": "thumbnail_frieren_4f255cf522",
+                                                "mime": "image/jpeg",
+                                                "name": "thumbnail_frieren.jpg",
+                                                "path": null,
+                                                "size": 7.45,
+                                                "width": 245,
+                                                "height": 138,
+                                                "sizeInBytes": 7450
+                                            }
+                                        },
+                                        "hash": "frieren_4f255cf522",
+                                        "ext": ".jpg",
+                                        "mime": "image/jpeg",
+                                        "size": 1120.43,
+                                        "url": "/uploads/frieren_4f255cf522.jpg",
+                                        "previewUrl": null,
+                                        "provider": "local",
+                                        "provider_metadata": null,
+                                        "createdAt": "2025-09-22T19:21:31.977Z",
+                                        "updatedAt": "2025-09-22T20:35:43.664Z",
+                                        "publishedAt": "2025-09-22T19:21:31.978Z"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            }
+        ]
+    },
+    "meta": {}
+}

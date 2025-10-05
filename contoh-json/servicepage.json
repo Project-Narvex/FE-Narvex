@@ -1,0 +1,307 @@
+{
+    "data": {
+        "id": 7,
+        "documentId": "pibmcjfiqjihb2bbdwh70ds0",
+        "createdAt": "2025-10-05T07:27:54.274Z",
+        "updatedAt": "2025-10-05T07:38:27.455Z",
+        "publishedAt": "2025-10-05T07:38:27.549Z",
+        "pageContent": [
+            {
+                "__component": "service.hero",
+                "id": 7,
+                "title": "Layanan Kami ",
+                "subtitle": "Narvex Creative Services",
+                "description": "Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda\n\n"
+            },
+            {
+                "__component": "service.services",
+                "id": 5,
+                "title": "Portfolio Layanan Lengkap",
+                "description": "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda.",
+                "services": [
+                    {
+                        "id": 7,
+                        "documentId": "up3thbrvd47ja4xh4i3w8m26",
+                        "title": "Creative Design",
+                        "description": "\n- Brand Identity Development\n- Logo Design & Brand Guidelines\n- Marketing Materials Design\n- Packaging Design\n- Visual Communication\n- Brand Strategy & Positioning",
+                        "orderNo": null,
+                        "createdAt": "2025-09-23T18:59:47.344Z",
+                        "updatedAt": "2025-10-05T07:31:32.225Z",
+                        "publishedAt": "2025-10-05T07:31:32.317Z",
+                        "Subtitle": "Brand Identity, Graphic Design, Visual Communication",
+                        "icon": {
+                            "id": 6,
+                            "documentId": "jsjn4kfi7p18szjr36h1ocow",
+                            "name": "9898.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 2256,
+                            "height": 1269,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_9898_3024a4d42f.png",
+                                    "hash": "large_9898_3024a4d42f",
+                                    "mime": "image/png",
+                                    "name": "large_9898.png",
+                                    "path": null,
+                                    "size": 432.15,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 432148
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_9898_3024a4d42f.png",
+                                    "hash": "small_9898_3024a4d42f",
+                                    "mime": "image/png",
+                                    "name": "small_9898.png",
+                                    "path": null,
+                                    "size": 135.91,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 135911
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_9898_3024a4d42f.png",
+                                    "hash": "medium_9898_3024a4d42f",
+                                    "mime": "image/png",
+                                    "name": "medium_9898.png",
+                                    "path": null,
+                                    "size": 262.03,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 262034
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_9898_3024a4d42f.png",
+                                    "hash": "thumbnail_9898_3024a4d42f",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_9898.png",
+                                    "path": null,
+                                    "size": 42.4,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 42397
+                                }
+                            },
+                            "hash": "9898_3024a4d42f",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 287.19,
+                            "url": "/uploads/9898_3024a4d42f.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-23T18:25:03.509Z",
+                            "updatedAt": "2025-09-23T18:25:03.509Z",
+                            "publishedAt": "2025-09-23T18:25:03.509Z"
+                        },
+                        "image_placeholder": {
+                            "id": 9,
+                            "documentId": "vo99py3n7wumg0pap33vacfr",
+                            "name": "1376375.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376375_c41bc77f77.png",
+                                    "hash": "large_1376375_c41bc77f77",
+                                    "mime": "image/png",
+                                    "name": "large_1376375.png",
+                                    "path": null,
+                                    "size": 514.28,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 514278
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376375_c41bc77f77.png",
+                                    "hash": "small_1376375_c41bc77f77",
+                                    "mime": "image/png",
+                                    "name": "small_1376375.png",
+                                    "path": null,
+                                    "size": 147.06,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 147059
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376375_c41bc77f77.png",
+                                    "hash": "medium_1376375_c41bc77f77",
+                                    "mime": "image/png",
+                                    "name": "medium_1376375.png",
+                                    "path": null,
+                                    "size": 304.05,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 304053
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376375_c41bc77f77.png",
+                                    "hash": "thumbnail_1376375_c41bc77f77",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376375.png",
+                                    "path": null,
+                                    "size": 42.19,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 42188
+                                }
+                            },
+                            "hash": "1376375_c41bc77f77",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 482.72,
+                            "url": "/uploads/1376375_c41bc77f77.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T22:42:45.536Z",
+                            "updatedAt": "2025-09-30T22:42:45.536Z",
+                            "publishedAt": "2025-09-30T22:42:45.536Z"
+                        }
+                    },
+                    {
+                        "id": 5,
+                        "documentId": "yz5qmqa9hewnd3asowm20u0s",
+                        "title": "Lorem Ipsum",
+                        "description": "Frieren, elf mage, vivo per mille annos. Post expeditionem contra Demon King, quaero iterum significationem temporis et amicitiae. Discipulos doceo, magias colligo, et historias conservo. Vita brevis hominum, sed projecta eorum aeternitatem tangere possunt.",
+                        "orderNo": null,
+                        "createdAt": "2025-09-30T22:45:49.470Z",
+                        "updatedAt": "2025-09-30T22:46:20.360Z",
+                        "publishedAt": "2025-09-30T22:46:20.450Z",
+                        "Subtitle": null,
+                        "icon": {
+                            "id": 10,
+                            "documentId": "twe9mmuz049o7v7qp2k6jus4",
+                            "name": "1376373.png",
+                            "alternativeText": null,
+                            "caption": null,
+                            "width": 1920,
+                            "height": 1080,
+                            "formats": {
+                                "large": {
+                                    "ext": ".png",
+                                    "url": "/uploads/large_1376373_9d56ef76fb.png",
+                                    "hash": "large_1376373_9d56ef76fb",
+                                    "mime": "image/png",
+                                    "name": "large_1376373.png",
+                                    "path": null,
+                                    "size": 656.75,
+                                    "width": 1000,
+                                    "height": 563,
+                                    "sizeInBytes": 656748
+                                },
+                                "small": {
+                                    "ext": ".png",
+                                    "url": "/uploads/small_1376373_9d56ef76fb.png",
+                                    "hash": "small_1376373_9d56ef76fb",
+                                    "mime": "image/png",
+                                    "name": "small_1376373.png",
+                                    "path": null,
+                                    "size": 182.28,
+                                    "width": 500,
+                                    "height": 281,
+                                    "sizeInBytes": 182276
+                                },
+                                "medium": {
+                                    "ext": ".png",
+                                    "url": "/uploads/medium_1376373_9d56ef76fb.png",
+                                    "hash": "medium_1376373_9d56ef76fb",
+                                    "mime": "image/png",
+                                    "name": "medium_1376373.png",
+                                    "path": null,
+                                    "size": 392.1,
+                                    "width": 750,
+                                    "height": 422,
+                                    "sizeInBytes": 392097
+                                },
+                                "thumbnail": {
+                                    "ext": ".png",
+                                    "url": "/uploads/thumbnail_1376373_9d56ef76fb.png",
+                                    "hash": "thumbnail_1376373_9d56ef76fb",
+                                    "mime": "image/png",
+                                    "name": "thumbnail_1376373.png",
+                                    "path": null,
+                                    "size": 46.89,
+                                    "width": 245,
+                                    "height": 138,
+                                    "sizeInBytes": 46894
+                                }
+                            },
+                            "hash": "1376373_9d56ef76fb",
+                            "ext": ".png",
+                            "mime": "image/png",
+                            "size": 678.57,
+                            "url": "/uploads/1376373_9d56ef76fb.png",
+                            "previewUrl": null,
+                            "provider": "local",
+                            "provider_metadata": null,
+                            "createdAt": "2025-09-30T22:42:45.782Z",
+                            "updatedAt": "2025-09-30T22:42:45.782Z",
+                            "publishedAt": "2025-09-30T22:42:45.782Z"
+                        },
+                        "image_placeholder": null
+                    }
+                ]
+            },
+            {
+                "__component": "service.strengths",
+                "id": 3,
+                "title": "Mengapa Memilih Narvex?",
+                "description": "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya",
+                "statistic1": {
+                    "id": 134,
+                    "value": null,
+                    "suffix": "Berpengalaman",
+                    "label": "Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing"
+                },
+                "statistic2": {
+                    "id": 135,
+                    "value": null,
+                    "suffix": "Tim Profesional",
+                    "label": "Tim ahli yang berpengalaman dan berdedikasi tinggi"
+                },
+                "statistic3": {
+                    "id": 136,
+                    "value": null,
+                    "suffix": "Tepat Waktu",
+                    "label": "Komitmen untuk menyelesaikan setiap project sesuai timeline"
+                },
+                "statistic4": {
+                    "id": 137,
+                    "value": null,
+                    "suffix": "Kualitas Terjamin ",
+                    "label": "Standar kualitas tinggi dalam setiap layanan yang kami berikan"
+                }
+            },
+            {
+                "__component": "sections.contact",
+                "id": 7,
+                "title": "Siap Memulai Project Anda?",
+                "description": "Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan.",
+                "phone_number": "0800000",
+                "email": "narvex@gmail.com",
+                "socialLinks": {
+                    "id": 7,
+                    "instagram": "https://www.instagram.com/jasonsusantoo",
+                    "tiktok": "https://www.instagram.com/jasonsusantoo",
+                    "facebook": "https://www.instagram.com/jasonsusantoo",
+                    "x": "https://www.instagram.com/jasonsusantoo",
+                    "linkedin": "https://www.instagram.com/jasonsusantoo",
+                    "youtube": "https://www.instagram.com/jasonsusantoo"
+                }
+            }
+        ]
+    },
+    "meta": {}
+}

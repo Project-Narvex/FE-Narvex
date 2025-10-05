@@ -34,12 +34,16 @@ const StackedLogoCarousel: React.FC<StackedLogoCarouselProps> = ({
 
     let topScrollAmount = 0;
     let bottomScrollAmount = 0;
+    let topInterval: NodeJS.Timeout | null = null;
+    let bottomInterval: NodeJS.Timeout | null = null;
+    let isPaused = false;
     
     const topMaxScroll = topRow.scrollWidth - topRow.clientWidth;
     const bottomMaxScroll = bottomRow.scrollWidth - bottomRow.clientWidth;
 
     const scrollTop = () => {
-      topScrollAmount += 1;
+      if (isPaused) return;
+      topScrollAmount += 0.5; // Smoother scrolling
       if (topScrollAmount >= topMaxScroll) {
         topScrollAmount = 0;
       }
@@ -47,27 +51,45 @@ const StackedLogoCarousel: React.FC<StackedLogoCarouselProps> = ({
     };
 
     const scrollBottom = () => {
-      bottomScrollAmount -= 1;
+      if (isPaused) return;
+      bottomScrollAmount -= 0.5; // Smoother scrolling
       if (bottomScrollAmount <= 0) {
         bottomScrollAmount = bottomMaxScroll;
       }
       bottomRow.scrollLeft = bottomScrollAmount;
     };
 
-    const topInterval = setInterval(scrollTop, scrollSpeed);
-    const bottomInterval = setInterval(scrollBottom, scrollSpeed + 10); // Slightly different speed
+    const startScrolling = () => {
+      if (topInterval) clearInterval(topInterval);
+      if (bottomInterval) clearInterval(bottomInterval);
+      
+      topInterval = setInterval(scrollTop, scrollSpeed);
+      bottomInterval = setInterval(scrollBottom, scrollSpeed + 10); // Slightly different speed
+    };
+
+    const pauseScrolling = () => {
+      isPaused = true;
+      if (topInterval) {
+        clearInterval(topInterval);
+        topInterval = null;
+      }
+      if (bottomInterval) {
+        clearInterval(bottomInterval);
+        bottomInterval = null;
+      }
+    };
+
+    const resumeScrolling = () => {
+      isPaused = false;
+      startScrolling();
+    };
+
+    // Start scrolling
+    startScrolling();
 
     // Pause on hover
-    const handleMouseEnter = () => {
-      clearInterval(topInterval);
-      clearInterval(bottomInterval);
-    };
-
-    const handleMouseLeave = () => {
-      const newTopInterval = setInterval(scrollTop, scrollSpeed);
-      const newBottomInterval = setInterval(scrollBottom, scrollSpeed + 10);
-      return { newTopInterval, newBottomInterval };
-    };
+    const handleMouseEnter = pauseScrolling;
+    const handleMouseLeave = resumeScrolling;
 
     topRow.addEventListener('mouseenter', handleMouseEnter);
     bottomRow.addEventListener('mouseenter', handleMouseEnter);
@@ -75,8 +97,8 @@ const StackedLogoCarousel: React.FC<StackedLogoCarouselProps> = ({
     bottomRow.addEventListener('mouseleave', handleMouseLeave);
 
     return () => {
-      clearInterval(topInterval);
-      clearInterval(bottomInterval);
+      if (topInterval) clearInterval(topInterval);
+      if (bottomInterval) clearInterval(bottomInterval);
       topRow.removeEventListener('mouseenter', handleMouseEnter);
       bottomRow.removeEventListener('mouseenter', handleMouseEnter);
       topRow.removeEventListener('mouseleave', handleMouseLeave);
@@ -93,10 +115,10 @@ const StackedLogoCarousel: React.FC<StackedLogoCarouselProps> = ({
       .slice(0, 3);
   };
 
-  // Split clients into two rows
+  // Split clients into two rows with more duplicates for smoother scrolling
   const midPoint = Math.ceil(clients.length / 2);
-  const topRowClients = [...clients.slice(0, midPoint), ...clients.slice(0, midPoint)];
-  const bottomRowClients = [...clients.slice(midPoint), ...clients.slice(midPoint)];
+  const topRowClients = [...clients.slice(0, midPoint), ...clients.slice(0, midPoint), ...clients.slice(0, midPoint)];
+  const bottomRowClients = [...clients.slice(midPoint), ...clients.slice(midPoint), ...clients.slice(midPoint)];
 
   const LogoItem = ({ client, index }: { client: Client; index: number }) => {
     const [imageError, setImageError] = React.useState(false);

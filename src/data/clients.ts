@@ -1,7 +1,11 @@
+import type { StrapiImage } from '@/lib/strapi/types';
+
 export interface ClientLogo {
   name: string;
-  logo: string;
+  logo: string | StrapiImage; // Allow both string URL and StrapiImage object
   category?: string;
+  id?: string | number;
+  website?: string;
 }
 
 export const clientLogos: ClientLogo[] = [
