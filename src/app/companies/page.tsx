@@ -1,118 +1,118 @@
 import React from 'react';
 import CompaniesClient from '@/components/pages/companies/companies-client';
+import { strapi, transformCompanyPageComponent, extractListFromRichText, getStrapiImageUrl } from '@/lib/strapi';
+import type { CompanyPageData, CompanyHero, CompanyHighlight } from '@/lib/strapi';
 
-export default function CompaniesPage() {
-  const companies = [
-    {
-      id: 'skywork',
-      name: 'Skywork.id',
-      tagline: 'Bekerja dengan Seni',
-      description: 'Platform kreatif yang menghadirkan solusi desain dan branding dengan pendekatan artistik yang unik.',
-      icon: "palette",
-      color: 'bg-blue-500',
-      instagram: '@skywork.id',
-      website: 'skywork.id',
-      services: [
-        'Brand Identity Design',
-        'Logo & Visual Identity',
-        'Print Design',
-        'Digital Design',
-        'Packaging Design',
-        'Marketing Materials',
-        'Social Media Design',
-        'Creative Consultation'
-      ],
-      portfolio: [
-        { title: 'Brand Identity Project A', category: 'Branding' },
-        { title: 'Logo Design Project B', category: 'Logo Design' },
-        { title: 'Print Campaign C', category: 'Print Design' },
-        { title: 'Digital Campaign D', category: 'Digital Design' }
-      ],
-      clients: ['Client A', 'Client B', 'Client C', 'Client D']
-    },
-    {
-      id: 'gutama',
-      name: 'Gutama Learning',
-      tagline: 'Empowering Through Education',
-      description: 'Platform pembelajaran yang menyediakan program edukasi dan training berkualitas untuk pengembangan skill.',
-      icon: "graduation-cap",
-      color: 'bg-green-500',
-      instagram: '@gutamalearning',
-      website: 'gutamalearning.com',
-      services: [
-        'Professional Training',
-        'Skill Development Programs',
-        'Corporate Training',
-        'Online Courses',
-        'Workshop & Seminar',
-        'Certification Programs',
-        'Learning Resources',
-        'Educational Consultation'
-      ],
-      portfolio: [
-        { title: 'Corporate Training Program A', category: 'Corporate Training' },
-        { title: 'Online Course B', category: 'Online Learning' },
-        { title: 'Workshop Series C', category: 'Workshop' },
-        { title: 'Certification Program D', category: 'Certification' }
-      ],
-      clients: ['Company A', 'Company B', 'Company C', 'Company D']
-    },
-    {
-      id: 'creativework',
-      name: 'CreativeWork',
-      tagline: 'Creative Solutions for Modern Business',
-      description: 'Layanan kreatif komprehensif untuk solusi branding, desain, dan strategi kreatif bisnis modern.',
-      icon: "lightbulb",
-      color: 'bg-purple-500',
-      instagram: '@creativesky.id',
-      website: 'creativework.id',
-      services: [
-        'Creative Strategy',
-        'Brand Development',
-        'Creative Campaign',
-        'Content Creation',
-        'Creative Direction',
-        'Design Thinking Workshop',
-        'Innovation Consultation',
-        'Creative Solutions'
-      ],
-      portfolio: [
-        { title: 'Creative Campaign A', category: 'Campaign' },
-        { title: 'Brand Development B', category: 'Branding' },
-        { title: 'Content Strategy C', category: 'Content' },
-        { title: 'Creative Direction D', category: 'Direction' }
-      ],
-      clients: ['Brand A', 'Brand B', 'Brand C', 'Brand D'],
-      notice: 'Transisi dari CreativeSky ke CreativeWork untuk fokus yang lebih spesifik pada solusi kreatif bisnis.'
-    },
-    {
-      id: 'evervow',
-      name: 'Evervow.wo',
-      tagline: 'Creating Magical Wedding Moments',
-      description: 'Spesialis wedding planning dan production yang menghadirkan momen pernikahan yang tak terlupakan.',
-      icon: "heart",
-      color: 'bg-pink-500',
-      instagram: '@evervow.wo',
-      website: 'evervow.wo',
-      services: [
-        'Wedding Planning',
-        'Wedding Decoration',
-        'Venue Selection',
-        'Catering Coordination',
-        'Photography & Videography',
-        'Entertainment Management',
-        'Wedding Consultation',
-        'Honeymoon Planning'
-      ],
-      portfolio: [
-        { title: 'Romantic Garden Wedding', category: 'Outdoor Wedding' },
-        { title: 'Elegant Ballroom Wedding', category: 'Indoor Wedding' },
-        { title: 'Beach Wedding Ceremony', category: 'Destination Wedding' },
-        { title: 'Traditional Wedding', category: 'Cultural Wedding' }
-      ],
-      clients: ['Couple A', 'Couple B', 'Couple C', 'Couple D']
+// This is now a Server Component
+export default async function CompaniesPage() {
+  try {
+    const companyPageData: any = await strapi.getCompanyPage();
+    
+    // Debug: Log the API response structure
+    console.log('Company Page API Response:', JSON.stringify(companyPageData, null, 2));
+    
+    // Check if we have the expected data structure
+    if (!companyPageData || !companyPageData.data) {
+      throw new Error('Invalid API response structure');
     }
-  ];
-
-  return <CompaniesClient companies={companies} />;
+    
+    // Extract the actual page data
+    const pageData = companyPageData.data;
+    
+    // Check if pageContent exists
+    if (!pageData.pageContent || !Array.isArray(pageData.pageContent)) {
+      throw new Error('pageContent not found or not an array');
+    }
+    
+    // Transform components
+    const components = pageData.pageContent.map(transformCompanyPageComponent);
+    
+    // Extract hero section
+    const heroSection = components.find(comp => comp.__component === 'service.hero') as CompanyHero;
+    
+    // Extract company highlight section
+    const companyHighlightSection = components.find(comp => comp.__component === 'company.company-highlight') as CompanyHighlight;
+    
+    // Transform company data to match the expected format
+    const companies = companyHighlightSection?.Company?.map((companyData) => {
+      // Extract services from rich text
+      const services = extractListFromRichText(companyData.services.description);
+      
+      // Transform portfolio data
+      const portfolio = companyData.company.portofolios?.map(portfolio => ({
+        title: portfolio.title,
+        category: portfolio.portfolio_categories?.[0]?.name || 'General'
+      })) || [];
+      
+      // Transform clients data
+      const clients = companyData.company.clients?.map(client => client.name) || [];
+      
+      // Get company logo URL
+      const logoUrl = companyData.company.logo ? getStrapiImageUrl(companyData.company.logo, 'medium') : null;
+      
+      return {
+        id: companyData.company.slug,
+        name: companyData.title,
+        tagline: companyData.Subtitle,
+        description: companyData.description,
+        icon: "palette", // Default icon, can be customized based on company type
+        color: 'bg-blue-500', // Default color, can be customized
+        instagram: companyData.company.socials?.instagram || '',
+        website: companyData.company.socials?.instagram || '', // Using instagram as website fallback
+        services: services,
+        portfolio: portfolio,
+        clients: clients,
+        logoUrl: logoUrl,
+        phone: companyData.company.phone_number,
+        address: companyData.company.address ? 
+          `${companyData.company.address.address}, ${companyData.company.address.city}, ${companyData.company.address.province}` : 
+          '',
+        socials: companyData.company.socials
+      };
+    }) || [];
+    
+    return (
+      <CompaniesClient 
+        companies={companies}
+        heroSection={heroSection}
+        companyHighlightSection={companyHighlightSection}
+      />
+    );
+    
+  } catch (error) {
+    console.error('Error fetching company page data:', error);
+    
+    // Fallback to static data if API fails
+    const fallbackCompanies = [
+      {
+        id: 'skywork',
+        name: 'Skywork.id',
+        tagline: 'Bekerja dengan Seni',
+        description: 'Platform kreatif yang menghadirkan solusi desain dan branding dengan pendekatan artistik yang unik.',
+        icon: "palette",
+        color: 'bg-blue-500',
+        instagram: '@skywork.id',
+        website: 'skywork.id',
+        services: [
+          'Brand Identity Design',
+          'Logo & Visual Identity',
+          'Print Design',
+          'Digital Design',
+          'Packaging Design',
+          'Marketing Materials',
+          'Social Media Design',
+          'Creative Consultation'
+        ],
+        portfolio: [
+          { title: 'Brand Identity Project A', category: 'Branding' },
+          { title: 'Logo Design Project B', category: 'Logo Design' },
+          { title: 'Print Campaign C', category: 'Print Design' },
+          { title: 'Digital Campaign D', category: 'Digital Design' }
+        ],
+        clients: ['Client A', 'Client B', 'Client C', 'Client D']
+      }
+    ];
+    
+    return <CompaniesClient companies={fallbackCompanies} />;
+  }
 }
