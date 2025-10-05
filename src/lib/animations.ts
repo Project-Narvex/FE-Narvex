@@ -1023,6 +1023,11 @@ export function addGSAPHoverAnimations() {
     if (elements.length === 0) return;
 
     elements.forEach((button) => {
+      // Check if already has animations to prevent duplicates
+      if (animationInstances.has(button)) {
+        return;
+      }
+
       // Use animation pool for timeline reuse
       const pool = AnimationPool.getInstance();
       const tl = pool.getTimeline('button-hover');
@@ -1042,6 +1047,9 @@ export function addGSAPHoverAnimations() {
       button.addEventListener('mouseenter', throttledEnter, { passive: true });
       button.addEventListener('mouseleave', throttledLeave, { passive: true });
       
+      // Mark as animated to prevent CSS conflicts
+      button.setAttribute('data-gsap-animated', 'true');
+      
       // Track for cleanup
       const timelines = animationInstances.get(button) || [];
       timelines.push(tl);
@@ -1055,6 +1063,11 @@ export function addGSAPHoverAnimations() {
     if (elements.length === 0) return;
 
     elements.forEach((card) => {
+      // Check if already has animations to prevent duplicates
+      if (animationInstances.has(card)) {
+        return;
+      }
+
       const pool = AnimationPool.getInstance();
       const tl = pool.getTimeline('card-hover');
       
@@ -1074,10 +1087,35 @@ export function addGSAPHoverAnimations() {
       card.addEventListener('mouseenter', throttledEnter, { passive: true });
       card.addEventListener('mouseleave', throttledLeave, { passive: true });
       
+      // Mark as animated to prevent CSS conflicts
+      card.setAttribute('data-gsap-animated', 'true');
+      
       // Track for cleanup
       const timelines = animationInstances.get(card) || [];
       timelines.push(tl);
       animationInstances.set(card, timelines);
+    });
+  });
+}
+
+/**
+ * Clean up all hover animations to prevent memory leaks and duplicate listeners
+ */
+export function cleanupGSAPHoverAnimations() {
+  const buttonSelectors = ['button', '.btn'];
+  const cardSelectors = ['.card', '.service-card', '.portfolio-item'];
+  
+  const allSelectors = [...buttonSelectors, ...cardSelectors];
+  
+  allSelectors.forEach(selector => {
+    const elements = document.querySelectorAll(selector);
+    elements.forEach((element) => {
+      // Clone the element to remove all event listeners
+      const newElement = element.cloneNode(true);
+      element.parentNode?.replaceChild(newElement, element);
+      
+      // Clear animation instances
+      animationInstances.delete(element);
     });
   });
 }

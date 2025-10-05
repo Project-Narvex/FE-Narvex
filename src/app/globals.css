@@ -425,6 +425,182 @@
     }
   }
 
+  /* Client Carousel Custom Styles */
+  .client-carousel-container {
+    /* Enhanced scrolling with momentum */
+    scroll-behavior: auto;
+    mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 10%, #000 90%, transparent 100%);
+    /* Improve performance */
+    will-change: scroll-position;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  /* Hide scrollbars */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* Internet Explorer 10+ */
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar { 
+    display: none;  /* Safari and Chrome */
+  }
+
+  /* Smooth scrolling for carousel */
+  .client-carousel-container * {
+    will-change: transform;
+  }
+
+  /* Mobile carousel optimizations */
+  @media (max-width: 768px) {
+    .client-carousel-container {
+      /* Reduce mask gradient on mobile for better visibility */
+      mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 5%, #000 95%, transparent 100%);
+    }
+    
+    /* Reduce performance optimizations on mobile to prevent issues */
+    .client-carousel-container {
+      will-change: auto;
+      transform: none;
+      backface-visibility: visible;
+    }
+  }
+
+  .client-logo-container {
+    /* Ensure logos are properly centered and responsive */
+    backdrop-filter: blur(2px);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.02);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Logo Image Components */
+  .logo-image-container {
+    @apply relative overflow-hidden;
+  }
+
+  .logo-image-loading {
+    @apply absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center;
+  }
+
+  .logo-image-error {
+    @apply bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center;
+  }
+
+  .company-logo-container {
+    @apply relative overflow-hidden rounded-lg;
+  }
+
+  /* Smart Logo Image Components */
+  .smart-logo-container {
+    @apply relative overflow-hidden rounded-lg;
+  }
+
+  .smart-logo-loading {
+    @apply absolute inset-0 bg-gray-100 animate-pulse flex items-center justify-center;
+  }
+
+  .smart-logo-error {
+    @apply bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center;
+  }
+
+  .smart-company-logo {
+    @apply relative overflow-hidden rounded-lg transition-transform duration-300;
+  }
+
+  .smart-client-logo {
+    @apply relative overflow-hidden rounded-lg transition-transform duration-300;
+  }
+
+  /* High Quality Image Settings */
+  .high-quality-image {
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+  }
+
+  .smart-logo-image {
+    @apply relative overflow-hidden rounded-lg;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  .service-icon-high-quality {
+    @apply relative overflow-hidden rounded-lg transition-transform duration-300;
+    image-rendering: -webkit-optimize-contrast;
+    image-rendering: crisp-edges;
+  }
+
+  .company-logo-container {
+    @apply relative overflow-hidden rounded-lg transition-transform duration-300;
+  }
+
+  /* Prevent animation conflicts - disable all CSS transitions for animated elements */
+  .service-card,
+  .card,
+  .portfolio-item,
+  .testimonial-card,
+  .service-card *,
+  .card *,
+  .portfolio-item *,
+  .testimonial-card * {
+    transition: none !important;
+    animation: none !important;
+  }
+
+  /* Only allow GSAP-controlled animations */
+  .service-card[data-gsap-animated],
+  .card[data-gsap-animated],
+  .portfolio-item[data-gsap-animated],
+  .testimonial-card[data-gsap-animated] {
+    transition: transform 0.3s ease-out !important;
+  }
+
+  /* Disable pulse animations that cause continuous popping */
+  .animate-pulse-hover {
+    animation: none !important;
+  }
+
+  /* Disable all pulse animations globally to prevent conflicts */
+  .animate-pulse,
+  .animate-pulse-hover,
+  .animate-pulse-glow {
+    animation: none !important;
+  }
+
+  /* Ensure service icons are completely static */
+  .service-icon,
+  .service-icon *,
+  .service-icon-high-quality,
+  .service-icon-high-quality * {
+    animation: none !important;
+    transition: none !important;
+  }
+
+  .client-logo-container:hover {
+    background: rgba(255, 255, 255, 0.05);
+    transform: translateY(-2px);
+  }
+
+  .client-logo-fallback {
+    /* Enhanced fallback styling */
+    backdrop-filter: blur(4px);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(255, 255, 255, 0.02) 100%);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  }
+
+  /* Testimonial carousel section styling */
+  .testimonial-carousel-heading {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+  }
+
+  .testimonial-carousel-description {
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+  }
+
   /* Accessibility - Respect user preferences */
   @media (prefers-reduced-motion: reduce) {
     html {

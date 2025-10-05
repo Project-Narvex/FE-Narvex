@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import CMSImage from '@/components/ui/CMSImage';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { 
   Calendar, 
   ArrowLeft, 
@@ -143,16 +143,18 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 {article.excerpt}
               </p>
               
-              {/* Featured Image - CMS Ready */}
+              {/* Featured Image - Direct Next.js Image */}
               {article.featuredImage && (
                 <div className="rounded-xl overflow-hidden shadow-lg mb-12">
-                  <CMSImage 
-                     src={article.featuredImage}
-                     alt={`${article.title} - Featured image`}
-                     className="w-full h-64 sm:h-80 lg:h-96"
-                     fallbackText={article.title}
-                     category={article.category}
-                   />
+                  <ImageWithFallback
+                    src={article.featuredImage}
+                    alt={`${article.title} - Featured image`}
+                    className="w-full h-64 sm:h-80 lg:h-96"
+                    fallbackText={article.title}
+                    category={article.category}
+                    fill={true}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
                 </div>
               )}
             </div>

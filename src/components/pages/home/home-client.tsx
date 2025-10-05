@@ -14,11 +14,17 @@ import { Card, CardContent } from '@/components/ui/Card';
 import ClientCarousel from '@/components/ui/ClientCarousel';
 import MapComponent from '@/components/ui/MapComponent';
 import AnimatedSection from '@/components/ui/AnimatedSection';
+import { mapStrapiLogo, mapClientLogo, getStrapiImageUrl } from '@/lib/strapi';
+import { LogoImage, CompanyLogoImage, ClientLogoImage } from '@/components/ui/LogoImage';
+import { SmartCompanyLogoImage, SmartClientLogoImage, SmartServiceIconImage } from '@/components/ui/SmartLogoImage';
+import { SafeCompanyLogoImage, SafeClientLogoImage, SafeServiceIconImage } from '@/components/ui/SafeLogoImage';
+import { SafePortfolioImage, SafeAvatarImage, SafeArticleImage } from '@/components/ui/SafeImageComponents';
 
 import {
   initializeAnimations,
   initializeHeroAnimation,
   addGSAPHoverAnimations,
+  cleanupGSAPHoverAnimations,
   DepthAnimationController,
   add3DCardEffect,
   addEnhancedParallax,
@@ -61,7 +67,41 @@ interface ContactFormData {
 }
 
 // Props interface for HomeClient component
+interface HomepageDataProps {
+  heroSection?: any;
+  companySection?: any;
+  serviceSection?: any;
+  projectSection?: any;
+  testimonialSection?: {
+    title?: string;
+    description?: string;
+    clients?: Array<{
+      name: string;
+      logo: any;
+      website?: string;
+      type?: string;
+      orderNo?: number;
+    }>;
+    selected_testimonials?: Array<{
+      clientName: string;
+      clientTitle: string;
+      companyName: string;
+      content: string;
+      rating?: number;
+      avatar?: any;
+    }>;
+    statistic1?: any;
+    statistic2?: any;
+    statistic3?: any;
+    statistic4?: any;
+  };
+  articleSection?: any;
+  contactSection?: any;
+  collaborationSection?: any;
+}
+
 interface HomeClientProps {
+  homepageData?: HomepageDataProps;
   recentArticles: BlogArticle[];
   defaultProjects: Project[];
   defaultTestimonials: Testimonial[];
@@ -121,6 +161,7 @@ const coverflowServices = [
 
 
 export default function HomeClient({
+  homepageData,
   recentArticles,
   defaultProjects,
   defaultTestimonials,
@@ -154,20 +195,26 @@ export default function HomeClient({
     if (!isMounted) {
       return; // Don't run animations until the component is mounted
     }
+
+    let animationController: any = null;
+    let heroAnimation: any = null;
+    let depthController: DepthAnimationController | null = null;
+    let depthEffectsTimeout: NodeJS.Timeout | null = null;
+
     // Initialize GSAP scroll animations
-    const animationController = initializeAnimations();
+    animationController = initializeAnimations();
 
     // Initialize hero entrance animation
-    const heroAnimation = initializeHeroAnimation();
+    heroAnimation = initializeHeroAnimation();
 
     // Initialize depth animation controller
-    const depthController = new DepthAnimationController();
+    depthController = new DepthAnimationController();
 
     // Add hover animations
     addGSAPHoverAnimations();
 
     // Add depth effects to specific elements after a delay
-    const depthEffectsTimeout = setTimeout(() => {
+    depthEffectsTimeout = setTimeout(() => {
       // Add 3D card effects to service cards
       document.querySelectorAll('.service-card').forEach(card => {
         add3DCardEffect(card, {
@@ -201,7 +248,7 @@ export default function HomeClient({
       // Create floating shapes in hero section
       const heroSection = document.querySelector('.hero-section');
       if (heroSection) {
-        depthController.createFloatingShapes(heroSection, 8);
+        depthController?.createFloatingShapes(heroSection, 8);
       }
 
       // Create morphing background for sections
@@ -225,7 +272,9 @@ export default function HomeClient({
 
     // Cleanup on unmount
     return () => {
-      clearTimeout(depthEffectsTimeout);
+      if (depthEffectsTimeout) {
+        clearTimeout(depthEffectsTimeout);
+      }
       if (animationController) {
         animationController.destroy();
       }
@@ -235,8 +284,10 @@ export default function HomeClient({
       if (depthController) {
         depthController.destroy();
       }
+      // Clean up hover animations to prevent duplicate listeners
+      cleanupGSAPHoverAnimations();
     };
-  }, [isMounted]);
+  }, [isMounted]); // Only depend on isMounted to prevent re-runs
 
   // Helper functions
   const scrollToSection = (sectionId: string) => {
@@ -262,7 +313,10 @@ export default function HomeClient({
     { key: 'wedding' as const, label: 'Wedding' }
   ];
 
-  const filteredProjects = defaultProjects.filter(project =>
+  // Get all projects from both API and fallback data for filtering
+  const allProjects = homepageData?.projectSection?.featuredProjects || defaultProjects;
+  
+  const filteredProjects = allProjects.filter((project: any) =>
     activeFilter === 'all' || project.category === activeFilter
   );
 
@@ -290,7 +344,34 @@ export default function HomeClient({
     'Lainnya'
   ];
 
-  const contactInfo = [
+  // Contact info from API data
+  const contactInfo = homepageData?.collaborationSection ? [
+    {
+      icon: <MapPin className="w-6 h-6 text-gold-500" />,
+      label: 'Alamat',
+      value: `${homepageData.collaborationSection.address.address}, ${homepageData.collaborationSection.address.city}, ${homepageData.collaborationSection.address.province}`,
+      description: 'Lokasi kantor pusat kami'
+    },
+    {
+      icon: <Phone className="w-6 h-6 text-gold-500" />,
+      label: 'Telepon',
+      value: homepageData.collaborationSection.phone ? `+${homepageData.collaborationSection.phone}` : '+62 xxx xxxx xxxx',
+      description: 'Hubungi kami langsung'
+    },
+    {
+      icon: <Mail className="w-6 h-6 text-gold-500" />,
+      label: 'Email',
+      value: homepageData?.contactSection?.email || 'narvex.ind@gmail.com',
+      description: 'Kirimi email untuk inquiry'
+    },
+    {
+      icon: <Instagram className="w-6 h-6 text-gold-500" />,
+      label: 'Instagram',
+      value: homepageData?.contactSection?.socialLinks?.instagram ? 
+        homepageData.contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : '@narvex.id',
+      description: 'Follow untuk update terbaru'
+    }
+  ] : [
     {
       icon: <MapPin className="w-6 h-6 text-gold-500" />,
       label: 'Alamat',
@@ -427,23 +508,33 @@ export default function HomeClient({
                   data-text-animation="wave"
                   suppressHydrationWarning
                 >
-                  <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
-                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
-                  <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                  {homepageData?.heroSection ? (
+                    <>
+                      <span className="block transform-3d break-words" data-tilt="8">{homepageData.heroSection.title.split(' ')[0]} {homepageData.heroSection.title.split(' ')[1]}</span>
+                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{homepageData.heroSection.title.split(' ')[2]} {homepageData.heroSection.title.split(' ')[3]}</span>
+                      <span className="block transform-3d break-words" data-tilt="6">{homepageData.heroSection.title.split(' ').slice(4).join(' ')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
+                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
+                      <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                    </>
+                  )}
                 </h1>
 
                 <p
                   className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth"
                   suppressHydrationWarning
                 >
-                  CV. Nara Exhibition Indonesia
+                  {homepageData?.heroSection?.subtitleLine1 || 'CV. Nara Exhibition Indonesia'}
                 </p>
 
                 <p
                   className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium"
                   suppressHydrationWarning
                 >
-                  Trusted by Government & Fortune 500 Companies
+                  {homepageData?.heroSection?.subtitleLine2 || 'Trusted by Government & Fortune 500 Companies'}
                 </p>
 
                 <div className="hero-buttons flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
@@ -472,18 +563,43 @@ export default function HomeClient({
 
                 {/* Stats */}
                 <div className="hero-stats grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 stagger-children" data-mouse-parallax="0.06">
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
-                  </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
-                  </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
-                  </div>
+                  {homepageData?.heroSection?.statistic1 ? (
+                    <>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                          {homepageData.heroSection.statistic1.value}{homepageData.heroSection.statistic1.suffix}
+                        </div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">{homepageData.heroSection.statistic1.label}</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                          {homepageData.heroSection.statistic2.value}{homepageData.heroSection.statistic2.suffix}
+                        </div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">{homepageData.heroSection.statistic2.label}</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                          {homepageData.heroSection.statistic3.value}{homepageData.heroSection.statistic3.suffix}
+                        </div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">{homepageData.heroSection.statistic3.label}</div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
@@ -508,8 +624,19 @@ export default function HomeClient({
                   modules={[EffectCoverflow, Pagination, Navigation]}
                   className="mySwiper perspective-1500"
                 >
-                  {coverflowServices.map((service, index) => (
-                    <SwiperSlide key={index} style={{ width: '300px' }}>
+                  {(homepageData?.heroSection?.hero_slides || coverflowServices).map((slide: any, index: number) => {
+                    // Handle both API data and fallback data
+                    const service = slide.image ? {
+                      image: (() => {
+                        const slideMap = mapStrapiLogo(slide.image, 'medium', slide.title);
+                        return slideMap.hasLogo ? slideMap.logoUrl : slide.image || 'https://picsum.photos/800/600?random=' + (index + 1);
+                      })(),
+                      title: slide.title || slide.title,
+                      subtitle: slide.subtitle || slide.subtitle
+                    } : slide; // If it's already the old format, use as is
+                    
+                    return (
+                      <SwiperSlide key={index} style={{ width: '300px' }}>
                       <div
                         className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
                         style={{
@@ -533,9 +660,10 @@ export default function HomeClient({
 
                         {/* Floating accent */}
                         <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
                 )}
               </div>
@@ -593,71 +721,39 @@ export default function HomeClient({
                 data-tilt="4"
                 suppressHydrationWarning
               >
-                CV. Nara Exhibition Indonesia
+                {homepageData?.companySection?.title || 'CV. Nara Exhibition Indonesia'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.03">
-                Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi,
-                mengkhususkan diri dalam MICE services, event production, dan solusi kreatif
-                komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan
-                layanan end-to-end untuk kesuksesan setiap project Anda.
+                {homepageData?.companySection?.description || 'Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, mengkhususkan diri dalam MICE services, event production, dan solusi kreatif komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan layanan end-to-end untuk kesuksesan setiap project Anda.'}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-12 sm:mt-16 animate-stagger">
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
-                  data-stagger="0"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">耳</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
-                  data-stagger="50"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">汐</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
-                  data-stagger="100"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">導</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card
-                  variant="service"
-                  className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
-                  data-stagger="150"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">直</span>
-                    </div>
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
+                {(homepageData?.companySection?.selected_companies || [
+                  { id: 1, name: 'Creative Design & Branding', description: 'Brand identity, graphic design, dan visual communication', logo: { formats: { medium: { url: '' } } } },
+                  { id: 2, name: 'Event Production', description: 'Event planning, design, dan technical support', logo: { formats: { medium: { url: '' } } } },
+                  { id: 3, name: 'Digital Marketing', description: 'Social media, SEO, digital advertising, dan website development', logo: { formats: { medium: { url: '' } } } },
+                  { id: 4, name: 'Brand Consultation', description: 'Strategic planning dan brand positioning', logo: { formats: { medium: { url: '' } } } }
+                ]).map((company: any, index: number) => (
+                  <Card
+                    key={company.id}
+                    variant="service"
+                    className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
+                    data-stagger={index * 50}
+                  >
+                    <CardContent className="px-4 py-8 flex flex-col h-full">
+                      <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 overflow-hidden">
+                        <SafeCompanyLogoImage
+                          src={company.logo}
+                          alt={company.name}
+                          fallbackText={company.name?.slice(0, 3).toUpperCase() || 'LOGO'}
+                          size={80}
+                        />
+                      </div>
+                      <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">{company.name}</h3>
+                      <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">{company.description || company.name}</p>
+                      <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                    </CardContent>
+                  </Card>
+                ))}
               </div>
 
               {/* Bottom Decorative Element */}
@@ -693,41 +789,66 @@ export default function HomeClient({
 
             {/* Services Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
-              {services.map((service, index) => (
-                <Card
-                  key={service.id}
-                  variant="service"
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform`}
-                  data-stagger={index * 150}
-                  data-tilt="8"
-                  data-mouse-parallax="0.12"
-                >
-                  {/* Icon */}
-                  <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
-                    <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300">
-                      {service.icon}
+              {(homepageData?.serviceSection?.services || services).map((service: any, index: number) => {
+                // Handle both API data and fallback data
+                const apiService = service.icon ? {
+                  id: service.id || index.toString(),
+                  title: service.title,
+                  description: service.description,
+                  icon: (() => {
+                    const iconMap = mapStrapiLogo(service.icon, 'medium', service.title);
+                    return iconMap.hasLogo ? (
+                      <SafeServiceIconImage
+                        src={service.icon}
+                        alt={iconMap.altText}
+                        fallbackText={service.title?.slice(0, 2).toUpperCase() || 'IC'}
+                        size={64}
+                        className="w-16 h-16"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-gold-500">
+                        <Palette className="w-8 h-8 text-white" />
+                      </div>
+                    );
+                  })(),
+                  features: service.features || []
+                } : service;
+                
+                return (
+                  <Card
+                    key={apiService.id}
+                    variant="service"
+                    className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform`}
+                    data-stagger={index * 150}
+                    data-tilt="8"
+                    data-mouse-parallax="0.12"
+                  >
+                    {/* Icon */}
+                    <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300 overflow-hidden">
+                        {apiService.icon}
+                      </div>
                     </div>
-                  </div>
 
-                  {/* Content */}
-                  <div className="flex-1 flex flex-col">
-                    <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
-                      {service.title}
-                    </h3>
+                    {/* Content */}
+                    <div className="flex-1 flex flex-col">
+                      <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
+                        {apiService.title}
+                      </h3>
 
-                    <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
-                      {service.description}
-                    </p>
+                      <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
+                        {apiService.description}
+                      </p>
 
-                    {/* Features List */}
-                    <ul className="space-y-3 mb-6 flex-1 list-none">
-                      {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start text-gray-contrast-700 animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
-                          <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
-                          <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
+                      {/* Features List */}
+                      <ul className="space-y-3 mb-6 flex-1 list-none">
+                        {(apiService.features || []).map((feature: any, idx: number) => (
+                          <li key={idx} className="flex items-start text-gray-contrast-700 animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                            <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
+                            <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
 
                     {/* CTA Button */}
                     <button
@@ -739,7 +860,8 @@ export default function HomeClient({
                     </button>
                   </div>
                 </Card>
-              ))}
+                );
+              })}
             </div>
 
             {/* Bottom CTA */}
@@ -814,47 +936,62 @@ export default function HomeClient({
 
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
-              {filteredProjects.map((project, index) => (
-                <Card
-                  key={project.id}
-                  variant="portfolio"
-                  className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
-                  data-stagger={index * 150}
-                  data-tilt="6"
-                  data-mouse-parallax="0.15"
-                >
-                  <div className="relative overflow-hidden rounded-2xl">
-                    <div className="relative w-full h-64">
-                      <Image
-                        src={project.images[0] || '/placeholder-image.jpg'}
-                        alt={project.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
+              {filteredProjects.map((project: any, index: number) => {
+                // Handle both API data and fallback data
+                const apiProject = project.cover ? {
+                  id: project.id.toString(),
+                  title: project.title,
+                  description: project.excerpt,
+                  category: project.category || 'creative', // Ensure category is available for filtering
+                  tags: project.tags || [], // Ensure tags are available for display
+                  images: [(() => {
+                    const coverMap = mapStrapiLogo(project.cover, 'medium', project.title);
+                    return coverMap.hasLogo ? coverMap.logoUrl : '/placeholder-image.jpg';
+                  })()]
+                } : project;
+                
+                return (
+                  <Card
+                    key={apiProject.id || project.id}
+                    variant="portfolio"
+                    className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
+                    data-stagger={index * 150}
+                    data-tilt="6"
+                    data-mouse-parallax="0.15"
+                  >
+                    <div className="relative overflow-hidden rounded-2xl">
+                      <div className="relative w-full h-64">
+                        <SafePortfolioImage
+                          src={apiProject.images?.[0] || project.images[0] || '/placeholder-image.jpg'}
+                          alt={apiProject.title || project.title}
+                          fallbackText={(apiProject.title || project.title)?.slice(0, 2).toUpperCase() || 'PR'}
+                          width={400}
+                          height={256}
+                        />
+                      </div>
 
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                       <div className="p-6 text-white w-full">
-                        <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">{project.description}</p>
+                        <h3 className="text-xl font-bold mb-2">{apiProject.title || project.title}</h3>
+                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">{apiProject.description || project.description}</p>
                         <div className="flex flex-wrap gap-2 mb-3">
-                          {project.tags.slice(0, 2).map((tag, idx) => (
+                          {((apiProject.tags || project.tags) || []).slice(0, 2).map((tag: any, idx: number) => (
                             <span key={idx} className="bg-gold-500 px-3 py-1 rounded-full text-xs font-medium">
                               {tag}
                             </span>
                           ))}
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-300">{project.client}</span>
+                          <span className="text-xs text-gray-300">{project.client || 'Narvex'}</span>
                           <ExternalLink className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
                   </div>
                 </Card>
-              ))}
+                );
+              })}
             </div>
 
             {/* Bottom CTA */}
@@ -908,40 +1045,95 @@ export default function HomeClient({
 
             {/* Testimonials Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16 stagger-children" data-mouse-parallax="0.08">
-              {defaultTestimonials.map((testimonial, index) => (
+              {(homepageData?.testimonialSection?.selected_testimonials || defaultTestimonials).map((testimonial: any, testimonialsIndex: number) => (
                 <Card
-                  key={testimonial.id}
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
-                  data-stagger={index * 200}
+                  key={testimonial.id || testimonial.documentId || testimonialsIndex}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform testimonial-accessible card-accessible`}
+                  data-stagger={testimonialsIndex * 200}
                   data-tilt="8"
                   data-mouse-parallax="0.12"
                   hover={true}
                 >
-                  {/* Rating */}
-                  <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
-                    {renderStars(testimonial.rating)}
-                  </div>
+                  {/* Use API data if available, otherwise fallback to default */}
+                  {testimonial.rating && (
+                    <div className="flex mb-6 justify-center" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
+                      {renderStars(testimonial.rating)}
+                    </div>
+                  )}
 
                   {/* Quote */}
-                  <blockquote className="quote font-normal text-medium-contrast text-lg mb-6 italic leading-relaxed">
-                    &ldquo;{testimonial.quote}&rdquo;
+                  <blockquote className="quote font-normal text-gray-contrast-700 text-lg mb-6 italic leading-relaxed px-4">
+                    &ldquo;{testimonial.content || testimonial.quote}&rdquo;
                   </blockquote>
 
                   {/* Author Info */}
-                  <div className="flex items-center">
-                    <div className="relative w-16 h-16 mr-4">
-                      <Image
-                        src={testimonial.avatar}
-                        alt={`${testimonial.name}, ${testimonial.position} at ${testimonial.company}`}
-                        fill
-                        className="rounded-full object-cover"
-                        sizes="64px"
-                      />
-                    </div>
-                    <div>
-                      <h4 className="author-name font-bold text-lg text-high-contrast">{testimonial.name}</h4>
-                      <p className="author-position text-gray-contrast-600 text-sm font-medium">{testimonial.position}</p>
-                      <p className="author-company text-sm font-semibold author-company-gold">{testimonial.company}</p>
+                  <div className="flex items-center justify-start mt-auto px-4">
+                    {testimonial.avatar ? (
+                      <div className="relative w-16 h-16 mr-4">
+                        {isMounted ? (
+                          (() => {
+                            try {
+                              // Debug: log avatar data
+                              console.log('Avatar data:', testimonial.avatar);
+                              
+                              // Use getStrapiImageUrl for avatar images
+                              const avatarUrl = getStrapiImageUrl(testimonial.avatar as any, 'medium');
+                              const altText = testimonial.avatar.alternativeText || testimonial.clientName || testimonial.name || 'Avatar';
+                              
+                              console.log('Avatar URL:', avatarUrl);
+                              
+                              return avatarUrl ? (
+                                <SafeAvatarImage
+                                  src={avatarUrl}
+                                  alt={altText}
+                                  fallbackText={(testimonial.clientName || testimonial.name || 'U').charAt(0).toUpperCase()}
+                                  size={64}
+                                />
+                              ) : (
+                                <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                                  <span className="text-gold-700 text-lg font-bold">
+                                    {(testimonial.clientName || testimonial.name || 'U').charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                              );
+                            } catch (error) {
+                              console.error('Error processing avatar:', error);
+                              return (
+                                <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                                  <span className="text-gold-700 text-lg font-bold">
+                                    {(testimonial.clientName || testimonial.name || 'U').charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                              );
+                            }
+                          })()
+                        ) : (
+                          <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                            <span className="text-gold-700 text-lg font-bold">
+                              {(testimonial.clientName || testimonial.name || 'U').charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="relative w-16 h-16 mr-4">
+                        <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                          <span className="text-gold-700 text-lg font-bold">
+                            {(testimonial.clientName || testimonial.name || 'U').charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <h4 className="author-name font-bold text-lg text-gray-contrast-800">
+                        {testimonial.clientName || testimonial.name}
+                      </h4>
+                      <p className="author-position text-gray-contrast-600 text-sm font-medium">
+                        {testimonial.clientTitle || testimonial.position}
+                      </p>
+                      <p className="author-company text-sm font-semibold" style={{color: 'var(--gold-700)'}}>
+                        {testimonial.companyName || testimonial.company}
+                      </p>
                       {testimonial.project && (
                         <p className="author-project text-gray-contrast-500 text-xs mt-1 font-medium">{testimonial.project}</p>
                       )}
@@ -951,34 +1143,76 @@ export default function HomeClient({
               ))}
             </div>
 
-            {/* Client Logos Carousel */}
+            {/* Client Testimonials and Logos Carousel */}
             <div className="animate-fade-in animation-delay-600 no-shadow">
-              <p className="text-center mb-8 text-lg client-carousel-text">
+              <h3 className="text-center mb-6 text-2xl font-bold text-white testimonial-carousel-heading">
                 Dipercaya oleh:
-              </p>
+              </h3>
               <div className="no-shadow">
-                {isMounted && <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />}
+                {isMounted && (
+                  <ClientCarousel 
+                    clients={homepageData?.testimonialSection?.clients?.map((client: any) => ({
+                      name: client.name,
+                      logo: client.logo
+                    })) || defaultClients} 
+                    autoScroll={true} 
+                    scrollSpeed={25} 
+                  />
+                )}
               </div>
             </div>
 
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>98%</div>
-                <div className="text-gray-300">Client Satisfaction</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>50+</div>
-                <div className="text-gray-300">Projects Delivered</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>25+</div>
-                <div className="text-gray-300">Happy Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>3+</div>
-                <div className="text-gray-300">Years Experience</div>
-              </div>
+              {homepageData?.testimonialSection?.statistic1 ? (
+                <>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                      {homepageData.testimonialSection.statistic1.value}{homepageData.testimonialSection.statistic1.suffix}
+                    </div>
+                    <div className="text-gold-300">{homepageData.testimonialSection.statistic1.label}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                      {homepageData.testimonialSection.statistic2.value}{homepageData.testimonialSection.statistic2.suffix}
+                    </div>
+                    <div className="text-gold-300">{homepageData.testimonialSection.statistic2.label}</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                      {homepageData.testimonialSection.statistic3.value}{homepageData.testimonialSection.statistic3.suffix}
+                    </div>
+                    <div className="text-gold-300">{homepageData.testimonialSection.statistic3.label}</div>
+                  </div>
+                  {homepageData.testimonialSection.statistic4 && (
+                    <div className="text-center">
+                      <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                        {homepageData.testimonialSection.statistic4.value}{homepageData.testimonialSection.statistic4.suffix}
+                      </div>
+                      <div className="text-gold-300">{homepageData.testimonialSection.statistic4.label}</div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">98%</div>
+                    <div className="text-gold-300">Client Satisfaction</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">50+</div>
+                    <div className="text-gold-300">Projects Delivered</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">25+</div>
+                    <div className="text-gold-300">Happy Clients</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">3+</div>
+                    <div className="text-gold-300">Years Experience</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </section>
@@ -1003,8 +1237,46 @@ export default function HomeClient({
                   <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
                     {recentArticles.map((article, index) => (
                       <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow card-accessible" data-stagger={index * 200}>
-                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
-                          <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center overflow-hidden">
+                          {(() => {
+                            const articleImage = article.featuredImage;
+                            
+                            // Check if it's a Strapi image object or a local path
+                            if (articleImage && typeof articleImage === 'object' && articleImage.url) {
+                              // It's a Strapi image object with formats - use getStrapiImageUrl to build proper URL
+                              const imageUrl = getStrapiImageUrl(articleImage as any, 'medium');
+                              const altText = articleImage.alternativeText || article.title;
+                              
+                              
+                              return imageUrl ? (
+                                <SafeArticleImage
+                                  src={imageUrl}
+                                  alt={altText}
+                                  fallbackText={article.title?.slice(0, 2).toUpperCase() || 'AR'}
+                                  width={400}
+                                  height={160}
+                                />
+                              ) : (
+                                <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                              );
+                            } else if (articleImage && typeof articleImage === 'string') {
+                              // It's a local path string
+                              return (
+                                <SafeArticleImage
+                                  src={articleImage}
+                                  alt={article.title}
+                                  fallbackText={article.title?.slice(0, 2).toUpperCase() || 'AR'}
+                                  width={400}
+                                  height={160}
+                                />
+                              );
+                            } else {
+                              // No image available, show fallback
+                              return (
+                                <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                              );
+                            }
+                          })()}
                         </div>
                         <div className="p-6">
                           <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
@@ -1016,11 +1288,24 @@ export default function HomeClient({
                           <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
                             {article.excerpt}
                           </p>
+                          
+                          {/* Article Tags */}
+                          {(article.tags || []).length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-3">
+                              {article.tags.slice(0, 3).map((tag: string, idx: number) => (
+                                <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          
                           <a
                             href={`/blog/${article.slug}`}
                             className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
                           >
-                            Baca Selengkapnya 竊                          </a>
+                            Baca Selengkapnya →
+                          </a>
                         </div>
                       </article>
                     ))}
@@ -1050,45 +1335,44 @@ export default function HomeClient({
           <div className="container mx-auto px-6 relative z-depth-2">
             <div className="text-center mb-12 scroll-animate-scale">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                Siap Memulai Project Anda?
+                {homepageData?.contactSection?.title || 'Siap Memulai Project Anda?'}
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu
-                mewujudkan visi kreatif Anda menjadi kenyataan.
+                {homepageData?.contactSection?.description || 'Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan.'}
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+                <p className="text-gray-300 text-sm">{homepageData?.contactSection?.email || 'narvex.ind@gmail.com'}</p>
               </a>
 
               <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="50">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">{homepageData?.contactSection?.phone_number ? '+' + homepageData.contactSection.phone_number : '+62 xxx xxxx xxxx'}</p>
               </a>
 
               <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
+                <p className="text-gray-300 text-sm">{homepageData?.contactSection?.socialLinks?.instagram ? homepageData.contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : '@narvex.id'}</p>
               </a>
 
               <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="150">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">{homepageData?.contactSection?.phone_number ? '+' + homepageData.contactSection.phone_number : '+62 xxx xxxx xxxx'}</p>
               </a>
             </div>
 
@@ -1132,10 +1416,10 @@ export default function HomeClient({
                   {/* Contact Form */}
                   <div >
                     <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                      Mari Wujudkan Project Impian Anda
+                      {homepageData?.collaborationSection?.title || 'Mari Wujudkan Project Impian Anda'}
                     </h2>
                     <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                      Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
+                      {homepageData?.collaborationSection?.description || 'Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.'}
                     </p>
 
                     <form onSubmit={handleSubmit} className="space-y-6 animate-stagger-3">

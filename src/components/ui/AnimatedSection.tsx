@@ -10,6 +10,7 @@ interface AnimatedSectionProps {
   threshold?: number;
   className?: string;
   once?: boolean;
+  id?: string;
 }
 
 const AnimatedSection: React.FC<AnimatedSectionProps> = ({
@@ -19,7 +20,8 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   duration = 600,
   threshold = 0.1,
   className = '',
-  once = true
+  once = true,
+  id
 }) => {
   const [isVisible, setIsVisible] = useState(false);
   const [hasAnimated, setHasAnimated] = useState(false);
@@ -97,6 +99,7 @@ const AnimatedSection: React.FC<AnimatedSectionProps> = ({
   return (
     <div
       ref={elementRef}
+      id={id}
       className={`${getAnimationClasses()} ${className}`}
     >
       {children}

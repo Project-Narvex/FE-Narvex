@@ -1,50 +1,47 @@
 import React from 'react';
-import AboutClient from '@/components/pages/about/about-client';
-import { teamMembers, getLeadershipTeam, getTeamByCompany } from '@/data/team';
-import { companies, getParentCompany } from '@/data/companies';
+import AboutPageClient from '@/components/pages/about/about-client-api';
+import { strapi } from '@/lib/strapi';
+import { AboutPageData } from '@/lib/strapi';
 
 // This is now a Server Component
-export default function AboutPage() {
-  // Pre-compute data on the server
-  const parentCompany = getParentCompany();
-  const allCompanies = companies;
+export default async function AboutPage() {
+  let aboutData: AboutPageData | null = null;
   
-  // Get team data
-  const leadershipTeam = getLeadershipTeam();
-  const narvexTeam = getTeamByCompany('narvex');
-  const allTeamMembers = teamMembers;
-  
-  // Pre-compute company statistics
-  const companyStats = {
-    totalCompanies: allCompanies.length,
-    establishedYear: parentCompany?.established || '2020',
-    totalTeamMembers: allTeamMembers.length,
-    leadershipCount: leadershipTeam.length
-  };
-  
-  // Company vision and mission data
-  const companyInfo = {
-    vision: "Menjadi perusahaan creative services terdepan di Indonesia yang memberikan solusi inovatif dan berkualitas tinggi untuk membantu klien mencapai kesuksesan bisnis mereka.",
-    mission: [
-      "Memberikan layanan creative services berkualitas tinggi dengan pendekatan profesional dan inovatif",
-      "Membantu klien membangun brand identity yang kuat dan memorable", 
-      "Menghadirkan event production yang memorable dan impactful",
-      "Mengoptimalkan digital presence klien melalui strategi digital marketing yang efektif"
-    ],
-    values: [
-      { title: "Innovation", description: "Selalu mencari cara baru dan kreatif dalam setiap project" },
-      { title: "Quality", description: "Berkomitmen memberikan hasil terbaik dengan standar tinggi" },
-      { title: "Collaboration", description: "Bekerja sama dengan klien untuk mencapai tujuan bersama" },
-      { title: "Integrity", description: "Menjaga kepercayaan dan transparansi dalam setiap kerjasama" }
-    ]
-  };
+  try {
+    // Fetch about page data from Strapi API
+    const response = await strapi.getAboutPage();
+    aboutData = response.data;
+  } catch (error) {
+    console.error('Error fetching about page data:', error);
+    // Fallback to static data if API fails
+    aboutData = {
+      id: 9,
+      documentId: "axd488i56suzqck4wowcy8lj",
+      createdAt: "2025-10-03T15:21:26.455Z",
+      updatedAt: "2025-10-03T15:42:11.534Z",
+      publishedAt: "2025-10-03T15:42:11.975Z",
+      pageContent: [
+        {
+          __component: "about.hero",
+          id: 9,
+          title: "Tentang Narvex",
+          description: "CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing"
+        }
+      ],
+      seo: []
+    };
+  }
 
-  return (
-    <AboutClient 
-      parentCompany={parentCompany}
-      leadershipTeam={leadershipTeam}
-      companyStats={companyStats}
-      companyInfo={companyInfo}
-    />
-  );
+  if (!aboutData) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Halaman Tidak Tersedia</h1>
+          <p className="text-gray-600">Data halaman about sedang tidak dapat diakses.</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <AboutPageClient aboutData={aboutData} />;
 }

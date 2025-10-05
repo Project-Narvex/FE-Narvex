@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import CMSImage from '@/components/ui/CMSImage';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { 
   MapPin, 
   Calendar, 
@@ -129,15 +129,17 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                 {project.longDescription || project.description}
               </p>
               
-              {/* Hero Image - CMS Ready */}
+              {/* Hero Image - Direct Next.js Image */}
               <div className="rounded-xl overflow-hidden shadow-lg mb-12">
-                <CMSImage 
-                   src={heroImage}
-                   alt={`${project.title} - Portfolio showcase image`}
-                   className="w-full h-64 sm:h-80 lg:h-96"
-                   fallbackText={project.title}
-                   category={project.category}
-                 />
+                <ImageWithFallback
+                  src={heroImage || '/placeholder-image.jpg'}
+                  alt={`${project.title} - Portfolio showcase image`}
+                  className="w-full h-64 sm:h-80 lg:h-96"
+                  fallbackText={project.title}
+                  category={project.category}
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
               </div>
             </div>
           </div>
@@ -332,12 +334,14 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                       <div className="flex items-center">
                         <div className="w-12 h-12 rounded-full mr-4 overflow-hidden bg-gray-200 flex-shrink-0">
                           {testimonial.avatar ? (
-                            <CMSImage 
-                               src={testimonial.avatar}
-                               alt={`${testimonial.name} - Client testimonial`}
-                               className="w-full h-full"
-                               fallbackText={testimonial.name.charAt(0)}
-                             />
+                            <ImageWithFallback
+                              src={testimonial.avatar}
+                              alt={`${testimonial.name} - Client testimonial`}
+                              className="w-full h-full"
+                              fallbackText={testimonial.name.charAt(0)}
+                              width={48}
+                              height={48}
+                            />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
                               <span className="text-blue-600 font-semibold text-lg">
