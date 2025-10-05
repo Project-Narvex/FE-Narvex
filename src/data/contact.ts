@@ -33,7 +33,7 @@ export interface ContactInfo {
   };
 }
 
-export interface ServiceCategory {
+export interface ServiceInfo {
   id: string;
   name: string;
   description: string;
@@ -45,8 +45,6 @@ export interface ServiceCategory {
     email: string;
     whatsapp: string;
   };
-  featured: boolean;
-  order: number;
 }
 
 export interface ContactPageContent {
@@ -55,10 +53,6 @@ export interface ContactPageContent {
     subtitle: string;
     description: string;
     backgroundImage?: string;
-  };
-  serviceSelection: {
-    title: string;
-    description: string;
   };
   contactForm: {
     title: string;
@@ -99,7 +93,6 @@ export interface FormSubmission {
   budget?: string;
   timeline?: string;
   message: string;
-  targetService: string;
   submittedAt: Date;
   status: 'pending' | 'contacted' | 'completed';
   source: 'website' | 'social' | 'referral';
@@ -112,10 +105,6 @@ export const defaultContactPageContent: ContactPageContent = {
     subtitle: "Narvex Creative Services",
     description: "Siap membantu mewujudkan project impian Anda dengan layanan creative services terbaik dari Narvex"
   },
-  serviceSelection: {
-    title: "Pilih Layanan",
-    description: "Pilih layanan yang sesuai dengan kebutuhan project Anda untuk mendapatkan konsultasi yang tepat"
-  },
   contactForm: {
     title: "Konsultasi Gratis",
     description: "Formulir ini akan diteruskan langsung ke tim spesialis untuk konsultasi yang tepat.",
@@ -125,8 +114,8 @@ export const defaultContactPageContent: ContactPageContent = {
       phone: { required: true, placeholder: "+62 xxx xxxx xxxx" },
       company: { required: false, placeholder: "Nama perusahaan (opsional)" },
       service: { required: true, options: [] }, // Will be populated dynamically
-      budget: { 
-        required: false, 
+      budget: {
+        required: false,
         options: [
           { value: "under-10m", label: "< 10 Juta" },
           { value: "10m-50m", label: "10 - 50 Juta" },
@@ -198,102 +187,36 @@ export const defaultContactInfo: ContactInfo = {
   }
 };
 
-// Default service categories (would be fetched from CMS)
-export const defaultServiceCategories: ServiceCategory[] = [
-  {
-    id: 'branding',
-    name: 'Creative Design & Branding',
-    description: 'Identitas visual yang kuat dan memorable untuk brand Anda',
-    icon: '🎨',
+// Main Service Information
+export const mainService: ServiceInfo = {
+    id: 'main-service',
+    name: 'Narvex Creative Services',
+    description: 'Solusi terintegrasi untuk semua kebutuhan branding, event, dan digital marketing Anda.',
+    icon: '耳',
     color: 'bg-blue-500',
     services: [
       'Brand Strategy & Identity',
       'Logo & Visual Design',
-      'Brand Guidelines',
-      'Marketing Collaterals',
-      'Brand Consultation'
-    ],
-    contact: {
-      phone: '+62 xxx xxxx xxxx',
-      email: 'creative@narvex.id',
-      whatsapp: '+62 xxx xxxx xxxx'
-    },
-    featured: true,
-    order: 1
-  },
-  {
-    id: 'event',
-    name: 'Event Production',
-    description: 'Produksi event berkualitas tinggi dari konsep hingga eksekusi',
-    icon: '🎪',
-    color: 'bg-gold-500',
-    services: [
       'Event Planning & Management',
       'Stage & Set Design',
-      'Audio Visual Production',
-      'Live Streaming',
-      'Event Coordination'
-    ],
-    contact: {
-      phone: '+62 xxx xxxx xxxx',
-      email: 'event@narvex.id',
-      whatsapp: '+62 xxx xxxx xxxx'
-    },
-    featured: true,
-    order: 2
-  },
-  {
-    id: 'digital',
-    name: 'Digital Marketing',
-    description: 'Strategi digital marketing yang efektif dan terukur',
-    icon: '📱',
-    color: 'bg-blue-600',
-    services: [
       'Social Media Strategy',
       'Content Creation',
-      'Influencer Marketing',
-      'Performance Advertising',
-      'Digital Analytics'
+      'Brand Consultation',
+      'Market Analysis'
     ],
     contact: {
       phone: '+62 xxx xxxx xxxx',
-      email: 'digital@narvex.id',
+      email: 'contact@narvex.id',
       whatsapp: '+62 xxx xxxx xxxx'
-    },
-    featured: true,
-    order: 3
-  },
-  {
-    id: 'consultation',
-    name: 'Brand Consultation',
-    description: 'Konsultasi strategis untuk pengembangan dan transformasi brand',
-    icon: '💡',
-    color: 'bg-gold-600',
-    services: [
-      'Brand Audit & Research',
-      'Market Analysis',
-      'Brand Strategy Development',
-      'Implementation Support',
-      'Performance Monitoring'
-    ],
-    contact: {
-      phone: '+62 xxx xxxx xxxx',
-      email: 'consultation@narvex.id',
-      whatsapp: '+62 xxx xxxx xxxx'
-    },
-    featured: true,
-    order: 4
-  }
-];
+    }
+};
+
 
 // CMS API functions (would integrate with Strapi)
 export const contactAPI = {
   // Get contact page content
   async getContactPageContent(): Promise<ContactPageContent> {
     try {
-      // In a real implementation, this would fetch from Strapi
-      // const response = await strapi.request('/contact-page?populate=*');
-      // return transformStrapiEntity(response.data);
       return defaultContactPageContent;
     } catch (error) {
       console.error('Error fetching contact page content:', error);
@@ -304,8 +227,6 @@ export const contactAPI = {
   // Get contact information
   async getContactInfo(): Promise<ContactInfo> {
     try {
-      // const response = await strapi.request('/contact-info?populate=*');
-      // return transformStrapiEntity(response.data);
       return defaultContactInfo;
     } catch (error) {
       console.error('Error fetching contact info:', error);
@@ -314,37 +235,20 @@ export const contactAPI = {
   },
 
   // Get service categories
-  async getServiceCategories(): Promise<ServiceCategory[]> {
+  async getMainService(): Promise<ServiceInfo> {
     try {
-      // const response = await strapi.request('/service-categories?populate=*&sort=order:asc');
-      // return response.data.map(transformStrapiEntity);
-      return defaultServiceCategories.sort((a, b) => a.order - b.order);
+      return mainService;
     } catch (error) {
-      console.error('Error fetching service categories:', error);
-      return defaultServiceCategories;
+      console.error('Error fetching main service:', error);
+      return mainService;
     }
   },
 
   // Submit contact form
   async submitContactForm(formData: Omit<FormSubmission, 'id' | 'submittedAt' | 'status'>): Promise<{ success: boolean; message: string; id?: string }> {
     try {
-      // In a real implementation, this would submit to Strapi
-      // const response = await strapi.request('/contact-submissions', {
-      //   method: 'POST',
-      //   body: JSON.stringify({
-      //     data: {
-      //       ...formData,
-      //       submittedAt: new Date().toISOString(),
-      //       status: 'pending'
-      //     }
-      //   })
-      // });
-      
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      
       console.log('Form submitted:', formData);
-      
       return {
         success: true,
         message: 'Pesan berhasil dikirim. Tim kami akan segera menghubungi Anda.',
@@ -359,5 +263,3 @@ export const contactAPI = {
     }
   }
 };
-
-// All types and data are exported above

@@ -544,7 +544,6 @@ export class GSAPAnimationController {
 
     // Initialize animations after a short delay to ensure DOM is ready
     gsap.delayedCall(0.1, () => {
-      this.initializeScrollAnimations();
       this.initializeTextAnimations();
       this.initializeStaggerAnimations();
     });

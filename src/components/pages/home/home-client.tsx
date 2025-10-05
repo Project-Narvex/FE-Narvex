@@ -5,6 +5,7 @@ import { BlogArticle } from '@/data/blog';
 import { Project } from '@/data/projects';
 import { ClientLogo } from '@/data/clients';
 import Image from 'next/image';
+import CMSImage from '@/components/ui/CMSImage';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
@@ -633,9 +634,13 @@ export default function HomeClient({
                   data-stagger="0"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎨</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Creative Design & Branding"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
@@ -647,9 +652,13 @@ export default function HomeClient({
                   data-stagger="50"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">🎬</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Event Production"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
@@ -661,9 +670,13 @@ export default function HomeClient({
                   data-stagger="100"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-blue-100 to-blue-200 group-hover:from-blue-200 group-hover:to-blue-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">📱</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Digital Marketing"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
@@ -675,9 +688,13 @@ export default function HomeClient({
                   data-stagger="150"
                 >
                   <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 bg-gradient-to-br from-gold-100 to-gold-200 group-hover:from-gold-200 group-hover:to-gold-300 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3">
-                      <span className="text-3xl group-hover:scale-110 transition-transform duration-300">💼</span>
-                    </div>
+                    <Image
+                      src="https://picsum.photos/id/10/512/512"
+                      alt="Brand Consultation"
+                      width={512}
+                      height={512}
+                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                    />
                     <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
                     <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
                     <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
