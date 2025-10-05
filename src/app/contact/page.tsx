@@ -467,15 +467,15 @@ export default function ContactPage() {
                     <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                       <div className="flex items-center">
                         <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-gold-500 flex-shrink-0" />
-                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{selectedServiceData?.contact.phone}</span>
+                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{contactInfo.contact.phone}</span>
                       </div>
                       <div className="flex items-center">
                         <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-gold-500 flex-shrink-0" />
-                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{selectedServiceData?.contact.email}</span>
+                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{contactInfo.contact.email}</span>
                       </div>
                       <div className="flex items-center">
                         <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-gray-contrast-700 text-sm sm:text-base">WhatsApp: {selectedServiceData?.contact.whatsapp}</span>
+                        <span className="text-gray-contrast-700 text-sm sm:text-base">WhatsApp: {contactInfo.contact.whatsapp}</span>
                       </div>
                     </div>
                     
