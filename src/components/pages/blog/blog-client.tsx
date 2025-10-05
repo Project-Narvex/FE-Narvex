@@ -5,15 +5,20 @@ import Link from 'next/link';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
 import { Calendar, User, Search, Star, ArrowRight } from 'lucide-react';
-import { BlogArticle } from '@/data/blog';
+import { transformBlogListData } from '@/lib/blog-utils';
 
 interface BlogClientProps {
-  initialArticles: BlogArticle[];
-  featuredArticles: BlogArticle[];
+  initialArticles: any[];
+  featuredArticles: any[];
   blogCategories: { id: string; name: string; }[];
   availableYears: number[];
   availableAuthors: string[];
   statusOptions: { id: string; name: string; }[];
+  heroData: {
+    title: string;
+    subtitle?: string;
+    description: string;
+  };
 }
 
 export default function BlogClient({
@@ -22,7 +27,8 @@ export default function BlogClient({
   blogCategories,
   availableYears,
   availableAuthors,
-  statusOptions
+  statusOptions,
+  heroData
 }: BlogClientProps) {
   // Blog Query Section state variables
   const [blogSearchQuery, setBlogSearchQuery] = useState('');
@@ -30,6 +36,15 @@ export default function BlogClient({
   const [blogYearFilter, setBlogYearFilter] = useState('all');
   const [blogAuthorFilter, setBlogAuthorFilter] = useState('all');
   const [blogStatusFilter, setBlogStatusFilter] = useState('all');
+  
+  // API state
+  const [filteredArticles, setFilteredArticles] = useState(initialArticles);
+  const [isLoading, setIsLoading] = useState(false);
+  
+  // Update filtered articles when initial articles change
+  useEffect(() => {
+    setFilteredArticles(initialArticles);
+  }, [initialArticles]);
   
   // Custom hook for debounced search
   function useDebounce<T>(value: T, delay: number): T {
@@ -51,44 +66,102 @@ export default function BlogClient({
   // Debounced search term for performance
   const debouncedBlogSearchQuery = useDebounce(blogSearchQuery, 300);
 
-   // Blog query filtering logic
-   const filteredBlogArticles = useMemo(() => {
-     const filtered = initialArticles.filter(article => {
-       const matchesSearch = debouncedBlogSearchQuery === '' || 
-         article.title.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
-         article.excerpt.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
-         article.author.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
-         article.tags.some(tag => tag.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()));
-       
-       const matchesCategory = blogCategoryFilter === 'all' || article.category === blogCategoryFilter;
-       const matchesYear = blogYearFilter === 'all' || new Date(article.publishDate).getFullYear().toString() === blogYearFilter;
-       const matchesAuthor = blogAuthorFilter === 'all' || article.author === blogAuthorFilter;
-       const matchesStatus = blogStatusFilter === 'all' || 
-         (blogStatusFilter === 'published' && article.published) ||
-         (blogStatusFilter === 'featured' && article.featured);
-       
-       return matchesSearch && matchesCategory && matchesYear && matchesAuthor && matchesStatus;
-     });
-     
-     return filtered;
-   }, [debouncedBlogSearchQuery, blogCategoryFilter, blogYearFilter, blogAuthorFilter, blogStatusFilter, initialArticles]);
-   
+  // Function to fetch filtered articles from API
+  const fetchFilteredArticles = async () => {
+    setIsLoading(true);
+    try {
+      // Build query parameters for API call
+      const params = new URLSearchParams();
+      
+      if (blogCategoryFilter !== 'all') {
+        params.append('category', blogCategoryFilter);
+      }
+      
+      if (blogYearFilter !== 'all') {
+        params.append('year', blogYearFilter);
+      }
+      
+      if (blogAuthorFilter !== 'all') {
+        params.append('author', blogAuthorFilter);
+      }
+      
+      if (blogStatusFilter !== 'all') {
+        params.append('status', blogStatusFilter);
+      }
+      
+      if (debouncedBlogSearchQuery) {
+        params.append('search', debouncedBlogSearchQuery);
+      }
+      
+      // Call our API route instead of Strapi directly
+      const response = await fetch(`/api/blog/filter?${params.toString()}`);
+      
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      const transformedArticles = transformBlogListData(data);
+      
+      // Apply search filter locally since it's more efficient for text search
+      let filtered = transformedArticles;
+      if (debouncedBlogSearchQuery) {
+        filtered = transformedArticles.filter(article => 
+          article.title.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+          article.excerpt.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+          article.author.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()) ||
+          article.tags.some(tag => tag.toLowerCase().includes(debouncedBlogSearchQuery.toLowerCase()))
+        );
+      }
+      
+      // Apply status filter locally
+      if (blogStatusFilter !== 'all') {
+        filtered = filtered.filter(article => {
+          if (blogStatusFilter === 'featured') {
+            return featuredArticles.some(featured => featured.id === article.id);
+          }
+          return true; // For 'published', we assume all articles from API are published
+        });
+      }
+      
+      setFilteredArticles(filtered);
+    } catch (error) {
+      console.error('Error fetching filtered articles:', error);
+      // Fallback to local filtering
+      setFilteredArticles(initialArticles);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Effect to fetch filtered articles when filters change (but not on initial load)
+  useEffect(() => {
+    // Only fetch if we have filters applied or search query
+    if (blogCategoryFilter !== 'all' || blogYearFilter !== 'all' || blogAuthorFilter !== 'all' || blogStatusFilter !== 'all' || debouncedBlogSearchQuery) {
+      fetchFilteredArticles();
+    } else {
+      // Use initial articles when no filters are applied
+      setFilteredArticles(initialArticles);
+    }
+  }, [blogCategoryFilter, blogYearFilter, blogAuthorFilter, blogStatusFilter, debouncedBlogSearchQuery, initialArticles]);
+
    // Enhanced articles with slug and proper date handling
    const filteredBlogArticlesEnhanced = useMemo(() => {
-     return filteredBlogArticles.map(article => ({
+     return filteredArticles.map(article => ({
        ...article,
        slug: article.slug || article.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
        publishDate: article.publishDate
      }));
-   }, [filteredBlogArticles]);
+   }, [filteredArticles]);
 
    return (
     <div className="min-h-screen scroll-snap-container">
       <main>
         {/* Hero Section */}
         <SimpleHero 
-          title="Blog & Insights"
-          subtitle="Temukan artikel terbaru, tips, dan insights dari dunia creative services dan event production"
+          title={heroData.title}
+          subtitle={heroData.subtitle}
+          description={heroData.description}
         />
 
         {/* Featured Articles */}
@@ -132,11 +205,21 @@ export default function BlogClient({
               {featuredArticles.map((article, index) => (
                 <Card key={article.id} variant="service" className={`article-card group flex flex-col h-full rounded-3xl shadow-depth-3 hover:shadow-depth-5 transition-all duration-500 backdrop-blur-sm glass-morphism overflow-hidden ${index % 2 === 0 ? 'scroll-animate-left' : 'scroll-animate-right'}`}>
                   <div className="h-48 bg-gradient-to-br from-blue-100 to-gold-100 flex items-center justify-center relative overflow-hidden">
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10"></div>
-                    <div className="text-center text-blue-600 relative z-10">
-                      <div className="text-5xl mb-2 group-hover:scale-110 transition-transform duration-300">📰</div>
-                      <p className="text-sm font-medium">Featured Article</p>
-                    </div>
+                    {article.cover?.url ? (
+                      <img 
+                        src={article.cover.url} 
+                        alt={article.cover.alternativeText || article.title}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <>
+                        <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-gold-500/10"></div>
+                        <div className="text-center text-blue-600 relative z-10">
+                          <div className="text-5xl mb-2 group-hover:scale-110 transition-transform duration-300">📰</div>
+                          <p className="text-sm font-medium">Featured Article</p>
+                        </div>
+                      </>
+                    )}
                     <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
                   </div>
                   
@@ -151,6 +234,9 @@ export default function BlogClient({
                         {article.author}
                       </div>
                       <span className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-xs">{article.readTime} read</span>
+                      {article.category !== 'None' && (
+                        <span className="bg-gold-100 text-gold-700 px-2 py-1 rounded-full text-xs">{article.category}</span>
+                      )}
                     </div>
                     
                     <h3 className="text-xl font-bold text-blue-900 mb-3 line-clamp-2 group-hover:text-blue-800 transition-colors duration-300 leading-snug">
@@ -162,11 +248,17 @@ export default function BlogClient({
                     </p>
                     
                     <div className="flex flex-wrap gap-2 mb-6">
-                      {article.tags.slice(0, 3).map((tag, idx) => (
-                        <span key={idx} className="bg-gradient-to-r from-gold-100 to-gold-200 text-gold-700 px-3 py-1 rounded-full text-xs font-medium hover-depth-subtle">
-                          {tag}
+                      {article.tags.length > 0 ? (
+                        article.tags.slice(0, 3).map((tag, idx) => (
+                          <span key={idx} className="bg-gradient-to-r from-gold-100 to-gold-200 text-gold-700 px-3 py-1 rounded-full text-xs font-medium hover-depth-subtle">
+                            {tag}
+                          </span>
+                        ))
+                      ) : (
+                        <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-medium">
+                          No Tags
                         </span>
-                      ))}
+                      )}
                     </div>
                     
                     <button className="text-gold-600 hover:text-gold-700 font-semibold inline-flex items-center transition-all duration-300 group-hover:translate-x-1">
@@ -286,7 +378,11 @@ export default function BlogClient({
               {/* Results Counter */}
               <div className="flex items-center justify-between">
                 <div className="text-gray-600">
-                  <span className="font-semibold text-blue-600">{filteredBlogArticlesEnhanced.length}</span> articles found
+                  {isLoading ? (
+                    <span className="font-semibold text-blue-600">Loading...</span>
+                  ) : (
+                    <span className="font-semibold text-blue-600">{filteredBlogArticlesEnhanced.length}</span>
+                  )} articles found
                 </div>
                 <button
                   onClick={() => {
@@ -304,7 +400,13 @@ export default function BlogClient({
             </div>
             
             {/* Query Results Section */}
-            {filteredBlogArticlesEnhanced.length > 0 ? (
+            {isLoading ? (
+              <div className="text-center py-16">
+                <div className="text-6xl mb-4 opacity-60">⏳</div>
+                <h3 className="text-2xl font-bold text-gray-700 mb-2">Loading articles...</h3>
+                <p className="text-gray-500">Please wait while we fetch the latest articles.</p>
+              </div>
+            ) : filteredBlogArticlesEnhanced.length > 0 ? (
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate" data-animation-delay="0.8">
                  {filteredBlogArticlesEnhanced.map((article, index) => (
                   <Link 
@@ -331,10 +433,18 @@ export default function BlogClient({
                       <CardContent className="p-0 flex flex-col h-full">
                         {/* Article Thumbnail */}
                         <div className="h-48 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center overflow-hidden relative group-hover:scale-110 transition-transform duration-700">
-                          <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
-                            <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">📰</div>
-                            <p className="text-sm font-semibold uppercase tracking-wide">{article.category.replace('-', ' ')}</p>
-                          </div>
+                          {article.cover?.url ? (
+                            <img 
+                              src={article.cover.url} 
+                              alt={article.cover.alternativeText || article.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
+                              <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">📰</div>
+                              <p className="text-sm font-semibold uppercase tracking-wide">{article.category.replace('-', ' ')}</p>
+                            </div>
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-gold-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                           
                           {/* Floating particles effect */}
@@ -345,7 +455,7 @@ export default function BlogClient({
                         <div className="p-6 flex flex-col flex-grow">
                           {/* Category Badge */}
                           <div className="inline-flex items-center bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-3 py-1.5 rounded-full text-xs font-medium capitalize w-fit mb-3">
-                            {article.category.replace('-', ' ')}
+                            {article.category === 'None' ? 'No Category' : article.category.replace('-', ' ')}
                           </div>
                           
                           {/* Article Title */}
@@ -375,13 +485,21 @@ export default function BlogClient({
                           
                           {/* Tags */}
                           <div className="flex flex-wrap gap-2 mt-auto">
-                            {article.tags.slice(0, 2).map((tag, idx) => (
-                              <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
-                                {tag}
+                            {article.tags.length > 0 ? (
+                              <>
+                                {article.tags.slice(0, 2).map((tag, idx) => (
+                                  <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
+                                    {tag}
+                                  </span>
+                                ))}
+                                {article.tags.length > 2 && (
+                                  <span className="text-xs text-gray-400 self-center font-medium">+{article.tags.length - 2} more</span>
+                                )}
+                              </>
+                            ) : (
+                              <span className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-500 px-3 py-1 rounded-full text-xs font-medium">
+                                No Tags
                               </span>
-                            ))}
-                            {article.tags.length > 2 && (
-                              <span className="text-xs text-gray-400 self-center font-medium">+{article.tags.length - 2} more</span>
                             )}
                           </div>
                         </div>

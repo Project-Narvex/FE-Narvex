@@ -1,0 +1,103 @@
+{
+    "data": {
+        "id": 1,
+        "documentId": "lyas72826tnvhndb6w8w5tj3",
+        "createdAt": "2025-10-05T17:37:51.128Z",
+        "updatedAt": "2025-10-05T17:38:24.438Z",
+        "publishedAt": null,
+        "hero": {
+            "id": 16,
+            "title": "Hubungi Kami Narvex Creative Services",
+            "description": "Siap membantu mewujudkan project impian Anda dengan layanan creative services terbaik dari Narvex"
+        },
+        "card_1": {
+            "id": 29,
+            "title": "Pilih layanan yang sesuai dengan kebutuhan project Anda untuk mendapatkan konsultasi yang tepat",
+            "description": [
+                {
+                    "type": "paragraph",
+                    "children": [
+                        {
+                            "text": "Identitas visual yang kuat dan memorable untuk brand Anda",
+                            "type": "text"
+                        }
+                    ]
+                }
+            ],
+            "logo": {
+                "id": 16,
+                "documentId": "srtalsyyoj16o4vog741fhcq",
+                "name": "1337733.png",
+                "alternativeText": null,
+                "caption": null,
+                "width": 3869,
+                "height": 3220,
+                "formats": {
+                    "large": {
+                        "ext": ".png",
+                        "url": "/uploads/large_1337733_453f1a35fa.png",
+                        "hash": "large_1337733_453f1a35fa",
+                        "mime": "image/png",
+                        "name": "large_1337733.png",
+                        "path": null,
+                        "size": 1056.57,
+                        "width": 1000,
+                        "height": 832,
+                        "sizeInBytes": 1056570
+                    },
+                    "small": {
+                        "ext": ".png",
+                        "url": "/uploads/small_1337733_453f1a35fa.png",
+                        "hash": "small_1337733_453f1a35fa",
+                        "mime": "image/png",
+                        "name": "small_1337733.png",
+                        "path": null,
+                        "size": 312.38,
+                        "width": 500,
+                        "height": 416,
+                        "sizeInBytes": 312377
+                    },
+                    "medium": {
+                        "ext": ".png",
+                        "url": "/uploads/medium_1337733_453f1a35fa.png",
+                        "hash": "medium_1337733_453f1a35fa",
+                        "mime": "image/png",
+                        "name": "medium_1337733.png",
+                        "path": null,
+                        "size": 638.16,
+                        "width": 750,
+                        "height": 624,
+                        "sizeInBytes": 638162
+                    },
+                    "thumbnail": {
+                        "ext": ".png",
+                        "url": "/uploads/thumbnail_1337733_453f1a35fa.png",
+                        "hash": "thumbnail_1337733_453f1a35fa",
+                        "mime": "image/png",
+                        "name": "thumbnail_1337733.png",
+                        "path": null,
+                        "size": 52.73,
+                        "width": 187,
+                        "height": 156,
+                        "sizeInBytes": 52730
+                    }
+                },
+                "hash": "1337733_453f1a35fa",
+                "ext": ".png",
+                "mime": "image/png",
+                "size": 2919.75,
+                "url": "/uploads/1337733_453f1a35fa.png",
+                "previewUrl": null,
+                "provider": "local",
+                "provider_metadata": null,
+                "createdAt": "2025-09-30T22:43:18.377Z",
+                "updatedAt": "2025-09-30T22:43:18.377Z",
+                "publishedAt": "2025-09-30T22:43:18.378Z"
+            }
+        },
+        "card_2": null,
+        "card_3": null,
+        "card_4": null
+    },
+    "meta": {}
+}

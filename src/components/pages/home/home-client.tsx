@@ -312,7 +312,8 @@ export default function HomeClient({
 
   // Get all projects from both API and fallback data for filtering
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const allProjects = (homepageData as any)?.projectSection?.featuredProjects || defaultProjects;
+  const apiProjects = (homepageData as any)?.projectSection?.featuredProjects || [];
+  const allProjects = apiProjects.length > 0 ? apiProjects : defaultProjects;
   
   const filteredProjects = allProjects.filter((project: Project) =>
     activeFilter === 'all' || project.category === activeFilter
@@ -442,6 +443,7 @@ export default function HomeClient({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    e.stopPropagation();
 
     if (!validateForm()) {
       return;
@@ -450,17 +452,39 @@ export default function HomeClient({
     setIsSubmitting(true);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-
-      setIsSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: ''
+      const response = await fetch('/api/contact/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          budget: 'not_specified',
+          timeline: 'not_specified',
+          message: formData.message,
+          company: '',
+          subject: `Konsultasi ${formData.service} - ${formData.name}`
+        }),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: ''
+        });
+      } else {
+        console.error('Form submission failed:', result.error);
+        // You can add error state handling here if needed
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -514,9 +538,9 @@ export default function HomeClient({
                   {homepageData?.heroSection ? (
                     <>
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      <span className="block transform-3d break-words" data-tilt="8">{(homepageData as any).heroSection.title.split(' ')[0]} {(homepageData as any).heroSection.title.split(' ')[1]}</span>
+                      <span className="block transform-3d break-words" data-tilt="8">{(homepageData as any).heroSection.title.split(' ').slice(0, 2).join(' ')}</span>
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{(homepageData as any).heroSection.title.split(' ')[2]} {(homepageData as any).heroSection.title.split(' ')[3]}</span>
+                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{(homepageData as any).heroSection.title.split(' ').slice(2, 4).join(' ')}</span>
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       <span className="block transform-3d break-words" data-tilt="6">{(homepageData as any).heroSection.title.split(' ').slice(4).join(' ')}</span>
                     </>
@@ -977,6 +1001,7 @@ export default function HomeClient({
                 const apiProject = (project as any).cover ? {
                   id: project.id.toString(),
                   title: project.title,
+                  slug: project.slug,
                   // eslint-disable-next-line @typescript-eslint/no-explicit-any
                   description: (project as any).excerpt,
                   category: project.category || 'creative', // Ensure category is available for filtering
@@ -989,14 +1014,14 @@ export default function HomeClient({
                 } : project;
                 
                 return (
-                  <Card
-                    key={apiProject.id || project.id}
-                    variant="portfolio"
-                    className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
-                    data-stagger={index * 150}
-                    data-tilt="6"
-                    data-mouse-parallax="0.15"
-                  >
+                  <Link key={apiProject.id || project.id} href={`/portfolio/${apiProject.slug || project.slug}`}>
+                    <Card
+                      variant="portfolio"
+                      className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
+                      data-stagger={index * 150}
+                      data-tilt="6"
+                      data-mouse-parallax="0.15"
+                    >
                     <div className="relative overflow-hidden rounded-2xl">
                       <div className="relative w-full h-64">
                         <SafePortfolioImage
@@ -1028,8 +1053,9 @@ export default function HomeClient({
                     </div>
                   </div>
                 </Card>
-                );
-              })}
+              </Link>
+            );
+          })}
             </div>
 
             {/* Bottom CTA */}

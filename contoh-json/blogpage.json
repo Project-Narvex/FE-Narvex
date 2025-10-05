@@ -1,0 +1,221 @@
+{
+    "id": 1,
+    "documentId": "s90lcrzk7fp9nueqr1fj5epa",
+    "createdAt": "2025-10-05T12:08:05.017Z",
+    "updatedAt": "2025-10-05T16:02:43.087Z",
+    "publishedAt": null,
+    "locale": null,
+    "hero": {
+        "id": 20,
+        "title": "Blog & Insights",
+        "subtitle": null,
+        "description": "Temukan artikel terbaru, tips, dan insights dari dunia creative services dan event production"
+    },
+    "Highlight_Article": {
+        "id": 21,
+        "title": "Artikel Unggulan",
+        "description": "cldjlaskdcjajlkjljclkajl;cd",
+        "blog_articles": [
+            {
+                "id": 3,
+                "documentId": "b34zn8ijpvkzhxhia1nl5kct",
+                "title": "The Beauty of Time: What Frieren Teaches Us About Life",
+                "slug": "blog-article-1",
+                "createdAt": "2025-09-30T22:58:03.932Z",
+                "updatedAt": "2025-09-30T22:59:53.317Z",
+                "publishedAt": null,
+                "locale": null,
+                "content": null,
+                "cover": {
+                    "id": 12,
+                    "documentId": "fkrv0t2e4ml21ralmwhvb83d",
+                    "name": "1376374.png",
+                    "alternativeText": null,
+                    "caption": null,
+                    "width": 1920,
+                    "height": 1080,
+                    "formats": {
+                        "large": {
+                            "ext": ".png",
+                            "url": "/uploads/large_1376374_57405936ae.png",
+                            "hash": "large_1376374_57405936ae",
+                            "mime": "image/png",
+                            "name": "large_1376374.png",
+                            "path": null,
+                            "size": 1062.65,
+                            "width": 1000,
+                            "height": 563,
+                            "sizeInBytes": 1062654
+                        },
+                        "small": {
+                            "ext": ".png",
+                            "url": "/uploads/small_1376374_57405936ae.png",
+                            "hash": "small_1376374_57405936ae",
+                            "mime": "image/png",
+                            "name": "small_1376374.png",
+                            "path": null,
+                            "size": 284.61,
+                            "width": 500,
+                            "height": 281,
+                            "sizeInBytes": 284608
+                        },
+                        "medium": {
+                            "ext": ".png",
+                            "url": "/uploads/medium_1376374_57405936ae.png",
+                            "hash": "medium_1376374_57405936ae",
+                            "mime": "image/png",
+                            "name": "medium_1376374.png",
+                            "path": null,
+                            "size": 607.51,
+                            "width": 750,
+                            "height": 422,
+                            "sizeInBytes": 607509
+                        },
+                        "thumbnail": {
+                            "ext": ".png",
+                            "url": "/uploads/thumbnail_1376374_57405936ae.png",
+                            "hash": "thumbnail_1376374_57405936ae",
+                            "mime": "image/png",
+                            "name": "thumbnail_1376374.png",
+                            "path": null,
+                            "size": 79.13,
+                            "width": 245,
+                            "height": 138,
+                            "sizeInBytes": 79134
+                        }
+                    },
+                    "hash": "1376374_57405936ae",
+                    "ext": ".png",
+                    "mime": "image/png",
+                    "size": 748.02,
+                    "url": "/uploads/1376374_57405936ae.png",
+                    "previewUrl": null,
+                    "provider": "local",
+                    "provider_metadata": null,
+                    "folderPath": "/",
+                    "createdAt": "2025-09-30T22:42:47.404Z",
+                    "updatedAt": "2025-09-30T22:42:47.404Z",
+                    "publishedAt": "2025-09-30T22:42:47.405Z",
+                    "locale": null
+                },
+                "blog_category": {
+                    "id": 3,
+                    "documentId": "e4hzl3r8acs6v1ta9umfyem2",
+                    "name": "Romance",
+                    "slug": "romance",
+                    "createdAt": "2025-09-30T22:58:18.666Z",
+                    "updatedAt": "2025-09-30T22:58:18.666Z",
+                    "publishedAt": null,
+                    "locale": null,
+                    "createdBy": {
+                        "id": 1,
+                        "documentId": "u0po0wopylwr50hxsgg8pmbe",
+                        "firstname": "Narvex",
+                        "lastname": "Admin",
+                        "username": null,
+                        "email": "narvexid@protonmail.com",
+                        "password": "$2a$10$OckryuOC5t06ieszIycQ2O7c5F/bjscLftQY1c9vra0MkoSQrVr.C",
+                        "resetPasswordToken": null,
+                        "registrationToken": null,
+                        "isActive": true,
+                        "blocked": false,
+                        "preferedLanguage": null,
+                        "createdAt": "2025-09-18T19:35:57.349Z",
+                        "updatedAt": "2025-09-21T13:46:22.298Z",
+                        "publishedAt": "2025-09-18T19:35:57.113Z",
+                        "locale": null
+                    },
+                    "updatedBy": {
+                        "id": 1,
+                        "documentId": "u0po0wopylwr50hxsgg8pmbe",
+                        "firstname": "Narvex",
+                        "lastname": "Admin",
+                        "username": null,
+                        "email": "narvexid@protonmail.com",
+                        "password": "$2a$10$OckryuOC5t06ieszIycQ2O7c5F/bjscLftQY1c9vra0MkoSQrVr.C",
+                        "resetPasswordToken": null,
+                        "registrationToken": null,
+                        "isActive": true,
+                        "blocked": false,
+                        "preferedLanguage": null,
+                        "createdAt": "2025-09-18T19:35:57.349Z",
+                        "updatedAt": "2025-09-21T13:46:22.298Z",
+                        "publishedAt": "2025-09-18T19:35:57.113Z",
+                        "locale": null
+                    },
+                    "localizations": []
+                },
+                "tags": [
+                    {
+                        "id": 3,
+                        "documentId": "df6m2s1s9oqcm6ma1zhp7q9f",
+                        "name": "Happy",
+                        "slug": "happy",
+                        "createdAt": "2025-09-30T22:58:49.734Z",
+                        "updatedAt": "2025-09-30T22:58:49.734Z",
+                        "publishedAt": null,
+                        "locale": null,
+                        "blog_articles": [
+                            {
+                                "id": 3,
+                                "documentId": "b34zn8ijpvkzhxhia1nl5kct",
+                                "title": "The Beauty of Time: What Frieren Teaches Us About Life",
+                                "slug": "blog-article-1",
+                                "createdAt": "2025-09-30T22:58:03.932Z",
+                                "updatedAt": "2025-09-30T22:59:53.317Z",
+                                "publishedAt": null,
+                                "locale": null,
+                                "content": null
+                            }
+                        ],
+                        "createdBy": {
+                            "id": 1,
+                            "documentId": "u0po0wopylwr50hxsgg8pmbe",
+                            "firstname": "Narvex",
+                            "lastname": "Admin",
+                            "username": null,
+                            "email": "narvexid@protonmail.com",
+                            "password": "$2a$10$OckryuOC5t06ieszIycQ2O7c5F/bjscLftQY1c9vra0MkoSQrVr.C",
+                            "resetPasswordToken": null,
+                            "registrationToken": null,
+                            "isActive": true,
+                            "blocked": false,
+                            "preferedLanguage": null,
+                            "createdAt": "2025-09-18T19:35:57.349Z",
+                            "updatedAt": "2025-09-21T13:46:22.298Z",
+                            "publishedAt": "2025-09-18T19:35:57.113Z",
+                            "locale": null
+                        },
+                        "updatedBy": {
+                            "id": 1,
+                            "documentId": "u0po0wopylwr50hxsgg8pmbe",
+                            "firstname": "Narvex",
+                            "lastname": "Admin",
+                            "username": null,
+                            "email": "narvexid@protonmail.com",
+                            "password": "$2a$10$OckryuOC5t06ieszIycQ2O7c5F/bjscLftQY1c9vra0MkoSQrVr.C",
+                            "resetPasswordToken": null,
+                            "registrationToken": null,
+                            "isActive": true,
+                            "blocked": false,
+                            "preferedLanguage": null,
+                            "createdAt": "2025-09-18T19:35:57.349Z",
+                            "updatedAt": "2025-09-21T13:46:22.298Z",
+                            "publishedAt": "2025-09-18T19:35:57.113Z",
+                            "locale": null
+                        },
+                        "localizations": []
+                    }
+                ],
+                "users_permissions_user": null,
+                "seo": []
+            }
+        ]
+    },
+    "Article": {
+        "id": 1,
+        "title": "Explore Our Full Blog Archive",
+        "description": "wteersds",
+        "blog_articles": []
+    }
+}

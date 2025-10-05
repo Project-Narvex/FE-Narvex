@@ -83,7 +83,7 @@ export default function SimpleHero({
             {title.split(' ').map((word, index) => (
               <span key={index} className={`inline-block ${word.toLowerCase().includes('narvex') || word.toLowerCase().includes('indonesia') ? 'text-gold-400' : ''}`}>
                 {word}
-                {index < title.split(' ').length - 1 && ' '}
+                {index < title.split(' ').length - 1 && <span>&nbsp;</span>}
               </span>
             ))}
           </h1>

@@ -12,6 +12,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { projects, Project } from '@/data/projects';
+import { strapi, PortfolioItem, getStrapiImageUrl } from '@/lib/strapi';
 
 interface PortfolioDetailPageProps {
   params: Promise<{
@@ -23,13 +24,62 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
   // Await params in Next.js 15
   const { slug } = await params;
   
-  // Find project by slug
-  const project = projects.find(p => p.slug === slug);
+  let project: Project | null = null;
+  let portfolioItem: PortfolioItem | null = null;
+  
+  try {
+    // First try to fetch from Strapi API
+    const portfolioResponse = await strapi.getPortfolios({
+      populate: ['cover', 'gallery', 'portfolio_categories', 'company', 'client', 'services'],
+      filters: { slug: { $eq: slug } }
+    });
+    
+    if (portfolioResponse.data && portfolioResponse.data.length > 0) {
+      portfolioItem = portfolioResponse.data[0];
+      
+      // Transform Strapi data to Project format
+      project = {
+        id: portfolioItem.id.toString(),
+        title: portfolioItem.title,
+        slug: portfolioItem.slug,
+        category: portfolioItem.portfolio_categories?.[0]?.name?.toLowerCase() as any || 'creative',
+        companyId: portfolioItem.company?.slug || 'narvex-main',
+        client: portfolioItem.client?.name || 'Unknown Client',
+        location: portfolioItem.company?.address ? 
+          `${portfolioItem.company.address.city}, ${portfolioItem.company.address.province}` : 
+          'Unknown Location',
+        date: portfolioItem.date || new Date(portfolioItem.createdAt).getFullYear().toString(),
+        year: portfolioItem.date ? parseInt(portfolioItem.date.split('-')[0]) : new Date(portfolioItem.createdAt).getFullYear(),
+        description: portfolioItem.excerpt,
+        longDescription: portfolioItem.excerpt,
+        services: portfolioItem.services?.map(service => service.title) || [],
+        images: portfolioItem.gallery?.map(img => getStrapiImageUrl(img, 'medium')) || [],
+        gallery: portfolioItem.gallery?.map(img => getStrapiImageUrl(img, 'large')) || [],
+        tags: portfolioItem.portfolio_categories?.map(cat => cat.name) || [],
+        results: {},
+        featured: portfolioItem.Highlight || false,
+        status: 'completed' as const,
+        budget: '',
+        duration: '',
+        teamSize: 0,
+        cover: portfolioItem.cover,
+        linkURL: portfolioItem.linkURL
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching portfolio from Strapi:', error);
+  }
+  
+  // Fallback to local data if Strapi fails
+  if (!project) {
+    project = projects.find(p => p.slug === slug) || null;
+  }
+  
   if (!project) {
     notFound();
   }
   
-  // Find related projects
+  // Find related projects (using local data for now)
   const relatedProjects = project.relatedProjects 
     ? project.relatedProjects
         .map(id => projects.find(p => p.id === id))
@@ -60,7 +110,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
   }
 
   const galleryImages = project.gallery || project.images || [];
-  const heroImage = galleryImages[0] || null;
+  const heroImage = portfolioItem?.cover ? getStrapiImageUrl(portfolioItem.cover, 'large') : galleryImages[0] || null;
 
   return (
     <div className="min-h-screen bg-white">
@@ -469,6 +519,23 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
 
 // Generate static params for all projects
 export async function generateStaticParams() {
+  try {
+    // Try to fetch from Strapi first
+    const portfolioResponse = await strapi.getPortfolios({
+      populate: ['slug'],
+      pagination: { page: 1, pageSize: 100 }
+    });
+    
+    if (portfolioResponse.data && portfolioResponse.data.length > 0) {
+      return portfolioResponse.data.map((item) => ({
+        slug: item.slug,
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching portfolio slugs from Strapi:', error);
+  }
+  
+  // Fallback to local data
   return projects.map((project) => ({
     slug: project.slug,
   }));

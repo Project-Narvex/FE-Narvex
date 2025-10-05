@@ -329,27 +329,27 @@ export interface AboutAspect extends AboutPageComponent {
   title: string;
   description: string;
   Subtitle: string;
-  aspect1: {
+  aspect1?: {
     id: number;
     title: string;
     description: string;
   };
-  aspect2: {
+  aspect2?: {
     id: number;
     title: string;
     description: string;
   };
-  aspect3: {
+  aspect3?: {
     id: number;
     title: string;
     description: string;
   };
-  aspect4: {
+  aspect4?: {
     id: number;
     title: string;
     description: string;
   };
-  card_highlight: {
+  card_highlight?: {
     id: number;
     title: string;
     description: string;
@@ -905,4 +905,144 @@ export interface BlogArticle {
     metaDescription?: string;
     keywords?: string;
   };
+}
+
+// Blog Page Types
+export interface BlogPageComponent extends BaseComponent {
+  // Blog page-specific properties
+  orderNo?: number;
+}
+
+export interface BlogHero extends BlogPageComponent {
+  __component: "blog.hero";
+  title: string;
+  subtitle?: string;
+  description: string;
+}
+
+export interface BlogHighlightArticle extends BlogPageComponent {
+  __component: "blog.highlight-article";
+  title: string;
+  description: string;
+  blog_articles: BlogArticleItem[];
+}
+
+export interface BlogArticleSection extends BlogPageComponent {
+  __component: "blog.article-section";
+  title: string;
+  description: string;
+  blog_articles: BlogArticleItem[];
+}
+
+export interface BlogPageData {
+  id: number;
+  documentId: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string;
+  locale?: string;
+  hero: BlogHero;
+  Highlight_Article: BlogHighlightArticle;
+  Article: BlogArticleSection;
+}
+
+export interface BlogListData {
+  data: BlogArticleItem[];
+  meta?: {
+    pagination?: {
+      page: number;
+      pageSize: number;
+      pageCount: number;
+      total: number;
+    };
+  };
+}
+
+// Contact Page Types
+export interface ContactPageComponent {
+  __component: string;
+  id: number;
+  title: string;
+  description?: string;
+}
+
+export interface ContactHero extends ContactPageComponent {
+  __component: 'contact.hero';
+  subtitle?: string;
+}
+
+export interface ContactServiceCard extends ContactPageComponent {
+  __component: 'contact.service-card';
+  icon: string;
+  color: string;
+  services: string[];
+  contact: {
+    phone: string;
+    email: string;
+    whatsapp: string;
+  };
+}
+
+export interface ContactForm extends ContactPageComponent {
+  __component: 'contact.form';
+  fields: {
+    name: { placeholder: string };
+    email: { placeholder: string };
+    phone: { placeholder: string };
+    company: { placeholder: string };
+    message: { placeholder: string };
+    budget: { options: Array<{ value: string; label: string }> };
+    timeline: { options: Array<{ value: string; label: string }> };
+  };
+  submitButton: {
+    text: string;
+    loadingText: string;
+  };
+  successMessage: {
+    title: string;
+    description: string;
+    buttonText: string;
+  };
+}
+
+export interface ContactInfo extends ContactPageComponent {
+  __component: 'contact.info';
+  address: {
+    city: string;
+    country: string;
+  };
+  businessHours: {
+    weekdays: string;
+    saturday: string;
+    sunday?: string;
+  };
+  contact: {
+    email: string;
+    phone: string;
+    whatsapp: string;
+  };
+  socialMedia: {
+    instagram: string;
+  };
+}
+
+export interface ContactPageData {
+  data: {
+    id: number;
+    pageContent: ContactPageComponent[];
+    seo: any[];
+  };
+  meta: {};
+}
+
+export interface ContactMessageData {
+  name: string;
+  email: string;
+  phone: string;
+  company?: string;
+  serviceType: string;
+  budget: string;
+  timeline: string;
+  subject: string;
+  message: string;
 }
