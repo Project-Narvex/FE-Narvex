@@ -1,7 +1,7 @@
 import React from 'react';
 import ServicesClient from '@/components/pages/services/services-client';
-import { strapi, transformServicePageComponent, processServiceImage } from '@/lib/strapi';
-import type { StrapiResponse, ServicePageData, ServiceItem } from '@/lib/strapi';
+import { strapi, transformServicePageComponent, processServiceImage, transformHomepageComponent } from '@/lib/strapi';
+import type { StrapiResponse, ServicePageData, ServiceItem, ContactSection } from '@/lib/strapi';
 
 interface ContactSectionData {
   title?: string;
@@ -17,7 +17,10 @@ interface ContactSectionData {
 // This is now a Server Component
 export default async function ServicesPage() {
   try {
+    // Fetch both service page data AND homepage data
     const servicePageData = await strapi.getServicePage() as StrapiResponse<ServicePageData>;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const homepageData = await strapi.getHomepage() as any;
     
     // Debug: Log the API response structure
     console.log('Service Page API Response:', JSON.stringify(servicePageData, null, 2));
@@ -47,8 +50,63 @@ export default async function ServicesPage() {
     // Extract strengths section
     const strengthsSection = components.find(comp => comp.__component === 'service.strengths');
     
-    // Extract contact section
-    const contactSection = components.find(comp => comp.__component === 'sections.contact');
+    // Extract contact section FROM HOMEPAGE (not from service page)
+    let contactSection: ContactSection | undefined;
+    
+    // Process homepage data to get contactSection
+    if (homepageData) {
+      let homepageEntity;
+      if (homepageData.data) {
+        homepageEntity = Array.isArray(homepageData.data) ? homepageData.data[0] : homepageData.data;
+      } else if (homepageData.id) {
+        homepageEntity = homepageData;
+      }
+      
+      if (homepageEntity && homepageEntity.pageContent) {
+        const homepageComponents = homepageEntity.pageContent.map(transformHomepageComponent);
+        contactSection = homepageComponents.find(c => c.__component === 'sections.contact') as ContactSection;
+      }
+    }
+    
+    // Extract strength cards from strengthsSection (card_1, card_2, card_3, card_4)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const strengthData: any = {
+      title: (strengthsSection as any)?.title || '',
+      description: (strengthsSection as any)?.description || '',
+      cards: []
+    };
+    
+    // Build cards array from card_1, card_2, card_3, card_4
+    if (strengthsSection) {
+      const cardFields = ['card_1', 'card_2', 'card_3', 'card_4'] as const;
+      cardFields.forEach((fieldName) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const card = (strengthsSection as any)[fieldName];
+        if (card && card.title) {
+          // Extract text from rich text description
+          let descriptionText = '';
+          if (card.description && Array.isArray(card.description)) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            card.description.forEach((block: any) => {
+              if (block.type === 'paragraph' && block.children) {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                block.children.forEach((child: any) => {
+                  if (child.text) {
+                    descriptionText += child.text;
+                  }
+                });
+              }
+            });
+          }
+          
+          strengthData.cards.push({
+            title: card.title,
+            description: descriptionText,
+            logo: card.logo ? getStrapiImageUrl(card.logo, 'thumbnail') : null
+          });
+        }
+      });
+    }
     
     // Transform services data to match the expected format
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -105,7 +163,7 @@ export default async function ServicesPage() {
       <ServicesClient 
         services={services}
         heroSection={heroSection}
-        strengthsSection={strengthsSection}
+        strengthData={strengthData}
         contactSection={contactSection as ContactSectionData}
       />
     );

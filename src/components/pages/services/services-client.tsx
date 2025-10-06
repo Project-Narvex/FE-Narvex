@@ -49,10 +49,22 @@ interface ContactSectionData {
   };
 }
 
+interface StrengthCard {
+  title: string;
+  description: string;
+  logo: string | null;
+}
+
+interface StrengthData {
+  title: string;
+  description: string;
+  cards: StrengthCard[];
+}
+
 interface ServicesClientProps {
   services: Service[];
   heroSection?: ServicePageComponent;
-  strengthsSection?: ServicePageComponent;
+  strengthData?: StrengthData;
   contactSection?: ContactSectionData;
 }
 
@@ -67,7 +79,7 @@ const getIconComponent = (iconName: string): LucideIcon => {
   return iconMap[iconName] || Palette; // fallback to Palette if icon not found
 };
 
-export default function ServicesClient({ services, heroSection, strengthsSection, contactSection }: ServicesClientProps) {
+export default function ServicesClient({ services, heroSection, strengthData, contactSection }: ServicesClientProps) {
   useEffect(() => {
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
@@ -275,8 +287,9 @@ export default function ServicesClient({ services, heroSection, strengthsSection
           </div>
         </section>
 
-        {/* Why Choose Us */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-blue-50/20 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+        {/* Why Choose Us - Dynamic Strength Cards */}
+        {strengthData && strengthData.cards && strengthData.cards.length > 0 && (
+          <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-blue-50/20 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
           {/* Enhanced floating background elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Original circles */}
@@ -301,78 +314,51 @@ export default function ServicesClient({ services, heroSection, strengthsSection
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(strengthsSection as any)?.title || "Mengapa Memilih Narvex?"}
+                {strengthData.title || "Mengapa Memilih Narvex?"}
               </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(strengthsSection as any)?.description || "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya"}
+                {strengthData.description || "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya"}
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(strengthsSection as any) && [
-                (strengthsSection as any).statistic1, // eslint-disable-line @typescript-eslint/no-explicit-any
-                (strengthsSection as any).statistic2, // eslint-disable-line @typescript-eslint/no-explicit-any
-                (strengthsSection as any).statistic3, // eslint-disable-line @typescript-eslint/no-explicit-any
-                (strengthsSection as any).statistic4 // eslint-disable-line @typescript-eslint/no-explicit-any
-              ].map((stat: unknown, index: number) => {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                const statData = stat as any;
-                const icons = ['🏆', '⚡', '🎯', '💎'];
+            <div className={`grid md:grid-cols-2 ${strengthData.cards.length === 4 ? 'lg:grid-cols-4' : strengthData.cards.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8 scroll-animate`} data-animation-delay="0.6">
+              {strengthData.cards.map((card, index) => {
+                // Define gradient colors based on index
+                const gradients = [
+                  'from-gold-100 to-gold-200',
+                  'from-blue-100 to-blue-200',
+                  'from-green-100 to-green-200',
+                  'from-purple-100 to-purple-200'
+                ];
+                
                 return (
-                  <Card key={statData.id} variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                  <Card key={index} variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
                     <CardContent className="p-6">
-                      <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                        <span className="text-3xl">{icons[index]}</span>
+                      <div className={`w-20 h-20 bg-gradient-to-br ${gradients[index % 4]} rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6 overflow-hidden`}>
+                        {card.logo ? (
+                          <Image 
+                            src={card.logo} 
+                            alt={card.title}
+                            width={60}
+                            height={60}
+                            className="w-15 h-15 object-contain"
+                          />
+                        ) : (
+                          <span className="text-3xl">
+                            {index === 0 ? '🏆' : index === 1 ? '⚡' : index === 2 ? '🎯' : '💎'}
+                          </span>
+                        )}
                       </div>
-                      <h3 className="text-xl font-bold text-blue-900 mb-3">{statData.suffix}</h3>
-                      <p className="text-gray-600">{statData.label}</p>
+                      <h3 className="text-xl font-bold text-blue-900 mb-3">{card.title}</h3>
+                      <p className="text-gray-600">{card.description}</p>
                     </CardContent>
                   </Card>
                 );
-              }) || [
-                <Card key="fallback-1" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                  <CardContent className="p-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                      <span className="text-3xl">🏆</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
-                    <p className="text-gray-600">Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing</p>
-                  </CardContent>
-                </Card>,
-                <Card key="fallback-2" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                  <CardContent className="p-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                      <span className="text-3xl">⚡</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-3">Tim Profesional</h3>
-                    <p className="text-gray-600">Tim ahli yang berpengalaman dan berdedikasi tinggi</p>
-                  </CardContent>
-                </Card>,
-                <Card key="fallback-3" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                  <CardContent className="p-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                      <span className="text-3xl">🎯</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-3">Tepat Waktu</h3>
-                    <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
-                  </CardContent>
-                </Card>,
-                <Card key="fallback-4" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                  <CardContent className="p-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                      <span className="text-3xl">💎</span>
-                    </div>
-                    <h3 className="text-xl font-bold text-blue-900 mb-3">Kualitas Terjamin</h3>
-                    <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
-                  </CardContent>
-                </Card>
-              ]}
+              })}
             </div>
           </div>
         </section>
+        )}
 
         {/* Multi-Channel Contact CTA */}
         <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
@@ -395,7 +381,7 @@ export default function ServicesClient({ services, heroSection, strengthsSection
             </div>
             
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
-              <a href={`mailto:${contactSection?.email || "narvex@gmail.com"}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
+              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
@@ -403,12 +389,14 @@ export default function ServicesClient({ services, heroSection, strengthsSection
                 <p className="text-gray-300 text-sm">{contactSection?.email || "narvex@gmail.com"}</p>
               </a>
               
-              <a href={`https://wa.me/${contactSection?.phone_number?.replace(/\D/g, '') || "0800000"}`} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
+              <a href={`https://wa.me/${contactSection?.phone_number?.replace(/\D/g, '') || "62xxx"}`} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">{contactSection?.phone_number || "0800000"}</p>
+                <p className="text-gray-300 text-sm">
+                  {contactSection?.phone_number ? '+' + contactSection.phone_number : '+62 xxx xxxx xxxx'}
+                </p>
               </a>
               
               <a href={contactSection?.socialLinks?.instagram || "https://www.instagram.com/jasonsusantoo"} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
@@ -416,15 +404,21 @@ export default function ServicesClient({ services, heroSection, strengthsSection
                   <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@jasonsusantoo</p>
+                <p className="text-gray-300 text-sm">
+                  {contactSection?.socialLinks?.instagram ? 
+                    contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : 
+                    '@jasonsusantoo'}
+                </p>
               </a>
               
-              <a href={contactSection?.socialLinks?.facebook || "https://www.instagram.com/jasonsusantoo"} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
+              <a href={`tel:${contactSection?.phone_number || '+62xxx'}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/facebook.png" alt="Facebook" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Facebook</h3>
-                <p className="text-gray-300 text-sm">Facebook Page</p>
+                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
+                <p className="text-gray-300 text-sm">
+                  {contactSection?.phone_number ? '+' + contactSection.phone_number : '+62 xxx xxxx xxxx'}
+                </p>
               </a>
             </div>
             

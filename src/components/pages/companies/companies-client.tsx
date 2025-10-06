@@ -56,6 +56,29 @@ interface CompanyHighlight {
   description: string;
 }
 
+interface ContactSectionData {
+  title?: string;
+  description?: string;
+  email?: string;
+  phone_number?: string;
+  socialLinks?: {
+    instagram?: string;
+    facebook?: string;
+  };
+}
+
+interface IntegrationCard {
+  title: string;
+  description: string;
+  logo: string | null;
+}
+
+interface IntegrationData {
+  title: string;
+  description: string;
+  cards: IntegrationCard[];
+}
+
 // Icon mapping function
 const getIconComponent = (iconName: string): LucideIcon => {
   const iconMap: Record<string, LucideIcon> = {
@@ -72,9 +95,11 @@ interface CompaniesClientProps {
   companies: Company[];
   heroSection?: CompanyHero;
   companyHighlightSection?: CompanyHighlight;
+  contactSection?: ContactSectionData;
+  integrationData?: IntegrationData;
 }
 
-export default function CompaniesClient({ companies, heroSection, companyHighlightSection }: CompaniesClientProps) {
+export default function CompaniesClient({ companies, heroSection, companyHighlightSection, contactSection, integrationData }: CompaniesClientProps) {
 
   useEffect(() => {
     // Initialize GSAP scroll animations
@@ -334,79 +359,76 @@ export default function CompaniesClient({ companies, heroSection, companyHighlig
           </div>
         </section>
 
-        {/* Integration Benefits */}
-        <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
-          {/* Enhanced floating background elements */}
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            {/* Original circles */}
-            <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
-            <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
-            <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
-            <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
-            <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
-            
-            {/* Additional circles for enhanced visual depth */}
-            <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
-            <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
-          </div>
-          
-          {/* Decorative divider */}
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-          
-          <div className="relative container mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Keunggulan Integrasi</h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Dengan companies yang terintegrasi, kami dapat memberikan solusi end-to-end 
-                yang lebih efisien dan efektif.
-              </p>
+        {/* Integration Benefits - Dynamic from API */}
+        {integrationData && integrationData.cards && integrationData.cards.length > 0 && (
+          <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
+            {/* Enhanced floating background elements */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none">
+              {/* Original circles */}
+              <div className="absolute top-1/5 right-1/4 w-28 h-28 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
+              <div className="absolute bottom-1/4 left-1/6 w-36 h-36 bg-blue-100/12 rounded-full filter blur-2xl" data-parallax="0.35" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
+              <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
+              <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
+              <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
+              
+              {/* Additional circles for enhanced visual depth */}
+              <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
+              <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 " data-animation-delay="0.6">
-              <Card variant="service" className="benefit-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-lg transition-all duration-300 hover:scale-102">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105 hover:rotate-2">
-                    <span className="text-2xl">🤝</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-blue-900 mb-2">Sinergi</h3>
-                  <p className="text-gray-600">Kolaborasi antar company untuk hasil optimal</p>
-                </CardContent>
-              </Card>
+            {/* Decorative divider */}
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
+            
+            <div className="relative container mx-auto px-6">
+              <div className="text-center mb-16">
+                <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                  {integrationData.title || "Keunggulan Integrasi"}
+                </h2>
+                <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+                  {integrationData.description || "Dengan companies yang terintegrasi, kami dapat memberikan solusi end-to-end yang lebih efisien dan efektif."}
+                </p>
+              </div>
               
-              <Card variant="service" className="benefit-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-lg transition-all duration-300 hover:scale-102">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-100 to-blue-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105 hover:rotate-2">
-                    <span className="text-2xl">⚡</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-blue-900 mb-2">Efisiensi</h3>
-                  <p className="text-gray-600">Proses yang lebih cepat dengan koordinasi internal</p>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="benefit-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-lg transition-all duration-300 hover:scale-102">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-100 to-green-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105 hover:rotate-2">
-                    <span className="text-2xl">🎯</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-blue-900 mb-2">Spesialisasi</h3>
-                  <p className="text-gray-600">Keahlian khusus di setiap bidang layanan</p>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="benefit-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-lg transition-all duration-300 hover:scale-102">
-                <CardContent className="p-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-100 to-purple-200 rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105 hover:rotate-2">
-                    <span className="text-2xl">🏢</span>
-                  </div>
-                  <h3 className="text-xl font-semibold text-blue-900 mb-2">One-Stop</h3>
-                  <p className="text-gray-600">Solusi lengkap dari satu ekosistem perusahaan</p>
-                </CardContent>
-              </Card>
+              <div className={`grid md:grid-cols-2 ${integrationData.cards.length === 4 ? 'lg:grid-cols-4' : integrationData.cards.length === 3 ? 'lg:grid-cols-3' : 'lg:grid-cols-2'} gap-8`} data-animation-delay="0.6">
+                {integrationData.cards.map((card, index) => {
+                  // Define gradient colors based on index
+                  const gradients = [
+                    'from-gold-100 to-gold-200',
+                    'from-blue-100 to-blue-200', 
+                    'from-green-100 to-green-200',
+                    'from-purple-100 to-purple-200'
+                  ];
+                  
+                  return (
+                    <Card key={index} variant="service" className="benefit-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-lg transition-all duration-300 hover:scale-102">
+                      <CardContent className="p-6">
+                        <div className={`w-16 h-16 bg-gradient-to-br ${gradients[index % 4]} rounded-2xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-105 hover:rotate-2 overflow-hidden`}>
+                          {card.logo ? (
+                            <Image 
+                              src={card.logo} 
+                              alt={card.title}
+                              width={48}
+                              height={48}
+                              className="w-12 h-12 object-contain"
+                            />
+                          ) : (
+                            <span className="text-2xl">
+                              {index === 0 ? '🤝' : index === 1 ? '⚡' : index === 2 ? '🎯' : '🏢'}
+                            </span>
+                          )}
+                        </div>
+                        <h3 className="text-xl font-semibold text-blue-900 mb-2">{card.title}</h3>
+                        <p className="text-gray-600">{card.description}</p>
+                      </CardContent>
+                    </Card>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
+        )}
 
-        {/* Multi-Channel Contact CTA */}
+        {/* Multi-Channel Contact CTA - From Homepage API */}
         <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
           {/* Enhanced floating background elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -419,11 +441,10 @@ export default function CompaniesClient({ companies, heroSection, companyHighlig
           <div className="container mx-auto px-6 relative z-depth-2">
             <div className="text-center mb-12 ">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6  animate-stagger-1">
-                Siap Memulai Project Anda?
+                {contactSection?.title || "Siap Memulai Project Anda?"}
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto  animate-stagger-2">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
-                mewujudkan visi kreatif Anda menjadi kenyataan.
+                {contactSection?.description || "Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan."}
               </p>
             </div>
             
@@ -433,31 +454,39 @@ export default function CompaniesClient({ companies, heroSection, companyHighlig
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+                <p className="text-gray-300 text-sm">{contactSection?.email || "narvex@gmail.com"}</p>
               </Link>
               
-              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
+              <a href={`https://wa.me/${contactSection?.phone_number?.replace(/\D/g, '') || "62xxx"}`} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">
+                  {contactSection?.phone_number ? '+' + contactSection.phone_number : '+62 xxx xxxx xxxx'}
+                </p>
               </a>
               
-              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
+              <a href={contactSection?.socialLinks?.instagram || "https://www.instagram.com/jasonsusantoo"} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
+                <p className="text-gray-300 text-sm">
+                  {contactSection?.socialLinks?.instagram ? 
+                    contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : 
+                    '@jasonsusantoo'}
+                </p>
               </a>
               
-              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
+              <a href={`tel:${contactSection?.phone_number || '+62xxx'}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">
+                  {contactSection?.phone_number ? '+' + contactSection.phone_number : '+62 xxx xxxx xxxx'}
+                </p>
               </a>
             </div>
             
