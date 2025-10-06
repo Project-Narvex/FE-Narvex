@@ -226,4 +226,16 @@ export class StrapiContentService extends StrapiAPI {
     console.log('Contact message API response:', data);
     return data;
   }
+
+  // Custom query method for blog filtering
+  async queryBlogArticles(queryString: string) {
+    const endpoint = `/blog-articles?${queryString}`;
+    
+    console.log('Querying blog articles with:', queryString);
+    console.log('Full URL:', `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api${endpoint}`);
+    
+    const data = await this.requestPage(endpoint);
+    console.log('Blog articles query response:', data);
+    return data;
+  }
 }

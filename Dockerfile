@@ -18,6 +18,9 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
+# Copy environment file if exists
+COPY .env.local* ./
+
 # Build the Next.js app
 ENV NODE_ENV=production
 RUN npm run build
@@ -40,6 +43,7 @@ RUN if [ -f package-lock.json ]; then \
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
 COPY --from=builder /app/next.config.* ./
+COPY --from=builder /app/.env.local* ./
 
 ENV NODE_ENV=production \
     PORT=3200 \

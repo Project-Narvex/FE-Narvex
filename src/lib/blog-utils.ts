@@ -1,7 +1,5 @@
 // Blog utilities for transforming API data
 
-import { BlogArticleItem, BlogPageData, BlogListData } from './strapi/types';
-
 export interface TransformedBlogArticle {
   id: number;
   title: string;
@@ -85,8 +83,8 @@ function extractExcerpt(content: any): string {
   if (Array.isArray(content)) {
     // Handle rich text content
     const textContent = content
-      .filter(item => item.type === 'paragraph')
-      .map(item => item.children?.map((child: any) => child.text).join('') || '')
+      .filter((item: any) => item.type === 'paragraph')
+      .map((item: any) => item.children?.map((child: any) => child.text).join('') || '')
       .join(' ')
       .substring(0, 150);
     
@@ -105,8 +103,8 @@ function calculateReadTime(content: any): string {
   } else if (Array.isArray(content)) {
     // Handle rich text content
     const textContent = content
-      .filter(item => item.type === 'paragraph')
-      .map(item => item.children?.map((child: any) => child.text).join('') || '')
+      .filter((item: any) => item.type === 'paragraph')
+      .map((item: any) => item.children?.map((child: any) => child.text).join('') || '')
       .join(' ');
     
     wordCount = textContent.split(' ').length;
@@ -136,7 +134,7 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
   const allArticles = allBlogArticles?.data?.map(transformBlogArticle) || [];
   
   // Mark featured articles
-  featuredArticles.forEach(article => {
+  featuredArticles.forEach((article: TransformedBlogArticle) => {
     article.featured = true;
   });
   
@@ -144,8 +142,8 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
   console.log('All articles:', allArticles);
   
   // Remove duplicates - if an article is in featured, don't include it in allArticles
-  const featuredIds = new Set(featuredArticles.map(article => article.id));
-  const uniqueAllArticles = allArticles.filter(article => !featuredIds.has(article.id));
+  const featuredIds = new Set(featuredArticles.map((article: TransformedBlogArticle) => article.id));
+  const uniqueAllArticles = allArticles.filter((article: TransformedBlogArticle) => !featuredIds.has(article.id));
   
   console.log('Featured IDs:', Array.from(featuredIds));
   console.log('Unique all articles (after removing featured):', uniqueAllArticles);
@@ -156,10 +154,10 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
   console.log('All articles combined (no duplicates):', allArticlesCombined);
   
   // Get unique categories
-  const uniqueCategories = Array.from(new Set(allArticlesCombined.map(article => article.category)));
+  const uniqueCategories = Array.from(new Set(allArticlesCombined.map((article: TransformedBlogArticle) => article.category)));
   const categories = [
     { id: 'all', name: 'All Categories' },
-    ...uniqueCategories.map(category => ({ 
+    ...uniqueCategories.map((category: string) => ({ 
       id: category.toLowerCase().replace(/\s+/g, '-'), 
       name: category 
     }))
@@ -167,11 +165,11 @@ export function transformBlogPageData(data: any, allBlogArticles?: any): BlogPag
   
   // Get unique years
   const years = Array.from(new Set(
-    allArticlesCombined.map(article => new Date(article.publishDate).getFullYear())
+    allArticlesCombined.map((article: TransformedBlogArticle) => new Date(article.publishDate).getFullYear())
   )).sort((a, b) => b - a);
   
   // Get unique authors
-  const authors = Array.from(new Set(allArticlesCombined.map(article => article.author)));
+  const authors = Array.from(new Set(allArticlesCombined.map((article: TransformedBlogArticle) => article.author)));
   
   return {
     hero: {

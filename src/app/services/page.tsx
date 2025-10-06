@@ -1,6 +1,7 @@
 import React from 'react';
 import ServicesClient from '@/components/pages/services/services-client';
 import { strapi, transformServicePageComponent, processServiceImage, transformHomepageComponent } from '@/lib/strapi';
+import { getStrapiImageUrl } from '@/lib/strapi/helpers';
 import type { StrapiResponse, ServicePageData, ServiceItem, ContactSection } from '@/lib/strapi';
 
 interface ContactSectionData {
@@ -19,8 +20,7 @@ export default async function ServicesPage() {
   try {
     // Fetch both service page data AND homepage data
     const servicePageData = await strapi.getServicePage() as StrapiResponse<ServicePageData>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const homepageData = await strapi.getHomepage() as any;
+    const homepageData = await strapi.getHomepage();
     
     // Debug: Log the API response structure
     console.log('Service Page API Response:', JSON.stringify(servicePageData, null, 2));
@@ -55,24 +55,38 @@ export default async function ServicesPage() {
     
     // Process homepage data to get contactSection
     if (homepageData) {
+      const homepageDataAny = homepageData as Record<string, unknown>;
       let homepageEntity;
-      if (homepageData.data) {
-        homepageEntity = Array.isArray(homepageData.data) ? homepageData.data[0] : homepageData.data;
-      } else if (homepageData.id) {
-        homepageEntity = homepageData;
+      if (homepageDataAny.data) {
+        const dataValue = homepageDataAny.data;
+        homepageEntity = Array.isArray(dataValue) ? dataValue[0] : dataValue;
+      } else if (homepageDataAny.id) {
+        homepageEntity = homepageDataAny;
       }
       
-      if (homepageEntity && homepageEntity.pageContent) {
-        const homepageComponents = homepageEntity.pageContent.map(transformHomepageComponent);
-        contactSection = homepageComponents.find(c => c.__component === 'sections.contact') as ContactSection;
+      if (homepageEntity && (homepageEntity as Record<string, unknown>).pageContent) {
+        const pageContent = (homepageEntity as Record<string, unknown>).pageContent;
+        if (Array.isArray(pageContent)) {
+          const homepageComponents = pageContent.map(transformHomepageComponent);
+          contactSection = homepageComponents.find((c: Record<string, unknown>) => c.__component === 'sections.contact') as ContactSection;
+        }
       }
     }
     
     // Extract strength cards from strengthsSection (card_1, card_2, card_3, card_4)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const strengthData: any = {
-      title: (strengthsSection as any)?.title || '',
-      description: (strengthsSection as any)?.description || '',
+    interface StrengthData {
+      title: string;
+      description: string;
+      cards: Array<{
+        title: string;
+        description: string;
+        logo: string | null;
+      }>;
+    }
+    
+    const strengthData: StrengthData = {
+      title: (strengthsSection as Record<string, unknown>)?.title as string || '',
+      description: (strengthsSection as Record<string, unknown>)?.description as string || '',
       cards: []
     };
     
@@ -80,17 +94,14 @@ export default async function ServicesPage() {
     if (strengthsSection) {
       const cardFields = ['card_1', 'card_2', 'card_3', 'card_4'] as const;
       cardFields.forEach((fieldName) => {
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        const card = (strengthsSection as any)[fieldName];
+        const card = (strengthsSection as Record<string, unknown>)[fieldName] as Record<string, unknown> | undefined;
         if (card && card.title) {
           // Extract text from rich text description
           let descriptionText = '';
           if (card.description && Array.isArray(card.description)) {
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            card.description.forEach((block: any) => {
-              if (block.type === 'paragraph' && block.children) {
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                block.children.forEach((child: any) => {
+            card.description.forEach((block: Record<string, unknown>) => {
+              if (block.type === 'paragraph' && block.children && Array.isArray(block.children)) {
+                block.children.forEach((child: Record<string, unknown>) => {
                   if (child.text) {
                     descriptionText += child.text;
                   }
@@ -100,17 +111,17 @@ export default async function ServicesPage() {
           }
           
           strengthData.cards.push({
-            title: card.title,
+            title: String(card.title),
             description: descriptionText,
-            logo: card.logo ? getStrapiImageUrl(card.logo, 'thumbnail') : null
+            logo: card.logo ? getStrapiImageUrl(card.logo as import('@/lib/strapi/types').StrapiImage, 'thumbnail') : null
           });
         }
       });
     }
     
     // Transform services data to match the expected format
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const services = (servicesSection as any)?.services?.map((service: ServiceItem) => {
+    const services = (servicesSection as Record<string, unknown>)?.services as ServiceItem[] | undefined;
+    const transformedServices = services?.map((service: ServiceItem) => {
       // Extract features from description (assuming they're separated by newlines)
       const features = service.description
         ?.split('\n')
@@ -161,8 +172,8 @@ export default async function ServicesPage() {
 
     return (
       <ServicesClient 
-        services={services}
-        heroSection={heroSection}
+        services={transformedServices}
+        heroSection={heroSection as unknown as { title?: string; subtitle?: string; description?: string }}
         strengthData={strengthData}
         contactSection={contactSection as ContactSectionData}
       />

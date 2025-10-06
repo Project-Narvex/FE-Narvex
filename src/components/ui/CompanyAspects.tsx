@@ -29,7 +29,7 @@ export default function CompanyAspects({ aspects, cardHighlight }: CompanyAspect
     aspects?.aspect3,
     aspects?.aspect4
   ].filter((aspect): aspect is NonNullable<typeof aspect> => 
-    aspect && aspect.title && aspect.description
+    Boolean(aspect && aspect.title && aspect.description)
   ).slice(0, 4); // Ensure maximum 4 items
   
   return (

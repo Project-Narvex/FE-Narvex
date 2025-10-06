@@ -54,7 +54,7 @@ export async function GET(request: NextRequest) {
       queryString += `&filters[$or][2][tags][name][$containsi]=${encodeURIComponent(search)}`;
     }
     
-    const data = await strapiService.requestPage(`/blog-articles?${queryString}`);
+    const data = await strapiService.queryBlogArticles(queryString);
     
     return NextResponse.json(data);
     

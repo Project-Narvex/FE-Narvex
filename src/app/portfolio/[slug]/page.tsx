@@ -32,7 +32,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
     const portfolioResponse = await strapi.getPortfolios({
       populate: ['cover', 'gallery', 'portfolio_categories', 'company', 'client', 'services'],
       filters: { slug: { $eq: slug } }
-    });
+    }) as { data?: PortfolioItem[] };
     
     if (portfolioResponse.data && portfolioResponse.data.length > 0) {
       portfolioItem = portfolioResponse.data[0];
@@ -42,7 +42,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         id: portfolioItem.id.toString(),
         title: portfolioItem.title,
         slug: portfolioItem.slug,
-        category: portfolioItem.portfolio_categories?.[0]?.name?.toLowerCase() as any || 'creative',
+        category: (portfolioItem.portfolio_categories?.[0]?.name?.toLowerCase() || 'corporate') as Project['category'],
         companyId: portfolioItem.company?.slug || 'narvex-main',
         client: portfolioItem.client?.name || 'Unknown Client',
         location: portfolioItem.company?.address ? 
@@ -61,9 +61,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
         status: 'completed' as const,
         budget: '',
         duration: '',
-        teamSize: 0,
-        cover: portfolioItem.cover,
-        linkURL: portfolioItem.linkURL
+        teamSize: 0
       };
     }
   } catch (error) {
@@ -524,10 +522,10 @@ export async function generateStaticParams() {
     const portfolioResponse = await strapi.getPortfolios({
       populate: ['slug'],
       pagination: { page: 1, pageSize: 100 }
-    });
+    }) as { data?: PortfolioItem[] };
     
     if (portfolioResponse.data && portfolioResponse.data.length > 0) {
-      return portfolioResponse.data.map((item) => ({
+      return portfolioResponse.data.map((item: PortfolioItem) => ({
         slug: item.slug,
       }));
     }

@@ -1,8 +1,6 @@
 // Contact Page Data Transformation Utilities
 
 import { 
-  ContactPageData, 
-  ContactPageComponent, 
   ContactHero, 
   ContactServiceCard, 
   ContactForm, 
@@ -25,7 +23,7 @@ function extractTextFromDescription(description: any): string {
       }
       if (item && typeof item === 'object') {
         if (item.children && Array.isArray(item.children)) {
-          return item.children.map(child => {
+          return item.children.map((child: any) => {
             if (typeof child === 'string') {
               return child;
             }
@@ -45,7 +43,7 @@ function extractTextFromDescription(description: any): string {
   
   if (description && typeof description === 'object') {
     if (description.children && Array.isArray(description.children)) {
-      return description.children.map(child => {
+      return description.children.map((child: any) => {
         if (typeof child === 'string') {
           return child;
         }
@@ -139,7 +137,7 @@ export function transformContactPageData(data: any): TransformedContactPageConte
     components = data.data.pageContent;
   } else if (data?.data && typeof data.data === 'object') {
     // Handle case where data is structured differently
-    components = Object.values(data.data).filter(item => 
+    components = Object.values(data.data).filter((item: any) => 
       item && typeof item === 'object' && item.__component
     ) as any[];
   } else {
@@ -274,8 +272,8 @@ export function transformContactPageData(data: any): TransformedContactPageConte
     address: {
       city: infoComponent?.address?.city || 'Jakarta',
       country: infoComponent?.address?.country || 'Indonesia',
-      street: infoComponent?.address?.street || '',
-      postalCode: infoComponent?.address?.postalCode || ''
+      street: (infoComponent?.address as any)?.street || (infoComponent?.address as any)?.address || '',
+      postalCode: (infoComponent?.address as any)?.postalCode || ''
     },
     businessHours: {
       weekdays: infoComponent?.businessHours?.weekdays || 'Senin - Jumat: 09:00 - 18:00',

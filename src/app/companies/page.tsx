@@ -91,20 +91,21 @@ export default async function CompaniesPage() {
       
       if (homepageEntity && homepageEntity.pageContent) {
         const homepageComponents = homepageEntity.pageContent.map(transformHomepageComponent);
-        contactSection = homepageComponents.find(c => c.__component === 'sections.contact') as ContactSection;
+        contactSection = homepageComponents.find((c: { __component: string }) => c.__component === 'sections.contact') as ContactSection;
       }
     }
     
     // Extract integration data from company page API
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const integrationData: any = {
-      title: pageData.integration?.title || '',
-      description: pageData.integration?.description || '',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      title: (pageData as any).integration?.title || '',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      description: (pageData as any).integration?.description || '',
       cards: []
     };
     
     // Build cards array from card_1, card_2, card_3, card_4
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const cardFields = ['card_1', 'card_2', 'card_3', 'card_4'] as const;
     cardFields.forEach((fieldName) => {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

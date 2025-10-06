@@ -15,7 +15,6 @@ import {
   addEnhancedParallax,
   createMorphingBackground
 } from '@/lib/animations';
-import { ServicePageComponent } from '@/lib/strapi';
 
 interface Service {
   icon: string;
@@ -61,9 +60,15 @@ interface StrengthData {
   cards: StrengthCard[];
 }
 
+interface HeroSectionData {
+  title?: string;
+  subtitle?: string;
+  description?: string;
+}
+
 interface ServicesClientProps {
   services: Service[];
-  heroSection?: ServicePageComponent;
+  heroSection?: HeroSectionData;
   strengthData?: StrengthData;
   contactSection?: ContactSectionData;
 }
@@ -147,9 +152,9 @@ export default function ServicesClient({ services, heroSection, strengthData, co
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
         {/* Hero Section */}
         <SimpleHero
-          title={(heroSection as any)?.title || "Layanan Kami"} // eslint-disable-line @typescript-eslint/no-explicit-any
-          subtitle={(heroSection as any)?.subtitle || "Narvex Creative Services"} // eslint-disable-line @typescript-eslint/no-explicit-any
-          description={(heroSection as any)?.description || "Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"} // eslint-disable-line @typescript-eslint/no-explicit-any
+          title={heroSection?.title || "Layanan Kami"}
+          subtitle={heroSection?.subtitle || "Narvex Creative Services"}
+          description={heroSection?.description || "Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"}
           breadcrumb={[
             { label: 'Home', href: '/' },
             { label: 'Layanan' }
@@ -186,12 +191,10 @@ export default function ServicesClient({ services, heroSection, strengthData, co
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="text-center mb-12 sm:mb-16">
               <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(strengthsSection as any)?.title || "Portfolio Layanan Lengkap"}
+                {strengthData?.title || "Portfolio Layanan Lengkap"}
               </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                {(strengthsSection as any)?.description || "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda."}
+                {strengthData?.description || "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda."}
               </p>
             </div>
             

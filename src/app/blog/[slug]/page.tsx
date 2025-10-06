@@ -1,5 +1,4 @@
 import React from 'react';
-import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { 
@@ -14,6 +13,7 @@ import {
   Tag
 } from 'lucide-react';
 import { StrapiContentService } from '@/lib/strapi/content';
+import { BlogCategory, BlogTag, StrapiImage } from '@/lib/strapi/types';
 
 // Enable dynamic rendering
 export const dynamic = 'force-dynamic';
@@ -22,6 +22,40 @@ interface BlogDetailPageProps {
   params: Promise<{
     slug: string;
   }>;
+}
+
+// Extended BlogArticle interface with all used fields
+interface BlogArticleDetailed {
+  id: number;
+  title: string;
+  slug: string;
+  excerpt?: string;
+  content?: string | Array<{
+    type: string;
+    level?: number;
+    children?: Array<{ text: string; type: string }>;
+    image?: StrapiImage;
+  }>;
+  publishDate?: string;
+  createdAt: string;
+  updatedAt: string;
+  publishedAt?: string;
+  locale?: string;
+  readTime?: string;
+  views?: number;
+  likes?: number;
+  featured?: boolean;
+  cover?: StrapiImage;
+  blog_category?: BlogCategory;
+  tags?: BlogTag[];
+  users_permissions_user?: {
+    username: string;
+  };
+  seo?: {
+    title?: string;
+    description?: string;
+    keywords?: string;
+  };
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
@@ -38,8 +72,11 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     
     console.log('All articles response:', allResponse);
     
+    // Type assertion for the response data
+    const allArticles = (allResponse.data || []) as unknown as BlogArticleDetailed[];
+    
     // Find article by slug manually
-    const foundArticle = allResponse.data?.find(article => article.slug === slug);
+    const foundArticle = allArticles.find((article: BlogArticleDetailed) => article.slug === slug);
     const articleResponse = {
       data: foundArticle ? [foundArticle] : []
     };
@@ -56,7 +93,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
             <div className="text-6xl mb-6">📄</div>
             <h1 className="text-3xl font-bold text-gray-900 mb-4">Article Not Found</h1>
             <p className="text-gray-600 mb-8">
-              The article with slug "{slug}" doesn't exist in our database.
+              The article with slug &quot;{slug}&quot; doesn&apos;t exist in our database.
             </p>
             <div className="space-y-4">
               <Link 
@@ -77,16 +114,13 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
     
     const article = articleResponse.data[0];
     
-    // Use the articles we already fetched
-    const allArticles = allResponse.data || [];
-    
     // Find related articles (same category, excluding current)
     const relatedArticles = allArticles
-      .filter(a => a.blog_category?.id === article.blog_category?.id && a.id !== article.id)
+      .filter((a: BlogArticleDetailed) => a.blog_category?.id === article.blog_category?.id && a.id !== article.id)
       .slice(0, 3);
     
     // Find previous and next articles
-    const currentIndex = allArticles.findIndex(a => a.id === article.id);
+    const currentIndex = allArticles.findIndex((a: BlogArticleDetailed) => a.id === article.id);
     const previousArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
     const nextArticle = currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
 
@@ -171,9 +205,6 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               {/* Featured Image - Direct Next.js Image */}
               {article.cover && (
                 <div className="rounded-xl overflow-hidden shadow-lg mb-12">
-                  {console.log('Blog detail - Article cover data:', article.cover)}
-                  {console.log('Blog detail - Cover URL:', article.cover.url)}
-                  {console.log('Blog detail - Cover formats:', article.cover.formats)}
                   <ImageWithFallback
                     src={article.cover}
                     alt={article.cover.alternativeText || `${article.title} - Featured image`}
@@ -222,15 +253,15 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                       <div>
                         {Array.isArray(article.content) ? (
                           // Handle Strapi rich text format
-                          article.content.map((block, index) => {
+                          article.content.map((block: any, index: number) => {
                             if (block.type === 'paragraph') {
                               return (
                                 <p key={index} className="text-base md:text-lg leading-relaxed mb-6 text-gray-700">
-                                  {block.children?.map((child, childIndex) => child.text).join('')}
+                                  {block.children?.map((child: any) => child.text).join('')}
                                 </p>
                               );
                             } else if (block.type === 'heading') {
-                              const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements;
+                              const HeadingTag = `h${block.level}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
                               return (
                                 <HeadingTag key={index} className={`font-bold mb-4 text-blue-900 ${
                                   block.level === 1 ? 'text-3xl md:text-4xl' :
@@ -238,14 +269,14 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                                   block.level === 3 ? 'text-xl md:text-2xl' :
                                   'text-lg md:text-xl'
                                 }`}>
-                                  {block.children?.map((child, childIndex) => child.text).join('')}
+                                  {block.children?.map((child: any) => child.text).join('')}
                                 </HeadingTag>
                               );
                             } else if (block.type === 'image') {
                               return (
                                 <div key={index} className="my-6">
-                                  <img 
-                                    src={block.image?.url} 
+                                  <ImageWithFallback 
+                                    src={block.image?.url || ''} 
                                     alt={block.image?.alternativeText || 'Article image'}
                                     className="w-full h-auto rounded-lg shadow-md"
                                   />
@@ -273,12 +304,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                 <div className="bg-white rounded-lg shadow-sm p-8 mb-12">
                   <h3 className="text-xl font-bold text-gray-900 mb-4">Tags</h3>
                   <div className="flex flex-wrap gap-3">
-                    {article.tags.map((tag, index) => (
+                    {article.tags.map((tag: BlogTag | string, index: number) => (
                       <span 
                         key={index} 
                         className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:from-blue-200 hover:to-blue-300 transition-all duration-300 cursor-pointer"
                       >
-                        {tag.name || tag}
+                        {typeof tag === 'string' ? tag : tag.name}
                       </span>
                     ))}
                   </div>
@@ -295,12 +326,12 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <div className="max-w-6xl mx-auto">
                 <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">Related Articles</h2>
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-                  {relatedArticles.map((relatedArticle) => (
+                  {relatedArticles.map((relatedArticle: BlogArticleDetailed) => (
                     <Link key={relatedArticle.id} href={`/blog/${relatedArticle.slug}`}>
                       <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden group">
                         <div className="h-48 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-transform duration-700">
                           {relatedArticle.cover?.url ? (
-                            <img 
+                            <ImageWithFallback 
                               src={relatedArticle.cover.url} 
                               alt={relatedArticle.cover.alternativeText || relatedArticle.title}
                               className="w-full h-full object-cover"
@@ -391,7 +422,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
           <div className="text-6xl mb-6">📄</div>
           <h1 className="text-3xl font-bold text-gray-900 mb-4">Article Not Found</h1>
           <p className="text-gray-600 mb-8">
-            The article you're looking for doesn't exist or there was an error loading it.
+            The article you&apos;re looking for doesn&apos;t exist or there was an error loading it.
           </p>
           <div className="space-y-4">
             <Link 
@@ -421,7 +452,10 @@ export async function generateStaticParams() {
     
     console.log('Static params response:', response);
     
-    return response.data?.map((article) => ({
+    // Type assertion for the response data
+    const articles = (response.data || []) as unknown as BlogArticleDetailed[];
+    
+    return articles.map((article: BlogArticleDetailed) => ({
       slug: article.slug,
     })) || [];
   } catch (error) {
@@ -442,14 +476,17 @@ export async function generateMetadata({ params }: BlogDetailPageProps) {
       populate: ['seo']
     });
     
-    if (!response.data || response.data.length === 0) {
+    // Type assertion for the response data
+    const articles = (response.data || []) as unknown as BlogArticleDetailed[];
+    
+    if (!articles || articles.length === 0) {
       return {
         title: 'Article Not Found',
         description: 'The requested article could not be found.'
       };
     }
     
-    const article = response.data[0];
+    const article = articles[0];
     
     return {
       title: article.seo?.title || article.title,
@@ -460,7 +497,7 @@ export async function generateMetadata({ params }: BlogDetailPageProps) {
         type: 'article',
         publishedTime: article.publishDate || article.createdAt,
         authors: [article.users_permissions_user?.username || 'Narvex Team'],
-        tags: article.tags?.map(tag => tag.name || tag) || [],
+        tags: article.tags?.map((tag: BlogTag | string) => typeof tag === 'string' ? tag : tag.name) || [],
       },
       twitter: {
         card: 'summary_large_image',

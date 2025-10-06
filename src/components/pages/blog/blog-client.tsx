@@ -4,7 +4,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
-import { Calendar, User, Search, Star, ArrowRight } from 'lucide-react';
+import { Calendar, User, Search, Star } from 'lucide-react';
 import { transformBlogListData } from '@/lib/blog-utils';
 
 interface BlogClientProps {
@@ -221,7 +221,7 @@ export default function BlogClient({
                               console.error('Image failed to load:', article.cover.url);
                               // Hide the image and show fallback
                               e.currentTarget.style.display = 'none';
-                              const fallback = e.currentTarget.nextElementSibling;
+                              const fallback = e.currentTarget.nextElementSibling as HTMLElement;
                               if (fallback) {
                                 fallback.style.display = 'flex';
                               }
@@ -272,9 +272,9 @@ export default function BlogClient({
                       
                       <div className="flex flex-wrap gap-2 mb-6">
                         {article.tags && article.tags.length > 0 ? (
-                          article.tags.slice(0, 3).map((tag, idx) => (
+                          article.tags.slice(0, 3).map((tag: { name?: string } | string, idx: number) => (
                             <span key={idx} className="bg-gradient-to-r from-gold-100 to-gold-200 text-gold-700 px-3 py-1 rounded-full text-xs font-medium hover-depth-subtle">
-                              {tag.name || tag}
+                              {typeof tag === 'object' ? tag.name || 'Tag' : tag}
                             </span>
                           ))
                         ) : (
@@ -515,9 +515,9 @@ export default function BlogClient({
                           <div className="flex flex-wrap gap-2 mt-auto">
                             {article.tags && article.tags.length > 0 ? (
                               <>
-                                {article.tags.slice(0, 2).map((tag, idx) => (
+                                {article.tags.slice(0, 2).map((tag: { name?: string } | string, idx: number) => (
                                   <span key={idx} className="bg-gradient-to-r from-gray-100 to-gray-200 text-gray-600 px-3 py-1 rounded-full text-xs font-medium transition-all duration-300 hover:from-gold-100 hover:to-gold-200 hover:text-gold-700">
-                                    {tag.name || tag}
+                                    {typeof tag === 'object' ? tag.name || 'Tag' : tag}
                                   </span>
                                 ))}
                                 {article.tags.length > 2 && (
