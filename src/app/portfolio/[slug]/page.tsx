@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import CMSImage from '@/components/ui/CMSImage';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { 
   MapPin, 
   Calendar, 
@@ -12,6 +12,7 @@ import {
   CheckCircle
 } from 'lucide-react';
 import { projects, Project } from '@/data/projects';
+import { strapi, PortfolioItem, getStrapiImageUrl } from '@/lib/strapi';
 
 interface PortfolioDetailPageProps {
   params: Promise<{
@@ -23,13 +24,62 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
   // Await params in Next.js 15
   const { slug } = await params;
   
-  // Find project by slug
-  const project = projects.find(p => p.slug === slug);
+  let project: Project | null = null;
+  let portfolioItem: PortfolioItem | null = null;
+  
+  try {
+    // First try to fetch from Strapi API
+    const portfolioResponse = await strapi.getPortfolios({
+      populate: ['cover', 'gallery', 'portfolio_categories', 'company', 'client', 'services'],
+      filters: { slug: { $eq: slug } }
+    });
+    
+    if (portfolioResponse.data && portfolioResponse.data.length > 0) {
+      portfolioItem = portfolioResponse.data[0];
+      
+      // Transform Strapi data to Project format
+      project = {
+        id: portfolioItem.id.toString(),
+        title: portfolioItem.title,
+        slug: portfolioItem.slug,
+        category: portfolioItem.portfolio_categories?.[0]?.name?.toLowerCase() as any || 'creative',
+        companyId: portfolioItem.company?.slug || 'narvex-main',
+        client: portfolioItem.client?.name || 'Unknown Client',
+        location: portfolioItem.company?.address ? 
+          `${portfolioItem.company.address.city}, ${portfolioItem.company.address.province}` : 
+          'Unknown Location',
+        date: portfolioItem.date || new Date(portfolioItem.createdAt).getFullYear().toString(),
+        year: portfolioItem.date ? parseInt(portfolioItem.date.split('-')[0]) : new Date(portfolioItem.createdAt).getFullYear(),
+        description: portfolioItem.excerpt,
+        longDescription: portfolioItem.excerpt,
+        services: portfolioItem.services?.map(service => service.title) || [],
+        images: portfolioItem.gallery?.map(img => getStrapiImageUrl(img, 'medium')) || [],
+        gallery: portfolioItem.gallery?.map(img => getStrapiImageUrl(img, 'large')) || [],
+        tags: portfolioItem.portfolio_categories?.map(cat => cat.name) || [],
+        results: {},
+        featured: portfolioItem.Highlight || false,
+        status: 'completed' as const,
+        budget: '',
+        duration: '',
+        teamSize: 0,
+        cover: portfolioItem.cover,
+        linkURL: portfolioItem.linkURL
+      };
+    }
+  } catch (error) {
+    console.error('Error fetching portfolio from Strapi:', error);
+  }
+  
+  // Fallback to local data if Strapi fails
+  if (!project) {
+    project = projects.find(p => p.slug === slug) || null;
+  }
+  
   if (!project) {
     notFound();
   }
   
-  // Find related projects
+  // Find related projects (using local data for now)
   const relatedProjects = project.relatedProjects 
     ? project.relatedProjects
         .map(id => projects.find(p => p.id === id))
@@ -60,7 +110,7 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
   }
 
   const galleryImages = project.gallery || project.images || [];
-  const heroImage = galleryImages[0] || null;
+  const heroImage = portfolioItem?.cover ? getStrapiImageUrl(portfolioItem.cover, 'large') : galleryImages[0] || null;
 
   return (
     <div className="min-h-screen bg-white">
@@ -129,15 +179,17 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                 {project.longDescription || project.description}
               </p>
               
-              {/* Hero Image - CMS Ready */}
+              {/* Hero Image - Direct Next.js Image */}
               <div className="rounded-xl overflow-hidden shadow-lg mb-12">
-                <CMSImage 
-                   src={heroImage}
-                   alt={`${project.title} - Portfolio showcase image`}
-                   className="w-full h-64 sm:h-80 lg:h-96"
-                   fallbackText={project.title}
-                   category={project.category}
-                 />
+                <ImageWithFallback
+                  src={heroImage || '/placeholder-image.jpg'}
+                  alt={`${project.title} - Portfolio showcase image`}
+                  className="w-full h-64 sm:h-80 lg:h-96"
+                  fallbackText={project.title}
+                  category={project.category}
+                  fill={true}
+                  sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                />
               </div>
             </div>
           </div>
@@ -332,12 +384,14 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
                       <div className="flex items-center">
                         <div className="w-12 h-12 rounded-full mr-4 overflow-hidden bg-gray-200 flex-shrink-0">
                           {testimonial.avatar ? (
-                            <CMSImage 
-                               src={testimonial.avatar}
-                               alt={`${testimonial.name} - Client testimonial`}
-                               className="w-full h-full"
-                               fallbackText={testimonial.name.charAt(0)}
-                             />
+                            <ImageWithFallback
+                              src={testimonial.avatar}
+                              alt={`${testimonial.name} - Client testimonial`}
+                              className="w-full h-full"
+                              fallbackText={testimonial.name.charAt(0)}
+                              width={48}
+                              height={48}
+                            />
                           ) : (
                             <div className="w-full h-full bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center">
                               <span className="text-blue-600 font-semibold text-lg">
@@ -465,6 +519,23 @@ export default async function PortfolioDetailPage({ params }: PortfolioDetailPag
 
 // Generate static params for all projects
 export async function generateStaticParams() {
+  try {
+    // Try to fetch from Strapi first
+    const portfolioResponse = await strapi.getPortfolios({
+      populate: ['slug'],
+      pagination: { page: 1, pageSize: 100 }
+    });
+    
+    if (portfolioResponse.data && portfolioResponse.data.length > 0) {
+      return portfolioResponse.data.map((item) => ({
+        slug: item.slug,
+      }));
+    }
+  } catch (error) {
+    console.error('Error fetching portfolio slugs from Strapi:', error);
+  }
+  
+  // Fallback to local data
   return projects.map((project) => ({
     slug: project.slug,
   }));

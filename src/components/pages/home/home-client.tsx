@@ -5,7 +5,6 @@ import { BlogArticle } from '@/data/blog';
 import { Project } from '@/data/projects';
 import { ClientLogo } from '@/data/clients';
 import Image from 'next/image';
-import CMSImage from '@/components/ui/CMSImage';
 import Link from 'next/link';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
@@ -14,11 +13,15 @@ import Button from '@/components/ui/Button';
 import { Card, CardContent } from '@/components/ui/Card';
 import ClientCarousel from '@/components/ui/ClientCarousel';
 import MapComponent from '@/components/ui/MapComponent';
+import AnimatedSection from '@/components/ui/AnimatedSection';
+import { mapStrapiLogo, getStrapiImageUrl } from '@/lib/strapi';
+import { SafePortfolioImage, SafeAvatarImage, SafeArticleImage, SafeCompanyLogoImage, SafeServiceIconImage } from '@/components/ui/SafeImageComponents';
 
-import { 
-  initializeAnimations, 
-  initializeHeroAnimation, 
+import {
+  initializeAnimations,
+  initializeHeroAnimation,
   addGSAPHoverAnimations,
+  cleanupGSAPHoverAnimations,
   DepthAnimationController,
   add3DCardEffect,
   addEnhancedParallax,
@@ -61,7 +64,41 @@ interface ContactFormData {
 }
 
 // Props interface for HomeClient component
+interface HomepageDataProps {
+  heroSection?: unknown;
+  companySection?: unknown;
+  serviceSection?: unknown;
+  projectSection?: unknown;
+  testimonialSection?: {
+    title?: string;
+    description?: string;
+    clients?: Array<{
+      name: string;
+      logo: unknown;
+      website?: string;
+      type?: string;
+      orderNo?: number;
+    }>;
+    selected_testimonials?: Array<{
+      clientName: string;
+      clientTitle: string;
+      companyName: string;
+      content: string;
+      rating?: number;
+      avatar?: unknown;
+    }>;
+    statistic1?: unknown;
+    statistic2?: unknown;
+    statistic3?: unknown;
+    statistic4?: unknown;
+  };
+  articleSection?: unknown;
+  contactSection?: unknown;
+  collaborationSection?: unknown;
+}
+
 interface HomeClientProps {
+  homepageData?: HomepageDataProps;
   recentArticles: BlogArticle[];
   defaultProjects: Project[];
   defaultTestimonials: Testimonial[];
@@ -120,15 +157,16 @@ const coverflowServices = [
 
 
 
-export default function HomeClient({ 
-  recentArticles, 
-  defaultProjects, 
-  defaultTestimonials, 
-  defaultClients 
+export default function HomeClient({
+  homepageData,
+  recentArticles,
+  defaultProjects,
+  defaultTestimonials,
+  defaultClients
 }: HomeClientProps) {
   // State for portfolio filter
   const [activeFilter, setActiveFilter] = useState<'all' | 'creative' | 'exhibition' | 'corporate' | 'wedding'>('all');
-  
+
   // State for contact form
   const [formData, setFormData] = useState<ContactFormData>({
     name: '',
@@ -141,58 +179,39 @@ export default function HomeClient({
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [errors, setErrors] = useState<Partial<ContactFormData>>({});
 
-  // State for animation attributes to prevent hydration mismatch
-  const [animationAttrs, setAnimationAttrs] = useState({
-    delay: "0",
-    duration: "0.3", 
-    stagger: "0.02"
-  });
-  const [isClient, setIsClient] = useState(false);
+
+
+  const [isMounted, setIsMounted] = useState(false);
+
 
   useEffect(() => {
-    // Set client-side flag to prevent hydration mismatch
-    setIsClient(true);
-    
-    // Set standardized animation attributes
-    setAnimationAttrs({
-      delay: "0",
-      duration: "0.3",
-      stagger: "0.02"
-    });
-
-    // Update all animation attributes client-side to prevent hydration mismatch
-    const updateAnimationAttributes = () => {
-      const animatedElements = document.querySelectorAll('[data-delay], [data-duration], [data-stagger]');
-      animatedElements.forEach(element => {
-        element.setAttribute('data-delay', '0');
-        element.setAttribute('data-duration', '0.3');
-        element.setAttribute('data-stagger', '0.02');
-      });
-    };
-
-    // Apply updates after a short delay to ensure DOM is ready
-    const timeoutId = setTimeout(updateAnimationAttributes, 100);
-    
-    return () => clearTimeout(timeoutId);
+    setIsMounted(true);
   }, []);
 
   useEffect(() => {
-    // Only initialize animations on client-side after hydration
-    if (!isClient) return;
+    if (!isMounted) {
+      return; // Don't run animations until the component is mounted
+    }
+
+    let animationController: unknown = null;
+    let heroAnimation: unknown = null;
+    let depthController: DepthAnimationController | null = null;
+    let depthEffectsTimeout: NodeJS.Timeout | null = null;
+
     // Initialize GSAP scroll animations
-    const animationController = initializeAnimations();
-    
+    animationController = initializeAnimations();
+
     // Initialize hero entrance animation
-    const heroAnimation = initializeHeroAnimation();
-    
+    heroAnimation = initializeHeroAnimation();
+
     // Initialize depth animation controller
-    const depthController = new DepthAnimationController();
-    
+    depthController = new DepthAnimationController();
+
     // Add hover animations
     addGSAPHoverAnimations();
-    
+
     // Add depth effects to specific elements after a delay
-    const depthEffectsTimeout = setTimeout(() => {
+    depthEffectsTimeout = setTimeout(() => {
       // Add 3D card effects to service cards
       document.querySelectorAll('.service-card').forEach(card => {
         add3DCardEffect(card, {
@@ -202,7 +221,7 @@ export default function HomeClient({
           liftHeight: 15
         });
       });
-      
+
       // Add 3D effects to portfolio items
       document.querySelectorAll('.portfolio-item').forEach(item => {
         add3DCardEffect(item, {
@@ -212,7 +231,7 @@ export default function HomeClient({
           liftHeight: 12
         });
       });
-      
+
       // Add 3D effects to testimonial cards
       document.querySelectorAll('.testimonial-card').forEach(card => {
         add3DCardEffect(card, {
@@ -222,19 +241,19 @@ export default function HomeClient({
           liftHeight: 18
         });
       });
-      
+
       // Create floating shapes in hero section
       const heroSection = document.querySelector('.hero-section');
       if (heroSection) {
-        depthController.createFloatingShapes(heroSection, 8);
+        depthController?.createFloatingShapes(heroSection, 8);
       }
-      
+
       // Create morphing background for sections
       const sectionsWithMorphing = document.querySelectorAll('.morphing-bg-section');
       sectionsWithMorphing.forEach(section => {
         createMorphingBackground(section);
       });
-      
+
       // Add enhanced parallax to background elements
       document.querySelectorAll('[data-parallax]').forEach(element => {
         const speed = parseFloat(element.getAttribute('data-parallax') || '0.5');
@@ -247,21 +266,25 @@ export default function HomeClient({
         });
       });
     }, 500);
-    
+
     // Cleanup on unmount
     return () => {
-      clearTimeout(depthEffectsTimeout);
+      if (depthEffectsTimeout) {
+        clearTimeout(depthEffectsTimeout);
+      }
       if (animationController) {
-        animationController.destroy();
+        (animationController as any).destroy(); // eslint-disable-line @typescript-eslint/no-explicit-any
       }
       if (heroAnimation) {
-        heroAnimation.kill();
+        (heroAnimation as any).kill(); // eslint-disable-line @typescript-eslint/no-explicit-any
       }
       if (depthController) {
         depthController.destroy();
       }
+      // Clean up hover animations to prevent duplicate listeners
+      cleanupGSAPHoverAnimations();
     };
-  }, [isClient]);
+  }, [isMounted]); // Only depend on isMounted to prevent re-runs
 
   // Helper functions
   const scrollToSection = (sectionId: string) => {
@@ -287,7 +310,12 @@ export default function HomeClient({
     { key: 'wedding' as const, label: 'Wedding' }
   ];
 
-  const filteredProjects = defaultProjects.filter(project => 
+  // Get all projects from both API and fallback data for filtering
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const apiProjects = (homepageData as any)?.projectSection?.featuredProjects || [];
+  const allProjects = apiProjects.length > 0 ? apiProjects : defaultProjects;
+  
+  const filteredProjects = allProjects.filter((project: Project) =>
     activeFilter === 'all' || project.category === activeFilter
   );
 
@@ -315,7 +343,39 @@ export default function HomeClient({
     'Lainnya'
   ];
 
-  const contactInfo = [
+  // Contact info from API data
+  const contactInfo = homepageData?.collaborationSection ? [
+    {
+      icon: <MapPin className="w-6 h-6 text-gold-500" />,
+      label: 'Alamat',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: `${(homepageData as any).collaborationSection?.address?.address || 'Jl. Raya'}, ${(homepageData as any).collaborationSection?.address?.city || 'Surabaya'}, ${(homepageData as any).collaborationSection?.address?.province || 'Jawa Timur'}`,
+      description: 'Lokasi kantor pusat kami'
+    },
+    {
+      icon: <Phone className="w-6 h-6 text-gold-500" />,
+      label: 'Telepon',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: (homepageData as any).collaborationSection?.phone ? `+${(homepageData as any).collaborationSection.phone}` : '+62 xxx xxxx xxxx',
+      description: 'Hubungi kami langsung'
+    },
+    {
+      icon: <Mail className="w-6 h-6 text-gold-500" />,
+      label: 'Email',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: (homepageData as any)?.contactSection?.email || 'narvex.ind@gmail.com',
+      description: 'Kirimi email untuk inquiry'
+    },
+    {
+      icon: <Instagram className="w-6 h-6 text-gold-500" />,
+      label: 'Instagram',
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      value: (homepageData as any)?.contactSection?.socialLinks?.instagram ? 
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (homepageData as any).contactSection.socialLinks.instagram.replace('https://www.instagram.com/', '@') : '@narvex.id',
+      description: 'Follow untuk update terbaru'
+    }
+  ] : [
     {
       icon: <MapPin className="w-6 h-6 text-gold-500" />,
       label: 'Alamat',
@@ -374,7 +434,7 @@ export default function HomeClient({
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
-    
+
     // Clear error when user starts typing
     if (errors[name as keyof ContactFormData]) {
       setErrors(prev => ({ ...prev, [name]: undefined }));
@@ -383,25 +443,48 @@ export default function HomeClient({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+    e.stopPropagation();
+
     if (!validateForm()) {
       return;
     }
 
     setIsSubmitting(true);
-    
+
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      setIsSubmitted(true);
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        service: '',
-        message: ''
+      const response = await fetch('/api/contact/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          service: formData.service,
+          budget: 'not_specified',
+          timeline: 'not_specified',
+          message: formData.message,
+          company: '',
+          subject: `Konsultasi ${formData.service} - ${formData.name}`
+        }),
       });
+
+      const result = await response.json();
+
+      if (result.success) {
+        setIsSubmitted(true);
+        setFormData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          message: ''
+        });
+      } else {
+        console.error('Form submission failed:', result.error);
+        // You can add error state handling here if needed
+      }
     } catch (error) {
       console.error('Error submitting form:', error);
     } finally {
@@ -423,20 +506,20 @@ export default function HomeClient({
                 <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500" data-float="true" data-float-amplitude="12" data-float-duration="3.5"></div>
               </div>
             </div>
-            
+
             {/* Depth Layer 2 - Middle */}
             <div className="absolute inset-0 opacity-25" data-depth-layer="2" data-parallax="0.5">
               <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-blue-400/20 to-gold-400/20 filter blur-lg" data-float="true" data-float-amplitude="10" data-float-duration="6"></div>
               <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-gradient-to-tr from-gold-400/15 to-blue-400/15 filter blur-lg" data-float="true" data-float-amplitude="18" data-float-duration="4.5"></div>
             </div>
-            
+
             {/* Depth Layer 3 - Closest */}
             <div className="absolute inset-0 opacity-30" data-depth-layer="1" data-parallax="0.2">
               <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-white/10 filter blur-sm" data-float="true" data-float-amplitude="8" data-float-duration="3" data-mouse-parallax="0.3"></div>
               <div className="absolute top-1/4 right-1/2 w-24 h-24 rounded-full bg-gold-300/20 filter blur-sm" data-float="true" data-float-amplitude="12" data-float-duration="4" data-mouse-parallax="0.2"></div>
               <div className="absolute bottom-1/2 right-1/4 w-40 h-40 rounded-full bg-blue-300/15 filter blur-sm" data-float="true" data-float-amplitude="15" data-float-duration="5.5" data-mouse-parallax="0.25"></div>
             </div>
-            
+
             {/* Morphing Gradient Overlay */}
             <div className="absolute inset-0 morphing-gradient opacity-60"></div>
           </div>
@@ -446,34 +529,46 @@ export default function HomeClient({
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center">
               {/* Text Content */}
               <div className="text-center lg:text-left depth-layer-2 w-full" data-mouse-parallax="0.1">
-                <h1 
-                  className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" 
-                  data-element="title" 
-                  data-text-animation="wave" 
-                  data-delay={animationAttrs.delay} 
-                  data-duration={animationAttrs.duration} 
-                  data-stagger={animationAttrs.stagger}
+                <h1
+                  className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight"
+                  data-element="title"
+                  data-text-animation="wave"
                   suppressHydrationWarning
                 >
-                  <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
-                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
-                  <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                  {homepageData?.heroSection ? (
+                    <>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <span className="block transform-3d break-words" data-tilt="8">{(homepageData as any).heroSection.title.split(' ').slice(0, 2).join(' ')}</span>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{(homepageData as any).heroSection.title.split(' ').slice(2, 4).join(' ')}</span>
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      <span className="block transform-3d break-words" data-tilt="6">{(homepageData as any).heroSection.title.split(' ').slice(4).join(' ')}</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="block transform-3d break-words" data-tilt="8">Indonesia&apos;s Premier</span>
+                      <span className="block text-gold-500 transform-3d break-words" data-tilt="10">MICE & Exhibition</span>
+                      <span className="block transform-3d break-words" data-tilt="6">Specialists</span>
+                    </>
+                  )}
                 </h1>
-                
-                <p 
-                  className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth" 
+
+                <p
+                  className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-3 sm:mb-4 max-w-2xl mx-auto lg:mx-0 text-depth"
                   suppressHydrationWarning
                 >
-                  CV. Nara Exhibition Indonesia
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData as any)?.heroSection?.subtitleLine1 || 'CV. Nara Exhibition Indonesia'}
                 </p>
-                
-                <p 
-                  className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium" 
+
+                <p
+                  className="text-base sm:text-lg md:text-xl text-gold-300 mb-6 sm:mb-8 max-w-2xl mx-auto lg:mx-0 text-depth font-medium"
                   suppressHydrationWarning
                 >
-                  Trusted by Government & Fortune 500 Companies
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData as any)?.heroSection?.subtitleLine2 || 'Trusted by Government & Fortune 500 Companies'}
                 </p>
-                
+
                 <div className="hero-buttons flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center lg:justify-start" data-mouse-parallax="0.08">
                   <Button
                     variant="secondary"
@@ -485,7 +580,7 @@ export default function HomeClient({
                     Lihat Portfolio
                     <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                  
+
                   <Button
                     variant="outline"
                     size="normal"
@@ -500,23 +595,62 @@ export default function HomeClient({
 
                 {/* Stats */}
                 <div className="hero-stats grid grid-cols-3 gap-3 sm:gap-6 lg:gap-8 mt-12 sm:mt-16 stagger-children" data-mouse-parallax="0.06">
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
-                  </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
-                  </div>
-                  <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
-                    <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
-                    <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
-                  </div>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData as any)?.heroSection?.statistic1 ? (
+                    <>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(homepageData?.heroSection as any)?.statistic1?.value}{(homepageData?.heroSection as any)?.statistic1?.suffix}
+                        </div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(homepageData?.heroSection as any)?.statistic1?.label}
+                        </div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(homepageData?.heroSection as any)?.statistic2?.value}{(homepageData?.heroSection as any)?.statistic2?.suffix}
+                        </div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(homepageData?.heroSection as any)?.statistic2?.label}
+                        </div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(homepageData?.heroSection as any)?.statistic3?.value}{(homepageData?.heroSection as any)?.statistic3?.suffix}
+                        </div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(homepageData?.heroSection as any)?.statistic3?.label}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">50+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Projects Completed</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">25+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Happy Clients</div>
+                      </div>
+                      <div className="text-center hover-depth-subtle glass-morphism rounded-lg p-3 sm:p-4 backdrop-blur-sm" data-tilt="3">
+                        <div className="text-2xl sm:text-3xl md:text-4xl font-bold mb-1 sm:mb-2 text-gold-500 text-depth">3+</div>
+                        <div className="text-gray-300 text-xs sm:text-sm md:text-base leading-tight">Years Experience</div>
+                      </div>
+                    </>
+                  )}
                 </div>
               </div>
 
               {/* Visual Content - Service Coverflow */}
               <div className="relative hidden lg:block w-full coverflow-container depth-layer-1 overflow-hidden" data-mouse-parallax="0.15">
+                {isMounted && (
                 <Swiper
                   effect={'coverflow'}
                   grabCursor={true}
@@ -535,9 +669,23 @@ export default function HomeClient({
                   modules={[EffectCoverflow, Pagination, Navigation]}
                   className="mySwiper perspective-1500"
                 >
-                  {coverflowServices.map((service, index) => (
-                    <SwiperSlide key={index} style={{ width: '300px' }}>
-                      <div 
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {((homepageData?.heroSection as any)?.hero_slides || coverflowServices).map((slide: unknown, index: number) => {
+                    // Handle both API data and fallback data
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const slideData = slide as any;
+                    const service = slideData.image ? {
+                      image: (() => {
+                        const slideMap = mapStrapiLogo(slideData.image, 'medium', slideData.title);
+                        return slideMap.hasLogo ? slideMap.logoUrl : slideData.image || 'https://picsum.photos/800/600?random=' + (index + 1);
+                      })(),
+                      title: slideData.title || slideData.title,
+                      subtitle: slideData.subtitle || slideData.subtitle
+                    } : slideData; // If it's already the old format, use as is
+                    
+                    return (
+                      <SwiperSlide key={index} style={{ width: '300px' }}>
+                      <div
                         className="relative rounded-2xl overflow-hidden h-80 shadow-depth-3 hover:shadow-depth-5 hover-depth transform-3d backdrop-blur-sm"
                         style={{
                           backgroundImage: `url(${service.image})`,
@@ -548,22 +696,24 @@ export default function HomeClient({
                       >
                         {/* Enhanced overlay with depth */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/30 to-transparent hover:from-black/50 hover:via-black/20 transition-all duration-500"></div>
-                        
+
                         {/* Glass morphism overlay */}
                         <div className="absolute inset-0 glass-morphism-dark opacity-20 hover:opacity-30 transition-opacity duration-300"></div>
-                        
+
                         {/* Text content with depth */}
                         <div className="absolute bottom-0 left-0 right-0 p-6 text-white transform-3d">
                           <h3 className="font-semibold text-lg mb-2 text-depth-lg">{service.title}</h3>
                           <p className="text-gray-200 text-sm text-depth">{service.subtitle}</p>
                         </div>
-                        
+
                         {/* Floating accent */}
                         <div className="absolute top-4 right-4 w-3 h-3 bg-gold-400 rounded-full opacity-60 animate-pulse" data-float="true" data-float-amplitude="3" data-float-duration="2"></div>
-                      </div>
-                    </SwiperSlide>
-                  ))}
+                        </div>
+                      </SwiperSlide>
+                    );
+                  })}
                 </Swiper>
+                )}
               </div>
             </div>
           </div>
@@ -575,9 +725,12 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-        
+
         {/* Company Introduction - CV. Nara Exhibition Indonesia */}
-        <section id="about" className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
+        <AnimatedSection
+          id="about"
+          animation="slide-up"
+          className="section-padding bg-gradient-to-br from-white via-blue-50/30 to-gray-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container relative overflow-hidden">
           {/* Enhanced floating background elements */}
           <div className="absolute inset-0 overflow-hidden pointer-events-none">
             {/* Original circles */}
@@ -587,7 +740,7 @@ export default function HomeClient({
             <div className="absolute top-10 left-10 w-28 h-28 bg-blue-300/10 rounded-full blur-3xl" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
             <div className="absolute bottom-20 right-20 w-36 h-36 bg-gold-300/12 rounded-full blur-2xl" data-float="true" data-float-amplitude="22" data-float-duration="9"></div>
             <div className="absolute top-1/2 left-1/3 w-20 h-20 bg-blue-200/15 rounded-full blur-xl" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
-            
+
             {/* Additional circles for enhanced visual depth */}
             <div className="absolute top-1/6 right-1/8 w-16 h-16 bg-blue-300/18 rounded-full filter blur-lg" data-parallax="0.25" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
             <div className="absolute bottom-1/6 left-1/4 w-24 h-24 bg-gold-100/15 rounded-full filter blur-xl" data-parallax="0.35" data-float="true" data-float-amplitude="16" data-float-duration="8"></div>
@@ -596,10 +749,10 @@ export default function HomeClient({
             <div className="absolute top-1/8 left-2/3 w-18 h-18 bg-blue-100/20 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
             <div className="absolute bottom-1/8 right-2/5 w-28 h-28 bg-gold-300/10 rounded-full filter blur-2xl" data-parallax="0.15" data-float="true" data-float-amplitude="20" data-float-duration="9"></div>
           </div>
-          
+
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-30"></div>
-          
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl text-center relative z-10">
             {/* Decorative Top Divider */}
             <div className="flex items-center justify-center mb-8 sm:mb-12">
@@ -607,101 +760,58 @@ export default function HomeClient({
               <div className="mx-3 sm:mx-4 w-2 h-2 rounded-full bg-gold-500"></div>
               <div className="h-px bg-gradient-to-r from-transparent via-blue-300 to-transparent w-16 sm:w-24"></div>
             </div>
-            
+
             <div className="max-w-7xl mx-auto z-depth-2">
-              <h2 
-                className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand"  
-                data-element="heading" 
-                data-text-animation="rotate-in" 
-                data-delay={animationAttrs.delay} 
-                data-duration={animationAttrs.duration} 
-                data-stagger={animationAttrs.stagger} 
+              <h2
+                className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand"
+                data-element="heading"
+                data-text-animation="rotate-in"
                 data-tilt="4"
                 suppressHydrationWarning
               >
-                CV. Nara Exhibition Indonesia
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(homepageData?.companySection as any)?.title || 'CV. Nara Exhibition Indonesia'}
               </h2>
               <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.03">
-                Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, 
-                mengkhususkan diri dalam MICE services, event production, dan solusi kreatif 
-                komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan 
-                layanan end-to-end untuk kesuksesan setiap project Anda.
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(homepageData?.companySection as any)?.description || 'Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, mengkhususkan diri dalam MICE services, event production, dan solusi kreatif komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan layanan end-to-end untuk kesuksesan setiap project Anda.'}
               </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5 lg:gap-6 mt-12 sm:mt-16 animate-stagger">
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
-                  data-stagger="0"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <Image
-                      src="https://picsum.photos/id/10/512/512"
-                      alt="Creative Design & Branding"
-                      width={512}
-                      height={512}
-                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                    />
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Creative Design & Branding</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Brand identity, graphic design, dan visual communication</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
-                  data-stagger="50"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <Image
-                      src="https://picsum.photos/id/10/512/512"
-                      alt="Event Production"
-                      width={512}
-                      height={512}
-                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                    />
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Event Production</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Event planning, design, dan technical support</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
-                  data-stagger="100"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <Image
-                      src="https://picsum.photos/id/10/512/512"
-                      alt="Digital Marketing"
-                      width={512}
-                      height={512}
-                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                    />
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Digital Marketing</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Social media, SEO, digital advertising, dan website development</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
-                <Card 
-                  variant="service" 
-                  className="service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform" 
-                  data-stagger="150"
-                >
-                  <CardContent className="px-4 py-8 flex flex-col h-full">
-                    <Image
-                      src="https://picsum.photos/id/10/512/512"
-                      alt="Brand Consultation"
-                      width={512}
-                      height={512}
-                      className="service-image relative w-28 h-28 sm:w-36 sm:h-36 rounded-3xl overflow-hidden mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                    />
-                    <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">Brand Consultation</h3>
-                    <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">Strategic planning dan brand positioning</p>
-                    <div className="mt-4 h-1 w-0 bg-gradient-to-r from-gold-500 to-blue-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
-                  </CardContent>
-                </Card>
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {((homepageData?.companySection as any)?.selected_companies || [
+                  { id: 1, name: 'Creative Design & Branding', description: 'Brand identity, graphic design, dan visual communication', logo: { formats: { medium: { url: '' } } } },
+                  { id: 2, name: 'Event Production', description: 'Event planning, design, dan technical support', logo: { formats: { medium: { url: '' } } } },
+                  { id: 3, name: 'Digital Marketing', description: 'Social media, SEO, digital advertising, dan website development', logo: { formats: { medium: { url: '' } } } },
+                  { id: 4, name: 'Brand Consultation', description: 'Strategic planning dan brand positioning', logo: { formats: { medium: { url: '' } } } }
+                ]).map((company: unknown, index: number) => {
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  const companyData = company as any;
+                  return (
+                  <Card
+                    key={companyData.id}
+                    variant="service"
+                    className="service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform"
+                    data-stagger={index * 50}
+                  >
+                    <CardContent className="px-4 py-8 flex flex-col h-full">
+                      <div className="service-icon w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 overflow-hidden">
+                        <SafeCompanyLogoImage
+                          src={companyData.logo}
+                          alt={companyData.name}
+                          fallbackText={companyData.name?.slice(0, 3).toUpperCase() || 'LOGO'}
+                          width={80}
+                          height={80}
+                        />
+                      </div>
+                      <h3 className="text-base font-bold mb-4 text-high-contrast group-hover:text-blue-800 transition-colors duration-300 leading-snug text-center">{companyData.name}</h3>
+                      <p className="text-sm text-gray-contrast-600 flex-1 leading-relaxed group-hover:text-gray-contrast-700 transition-colors duration-300 mb-4">{companyData.description || companyData.name}</p>
+                      <div className="mt-4 h-1 w-0 bg-gradient-to-r from-blue-500 to-gold-500 group-hover:w-full transition-all duration-500 rounded-full mx-auto"></div>
+                    </CardContent>
+                  </Card>
+                  );
+                })}
               </div>
-              
+
               {/* Bottom Decorative Element */}
               <div className="flex items-center justify-center mt-16">
                 <div className="h-px bg-gradient-to-r from-transparent via-gold-300 to-transparent w-32"></div>
@@ -710,8 +820,8 @@ export default function HomeClient({
               </div>
             </div>
           </div>
-        </section>
-        
+        </AnimatedSection>
+
         {/* Services Section */}
         <section id="services" className="section-padding bg-gradient-to-br from-gray-50 to-blue-50 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
           {/* Floating background elements */}
@@ -720,10 +830,10 @@ export default function HomeClient({
             <div className="absolute bottom-1/3 right-1/5 w-24 h-24 bg-gold-200/25 rounded-full filter blur-lg" data-parallax="0.4" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
             <div className="absolute top-2/3 left-2/3 w-40 h-40 bg-blue-100/15 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
           </div>
-          
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.05">
+            <div className="text-center mb-12 sm:mb-16 depth-layer-1" data-mouse-parallax="0.05">
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand" data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="4">
                 Layanan Kami
               </h2>
@@ -732,47 +842,75 @@ export default function HomeClient({
               </p>
             </div>
 
-            
+
             {/* Services Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.08">
-              {services.map((service, index) => (
-                <Card
-                  key={service.id}
-                  variant="service"
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform`}
-                  data-stagger={index * 150}
-                  data-tilt="8"
-                  data-mouse-parallax="0.12"
-                >
-                  {/* Icon */}
-                  <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300 animate-pulse-hover">
-                    <div className="w-16 h-16 gradient-secondary rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300">
-                      {service.icon}
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {((homepageData?.serviceSection as any)?.services || services).map((service: unknown, index: number) => {
+                // Handle both API data and fallback data
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const serviceData = service as any;
+                const apiService = serviceData.icon ? {
+                  id: serviceData.id || index.toString(),
+                  title: serviceData.title,
+                  description: serviceData.description,
+                  icon: (() => {
+                    const iconMap = mapStrapiLogo(serviceData.icon, 'medium', serviceData.title);
+                    return iconMap.hasLogo ? (
+                      <SafeServiceIconImage
+                        src={serviceData.icon}
+                        alt={iconMap.altText}
+                        fallbackText={serviceData.title?.slice(0, 2).toUpperCase() || 'IC'}
+                        size={64}
+                        className="w-16 h-16"
+                      />
+                    ) : (
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center bg-gradient-to-br from-blue-500 to-gold-500">
+                        <Palette className="w-8 h-8 text-white" />
+                      </div>
+                    );
+                  })(),
+                  features: serviceData.features || []
+                } : serviceData;
+                
+                return (
+                  <Card
+                    key={apiService.id}
+                    variant="service"
+                    className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform`}
+                    data-stagger={index * 150}
+                    data-tilt="8"
+                    data-mouse-parallax="0.12"
+                  >
+                    {/* Icon */}
+                    <div className="mb-6 transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-16 h-16 rounded-2xl flex items-center justify-center mb-4 group-hover:shadow-glow-gold transition-all duration-300 overflow-hidden">
+                        {apiService.icon}
+                      </div>
                     </div>
-                  </div>
-                  
-                  {/* Content */}
-                  <div className="flex-1 flex flex-col">
-                    <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
-                      {service.title}
-                    </h3>
-                    
-                    <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
-                      {service.description}
-                    </p>
-                    
-                    {/* Features List */}
-                    <ul className="space-y-3 mb-6 flex-1 list-none">
-                      {service.features.map((feature, idx) => (
-                        <li key={idx} className="flex items-start text-gray-contrast-700  animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
-                          <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
-                          <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                    
+
+                    {/* Content */}
+                    <div className="flex-1 flex flex-col">
+                      <h3 className="text-2xl font-bold mb-4 transition-colors text-high-contrast">
+                        {apiService.title}
+                      </h3>
+
+                      <p className="text-gray-contrast-600 mb-6 leading-relaxed text-justify">
+                        {apiService.description}
+                      </p>
+
+                      {/* Features List */}
+                      <ul className="space-y-3 mb-6 flex-1 list-none">
+                        {(apiService.features || []).map((feature: string, idx: number) => (
+                          <li key={idx} className="flex items-start text-gray-contrast-700 animate-stagger-3" data-stagger={(index * 150) + (idx * 50)}>
+                            <span className="w-2 h-2 bg-gold-500 rounded-full mt-2 mr-3 flex-shrink-0 transition-all duration-300 hover:scale-150" aria-hidden="true"></span>
+                            <span className="text-sm font-medium group-hover:text-blue-800 transition-colors leading-relaxed">{feature}</span>
+                          </li>
+                        ))}
+                      </ul>
+
                     {/* CTA Button */}
-                    <button 
+                    <button
                       onClick={scrollToContact}
                       className="font-semibold transition-all duration-300 group flex items-center hover:shadow-lg px-4 py-2 rounded-lg hover:bg-blue-50 mt-auto" style={{color: 'var(--gold-700)'}}
                     >
@@ -781,11 +919,12 @@ export default function HomeClient({
                     </button>
                   </div>
                 </Card>
-              ))}
+                );
+              })}
             </div>
-            
+
             {/* Bottom CTA */}
-            <div className="text-center  animate-stagger-4">
+            <div className="text-center animate-stagger-4">
               <p className="body-large mb-8 text-gray-contrast-600">
                 Siap untuk mengembangkan bisnis Anda? Mari diskusikan project impian Anda bersama tim ahli kami.
               </p>
@@ -801,7 +940,7 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-        
+
         {/* Portfolio Section */}
         <section id="portfolio" className="section-padding bg-white scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
           {/* Enhanced floating background elements */}
@@ -812,7 +951,7 @@ export default function HomeClient({
             <div className="absolute top-3/4 right-1/3 w-20 h-20 bg-gold-200/18 rounded-full filter blur-lg" data-parallax="0.15" data-float="true" data-float-amplitude="12" data-float-duration="5"></div>
             <div className="absolute top-1/3 left-1/2 w-24 h-24 bg-blue-200/10 rounded-full filter blur-xl" data-parallax="0.3" data-float="true" data-float-amplitude="16" data-float-duration="6"></div>
             <div className="absolute bottom-1/2 right-1/5 w-32 h-32 bg-gold-100/12 rounded-full filter blur-2xl" data-parallax="0.2" data-float="true" data-float-amplitude="20" data-float-duration="8"></div>
-            
+
             {/* Additional circles for enhanced visual depth */}
             <div className="absolute top-1/8 left-1/8 w-22 h-22 bg-blue-300/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="14" data-float-duration="6"></div>
             <div className="absolute bottom-1/8 right-1/8 w-26 h-26 bg-gold-200/12 rounded-full filter blur-2xl" data-parallax="0.3" data-float="true" data-float-amplitude="18" data-float-duration="8"></div>
@@ -821,20 +960,20 @@ export default function HomeClient({
             <div className="absolute top-1/6 right-1/6 w-20 h-20 bg-blue-200/12 rounded-full filter blur-2xl" data-parallax="0.45" data-float="true" data-float-amplitude="16" data-float-duration="7"></div>
             <div className="absolute bottom-1/6 left-2/3 w-24 h-24 bg-gold-300/15 rounded-full filter blur-xl" data-parallax="0.2" data-float="true" data-float-amplitude="15" data-float-duration="9"></div>
           </div>
-          
+
           {/* Decorative divider */}
           <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-gold-500 to-transparent opacity-30"></div>
-          
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.04">
+            <div className="text-center mb-12 sm:mb-16 depth-layer-1" data-mouse-parallax="0.04">
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Portfolio Terpilih
               </h2>
               <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.02">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
-              
+
               {/* Filter Buttons */}
               <div className="flex flex-wrap justify-center gap-2 sm:gap-4" data-mouse-parallax="0.06">
                 {filters.map((filter) => (
@@ -853,54 +992,74 @@ export default function HomeClient({
                 ))}
               </div>
             </div>
-            
+
             {/* Projects Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 mb-12 sm:mb-16 animate-stagger stagger-children" data-mouse-parallax="0.1">
-              {filteredProjects.map((project, index) => (
-                <Card
-                  key={project.id}
-                  variant="portfolio"
-                  className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
-                  data-stagger={index * 150}
-                  data-tilt="6"
-                  data-mouse-parallax="0.15"
-                >
-                  <div className="relative overflow-hidden rounded-2xl">
-                    <div className="relative w-full h-64">
-                      <Image
-                        src={project.images[0] || '/placeholder-image.jpg'}
-                        alt={project.title}
-                        fill
-                        className="object-cover group-hover:scale-110 transition-transform duration-500"
-                        sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                      />
-                    </div>
-                    
+              {filteredProjects.map((project: Project, index: number) => {
+                // Handle both API data and fallback data
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const apiProject = (project as any).cover ? {
+                  id: project.id.toString(),
+                  title: project.title,
+                  slug: project.slug,
+                  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                  description: (project as any).excerpt,
+                  category: project.category || 'creative', // Ensure category is available for filtering
+                  tags: project.tags || [], // Ensure tags are available for display
+                  images: [(() => {
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    const coverMap = mapStrapiLogo((project as any).cover, 'medium', project.title);
+                    return coverMap.hasLogo ? coverMap.logoUrl : '/placeholder-image.jpg';
+                  })()]
+                } : project;
+                
+                return (
+                  <Link key={apiProject.id || project.id} href={`/portfolio/${apiProject.slug || project.slug}`}>
+                    <Card
+                      variant="portfolio"
+                      className={`portfolio-item group cursor-pointer shadow-depth-2 hover:shadow-depth-4 hover-depth transform-3d backdrop-blur-sm`}
+                      data-stagger={index * 150}
+                      data-tilt="6"
+                      data-mouse-parallax="0.15"
+                    >
+                    <div className="relative overflow-hidden rounded-2xl">
+                      <div className="relative w-full h-64">
+                        <SafePortfolioImage
+                          src={apiProject.images?.[0] || project.images[0] || '/placeholder-image.jpg'}
+                          alt={apiProject.title || project.title}
+                          fallbackText={(apiProject.title || project.title)?.slice(0, 2).toUpperCase() || 'PR'}
+                          width={400}
+                          height={256}
+                        />
+                      </div>
+
                     {/* Overlay */}
                     <div className="absolute inset-0 bg-gradient-to-t from-blue-900/90 via-blue-900/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end">
                       <div className="p-6 text-white w-full">
-                        <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">{project.description}</p>
+                        <h3 className="text-xl font-bold mb-2">{apiProject.title || project.title}</h3>
+                        <p className="text-gray-200 text-sm mb-3 line-clamp-2">{apiProject.description || project.description}</p>
                         <div className="flex flex-wrap gap-2 mb-3">
-                          {project.tags.slice(0, 2).map((tag, idx) => (
+                          {((apiProject.tags || project.tags) || []).slice(0, 2).map((tag: string, idx: number) => (
                             <span key={idx} className="bg-gold-500 px-3 py-1 rounded-full text-xs font-medium">
                               {tag}
                             </span>
                           ))}
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-300">{project.client}</span>
+                          <span className="text-xs text-gray-300">{project.client || 'Narvex'}</span>
                           <ExternalLink className="w-4 h-4" />
                         </div>
                       </div>
                     </div>
                   </div>
                 </Card>
-              ))}
+              </Link>
+            );
+          })}
             </div>
-            
+
             {/* Bottom CTA */}
-            <div className="text-center  animate-stagger-4">
+            <div className="text-center animate-stagger-4">
               <p className="body-large mb-8 text-gray-contrast-600">
                 Tertarik dengan hasil kerja kami? Mari diskusikan project Anda dan wujudkan visi kreatif bersama.
               </p>
@@ -926,7 +1085,7 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-        
+
         {/* Testimonials Section */}
         <section id="testimonials" className="section-padding bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
           {/* Enhanced floating background elements */}
@@ -936,10 +1095,10 @@ export default function HomeClient({
             <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
             <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
           </div>
-          
+
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl relative z-depth-2">
             {/* Section Header */}
-            <div className="text-center mb-12 sm:mb-16  depth-layer-1" data-mouse-parallax="0.03">
+            <div className="text-center mb-12 sm:mb-16 depth-layer-1" data-mouse-parallax="0.03">
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Kata Mereka
               </h2>
@@ -947,104 +1106,269 @@ export default function HomeClient({
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
-            
+
             {/* Testimonials Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16 stagger-children" data-mouse-parallax="0.08">
-              {defaultTestimonials.map((testimonial, index) => (
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {((homepageData?.testimonialSection as any)?.selected_testimonials || defaultTestimonials).map((testimonial: unknown, testimonialsIndex: number) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const testimonialData = testimonial as any;
+                return (
                 <Card
-                  key={testimonial.id}
-                  className={`service-card group text-center flex flex-col h-full min-h-[280px]  rounded-3xl will-change-transform testimonial-accessible bg-white card-accessible`}
-                  data-stagger={index * 200}
+                  key={testimonialData.id || testimonialData.documentId || testimonialsIndex}
+                  className={`service-card group text-center flex flex-col h-full min-h-[280px] rounded-3xl will-change-transform testimonial-accessible card-accessible`}
+                  data-stagger={testimonialsIndex * 200}
                   data-tilt="8"
                   data-mouse-parallax="0.12"
                   hover={true}
                 >
-                  {/* Rating */}
-                  <div className="flex mb-6" role="img" aria-label={`Rating: ${testimonial.rating} out of 5 stars`}>
-                    {renderStars(testimonial.rating)}
-                  </div>
-                  
-                  {/* Quote */}
-                  <blockquote className="quote font-normal text-medium-contrast text-lg mb-6 italic leading-relaxed">
-                    &ldquo;{testimonial.quote}&rdquo;
-                  </blockquote>
-                  
-                  {/* Author Info */}
-                  <div className="flex items-center">
-                    <div className="relative w-16 h-16 mr-4">
-                      <Image
-                        src={testimonial.avatar}
-                        alt={`${testimonial.name}, ${testimonial.position} at ${testimonial.company}`}
-                        fill
-                        className="rounded-full object-cover"
-                        sizes="64px"
-                      />
+                  {/* Use API data if available, otherwise fallback to default */}
+                  {testimonialData.rating && (
+                    <div className="flex mb-6 justify-center" role="img" aria-label={`Rating: ${testimonialData.rating} out of 5 stars`}>
+                      {renderStars(testimonialData.rating)}
                     </div>
-                    <div>
-                      <h4 className="author-name font-bold text-lg text-high-contrast">{testimonial.name}</h4>
-                      <p className="author-position text-gray-contrast-600 text-sm font-medium">{testimonial.position}</p>
-                      <p className="author-company text-sm font-semibold author-company-gold">{testimonial.company}</p>
-                      {testimonial.project && (
-                        <p className="author-project text-gray-contrast-500 text-xs mt-1 font-medium">{testimonial.project}</p>
+                  )}
+
+                  {/* Quote */}
+                  <blockquote className="quote font-normal text-gray-contrast-700 text-lg mb-6 italic leading-relaxed px-4">
+                    &ldquo;{testimonialData.content || testimonialData.quote}&rdquo;
+                  </blockquote>
+
+                  {/* Author Info */}
+                  <div className="flex items-center justify-start mt-auto px-4">
+                    {testimonialData.avatar ? (
+                      <div className="relative w-16 h-16 mr-4">
+                        {isMounted ? (
+                          (() => {
+                            try {
+                              // Debug: log avatar data
+                              console.log('Avatar data:', testimonialData.avatar);
+                              
+                              // Use getStrapiImageUrl for avatar images
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              const avatarUrl = getStrapiImageUrl(testimonialData.avatar as any, 'medium');
+                              const altText = testimonialData.avatar.alternativeText || testimonialData.clientName || testimonialData.name || 'Avatar';
+                              
+                              console.log('Avatar URL:', avatarUrl);
+                              
+                              return avatarUrl ? (
+                                <SafeAvatarImage
+                                  src={avatarUrl}
+                                  alt={altText}
+                                  fallbackText={(testimonialData.clientName || testimonialData.name || 'U').charAt(0).toUpperCase()}
+                                  size={64}
+                                />
+                              ) : (
+                                <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                                  <span className="text-gold-700 text-lg font-bold">
+                                    {(testimonialData.clientName || testimonialData.name || 'U').charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                              );
+                            } catch (error) {
+                              console.error('Error processing avatar:', error);
+                              return (
+                                <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                                  <span className="text-gold-700 text-lg font-bold">
+                                    {(testimonialData.clientName || testimonialData.name || 'U').charAt(0).toUpperCase()}
+                                  </span>
+                                </div>
+                              );
+                            }
+                          })()
+                        ) : (
+                          <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                            <span className="text-gold-700 text-lg font-bold">
+                              {(testimonialData.clientName || testimonialData.name || 'U').charAt(0).toUpperCase()}
+                            </span>
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      <div className="relative w-16 h-16 mr-4">
+                        <div className="w-full h-full rounded-full bg-gradient-to-br from-gold-100 to-gold-200 flex items-center justify-center border-2 border-gold-300">
+                          <span className="text-gold-700 text-lg font-bold">
+                            {(testimonialData.clientName || testimonialData.name || 'U').charAt(0).toUpperCase()}
+                          </span>
+                        </div>
+                      </div>
+                    )}
+                    <div className="text-left">
+                      <h4 className="author-name font-bold text-lg text-gray-contrast-800">
+                        {testimonialData.clientName || testimonialData.name}
+                      </h4>
+                      <p className="author-position text-gray-contrast-600 text-sm font-medium">
+                        {testimonialData.clientTitle || testimonialData.position}
+                      </p>
+                      <p className="author-company text-sm font-semibold" style={{color: 'var(--gold-700)'}}>
+                        {testimonialData.companyName || testimonialData.company}
+                      </p>
+                      {testimonialData.project && (
+                        <p className="author-project text-gray-contrast-500 text-xs mt-1 font-medium">{testimonialData.project}</p>
                       )}
                     </div>
                   </div>
                 </Card>
-              ))}
+                );
+              })}
             </div>
-            
-            {/* Client Logos Carousel */}
+
+            {/* Client Testimonials and Logos Carousel */}
             <div className="animate-fade-in animation-delay-600 no-shadow">
-              <p className="text-center mb-8 text-lg client-carousel-text">
+              <h3 className="text-center mb-6 text-2xl font-bold text-white testimonial-carousel-heading">
                 Dipercaya oleh:
-              </p>
+              </h3>
               <div className="no-shadow">
-                <ClientCarousel clients={defaultClients} autoScroll={true} scrollSpeed={25} />
+                {isMounted && (
+                  <ClientCarousel 
+                    clients={(homepageData?.testimonialSection as any)?.clients?.map((client: unknown) => { // eslint-disable-line @typescript-eslint/no-explicit-any
+                      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                      const clientData = client as any;
+                      return {
+                        name: clientData.name,
+                        logo: clientData.logo
+                      };
+                    }) || defaultClients} 
+                    autoScroll={true} 
+                    scrollSpeed={25} 
+                  />
+                )}
               </div>
             </div>
-            
+
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>98%</div>
-                <div className="text-gray-300">Client Satisfaction</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>50+</div>
-                <div className="text-gray-300">Projects Delivered</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>25+</div>
-                <div className="text-gray-300">Happy Clients</div>
-              </div>
-              <div className="text-center">
-                <div className="text-4xl md:text-5xl font-bold mb-2" style={{color: 'var(--gold-500)'}}>3+</div>
-                <div className="text-gray-300">Years Experience</div>
-              </div>
+              {homepageData?.testimonialSection?.statistic1 ? (
+                <>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.testimonialSection as any)?.statistic1?.value}{(homepageData?.testimonialSection as any)?.statistic1?.suffix}
+                    </div>
+                    <div className="text-gold-300">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.testimonialSection as any)?.statistic1?.label}
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.testimonialSection as any)?.statistic2?.value}{(homepageData?.testimonialSection as any)?.statistic2?.suffix}
+                    </div>
+                    <div className="text-gold-300">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.testimonialSection as any)?.statistic2?.label}
+                    </div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.testimonialSection as any)?.statistic3?.value}{(homepageData?.testimonialSection as any)?.statistic3?.suffix}
+                    </div>
+                    <div className="text-gold-300">
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.testimonialSection as any)?.statistic3?.label}
+                    </div>
+                  </div>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData?.testimonialSection as any)?.statistic4 && (
+                    <div className="text-center">
+                      <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {(homepageData?.testimonialSection as any)?.statistic4?.value}{(homepageData?.testimonialSection as any)?.statistic4?.suffix}
+                      </div>
+                      <div className="text-gold-300">
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {(homepageData?.testimonialSection as any)?.statistic4?.label}
+                      </div>
+                    </div>
+                  )}
+                </>
+              ) : (
+                <>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">98%</div>
+                    <div className="text-gold-300">Client Satisfaction</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">50+</div>
+                    <div className="text-gold-300">Projects Delivered</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">25+</div>
+                    <div className="text-gold-300">Happy Clients</div>
+                  </div>
+                  <div className="text-center">
+                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">3+</div>
+                    <div className="text-gold-300">Years Experience</div>
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </section>
-        
+
         {/* Latest Updates - Blog/News Integration */}
-        <section className="section-padding bg-white scroll-snap-section">
+        <AnimatedSection
+          animation="fade-in"
+          className="section-padding bg-white scroll-snap-section">
           <div className="container mx-auto px-6">
-            <div className="text-center mb-16 ">
-              <h2 className="heading-2 mb-6  animate-stagger-1">Latest Updates</h2>
-              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto  animate-stagger-2">
+            <div className="text-center mb-16">
+              <h2 className="heading-2 mb-6">Latest Updates</h2>
+              <p className="body-large text-gray-contrast-600 max-w-3xl mx-auto">
                 Berita terbaru, insights industri, dan stories dari project-project terbaru kami.
               </p>
             </div>
-            
+
             {/* Centered Blog Articles Container */}
             <div className="flex justify-center">
               <div className="w-full max-w-5xl">
                 {/* Blog Articles */}
-                <div className="">
+                <div >
                   <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 gap-6">
                     {recentArticles.map((article, index) => (
-                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow  card-accessible" data-stagger={index * 200}>
-                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center">
-                          <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                      <article key={article.id} className="article-card bg-gray-contrast-50 rounded-2xl overflow-hidden hover:shadow-lg transition-shadow card-accessible" data-stagger={index * 200}>
+                        <div className="h-40 bg-gray-contrast-200 flex items-center justify-center overflow-hidden">
+                          {(() => {
+                            const articleImage = article.featuredImage;
+                            
+                            // Check if it's a Strapi image object or a local path
+                            if (articleImage && typeof articleImage === 'object' && articleImage.url) {
+                              // It's a Strapi image object with formats - use getStrapiImageUrl to build proper URL
+                              // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                              const imageUrl = getStrapiImageUrl(articleImage as any, 'medium');
+                              const altText = articleImage.alternativeText || article.title;
+                              
+                              
+                              return imageUrl ? (
+                                <SafeArticleImage
+                                  src={imageUrl}
+                                  alt={altText}
+                                  fallbackText={article.title?.slice(0, 2).toUpperCase() || 'AR'}
+                                  width={400}
+                                  height={160}
+                                />
+                              ) : (
+                                <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                              );
+                            } else if (articleImage && typeof articleImage === 'string') {
+                              // It's a local path string
+                              return (
+                                <SafeArticleImage
+                                  src={articleImage}
+                                  alt={article.title}
+                                  fallbackText={article.title?.slice(0, 2).toUpperCase() || 'AR'}
+                                  width={400}
+                                  height={160}
+                                />
+                              );
+                            } else {
+                              // No image available, show fallback
+                              return (
+                                <div className="text-4xl font-bold opacity-20 text-gold-500">{index + 1}</div>
+                              );
+                            }
+                          })()}
                         </div>
                         <div className="p-6">
                           <div className="text-sm font-medium mb-2 capitalize" style={{color: 'var(--gold-700)'}}>
@@ -1056,7 +1380,19 @@ export default function HomeClient({
                           <p className="text-gray-contrast-600 mb-4 line-clamp-2 text-sm">
                             {article.excerpt}
                           </p>
-                          <a 
+                          
+                          {/* Article Tags */}
+                          {(article.tags || []).length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-3">
+                              {article.tags.slice(0, 3).map((tag: string, idx: number) => (
+                                <span key={idx} className="bg-blue-100 text-blue-800 px-2 py-1 rounded text-xs font-medium">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          )}
+                          
+                          <a
                             href={`/blog/${article.slug}`}
                             className="font-medium transition-colors text-sm hover:opacity-80 link-accessible" style={{color: 'var(--gold-700)'}}
                           >
@@ -1069,15 +1405,15 @@ export default function HomeClient({
                 </div>
               </div>
             </div>
-            
+
             <div className="text-center mt-12">
               <Link href="/blog" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block hover:opacity-90 btn-accessible-primary blog-button">
                 Lihat Semua Artikel
               </Link>
             </div>
           </div>
-        </section>
-        
+        </AnimatedSection>
+
         {/* Multi-Channel Contact CTA */}
         <section className="min-h-screen flex items-center py-20 bg-blue-900 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container floating-container">
           {/* Enhanced floating background elements */}
@@ -1087,53 +1423,67 @@ export default function HomeClient({
             <div className="absolute top-2/3 left-1/2 w-24 h-24 bg-white/10 rounded-full filter blur-lg" data-parallax="0.5" data-float="true" data-float-amplitude="15" data-float-duration="6"></div>
             <div className="absolute top-1/4 right-2/3 w-28 h-28 bg-gold-200/12 rounded-full filter blur-xl" data-parallax="0.25" data-float="true" data-float-amplitude="20" data-float-duration="10"></div>
           </div>
-          
+
           <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 ">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6  animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                Siap Memulai Project Anda?
+            <div className="text-center mb-12 scroll-animate-scale">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(homepageData?.contactSection as any)?.title || 'Siap Memulai Project Anda?'}
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto  animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
-                mewujudkan visi kreatif Anda menjadi kenyataan.
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(homepageData?.contactSection as any)?.description || 'Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan.'}
               </p>
             </div>
-            
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
               <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+                <p className="text-gray-300 text-sm">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData?.contactSection as any)?.email || 'narvex.ind@gmail.com'}
+                </p>
               </a>
-              
+
               <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="50">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData?.contactSection as any)?.phone_number ? '+' + (homepageData?.contactSection as any)?.phone_number : '+62 xxx xxxx xxxx'}
+                </p>
               </a>
-              
+
               <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
+                <p className="text-gray-300 text-sm">
+                  {(homepageData?.contactSection as any)?.socialLinks?.instagram ? // eslint-disable-line @typescript-eslint/no-explicit-any
+                    (homepageData?.contactSection as any)?.socialLinks?.instagram?.replace('https://www.instagram.com/', '@') : // eslint-disable-line @typescript-eslint/no-explicit-any
+                    '@narvex.id'}
+                </p>
               </a>
-              
+
               <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="150">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  {(homepageData?.contactSection as any)?.phone_number ? '+' + (homepageData?.contactSection as any)?.phone_number : '+62 xxx xxxx xxxx'}
+                </p>
               </a>
             </div>
-            
-            <div className="text-center  animate-stagger-4">
+
+            <div className="text-center animate-stagger-4">
               <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
               </Link>
@@ -1143,7 +1493,7 @@ export default function HomeClient({
             </div>
           </div>
         </section>
-        
+
         {/* Contact Section */}
         <div className="scroll-snap-section">
           {isSubmitted ? (
@@ -1171,15 +1521,17 @@ export default function HomeClient({
               <div className="container mx-auto px-6">
                 <div className="grid lg:grid-cols-2 gap-12">
                   {/* Contact Form */}
-                  <div className="">
+                  <div >
                     <h2 className="heading-2 mb-6" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                      Mari Wujudkan Project Impian Anda
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.collaborationSection as any)?.title || 'Mari Wujudkan Project Impian Anda'}
                     </h2>
                     <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                      Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.
+                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                      {(homepageData?.collaborationSection as any)?.description || 'Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.'}
                     </p>
-                    
-                    <form onSubmit={handleSubmit} className="space-y-6  animate-stagger-3">
+
+                    <form onSubmit={handleSubmit} className="space-y-6 animate-stagger-3">
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <input
@@ -1196,7 +1548,7 @@ export default function HomeClient({
                             <p className="text-red-500 text-sm mt-1">{errors.name}</p>
                           )}
                         </div>
-                        
+
                         <div>
                           <input
                             type="email"
@@ -1213,7 +1565,7 @@ export default function HomeClient({
                           )}
                         </div>
                       </div>
-                      
+
                       <div className="grid md:grid-cols-2 gap-6">
                         <div>
                           <input
@@ -1230,7 +1582,7 @@ export default function HomeClient({
                             <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
                           )}
                         </div>
-                        
+
                         <div>
                           <select
                             name="service"
@@ -1251,7 +1603,7 @@ export default function HomeClient({
                           )}
                         </div>
                       </div>
-                      
+
                       <div>
                         <textarea
                           name="message"
@@ -1267,7 +1619,7 @@ export default function HomeClient({
                           <p className="text-red-500 text-sm mt-1">{errors.message}</p>
                         )}
                       </div>
-                      
+
                       <Button
                         type="submit"
                         variant="primary"
@@ -1289,14 +1641,14 @@ export default function HomeClient({
                       </Button>
                     </form>
                   </div>
-                  
+
                   {/* Contact Info & Map */}
-                  <div className="">
-                    <Card className="p-8 mb-8  animate-stagger-4">
+                  <div >
+                    <Card className="p-8 mb-8 animate-stagger-4">
                       <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">Hubungi Kami</h3>
                       <div className="space-y-6">
                         {contactInfo.map((info, index) => (
-                          <div key={index} className="flex items-start  animate-stagger-6" data-stagger={index * 100}>
+                          <div key={index} className="flex items-start animate-stagger-6" data-stagger={index * 100}>
                             <div className="w-12 h-12 bg-gold-100 rounded-lg flex items-center justify-center mr-4 flex-shrink-0">
                               {info.icon}
                             </div>
@@ -1309,10 +1661,10 @@ export default function HomeClient({
                         ))}
                       </div>
                     </Card>
-                    
+
                     {/* Interactive Map */}
-                    <div className="rounded-lg shadow-lg relative z-10">
-                      <MapComponent height="h-64" className="w-full overflow-hidden" />
+                    <div className="rounded-lg overflow-hidden shadow-lg animate-stagger-7">
+                      <MapComponent height="h-64" className="w-full" />
                     </div>
                   </div>
                 </div>

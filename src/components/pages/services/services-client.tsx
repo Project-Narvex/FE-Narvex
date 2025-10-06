@@ -15,6 +15,7 @@ import {
   addEnhancedParallax,
   createMorphingBackground
 } from '@/lib/animations';
+import { ServicePageComponent } from '@/lib/strapi';
 
 interface Service {
   icon: string;
@@ -23,10 +24,36 @@ interface Service {
   description: string;
   features: string[];
   color: string;
+  iconImage?: unknown;
+  placeholderImage?: unknown;
+  iconImageProcessed?: {
+    hasImage: boolean;
+    imageUrl: string | null;
+    altText: string;
+  };
+  placeholderImageProcessed?: {
+    hasImage: boolean;
+    imageUrl: string | null;
+    altText: string;
+  };
+}
+
+interface ContactSectionData {
+  title?: string;
+  description?: string;
+  email?: string;
+  phone_number?: string;
+  socialLinks?: {
+    instagram?: string;
+    facebook?: string;
+  };
 }
 
 interface ServicesClientProps {
   services: Service[];
+  heroSection?: ServicePageComponent;
+  strengthsSection?: ServicePageComponent;
+  contactSection?: ContactSectionData;
 }
 
 // Icon mapping function
@@ -40,7 +67,7 @@ const getIconComponent = (iconName: string): LucideIcon => {
   return iconMap[iconName] || Palette; // fallback to Palette if icon not found
 };
 
-export default function ServicesClient({ services }: ServicesClientProps) {
+export default function ServicesClient({ services, heroSection, strengthsSection, contactSection }: ServicesClientProps) {
   useEffect(() => {
     // Initialize GSAP scroll animations
     const animationController = initializeAnimations();
@@ -108,9 +135,9 @@ export default function ServicesClient({ services }: ServicesClientProps) {
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
         {/* Hero Section */}
         <SimpleHero
-          title="Layanan Kami"
-          subtitle="Narvex Creative Services"
-          description="Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"
+          title={(heroSection as any)?.title || "Layanan Kami"} // eslint-disable-line @typescript-eslint/no-explicit-any
+          subtitle={(heroSection as any)?.subtitle || "Narvex Creative Services"} // eslint-disable-line @typescript-eslint/no-explicit-any
+          description={(heroSection as any)?.description || "Solusi komprehensif untuk semua kebutuhan creative services, event production, dan digital marketing Anda"} // eslint-disable-line @typescript-eslint/no-explicit-any
           breadcrumb={[
             { label: 'Home', href: '/' },
             { label: 'Layanan' }
@@ -146,14 +173,17 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           
           <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
             <div className="text-center mb-12 sm:mb-16">
-              <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Portfolio Layanan Lengkap</h2>
+              <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(strengthsSection as any)?.title || "Portfolio Layanan Lengkap"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi 
-                untuk kesuksesan setiap project Anda.
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(strengthsSection as any)?.description || "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda."}
               </p>
             </div>
             
-            <div className="space-y-12 sm:space-y-16 " data-animation-delay="0.6">
+            <div className="space-y-12 sm:space-y-16 scroll-animate" data-animation-delay="0.6">
               {services.map((service, index) => {
                 const IconComponent = getIconComponent(service.icon);
                 return (
@@ -169,8 +199,24 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                   >
                     <CardContent className={`p-6 sm:p-8 ${index % 2 === 1 ? 'lg:col-start-2' : ''}`}>
                       <div className="flex items-center mb-6">
-                        <div className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110 hover:rotate-6`}>
-                          <IconComponent className="w-8 h-8 text-white" />
+                        <div className="w-16 h-16 rounded-2xl flex items-center justify-center mr-4 transition-transform duration-300 hover:scale-110 hover:rotate-6 relative overflow-hidden">
+                          {service.iconImageProcessed?.hasImage ? (
+                            <Image
+                              src={service.iconImageProcessed.imageUrl!}
+                              alt={service.iconImageProcessed.altText}
+                              width={64}
+                              height={64}
+                              className="w-16 h-16 object-cover rounded-lg"
+                              style={{
+                                objectFit: 'cover',
+                                objectPosition: 'center'
+                              }}
+                            />
+                          ) : (
+                            <div className={`w-16 h-16 ${service.color} rounded-2xl flex items-center justify-center`}>
+                              <IconComponent className="w-8 h-8 text-white" />
+                            </div>
+                          )}
                         </div>
                         <div>
                           <h3 className="heading-3 text-blue-900">{service.title}</h3>
@@ -200,10 +246,23 @@ export default function ServicesClient({ services }: ServicesClientProps) {
                     
                     <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
                       <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-80 flex items-center justify-center transition-all duration-500 hover:scale-105 hover:shadow-lg overflow-hidden relative group">
-                        <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
-                          <IconComponent className="w-24 h-24 mx-auto mb-4 opacity-50 transition-all duration-300 group-hover:opacity-70 group-hover:rotate-12" />
-                          <p className="font-semibold">Service Image Placeholder</p>
-                        </div>
+                        {service.placeholderImageProcessed?.hasImage ? (
+                          <Image
+                            src={service.placeholderImageProcessed.imageUrl!}
+                            alt={service.placeholderImageProcessed.altText}
+                            fill
+                            className="object-cover rounded-2xl"
+                            style={{
+                              objectFit: 'cover',
+                              objectPosition: 'center'
+                            }}
+                          />
+                        ) : (
+                          <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
+                            <IconComponent className="w-24 h-24 mx-auto mb-4 opacity-50 transition-all duration-300 group-hover:opacity-70 group-hover:rotate-12" />
+                            <p className="font-semibold">Service Image Placeholder</p>
+                          </div>
+                        )}
                         
                         {/* Hover overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-gold-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -241,52 +300,76 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Mengapa Memilih Narvex?</h2>
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(strengthsSection as any)?.title || "Mengapa Memilih Narvex?"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya
+                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                {(strengthsSection as any)?.description || "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya"}
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 " data-animation-delay="0.6">
-              <Card variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                <CardContent className="p-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                    <span className="text-3xl">🏆</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
-                  <p className="text-gray-600">Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing</p>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                <CardContent className="p-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                    <span className="text-3xl">⚡</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Tim Profesional</h3>
-                  <p className="text-gray-600">Tim ahli yang berpengalaman dan berdedikasi tinggi</p>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                <CardContent className="p-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                    <span className="text-3xl">🎯</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Tepat Waktu</h3>
-                  <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
-                </CardContent>
-              </Card>
-              
-              <Card variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
-                <CardContent className="p-6">
-                  <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
-                    <span className="text-3xl">💎</span>
-                  </div>
-                  <h3 className="text-xl font-bold text-blue-900 mb-3">Kualitas Terjamin</h3>
-                  <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
-                </CardContent>
-              </Card>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8 scroll-animate" data-animation-delay="0.6">
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {(strengthsSection as any) && [
+                (strengthsSection as any).statistic1, // eslint-disable-line @typescript-eslint/no-explicit-any
+                (strengthsSection as any).statistic2, // eslint-disable-line @typescript-eslint/no-explicit-any
+                (strengthsSection as any).statistic3, // eslint-disable-line @typescript-eslint/no-explicit-any
+                (strengthsSection as any).statistic4 // eslint-disable-line @typescript-eslint/no-explicit-any
+              ].map((stat: unknown, index: number) => {
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                const statData = stat as any;
+                const icons = ['🏆', '⚡', '🎯', '💎'];
+                return (
+                  <Card key={statData.id} variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                    <CardContent className="p-6">
+                      <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+                        <span className="text-3xl">{icons[index]}</span>
+                      </div>
+                      <h3 className="text-xl font-bold text-blue-900 mb-3">{statData.suffix}</h3>
+                      <p className="text-gray-600">{statData.label}</p>
+                    </CardContent>
+                  </Card>
+                );
+              }) || [
+                <Card key="fallback-1" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                  <CardContent className="p-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+                      <span className="text-3xl">🏆</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-blue-900 mb-3">Berpengalaman</h3>
+                    <p className="text-gray-600">Lebih dari 10 tahun pengalaman dalam industri creative services dan digital marketing</p>
+                  </CardContent>
+                </Card>,
+                <Card key="fallback-2" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                  <CardContent className="p-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+                      <span className="text-3xl">⚡</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-blue-900 mb-3">Tim Profesional</h3>
+                    <p className="text-gray-600">Tim ahli yang berpengalaman dan berdedikasi tinggi</p>
+                  </CardContent>
+                </Card>,
+                <Card key="fallback-3" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                  <CardContent className="p-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+                      <span className="text-3xl">🎯</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-blue-900 mb-3">Tepat Waktu</h3>
+                    <p className="text-gray-600">Komitmen untuk menyelesaikan setiap project sesuai timeline</p>
+                  </CardContent>
+                </Card>,
+                <Card key="fallback-4" variant="service" className="feature-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50 text-center hover:shadow-2xl transition-all duration-500 hover:scale-105">
+                  <CardContent className="p-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-gold-100 to-gold-200 rounded-2xl flex items-center justify-center mx-auto mb-6 transition-transform duration-300 hover:scale-110 hover:rotate-6">
+                      <span className="text-3xl">💎</span>
+                    </div>
+                    <h3 className="text-xl font-bold text-blue-900 mb-3">Kualitas Terjamin</h3>
+                    <p className="text-gray-600">Standar kualitas tinggi dalam setiap layanan yang kami berikan</p>
+                  </CardContent>
+                </Card>
+              ]}
             </div>
           </div>
         </section>
@@ -302,51 +385,50 @@ export default function ServicesClient({ services }: ServicesClientProps) {
           </div>
           
           <div className="container mx-auto px-6 relative z-depth-2">
-            <div className="text-center mb-12 ">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6  animate-stagger-1">
-                Siap Memulai Project Anda?
+            <div className="text-center mb-12 scroll-animate-scale">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 scroll-animate animate-stagger-1">
+                {contactSection?.title || "Siap Memulai Project Anda?"}
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto  animate-stagger-2">
-                Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu 
-                mewujudkan visi kreatif Anda menjadi kenyataan.
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto scroll-animate animate-stagger-2">
+                {contactSection?.description || "Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan."}
               </p>
             </div>
             
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 ">
-              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 scroll-animate">
+              <a href={`mailto:${contactSection?.email || "narvex@gmail.com"}`} className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
                 <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
                   <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">narvex.ind@gmail.com</p>
+                <p className="text-gray-300 text-sm">{contactSection?.email || "narvex@gmail.com"}</p>
               </a>
               
-              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
+              <a href={`https://wa.me/${contactSection?.phone_number?.replace(/\D/g, '') || "0800000"}`} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <p className="text-gray-300 text-sm">{contactSection?.phone_number || "0800000"}</p>
               </a>
               
-              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
+              <a href={contactSection?.socialLinks?.instagram || "https://www.instagram.com/jasonsusantoo"} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="200">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
                   <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" />
                 </div>
                 <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">@narvex.id</p>
+                <p className="text-gray-300 text-sm">@jasonsusantoo</p>
               </a>
               
-              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
+              <a href={contactSection?.socialLinks?.facebook || "https://www.instagram.com/jasonsusantoo"} target="_blank" rel="noopener noreferrer" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="300">
                 <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" />
+                  <Image src="/icons/facebook.png" alt="Facebook" width={32} height={32} className="w-8 h-8" />
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">+62 xxx xxxx xxxx</p>
+                <h3 className="text-xl font-bold text-white mb-2">Facebook</h3>
+                <p className="text-gray-300 text-sm">Facebook Page</p>
               </a>
             </div>
             
-            <div className="text-center  animate-stagger-4">
+            <div className="text-center scroll-animate animate-stagger-4">
               <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
                 Konsultasi Gratis
               </Link>

@@ -32,6 +32,28 @@ interface Company {
   portfolio: { title: string; category: string; }[];
   clients: string[];
   notice?: string;
+  logoUrl?: string | null;
+  phone?: string;
+  address?: string;
+  socials?: {
+    instagram: string;
+    tiktok: string;
+    facebook: string;
+    x: string;
+    linkedin: string;
+    youtube: string;
+  };
+}
+
+interface CompanyHero {
+  title: string;
+  subtitle: string;
+  description: string;
+}
+
+interface CompanyHighlight {
+  title: string;
+  description: string;
 }
 
 // Icon mapping function
@@ -48,9 +70,11 @@ const getIconComponent = (iconName: string): LucideIcon => {
 
 interface CompaniesClientProps {
   companies: Company[];
+  heroSection?: CompanyHero;
+  companyHighlightSection?: CompanyHighlight;
 }
 
-export default function CompaniesClient({ companies }: CompaniesClientProps) {
+export default function CompaniesClient({ companies, heroSection, companyHighlightSection }: CompaniesClientProps) {
 
   useEffect(() => {
     // Initialize GSAP scroll animations
@@ -120,9 +144,9 @@ export default function CompaniesClient({ companies }: CompaniesClientProps) {
       <main>
         {/* Hero Section */}
         <SimpleHero
-          title="Companies Kami"
-          subtitle="Narvex Ecosystem"
-          description="Ekosistem perusahaan yang terintegrasi untuk memberikan solusi kreatif dan layanan terbaik"
+          title={heroSection?.title || "Companies Kami"}
+          subtitle={heroSection?.subtitle || "Narvex Ecosystem"}
+          description={heroSection?.description || "Ekosistem perusahaan yang terintegrasi untuk memberikan solusi kreatif dan layanan terbaik"}
           breadcrumb={[
             { label: 'Home', href: '/' },
             { label: 'Companies' }
@@ -154,10 +178,11 @@ export default function CompaniesClient({ companies }: CompaniesClientProps) {
           
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Keluarga Besar Narvex</h2>
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {companyHighlightSection?.title || "Keluarga Besar Narvex"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Setiap company memiliki keahlian khusus yang saling melengkapi untuk memberikan 
-                solusi komprehensif bagi klien.
+                {companyHighlightSection?.description || "Setiap company memiliki keahlian khusus yang saling melengkapi untuk memberikan solusi komprehensif bagi klien."}
               </p>
             </div>
             
@@ -176,8 +201,20 @@ export default function CompaniesClient({ companies }: CompaniesClientProps) {
                     <CardContent className="p-8">
                       {/* Company Header */}
                       <div className="text-center mb-8">
-                        <div className={`w-20 h-20 ${company.color} rounded-3xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-102 hover:rotate-2`}>
-                          <IconComponent className="w-10 h-10 text-white" />
+                        <div className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-4 transition-transform duration-300 hover:scale-102 hover:rotate-2 overflow-hidden">
+                          {company.logoUrl ? (
+                            <Image 
+                              src={company.logoUrl} 
+                              alt={`${company.name} logo`}
+                              width={80}
+                              height={80}
+                              className="w-full h-full object-contain"
+                            />
+                          ) : (
+                            <div className={`w-full h-full ${company.color} flex items-center justify-center`}>
+                              <IconComponent className="w-10 h-10 text-white" />
+                            </div>
+                          )}
                         </div>
                         <h3 className="heading-3 text-blue-900 mb-2">{company.name}</h3>
                         <p className="text-xl text-gold-500 font-medium mb-3">{company.tagline}</p>
@@ -234,15 +271,33 @@ export default function CompaniesClient({ companies }: CompaniesClientProps) {
                             
                             <div className="flex-1 space-y-4">
                               <div className="space-y-2">
-                                <div className="flex items-center transition-colors duration-300 hover:text-pink-600">
-                                  <Instagram className="w-4 h-4 text-pink-500 mr-3" />
-                                  <span className="text-gray-700 text-sm">{company.instagram}</span>
-                                </div>
+                                {company.instagram && (
+                                  <div className="flex items-center transition-colors duration-300 hover:text-pink-600">
+                                    <Instagram className="w-4 h-4 text-pink-500 mr-3" />
+                                    <span className="text-gray-700 text-sm">{company.instagram}</span>
+                                  </div>
+                                )}
                                 
-                                <div className="flex items-center transition-colors duration-300 hover:text-blue-600">
-                                  <ExternalLink className="w-4 h-4 text-blue-500 mr-3" />
-                                  <span className="text-gray-700 text-sm">{company.website}</span>
-                                </div>
+                                {company.website && (
+                                  <div className="flex items-center transition-colors duration-300 hover:text-blue-600">
+                                    <ExternalLink className="w-4 h-4 text-blue-500 mr-3" />
+                                    <span className="text-gray-700 text-sm">{company.website}</span>
+                                  </div>
+                                )}
+                                
+                                {company.phone && (
+                                  <div className="flex items-center transition-colors duration-300 hover:text-green-600">
+                                    <span className="text-green-500 mr-3">📞</span>
+                                    <span className="text-gray-700 text-sm">{company.phone}</span>
+                                  </div>
+                                )}
+                                
+                                {company.address && (
+                                  <div className="flex items-center transition-colors duration-300 hover:text-purple-600">
+                                    <span className="text-purple-500 mr-3">📍</span>
+                                    <span className="text-gray-700 text-sm">{company.address}</span>
+                                  </div>
+                                )}
                               </div>
                               
                               <div className="border-t pt-4">

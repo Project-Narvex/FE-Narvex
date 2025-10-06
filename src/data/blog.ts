@@ -13,7 +13,18 @@ export interface BlogArticle {
   tags: string[];
   featured: boolean;
   published: boolean;
-  featuredImage?: string;
+  featuredImage?: string | {
+    url: string;
+    formats?: {
+      large?: { url: string; width: number; height: number };
+      medium?: { url: string; width: number; height: number };
+      small?: { url: string; width: number; height: number };
+      thumbnail?: { url: string; width: number; height: number };
+    };
+    alternativeText?: string;
+    width: number;
+    height: number;
+  };
   seoTitle?: string;
   seoDescription?: string;
   views?: number;

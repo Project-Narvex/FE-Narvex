@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import SimpleHero from '@/components/ui/SimpleHero';
 import { Card, CardContent } from '@/components/ui/Card';
 import { MapPin, Calendar, Users, Award, ExternalLink, Search } from 'lucide-react';
@@ -14,6 +15,7 @@ import { MapPin, Calendar, Users, Award, ExternalLink, Search } from 'lucide-rea
 //   createMorphingBackground
 // } from '@/lib/animations';
 import { Project } from '@/data/projects';
+import { PortfolioPageData, getStrapiImageUrl } from '@/lib/strapi';
 
 // Custom hook for debounced search
 function useDebounce<T>(value: T, delay: number): T {
@@ -34,6 +36,8 @@ function useDebounce<T>(value: T, delay: number): T {
 
 interface PortfolioClientProps {
   initialProjects: Project[];
+  featuredProjects: Project[];
+  portfolioPageData: PortfolioPageData | null;
   portfolioCategories: Array<{ id: string; name: string }>;
   availableYears: number[];
   availableClients: string[];
@@ -42,6 +46,8 @@ interface PortfolioClientProps {
 
 export default function PortofolioClient({
   initialProjects,
+  featuredProjects,
+  portfolioPageData,
   portfolioCategories,
   availableYears,
   availableClients,
@@ -70,7 +76,7 @@ export default function PortofolioClient({
     }
     
     try {
-      return initialProjects.filter((project: Project) => {
+      const filtered = initialProjects.filter((project: Project) => {
         if (!project) return false;
         
         const matchesSearch = debouncedPortfolioSearchQuery === '' || 
@@ -79,15 +85,43 @@ export default function PortofolioClient({
           (project.client?.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase())) ||
           (project.services?.some?.((service: string) => service?.toLowerCase().includes(debouncedPortfolioSearchQuery.toLowerCase())));
         
-        const matchesCategory = portfolioCategoryFilter === 'all' || project.category === portfolioCategoryFilter;
-        const matchesYear = portfolioYearFilter === 'all' || project.date === portfolioYearFilter;
-        const matchesClient = portfolioClientFilter === 'all' || project.client === portfolioClientFilter;
+        const matchesCategory = portfolioCategoryFilter === 'all' || 
+          project.category?.toLowerCase() === portfolioCategoryFilter.toLowerCase() ||
+          project.category?.toLowerCase().includes(portfolioCategoryFilter.toLowerCase());
+        
+        const matchesYear = portfolioYearFilter === 'all' || 
+          project.year?.toString() === portfolioYearFilter ||
+          project.date?.includes(portfolioYearFilter);
+        
+        const matchesClient = portfolioClientFilter === 'all' || 
+          project.client?.toLowerCase() === portfolioClientFilter.toLowerCase() ||
+          project.client?.toLowerCase().includes(portfolioClientFilter.toLowerCase());
+        
         const matchesStatus = portfolioStatusFilter === 'all' || 
-          (portfolioStatusFilter === 'completed') ||
+          (portfolioStatusFilter === 'completed' && project.status === 'completed') ||
+          (portfolioStatusFilter === 'ongoing' && project.status === 'ongoing') ||
+          (portfolioStatusFilter === 'upcoming' && project.status === 'upcoming') ||
           (portfolioStatusFilter === 'featured' && project.featured);
         
         return matchesSearch && matchesCategory && matchesYear && matchesClient && matchesStatus;
       });
+      
+      // Debug logging
+      if (process.env.NODE_ENV === 'development') {
+        console.log('Filter Debug:', {
+          totalProjects: initialProjects.length,
+          filteredCount: filtered.length,
+          filters: {
+            search: debouncedPortfolioSearchQuery,
+            category: portfolioCategoryFilter,
+            year: portfolioYearFilter,
+            client: portfolioClientFilter,
+            status: portfolioStatusFilter
+          }
+        });
+      }
+      
+      return filtered;
     } catch (error) {
       console.error('Error filtering projects:', error);
       return [];
@@ -223,9 +257,9 @@ export default function PortofolioClient({
       <main>
         {/* Hero Section */}
         <SimpleHero
-          title="Portfolio & Case Studies"
-          subtitle="Narvex Showcase"
-          description="Showcase project-project terbaik dari creative services, event production, dan digital marketing kami"
+          title={portfolioPageData?.hero?.title || "Portfolio & Case Studies"}
+          subtitle={portfolioPageData?.hero?.subtitle || "Narvex Showcase"}
+          description={portfolioPageData?.hero?.description || "Showcase project-project terbaik dari creative services, event production, dan digital marketing kami"}
           breadcrumb={[
             { label: 'Home', href: '/' },
             { label: 'Portfolio' }
@@ -256,15 +290,17 @@ export default function PortofolioClient({
           
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Narvex Portfolio</h2>
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {portfolioPageData?.highlight_portofolio?.title || "Narvex Portfolio"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Project-project unggulan yang telah kami kerjakan dengan detail case study dan hasil yang dicapai.
+                {portfolioPageData?.highlight_portofolio?.description || "Project-project unggulan yang telah kami kerjakan dengan detail case study dan hasil yang dicapai."}
               </p>
             </div>
             
-            {(filteredProjects?.length || 0) > 0 ? (
-              <div className="space-y-16 " data-animation-delay="0.6">
-                {filteredProjects.map((project, index) => (
+            {(featuredProjects?.length || 0) > 0 ? (
+              <div className="space-y-16 scroll-animate" data-animation-delay="0.6">
+                {featuredProjects.map((project, index) => (
                   <Card 
                     key={project.id} 
                     variant="service" 
@@ -313,19 +349,30 @@ export default function PortofolioClient({
                         </div>
                       )}
                       
-                      <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform">
+                      <Link href={`/portfolio/${project.slug}`} className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform">
                         Lihat Detail Case Study
                         <ExternalLink className="w-4 h-4 ml-2" />
-                      </button>
+                      </Link>
                     </CardContent>
                     
                     <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
                       <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-2xl h-80 flex items-center justify-center transition-all duration-500 hover:scale-105 hover:shadow-lg overflow-hidden relative group">
-                        <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
-                          <div className="text-4xl mb-4 transition-transform duration-300 group-hover:rotate-12">📸</div>
-                          <p className="font-semibold mb-2">Project Image Gallery</p>
-                          <p className="text-sm">{project.title}</p>
-                        </div>
+                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                        {(project as any).cover ? (
+                          <Image
+                            src={getStrapiImageUrl((project as any).cover, 'large')} // eslint-disable-line @typescript-eslint/no-explicit-any
+                            alt={(project as any).cover.alternativeText || project.title} // eslint-disable-line @typescript-eslint/no-explicit-any
+                            width={800}
+                            height={600}
+                            className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                          />
+                        ) : (
+                          <div className="text-center text-gray-500 transition-all duration-300 group-hover:scale-110">
+                            <div className="text-4xl mb-4 transition-transform duration-300 group-hover:rotate-12">📸</div>
+                            <p className="font-semibold mb-2">Project Image Gallery</p>
+                            <p className="text-sm">{project.title}</p>
+                          </div>
+                        )}
                         
                         {/* Hover overlay */}
                         <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-gold-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
@@ -377,9 +424,11 @@ export default function PortofolioClient({
             
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Explore Our Portfolio</h2>
+              <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
+                {portfolioPageData?.portofolio?.title || "Explore Our Portfolio"}
+              </h2>
               <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
-                Discover our complete collection of projects across all categories. Use the search and filters below to find specific work.
+                {portfolioPageData?.portofolio?.description || "Discover our complete collection of projects across all categories. Use the search and filters below to find specific work."}
               </p>
             </div>
             
@@ -487,11 +536,11 @@ export default function PortofolioClient({
             <div className="portfolio-results-section">
               {(filteredProjects?.length || 0) > 0 ? (
                 <>
-                  <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8  transition-opacity duration-300 ${isPageTransitioning ? 'opacity-50' : 'opacity-100'}`} data-animation-delay="0.8">
+                  <div className={`grid md:grid-cols-2 lg:grid-cols-3 gap-8 scroll-animate transition-opacity duration-300 ${isPageTransitioning ? 'opacity-50' : 'opacity-100'}`} data-animation-delay="0.8">
                     {currentProjects.map((project, index) => (
                   <Link 
                     key={project.id}
-                    href={`/portfolio/${project.id}`}
+                    href={`/portfolio/${project.slug}`}
                     className="block group cursor-pointer"
                   >
                     <Card 
@@ -513,10 +562,21 @@ export default function PortofolioClient({
                       <CardContent className="p-0 flex flex-col h-full">
                         {/* Project Thumbnail */}
                         <div className="h-56 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center overflow-hidden relative group-hover:scale-110 transition-transform duration-700">
-                          <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
-                            <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">🎨</div>
-                            <p className="text-sm font-semibold uppercase tracking-wide">{project.category.replace('-', ' ')}</p>
-                          </div>
+                          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                          {(project as any).cover ? (
+                            <Image
+                              src={getStrapiImageUrl((project as any).cover, 'medium')} // eslint-disable-line @typescript-eslint/no-explicit-any
+                              alt={(project as any).cover.alternativeText || project.title} // eslint-disable-line @typescript-eslint/no-explicit-any
+                              width={400}
+                              height={300}
+                              className="w-full h-full object-cover transition-all duration-500 group-hover:scale-110"
+                            />
+                          ) : (
+                            <div className="text-center text-blue-600 transition-all duration-500 group-hover:scale-125">
+                              <div className="text-4xl mb-3 transition-transform duration-500 group-hover:rotate-12">🎨</div>
+                              <p className="text-sm font-semibold uppercase tracking-wide">{project.category.replace('-', ' ')}</p>
+                            </div>
+                          )}
                           <div className="absolute inset-0 bg-gradient-to-br from-blue-500/30 to-gold-500/30 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                           
                           {/* Hover overlay with text */}

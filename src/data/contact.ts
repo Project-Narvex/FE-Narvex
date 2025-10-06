@@ -33,6 +33,15 @@ export interface ContactInfo {
   };
 }
 
+export interface ServiceCategory {
+  id: string;
+  name: string;
+  description: string;
+  icon: string;
+  color: string;
+  services: string[];
+}
+
 export interface ServiceInfo {
   id: string;
   name: string;
@@ -53,6 +62,10 @@ export interface ContactPageContent {
     subtitle: string;
     description: string;
     backgroundImage?: string;
+  };
+  serviceSelection: {
+    title: string;
+    description: string;
   };
   contactForm: {
     title: string;
@@ -93,6 +106,7 @@ export interface FormSubmission {
   budget?: string;
   timeline?: string;
   message: string;
+  targetService?: string;
   submittedAt: Date;
   status: 'pending' | 'contacted' | 'completed';
   source: 'website' | 'social' | 'referral';
@@ -104,6 +118,10 @@ export const defaultContactPageContent: ContactPageContent = {
     title: "Hubungi Kami",
     subtitle: "Narvex Creative Services",
     description: "Siap membantu mewujudkan project impian Anda dengan layanan creative services terbaik dari Narvex"
+  },
+  serviceSelection: {
+    title: "Pilih Layanan Anda",
+    description: "Pilih kategori layanan yang sesuai dengan kebutuhan project Anda untuk konsultasi yang lebih tepat sasaran"
   },
   contactForm: {
     title: "Konsultasi Gratis",
@@ -186,6 +204,42 @@ export const defaultContactInfo: ContactInfo = {
     youtube: "https://youtube.com/@narvex"
   }
 };
+
+// Default service categories for contact form
+export const defaultServiceCategories: ServiceCategory[] = [
+  {
+    id: 'branding',
+    name: 'Branding & Design',
+    description: 'Logo design, brand identity, dan visual branding yang memorable',
+    icon: '🎨',
+    color: 'bg-blue-500',
+    services: ['Logo Design', 'Brand Guidelines', 'Visual Identity', 'Print Design']
+  },
+  {
+    id: 'event',
+    name: 'Event Production',
+    description: 'Event planning, stage design, dan production management',
+    icon: '🎪',
+    color: 'bg-purple-500',
+    services: ['Event Planning', 'Stage Design', 'Audio Visual', 'Event Coordination']
+  },
+  {
+    id: 'digital',
+    name: 'Digital Marketing',
+    description: 'Social media management, content creation, dan digital advertising',
+    icon: '📱',
+    color: 'bg-green-500',
+    services: ['Social Media Management', 'Content Creation', 'SEO', 'Digital Ads']
+  },
+  {
+    id: 'consultation',
+    name: 'Consultation',
+    description: 'Strategic consultation untuk brand development dan marketing',
+    icon: '💡',
+    color: 'bg-gold-500',
+    services: ['Brand Strategy', 'Market Analysis', 'Business Consultation', 'Creative Direction']
+  }
+];
 
 // Main Service Information
 export const mainService: ServiceInfo = {

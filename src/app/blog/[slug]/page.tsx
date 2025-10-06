@@ -1,7 +1,7 @@
 import React from 'react';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
-import CMSImage from '@/components/ui/CMSImage';
+import ImageWithFallback from '@/components/ui/ImageWithFallback';
 import { 
   Calendar, 
   ArrowLeft, 
@@ -13,7 +13,10 @@ import {
   Star,
   Tag
 } from 'lucide-react';
-import { blogArticles } from '@/data/blog';
+import { StrapiContentService } from '@/lib/strapi/content';
+
+// Enable dynamic rendering
+export const dynamic = 'force-dynamic';
 
 interface BlogDetailPageProps {
   params: Promise<{
@@ -22,51 +25,73 @@ interface BlogDetailPageProps {
 }
 
 export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
-  // Find article by slug
   const { slug } = await params;
-  const article = blogArticles.find(a => a.slug === slug);
-  if (!article) {
-    notFound();
-  }
   
-  // Find related articles (same category, excluding current)
-  const relatedArticles = blogArticles
-    .filter(a => a.category === article.category && a.id !== article.id && a.published)
-    .slice(0, 3);
-  
-  // Find previous and next articles
-  const currentIndex = blogArticles.findIndex(a => a.id === article.id);
-  const previousArticle = currentIndex > 0 ? blogArticles[currentIndex - 1] : null;
-  const nextArticle = currentIndex < blogArticles.length - 1 ? blogArticles[currentIndex + 1] : null;
-
-  if (!article) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <div className="text-6xl mb-4">📄</div>
-          <h1 className="text-2xl font-bold text-gray-700 mb-2">Article Not Found</h1>
-          <p className="text-gray-500 mb-6">The article you&apos;re looking for doesn&apos;t exist.</p>
-          <Link 
-            href="/blog" 
-            className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
-          >
-            Back to Blog
-          </Link>
+  try {
+    const strapiService = new StrapiContentService();
+    
+    // Fetch all articles and filter manually (more reliable)
+    console.log('Fetching all articles to find slug:', slug);
+    const allResponse = await strapiService.getBlogArticles({
+      populate: ['cover', 'blog_category', 'tags', 'users_permissions_user']
+    });
+    
+    console.log('All articles response:', allResponse);
+    
+    // Find article by slug manually
+    const foundArticle = allResponse.data?.find(article => article.slug === slug);
+    const articleResponse = {
+      data: foundArticle ? [foundArticle] : []
+    };
+    
+    console.log('Article response for slug:', slug, articleResponse);
+    
+    if (!articleResponse.data || articleResponse.data.length === 0) {
+      console.log('No article found for slug:', slug);
+      
+      // Show error page instead of calling notFound()
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <div className="text-center max-w-md mx-auto px-6">
+            <div className="text-6xl mb-6">📄</div>
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">Article Not Found</h1>
+            <p className="text-gray-600 mb-8">
+              The article with slug "{slug}" doesn't exist in our database.
+            </p>
+            <div className="space-y-4">
+              <Link 
+                href="/blog" 
+                className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
+              >
+                Back to Blog
+              </Link>
+              <div className="text-sm text-gray-500">
+                <p>Available slugs: blog-article, blog-article-1</p>
+                <p>Searched slug: {slug}</p>
+              </div>
+            </div>
+          </div>
         </div>
-      </div>
-    );
-  }
+      );
+    }
+    
+    const article = articleResponse.data[0];
+    
+    // Use the articles we already fetched
+    const allArticles = allResponse.data || [];
+    
+    // Find related articles (same category, excluding current)
+    const relatedArticles = allArticles
+      .filter(a => a.blog_category?.id === article.blog_category?.id && a.id !== article.id)
+      .slice(0, 3);
+    
+    // Find previous and next articles
+    const currentIndex = allArticles.findIndex(a => a.id === article.id);
+    const previousArticle = currentIndex > 0 ? allArticles[currentIndex - 1] : null;
+    const nextArticle = currentIndex < allArticles.length - 1 ? allArticles[currentIndex + 1] : null;
 
-  const categoryNames = {
-    'company-updates': 'Company Updates',
-    'industry-insights': 'Industry Insights',
-    'project-stories': 'Project Stories',
-    'tips-tricks': 'Tips & Tricks',
-    'company-news': 'Company News'
-  };
-
-  return (
-    <div className="min-h-screen bg-white">
+    return (
+      <div className="min-h-screen bg-white">
       <main>
         {/* Enhanced Navigation Bar */}
         <div className="bg-white/95 backdrop-blur-md border-b border-gray-200 sticky top-0 z-50 transition-all duration-300 shadow-lg">
@@ -109,20 +134,20 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               <div className="flex flex-wrap gap-6 mb-8 text-gray-600">
                 <div className="flex items-center">
                   <User className="w-5 h-5 mr-2" />
-                  <span>{article.author}</span>
+                  <span>{article.users_permissions_user?.username || 'Narvex Team'}</span>
                 </div>
                 <div className="flex items-center">
                   <Calendar className="w-5 h-5 mr-2" />
-                  <span>{new Date(article.publishDate).toLocaleDateString('id-ID')}</span>
+                  <span>{new Date(article.publishDate || article.createdAt).toLocaleDateString('id-ID')}</span>
                 </div>
                 <div className="flex items-center">
                   <Clock className="w-5 h-5 mr-2" />
-                  <span>{article.readTime}</span>
+                  <span>{article.readTime || '5 min'}</span>
                 </div>
                 <div className="flex items-center">
                   <Tag className="w-5 h-5 mr-2" />
                   <span className="bg-blue-100 text-blue-700 px-3 py-1 rounded-full text-sm font-medium capitalize">
-                    {categoryNames[article.category]}
+                    {article.blog_category?.name || 'No Category'}
                   </span>
                 </div>
                 {article.views && (
@@ -140,19 +165,22 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
               </div>
               
               <p className="text-xl text-gray-600 mb-12 leading-relaxed">
-                {article.excerpt}
+                {article.excerpt || 'Artikel menarik dari tim Narvex...'}
               </p>
               
-              {/* Featured Image - CMS Ready */}
-              {article.featuredImage && (
+              {/* Featured Image - Direct Next.js Image */}
+              {article.cover && (
                 <div className="rounded-xl overflow-hidden shadow-lg mb-12">
-                  <CMSImage 
-                     src={article.featuredImage}
-                     alt={`${article.title} - Featured image`}
-                     className="w-full h-64 sm:h-80 lg:h-96"
-                     fallbackText={article.title}
-                     category={article.category}
-                   />
+                  {console.log('Blog detail - Article cover data:', article.cover)}
+                  {console.log('Blog detail - Cover URL:', article.cover.url)}
+                  {console.log('Blog detail - Cover formats:', article.cover.formats)}
+                  <ImageWithFallback
+                    src={article.cover}
+                    alt={article.cover.alternativeText || `${article.title} - Featured image`}
+                    className="w-full h-64 sm:h-80 lg:h-96"
+                    fallbackText={article.title}
+                    category={article.blog_category?.name || 'blog'}
+                  />
                 </div>
               )}
             </div>
@@ -191,11 +219,48 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                   {/* Rich text content - CMS friendly */}
                   <div className="space-y-6 text-gray-700 leading-relaxed">
                     {article.content ? (
-                      <div 
-                        dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br>') }}
-                      />
+                      <div>
+                        {Array.isArray(article.content) ? (
+                          // Handle Strapi rich text format
+                          article.content.map((block, index) => {
+                            if (block.type === 'paragraph') {
+                              return (
+                                <p key={index} className="text-base md:text-lg leading-relaxed mb-6 text-gray-700">
+                                  {block.children?.map((child, childIndex) => child.text).join('')}
+                                </p>
+                              );
+                            } else if (block.type === 'heading') {
+                              const HeadingTag = `h${block.level}` as keyof JSX.IntrinsicElements;
+                              return (
+                                <HeadingTag key={index} className={`font-bold mb-4 text-blue-900 ${
+                                  block.level === 1 ? 'text-3xl md:text-4xl' :
+                                  block.level === 2 ? 'text-2xl md:text-3xl' :
+                                  block.level === 3 ? 'text-xl md:text-2xl' :
+                                  'text-lg md:text-xl'
+                                }`}>
+                                  {block.children?.map((child, childIndex) => child.text).join('')}
+                                </HeadingTag>
+                              );
+                            } else if (block.type === 'image') {
+                              return (
+                                <div key={index} className="my-6">
+                                  <img 
+                                    src={block.image?.url} 
+                                    alt={block.image?.alternativeText || 'Article image'}
+                                    className="w-full h-auto rounded-lg shadow-md"
+                                  />
+                                </div>
+                              );
+                            }
+                            return null;
+                          })
+                        ) : (
+                          // Handle plain text content
+                          <div dangerouslySetInnerHTML={{ __html: article.content.replace(/\n/g, '<br>') }} />
+                        )}
+                      </div>
                     ) : (
-                      <p className="text-base md:text-lg leading-relaxed mb-6 text-gray-700">{article.excerpt}</p>
+                      <p className="text-base md:text-lg leading-relaxed mb-6 text-gray-700">{article.excerpt || 'Artikel menarik dari tim Narvex...'}</p>
                     )}
                   </div>
                 </div>
@@ -213,7 +278,7 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                         key={index} 
                         className="bg-gradient-to-r from-blue-100 to-blue-200 text-blue-700 px-4 py-2 rounded-full text-sm font-medium hover:from-blue-200 hover:to-blue-300 transition-all duration-300 cursor-pointer"
                       >
-                        {tag}
+                        {tag.name || tag}
                       </span>
                     ))}
                   </div>
@@ -234,24 +299,32 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
                     <Link key={relatedArticle.id} href={`/blog/${relatedArticle.slug}`}>
                       <div className="bg-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 overflow-hidden group">
                         <div className="h-48 bg-gradient-to-br from-blue-100 via-blue-200 to-gold-100 flex items-center justify-center relative overflow-hidden group-hover:scale-110 transition-transform duration-700">
-                          <div className="text-center text-blue-600">
-                            <div className="text-3xl mb-2">📰</div>
-                            <p className="text-xs font-semibold uppercase tracking-wide">{categoryNames[relatedArticle.category]}</p>
-                          </div>
+                          {relatedArticle.cover?.url ? (
+                            <img 
+                              src={relatedArticle.cover.url} 
+                              alt={relatedArticle.cover.alternativeText || relatedArticle.title}
+                              className="w-full h-full object-cover"
+                            />
+                          ) : (
+                            <div className="text-center text-blue-600">
+                              <div className="text-3xl mb-2">📰</div>
+                              <p className="text-xs font-semibold uppercase tracking-wide">{relatedArticle.blog_category?.name || 'No Category'}</p>
+                            </div>
+                          )}
                         </div>
                         <div className="p-6">
                           <h3 className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-blue-800 transition-colors">
                             {relatedArticle.title}
                           </h3>
                           <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                            {relatedArticle.excerpt}
+                            {relatedArticle.excerpt || 'Artikel menarik dari tim Narvex...'}
                           </p>
                           <div className="flex items-center text-xs text-gray-500">
                             <Calendar className="w-3 h-3 mr-1" />
-                            <span>{new Date(relatedArticle.publishDate).toLocaleDateString('id-ID')}</span>
+                            <span>{new Date(relatedArticle.publishDate || relatedArticle.createdAt).toLocaleDateString('id-ID')}</span>
                             <span className="mx-2">•</span>
                             <Clock className="w-3 h-3 mr-1" />
-                            <span>{relatedArticle.readTime}</span>
+                            <span>{relatedArticle.readTime || '5 min'}</span>
                           </div>
                         </div>
                       </div>
@@ -308,44 +381,98 @@ export default async function BlogDetailPage({ params }: BlogDetailPageProps) {
       </main>
     </div>
   );
+  } catch (error) {
+    console.error('Error fetching blog article:', error);
+    
+    // Show a more user-friendly error page instead of 404
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center max-w-md mx-auto px-6">
+          <div className="text-6xl mb-6">📄</div>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4">Article Not Found</h1>
+          <p className="text-gray-600 mb-8">
+            The article you're looking for doesn't exist or there was an error loading it.
+          </p>
+          <div className="space-y-4">
+            <Link 
+              href="/blog" 
+              className="inline-block bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 hover:scale-105 hover:shadow-lg transform"
+            >
+              Back to Blog
+            </Link>
+            <div className="text-sm text-gray-500">
+              <p>Slug: {slug}</p>
+              <p>Error: {error instanceof Error ? error.message : 'Unknown error'}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 }
 
 // Generate static params for all blog articles
 export async function generateStaticParams() {
-  return blogArticles
-    .filter(article => article.published)
-    .map((article) => ({
+  try {
+    const strapiService = new StrapiContentService();
+    const response = await strapiService.getBlogArticles({
+      populate: ['slug']
+    });
+    
+    console.log('Static params response:', response);
+    
+    return response.data?.map((article) => ({
       slug: article.slug,
-    }));
+    })) || [];
+  } catch (error) {
+    console.error('Error generating static params:', error);
+    // Return empty array to allow dynamic rendering
+    return [];
+  }
 }
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: BlogDetailPageProps) {
   const { slug } = await params;
-  const article = blogArticles.find(a => a.slug === slug);
   
-  if (!article) {
+  try {
+    const strapiService = new StrapiContentService();
+    const response = await strapiService.getBlogArticles({
+      filters: { slug: { $eq: slug } },
+      populate: ['seo']
+    });
+    
+    if (!response.data || response.data.length === 0) {
+      return {
+        title: 'Article Not Found',
+        description: 'The requested article could not be found.'
+      };
+    }
+    
+    const article = response.data[0];
+    
+    return {
+      title: article.seo?.title || article.title,
+      description: article.seo?.description || article.excerpt || 'Artikel menarik dari tim Narvex...',
+      openGraph: {
+        title: article.title,
+        description: article.excerpt || 'Artikel menarik dari tim Narvex...',
+        type: 'article',
+        publishedTime: article.publishDate || article.createdAt,
+        authors: [article.users_permissions_user?.username || 'Narvex Team'],
+        tags: article.tags?.map(tag => tag.name || tag) || [],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: article.title,
+        description: article.excerpt || 'Artikel menarik dari tim Narvex...',
+      },
+    };
+  } catch (error) {
+    console.error('Error generating metadata:', error);
     return {
       title: 'Article Not Found',
       description: 'The requested article could not be found.'
     };
   }
-  
-  return {
-    title: article.seoTitle || article.title,
-    description: article.seoDescription || article.excerpt,
-    openGraph: {
-      title: article.title,
-      description: article.excerpt,
-      type: 'article',
-      publishedTime: article.publishDate,
-      authors: [article.author],
-      tags: article.tags,
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: article.title,
-      description: article.excerpt,
-    },
-  };
 }
