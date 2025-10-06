@@ -1237,73 +1237,68 @@ export default function HomeClient({
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mt-16 animate-fade-in animation-delay-900">
-              {homepageData?.testimonialSection?.statistic1 ? (
-                <>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(homepageData?.testimonialSection as any)?.statistic1?.value}{(homepageData?.testimonialSection as any)?.statistic1?.suffix}
+            <div className="mt-16 animate-fade-in animation-delay-900">
+              {(() => {
+                // Collect all available statistics
+                const testimonialSection = homepageData?.testimonialSection as any;
+                const statistics = [
+                  testimonialSection?.statistic1,
+                  testimonialSection?.statistic2,
+                  testimonialSection?.statistic3,
+                  testimonialSection?.statistic4
+                ].filter(Boolean);
+
+                // If we have statistics from data, use them
+                if (statistics.length > 0) {
+                  // Dynamic grid classes based on number of items
+                  const getGridClasses = (count: number) => {
+                    switch (count) {
+                      case 1:
+                        return 'grid grid-cols-1 gap-8 max-w-xs mx-auto';
+                      case 2:
+                        return 'grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto';
+                      case 3:
+                        return 'grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto';
+                      case 4:
+                      default:
+                        return 'grid grid-cols-2 md:grid-cols-4 gap-8';
+                    }
+                  };
+
+                  return (
+                    <div className={getGridClasses(statistics.length)}>
+                      {statistics.map((stat, index) => (
+                        <div key={index} className="text-center">
+                          <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
+                            {stat?.value}{stat?.suffix}
+                          </div>
+                          <div className="text-gold-300">
+                            {stat?.label}
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="text-gold-300">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(homepageData?.testimonialSection as any)?.statistic1?.label}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(homepageData?.testimonialSection as any)?.statistic2?.value}{(homepageData?.testimonialSection as any)?.statistic2?.suffix}
-                    </div>
-                    <div className="text-gold-300">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(homepageData?.testimonialSection as any)?.statistic2?.label}
-                    </div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(homepageData?.testimonialSection as any)?.statistic3?.value}{(homepageData?.testimonialSection as any)?.statistic3?.suffix}
-                    </div>
-                    <div className="text-gold-300">
-                      {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                      {(homepageData?.testimonialSection as any)?.statistic3?.label}
-                    </div>
-                  </div>
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {(homepageData?.testimonialSection as any)?.statistic4 && (
+                  );
+                }
+
+                // Fallback to default statistics
+                return (
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
                     <div className="text-center">
-                      <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {(homepageData?.testimonialSection as any)?.statistic4?.value}{(homepageData?.testimonialSection as any)?.statistic4?.suffix}
-                      </div>
-                      <div className="text-gold-300">
-                        {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                        {(homepageData?.testimonialSection as any)?.statistic4?.label}
-                      </div>
+                      <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">98%</div>
+                      <div className="text-gold-300">Client Satisfaction</div>
                     </div>
-                  )}
-                </>
-              ) : (
-                <>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">98%</div>
-                    <div className="text-gold-300">Client Satisfaction</div>
+                    <div className="text-center">
+                      <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">50+</div>
+                      <div className="text-gold-300">Projects Delivered</div>
+                    </div>
+                    <div className="text-center">
+                      <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">25+</div>
+                      <div className="text-gold-300">Happy Clients</div>
+                    </div>
                   </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">50+</div>
-                    <div className="text-gold-300">Projects Delivered</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">25+</div>
-                    <div className="text-gold-300">Happy Clients</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-4xl md:text-5xl font-bold mb-2 text-gold-500">3+</div>
-                    <div className="text-gold-300">Years Experience</div>
-                  </div>
-                </>
-              )}
+                );
+              })()}
             </div>
           </div>
         </section>
