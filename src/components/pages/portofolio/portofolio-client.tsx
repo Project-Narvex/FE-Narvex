@@ -349,10 +349,10 @@ export default function PortofolioClient({
                         </div>
                       )}
                       
-                      <button className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform">
+                      <Link href={`/portfolio/${project.slug}`} className="bg-gradient-to-r from-gold-500 to-gold-600 hover:from-gold-600 hover:to-gold-700 text-white px-6 py-3 rounded-xl font-semibold transition-all duration-300 inline-flex items-center hover:scale-105 hover:shadow-lg transform">
                         Lihat Detail Case Study
                         <ExternalLink className="w-4 h-4 ml-2" />
-                      </button>
+                      </Link>
                     </CardContent>
                     
                     <div className={`${index % 2 === 1 ? 'lg:col-start-1' : ''} p-8`}>
@@ -540,7 +540,7 @@ export default function PortofolioClient({
                     {currentProjects.map((project, index) => (
                   <Link 
                     key={project.id}
-                    href={`/portfolio/${project.id}`}
+                    href={`/portfolio/${project.slug}`}
                     className="block group cursor-pointer"
                   >
                     <Card 

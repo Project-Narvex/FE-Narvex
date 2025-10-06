@@ -5,6 +5,11 @@ import { StrapiResponse, StrapiEntity } from './types';
 const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
 const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
 
+// Security: Validate token exists and is not empty (only in production)
+if (process.env.NODE_ENV === 'production' && (!STRAPI_TOKEN || STRAPI_TOKEN.trim() === '')) {
+  console.error('STRAPI_API_TOKEN is not set or empty');
+}
+
 export class StrapiAPI {
   private baseURL: string;
   private token?: string;
@@ -27,6 +32,8 @@ export class StrapiAPI {
 
     if (this.token) {
       (headers as Record<string, string>).Authorization = `Bearer ${this.token}`;
+    } else {
+      console.warn('Strapi API request made without authentication token');
     }
 
     const response = await fetch(url, {

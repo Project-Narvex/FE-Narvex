@@ -135,8 +135,20 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
         <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
           <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
             <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
-              <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
-              <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {(heroComponent as any)?.title ? (
+                <>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <span className="block transform-3d break-words" data-tilt="8">{(heroComponent as any).title.split(' ').slice(0, 1).join(' ')}</span>
+                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{(heroComponent as any).title.split(' ').slice(1).join(' ')}</span>
+                </>
+              ) : (
+                <>
+                  <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
+                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
+                </>
+              )}
             </h1>
             <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth">
               {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
@@ -187,7 +199,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
             
              <CompanyAspects 
                aspects={aspectComponent as any} // eslint-disable-line @typescript-eslint/no-explicit-any
-               cardHighlight={(aspectComponent as any).card_highlight} // eslint-disable-line @typescript-eslint/no-explicit-any
+               cardHighlight={(aspectComponent as any)?.card_highlight} // eslint-disable-line @typescript-eslint/no-explicit-any
              />
           </div>
         </section>

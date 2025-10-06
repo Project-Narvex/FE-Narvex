@@ -1,0 +1,312 @@
+{
+    "data": [
+        {
+            "id": 3,
+            "documentId": "b34zn8ijpvkzhxhia1nl5kct",
+            "title": "The Beauty of Time: What Frieren Teaches Us About Life",
+            "slug": "blog-article-1",
+            "createdAt": "2025-09-30T22:58:03.932Z",
+            "updatedAt": "2025-09-30T22:59:53.317Z",
+            "publishedAt": null,
+            "locale": null,
+            "content": null,
+            "cover": {
+                "id": 12,
+                "documentId": "fkrv0t2e4ml21ralmwhvb83d",
+                "name": "1376374.png",
+                "alternativeText": null,
+                "caption": null,
+                "width": 1920,
+                "height": 1080,
+                "formats": {
+                    "large": {
+                        "ext": ".png",
+                        "url": "/uploads/large_1376374_57405936ae.png",
+                        "hash": "large_1376374_57405936ae",
+                        "mime": "image/png",
+                        "name": "large_1376374.png",
+                        "path": null,
+                        "size": 1062.65,
+                        "width": 1000,
+                        "height": 563,
+                        "sizeInBytes": 1062654
+                    },
+                    "small": {
+                        "ext": ".png",
+                        "url": "/uploads/small_1376374_57405936ae.png",
+                        "hash": "small_1376374_57405936ae",
+                        "mime": "image/png",
+                        "name": "small_1376374.png",
+                        "path": null,
+                        "size": 284.61,
+                        "width": 500,
+                        "height": 281,
+                        "sizeInBytes": 284608
+                    },
+                    "medium": {
+                        "ext": ".png",
+                        "url": "/uploads/medium_1376374_57405936ae.png",
+                        "hash": "medium_1376374_57405936ae",
+                        "mime": "image/png",
+                        "name": "medium_1376374.png",
+                        "path": null,
+                        "size": 607.51,
+                        "width": 750,
+                        "height": 422,
+                        "sizeInBytes": 607509
+                    },
+                    "thumbnail": {
+                        "ext": ".png",
+                        "url": "/uploads/thumbnail_1376374_57405936ae.png",
+                        "hash": "thumbnail_1376374_57405936ae",
+                        "mime": "image/png",
+                        "name": "thumbnail_1376374.png",
+                        "path": null,
+                        "size": 79.13,
+                        "width": 245,
+                        "height": 138,
+                        "sizeInBytes": 79134
+                    }
+                },
+                "hash": "1376374_57405936ae",
+                "ext": ".png",
+                "mime": "image/png",
+                "size": 748.02,
+                "url": "/uploads/1376374_57405936ae.png",
+                "previewUrl": null,
+                "provider": "local",
+                "provider_metadata": null,
+                "folderPath": "/",
+                "createdAt": "2025-09-30T22:42:47.404Z",
+                "updatedAt": "2025-09-30T22:42:47.404Z",
+                "publishedAt": "2025-09-30T22:42:47.405Z",
+                "locale": null
+            },
+            "blog_category": {
+                "id": 3,
+                "documentId": "e4hzl3r8acs6v1ta9umfyem2",
+                "name": "Romance",
+                "slug": "romance",
+                "createdAt": "2025-09-30T22:58:18.666Z",
+                "updatedAt": "2025-09-30T22:58:18.666Z",
+                "publishedAt": null,
+                "locale": null
+            },
+            "tags": [
+                {
+                    "id": 3,
+                    "documentId": "df6m2s1s9oqcm6ma1zhp7q9f",
+                    "name": "Happy",
+                    "slug": "happy",
+                    "createdAt": "2025-09-30T22:58:49.734Z",
+                    "updatedAt": "2025-09-30T22:58:49.734Z",
+                    "publishedAt": null,
+                    "locale": null
+                }
+            ],
+            "users_permissions_user": null,
+            "seo": []
+        },
+        {
+            "id": 1,
+            "documentId": "y9ggbempfxywiulx9jz9ohnk",
+            "title": "The Beauty of Time: What Frieren Teaches Us About Life",
+            "slug": "blog-article",
+            "createdAt": "2025-09-22T15:56:54.950Z",
+            "updatedAt": "2025-10-05T16:47:46.198Z",
+            "publishedAt": null,
+            "locale": null,
+            "content": [
+                {
+                    "type": "heading",
+                    "level": 1,
+                    "children": [
+                        {
+                            "text": "The Beauty of Time: What Frieren Teaches Us About Life",
+                            "type": "text"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "children": [
+                        {
+                            "text": "This blog explores how Frieren: Beyond Journey’s End goes beyond the typical fantasy narrative. Instead of focusing only on battles, it highlights the fleeting yet precious nature of human life through Frieren’s perspective as an elf who lives for centuries. It’s a story about appreciating everyday moments and cherishing the bonds we often take for granted.",
+                            "type": "text"
+                        }
+                    ]
+                },
+                {
+                    "type": "image",
+                    "image": {
+                        "ext": ".png",
+                        "url": "https://admin.narvex.id/uploads/1376373_9d56ef76fb.png",
+                        "hash": "1376373_9d56ef76fb",
+                        "mime": "image/png",
+                        "name": "1376373.png",
+                        "size": 678.57,
+                        "width": 1920,
+                        "height": 1080,
+                        "caption": null,
+                        "formats": {
+                            "large": {
+                                "ext": ".png",
+                                "url": "/uploads/large_1376373_9d56ef76fb.png",
+                                "hash": "large_1376373_9d56ef76fb",
+                                "mime": "image/png",
+                                "name": "large_1376373.png",
+                                "path": null,
+                                "size": 656.75,
+                                "width": 1000,
+                                "height": 563,
+                                "sizeInBytes": 656748
+                            },
+                            "small": {
+                                "ext": ".png",
+                                "url": "/uploads/small_1376373_9d56ef76fb.png",
+                                "hash": "small_1376373_9d56ef76fb",
+                                "mime": "image/png",
+                                "name": "small_1376373.png",
+                                "path": null,
+                                "size": 182.28,
+                                "width": 500,
+                                "height": 281,
+                                "sizeInBytes": 182276
+                            },
+                            "medium": {
+                                "ext": ".png",
+                                "url": "/uploads/medium_1376373_9d56ef76fb.png",
+                                "hash": "medium_1376373_9d56ef76fb",
+                                "mime": "image/png",
+                                "name": "medium_1376373.png",
+                                "path": null,
+                                "size": 392.1,
+                                "width": 750,
+                                "height": 422,
+                                "sizeInBytes": 392097
+                            },
+                            "thumbnail": {
+                                "ext": ".png",
+                                "url": "/uploads/thumbnail_1376373_9d56ef76fb.png",
+                                "hash": "thumbnail_1376373_9d56ef76fb",
+                                "mime": "image/png",
+                                "name": "thumbnail_1376373.png",
+                                "path": null,
+                                "size": 46.89,
+                                "width": 245,
+                                "height": 138,
+                                "sizeInBytes": 46894
+                            }
+                        },
+                        "provider": "local",
+                        "createdAt": "2025-09-30T22:42:45.782Z",
+                        "updatedAt": "2025-09-30T22:42:45.782Z",
+                        "previewUrl": null,
+                        "alternativeText": "1376373.png",
+                        "provider_metadata": null
+                    },
+                    "children": [
+                        {
+                            "text": "",
+                            "type": "text"
+                        }
+                    ]
+                },
+                {
+                    "type": "paragraph",
+                    "children": [
+                        {
+                            "text": "This blog explores how Frieren: Beyond Journey’s End goes beyond the typical fantasy narrative. Instead of focusing only on battles, it highlights the fleeting yet precious nature of human life through Frieren’s perspective as an elf who lives for centuries. It’s a story about appreciating everyday moments and cherishing the bonds we often take for granted.",
+                            "type": "text"
+                        }
+                    ]
+                }
+            ],
+            "cover": {
+                "id": 7,
+                "documentId": "j89twyxrxqyyg4zl26t8xnp8",
+                "name": "1357999.jpeg",
+                "alternativeText": null,
+                "caption": null,
+                "width": 2400,
+                "height": 1761,
+                "formats": {
+                    "large": {
+                        "ext": ".jpeg",
+                        "url": "/uploads/large_1357999_2fbf5fa4cc.jpeg",
+                        "hash": "large_1357999_2fbf5fa4cc",
+                        "mime": "image/jpeg",
+                        "name": "large_1357999.jpeg",
+                        "path": null,
+                        "size": 156.54,
+                        "width": 1000,
+                        "height": 734,
+                        "sizeInBytes": 156542
+                    },
+                    "small": {
+                        "ext": ".jpeg",
+                        "url": "/uploads/small_1357999_2fbf5fa4cc.jpeg",
+                        "hash": "small_1357999_2fbf5fa4cc",
+                        "mime": "image/jpeg",
+                        "name": "small_1357999.jpeg",
+                        "path": null,
+                        "size": 44.5,
+                        "width": 500,
+                        "height": 367,
+                        "sizeInBytes": 44504
+                    },
+                    "medium": {
+                        "ext": ".jpeg",
+                        "url": "/uploads/medium_1357999_2fbf5fa4cc.jpeg",
+                        "hash": "medium_1357999_2fbf5fa4cc",
+                        "mime": "image/jpeg",
+                        "name": "medium_1357999.jpeg",
+                        "path": null,
+                        "size": 91.43,
+                        "width": 750,
+                        "height": 550,
+                        "sizeInBytes": 91431
+                    },
+                    "thumbnail": {
+                        "ext": ".jpeg",
+                        "url": "/uploads/thumbnail_1357999_2fbf5fa4cc.jpeg",
+                        "hash": "thumbnail_1357999_2fbf5fa4cc",
+                        "mime": "image/jpeg",
+                        "name": "thumbnail_1357999.jpeg",
+                        "path": null,
+                        "size": 9.52,
+                        "width": 213,
+                        "height": 156,
+                        "sizeInBytes": 9518
+                    }
+                },
+                "hash": "1357999_2fbf5fa4cc",
+                "ext": ".jpeg",
+                "mime": "image/jpeg",
+                "size": 838.3,
+                "url": "/uploads/1357999_2fbf5fa4cc.jpeg",
+                "previewUrl": null,
+                "provider": "local",
+                "provider_metadata": null,
+                "folderPath": "/",
+                "createdAt": "2025-09-30T22:42:45.444Z",
+                "updatedAt": "2025-09-30T22:42:45.444Z",
+                "publishedAt": "2025-09-30T22:42:45.445Z",
+                "locale": null
+            },
+            "blog_category": {
+                "id": 1,
+                "documentId": "lvhvn8512lgo239nfkhx1atd",
+                "name": "Aman",
+                "slug": "blog-category",
+                "createdAt": "2025-09-22T15:53:54.677Z",
+                "updatedAt": "2025-09-22T15:53:54.677Z",
+                "publishedAt": null,
+                "locale": null
+            },
+            "tags": [],
+            "users_permissions_user": null,
+            "seo": []
+        }
+    ]
+}
