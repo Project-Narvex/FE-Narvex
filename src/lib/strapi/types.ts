@@ -283,13 +283,30 @@ export interface ArticleSection extends HomepageComponent {
   blog_articles: BlogArticleItem[];
 }
 
+export interface ContactCard {
+  id: number;
+  title: string;
+  description: Array<{
+    type: string;
+    children: Array<{
+      text: string;
+      type: string;
+    }>;
+  }>;
+  logo?: StrapiImage;
+}
+
 export interface ContactSection extends HomepageComponent {
   __component: "sections.contact";
   title: string;
   description: string;
-  phone_number: string;
-  email: string;
-  socialLinks: SocialLink;
+  phone_number?: string;
+  email?: string;
+  socialLinks?: SocialLink;
+  card_1?: ContactCard | null;
+  card_2?: ContactCard | null;
+  card_3?: ContactCard | null;
+  card_4?: ContactCard | null;
 }
 
 export interface CollaborationSection extends HomepageComponent {

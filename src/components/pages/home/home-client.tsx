@@ -1422,61 +1422,81 @@ export default function HomeClient({
           <div className="container mx-auto px-6 relative z-depth-2">
             <div className="text-center mb-12 scroll-animate-scale">
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 animate-stagger-1" data-element="heading" data-text-animation="wave" data-delay="0" data-duration="0.25" data-stagger="0.015">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(homepageData?.contactSection as any)?.title || 'Siap Memulai Project Anda?'}
               </h2>
               <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-stagger-2">
-                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(homepageData?.contactSection as any)?.description || 'Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan.'}
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-              <a href="/contact" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="0">
-                <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
-                  <Image src="/icons/email.png" alt="Email" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Email</h3>
-                <p className="text-gray-300 text-sm">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {(homepageData?.contactSection as any)?.email || 'narvex.ind@gmail.com'}
-                </p>
-              </a>
+            {(() => {
+              // Helper function to extract text from Strapi rich text
+              const extractText = (description: any): string => {
+                if (!description) return '';
+                if (typeof description === 'string') return description;
+                if (Array.isArray(description)) {
+                  return description.map((item: any) => {
+                    if (item?.children) {
+                      return item.children.map((child: any) => child?.text || '').join('');
+                    }
+                    return '';
+                  }).join(' ');
+                }
+                return '';
+              };
 
-              <a href="https://wa.me/62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="50">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/whatsapp.png" alt="WhatsApp" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">WhatsApp</h3>
-                <p className="text-gray-300 text-sm">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {(homepageData?.contactSection as any)?.phone_number ? '+' + (homepageData?.contactSection as any)?.phone_number : '+62 xxx xxxx xxxx'}
-                </p>
-              </a>
+              // Collect valid cards (card_1 to card_4)
+              const contactSection = homepageData?.contactSection as any;
+              const cards = [
+                contactSection?.card_1,
+                contactSection?.card_2,
+                contactSection?.card_3,
+                contactSection?.card_4
+              ].filter(card => card && card.title); // Only include cards with title
 
-              <a href="https://instagram.com/narvex.id" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="100">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/instagram.png" alt="Instagram" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Instagram</h3>
-                <p className="text-gray-300 text-sm">
-                  {(homepageData?.contactSection as any)?.socialLinks?.instagram ? // eslint-disable-line @typescript-eslint/no-explicit-any
-                    (homepageData?.contactSection as any)?.socialLinks?.instagram?.replace('https://www.instagram.com/', '@') : // eslint-disable-line @typescript-eslint/no-explicit-any
-                    '@narvex.id'}
-                </p>
-              </a>
+              // Determine grid layout based on number of cards
+              const getGridClass = () => {
+                if (cards.length === 0) return 'hidden';
+                if (cards.length === 1) return 'grid-cols-1 max-w-md mx-auto';
+                if (cards.length === 2) return 'md:grid-cols-2 max-w-4xl mx-auto';
+                if (cards.length === 3) return 'md:grid-cols-3 max-w-5xl mx-auto';
+                return 'md:grid-cols-2 lg:grid-cols-4';
+              };
 
-              <a href="tel:+62xxx" className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" data-stagger="150">
-                <div className="contact-icon w-16 h-16 bg-gold-500 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
-                  <Image src="/icons/phone.png" alt="Phone" width={32} height={32} className="w-8 h-8" suppressHydrationWarning />
+              return cards.length > 0 ? (
+                <div className={`grid ${getGridClass()} gap-6 mb-8`}>
+                  {cards.map((card: any, index: number) => {
+                    const description = extractText(card.description);
+                    const logoUrl = card.logo ? getStrapiImageUrl(card.logo.url) : null;
+                    
+                    return (
+                      <div 
+                        key={card.id || index} 
+                        className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" 
+                        data-stagger={index * 50}
+                      >
+                        <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
+                          {logoUrl ? (
+                            <Image 
+                              src={logoUrl} 
+                              alt={card.logo?.alternativeText || card.title} 
+                              width={32} 
+                              height={32} 
+                              className="w-8 h-8 object-contain" 
+                              suppressHydrationWarning 
+                            />
+                          ) : (
+                            <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+                          )}
+                        </div>
+                        <h3 className="text-xl font-bold text-white mb-2">{card.title}</h3>
+                        <p className="text-gray-300 text-sm">{description}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-                <h3 className="text-xl font-bold text-white mb-2">Phone</h3>
-                <p className="text-gray-300 text-sm">
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  {(homepageData?.contactSection as any)?.phone_number ? '+' + (homepageData?.contactSection as any)?.phone_number : '+62 xxx xxxx xxxx'}
-                </p>
-              </a>
-            </div>
+              ) : null;
+            })()}
 
             <div className="text-center animate-stagger-4">
               <Link href="/contact" className="text-white px-8 py-4 rounded-lg text-lg font-semibold transition-colors inline-block mr-4 hover:opacity-90 bg-gold-500 animate-pulse-glow">
