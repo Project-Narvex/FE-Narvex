@@ -1467,7 +1467,7 @@ export default function HomeClient({
                 <div className={`grid ${getGridClass()} gap-6 mb-8`}>
                   {cards.map((card: any, index: number) => {
                     const description = extractText(card.description);
-                    const logoUrl = card.logo ? getStrapiImageUrl(card.logo.url) : null;
+                    const logoUrl = card.logo ? getStrapiImageUrl(card.logo) : null;
                     
                     return (
                       <div 
@@ -1475,18 +1475,20 @@ export default function HomeClient({
                         className="contact-card bg-white/10 backdrop-blur-sm rounded-2xl p-6 text-center hover:bg-white/20 transition-colors group animate-bounce-in-delay" 
                         data-stagger={index * 50}
                       >
-                        <div className="contact-icon w-16 h-16 rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500">
+                        <div className="contact-icon w-16 h-16 rounded-2xl overflow-hidden mx-auto mb-4 group-hover:scale-110 transition-transform bg-gold-500 relative">
                           {logoUrl ? (
                             <Image 
                               src={logoUrl} 
                               alt={card.logo?.alternativeText || card.title} 
-                              width={32} 
-                              height={32} 
-                              className="w-8 h-8 object-contain" 
+                              fill
+                              className="object-cover" 
+                              sizes="64px"
                               suppressHydrationWarning 
                             />
                           ) : (
-                            <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+                            <div className="w-full h-full flex items-center justify-center">
+                              <div className="w-8 h-8 bg-white/20 rounded-full"></div>
+                            </div>
                           )}
                         </div>
                         <h3 className="text-xl font-bold text-white mb-2">{card.title}</h3>

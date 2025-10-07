@@ -37,12 +37,18 @@ import {
 export function getStrapiImageUrl(image: StrapiImage, size: 'thumbnail' | 'small' | 'medium' | 'large' | 'original' = 'medium'): string {
   const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337';
   
+  // Safety check: ensure image and image.url exist
+  if (!image || !image.url) {
+    console.warn('getStrapiImageUrl: Invalid image object provided', image);
+    return '';
+  }
+  
   if (size === 'original') {
     return image.url.startsWith('http') ? image.url : `${STRAPI_URL}${image.url}`;
   }
   
   const format = image.formats?.[size];
-  if (format) {
+  if (format && format.url) {
     return format.url.startsWith('http') ? format.url : `${STRAPI_URL}${format.url}`;
   }
   
