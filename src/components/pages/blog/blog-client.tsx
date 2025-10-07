@@ -196,7 +196,7 @@ export default function BlogClient({
               <h2 className="heading-2 mb-6 sm:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Artikel Unggulan
               </h2>
-              <p className="body-large text-gray-contrast-700 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.25" data-stagger="0.01">
+              <p className="body-large text-gray-contrast-700 max-w-3xl mx-auto leading-relaxed">
                 Artikel-artikel terpilih yang memberikan insights berharga tentang industri dan project terbaru kami.
               </p>
             </div>
@@ -321,7 +321,7 @@ export default function BlogClient({
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">Explore Our Full Blog Archive</h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
                 Discover our complete collection of articles across all categories. Use the search and filters below to find specific content.
               </p>
             </div>
@@ -590,7 +590,7 @@ export default function BlogClient({
               <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 text-depth-lg" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
                 Stay Updated
               </h2>
-              <p className="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed text-depth" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
+              <p className="text-xl md:text-2xl text-gray-200 mb-12 leading-relaxed text-depth">
                 Dapatkan artikel terbaru, industry insights, dan update project langsung ke email Anda.
               </p>
               

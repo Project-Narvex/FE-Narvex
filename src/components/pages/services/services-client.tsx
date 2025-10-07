@@ -193,7 +193,7 @@ export default function ServicesClient({ services, heroSection, strengthData, co
               <h2 className="heading-2 mb-4 sm:mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
                 {strengthData?.title || "Portfolio Layanan Lengkap"}
               </h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
                 {strengthData?.description || "Dari creative design hingga digital marketing, kami menyediakan solusi terintegrasi untuk kesuksesan setiap project Anda."}
               </p>
             </div>
@@ -319,7 +319,7 @@ export default function ServicesClient({ services, heroSection, strengthData, co
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
                 {strengthData.title || "Mengapa Memilih Narvex?"}
               </h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
                 {strengthData.description || "Pengalaman bertahun-tahun dan komitmen terhadap kualitas membuat kami menjadi partner terpercaya"}
               </p>
             </div>

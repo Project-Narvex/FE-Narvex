@@ -139,7 +139,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(aspectComponent as any).title}
               </h2>
-              <p className="body-large text-gray-contrast-700 leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
+              <p className="body-large text-gray-contrast-700 leading-relaxed">
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(aspectComponent as any).description}
               </p>
@@ -173,7 +173,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
               </h2>
                {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                {(visionMissionComponent as any).description && (
-                <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.3" data-stagger="0.015">
+                <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed">
                   {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(visionMissionComponent as any).description}
                 </p>
@@ -206,7 +206,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(legalComponent as any).title}
               </h2>
-              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
+              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed">
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(legalComponent as any).description}
               </p>
@@ -240,7 +240,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(teamComponent as any).title}
               </h2>
-              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
+              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed">
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(teamComponent as any).description}
               </p>
@@ -272,7 +272,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(awardsComponent as any).title}
               </h2>
-              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
+              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed">
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(awardsComponent as any).description}
               </p>
@@ -306,7 +306,7 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(cultureComponent as any).title}
               </h2>
-              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed" data-element="content" data-text-animation="fade-in" data-delay="0.3" data-duration="0.4" data-stagger="0.02">
+              <p className="body-large text-gray-contrast-700 mb-12 max-w-3xl mx-auto leading-relaxed">
                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                  {(cultureComponent as any).description}
               </p>

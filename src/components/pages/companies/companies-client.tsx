@@ -206,7 +206,7 @@ export default function CompaniesClient({ companies, heroSection, companyHighlig
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
                 {companyHighlightSection?.title || "Keluarga Besar Narvex"}
               </h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
                 {companyHighlightSection?.description || "Setiap company memiliki keahlian khusus yang saling melengkapi untuk memberikan solusi komprehensif bagi klien."}
               </p>
             </div>
@@ -384,7 +384,7 @@ export default function CompaniesClient({ companies, heroSection, companyHighlig
                 <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
                   {integrationData.title || "Keunggulan Integrasi"}
                 </h2>
-                <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+                <p className="body-large text-gray-600 max-w-3xl mx-auto">
                   {integrationData.description || "Dengan companies yang terintegrasi, kami dapat memberikan solusi end-to-end yang lebih efisien dan efektif."}
                 </p>
               </div>

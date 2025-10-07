@@ -291,9 +291,9 @@ export default function PortofolioClient({
           <div className="relative container mx-auto px-6">
             <div className="text-center mb-16">
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
-                {portfolioPageData?.highlight_portofolio?.title || "Narvex Portfolio"}
+                {portfolioPageData?.highlight_portofolio?.title || "Highlights"}
               </h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
                 {portfolioPageData?.highlight_portofolio?.description || "Project-project unggulan yang telah kami kerjakan dengan detail case study dan hasil yang dicapai."}
               </p>
             </div>
@@ -427,7 +427,7 @@ export default function PortofolioClient({
               <h2 className="heading-2 mb-6" data-text-animation="fade-in" data-animation-delay="0.2">
                 {portfolioPageData?.portofolio?.title || "Explore Our Portfolio"}
               </h2>
-              <p className="body-large text-gray-600 max-w-3xl mx-auto" data-text-animation="fade-in" data-animation-delay="0.4">
+              <p className="body-large text-gray-600 max-w-3xl mx-auto">
                 {portfolioPageData?.portofolio?.description || "Discover our complete collection of projects across all categories. Use the search and filters below to find specific work."}
               </p>
             </div>
