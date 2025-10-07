@@ -772,7 +772,7 @@ export default function HomeClient({
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(homepageData?.companySection as any)?.title || 'CV. Nara Exhibition Indonesia'}
               </h2>
-              <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.03">
+              <p className="body-large text-gray-contrast-700 mb-12 leading-relaxed max-w-3xl mx-auto">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(homepageData?.companySection as any)?.description || 'Perusahaan induk yang menaungi ekosistem layanan kreatif terintegrasi, mengkhususkan diri dalam MICE services, event production, dan solusi kreatif komprehensif. Dengan 4 partner company yang saling melengkapi, kami memberikan layanan end-to-end untuk kesuksesan setiap project Anda.'}
               </p>
@@ -837,7 +837,7 @@ export default function HomeClient({
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d text-blue-brand" data-element="heading" data-text-animation="rotate-in" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="4">
                 Layanan Kami
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-contrast-700 text-depth" data-element="description" data-text-animation="blur-focus" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.03">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-700 text-depth">
                 Solusi kreatif terpadu yang dirancang untuk mengangkat brand Anda ke level yang lebih tinggi.
               </p>
             </div>
@@ -970,7 +970,7 @@ export default function HomeClient({
               <h2 className="heading-2 mb-4 sm:mb-6 text-depth-lg transform-3d" data-element="heading" data-text-animation="elastic" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Portfolio Terpilih
               </h2>
-              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth" data-element="filters" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.02">
+              <p className="body-large max-w-3xl mx-auto text-gray-contrast-600 mb-6 sm:mb-8 text-depth">
                 Lihat beberapa project terbaik yang telah kami kerjakan untuk berbagai klien dari berbagai industri.
               </p>
 
@@ -1102,7 +1102,7 @@ export default function HomeClient({
               <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold leading-tight mb-4 sm:mb-6 text-depth-lg transform-3d testimonial-heading text-white" data-element="heading" data-text-animation="glitch" data-delay="0" data-duration="0.25" data-stagger="0.015" data-tilt="3">
                 Kata Mereka
               </h2>
-              <p className="text-lg sm:text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description text-gray-200" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015" data-mouse-parallax="0.02">
+              <p className="text-lg sm:text-xl font-normal leading-relaxed max-w-3xl mx-auto text-depth testimonial-description text-gray-200">
                 Kepercayaan klien adalah prioritas utama kami. Lihat apa kata mereka tentang pengalaman bekerja sama dengan Narvex.
               </p>
             </div>
@@ -1425,7 +1425,7 @@ export default function HomeClient({
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(homepageData?.contactSection as any)?.title || 'Siap Memulai Project Anda?'}
               </h2>
-              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-stagger-2" data-element="content" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">
+              <p className="text-xl text-gray-300 mb-8 max-w-3xl mx-auto animate-stagger-2">
                 {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                 {(homepageData?.contactSection as any)?.description || 'Hubungi kami melalui berbagai channel yang tersedia. Tim ahli kami siap membantu mewujudkan visi kreatif Anda menjadi kenyataan.'}
               </p>
@@ -1521,7 +1521,7 @@ export default function HomeClient({
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {(homepageData?.collaborationSection as any)?.title || 'Mari Wujudkan Project Impian Anda'}
                     </h2>
-                    <p className="body-large text-gray-contrast-600 mb-8" data-element="form" data-text-animation="slide-up" data-delay="0" data-duration="0.25" data-stagger="0.015">
+                    <p className="body-large text-gray-contrast-600 mb-8">
                       {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
                       {(homepageData?.collaborationSection as any)?.description || 'Ceritakan visi Anda kepada kami. Tim Narvex siap membantu mewujudkan project yang luar biasa.'}
                     </p>
@@ -1640,7 +1640,7 @@ export default function HomeClient({
                   {/* Contact Info & Map */}
                   <div >
                     <Card className="p-8 mb-8 animate-stagger-4">
-                      <h3 className="heading-4 mb-6" data-element="info" data-text-animation="fade-in" data-delay="0" data-duration="0.25" data-stagger="0.015">Hubungi Kami</h3>
+                      <h3 className="heading-4 mb-6">Hubungi Kami</h3>
                       <div className="space-y-6">
                         {contactInfo.map((info, index) => (
                           <div key={index} className="flex items-start animate-stagger-6" data-stagger={index * 100}>

@@ -5,6 +5,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/Card';
 import MapComponent from '@/components/ui/MapComponent';
+import SimpleHero from '@/components/ui/SimpleHero';
 import { MapPin, Phone, Mail, Clock, Send, MessageCircle, CheckCircle } from 'lucide-react';
 import {
   initializeAnimations,
@@ -93,7 +94,7 @@ export default function ContactClient({
   socialSection,
   homepageData
 }: ContactClientProps) {
-  const [selectedService, setSelectedService] = useState(serviceCards[0]?.id || 'branding');
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -108,7 +109,7 @@ export default function ContactClient({
   const [submitSuccess, setSubmitSuccess] = useState(false);
   const [submitError, setSubmitError] = useState('');
 
-  const selectedServiceData = serviceCards.find(s => s.id === selectedService);
+
 
   // Use homepage data for contact information if available
   const getContactInfoFromHomepage = () => {
@@ -244,7 +245,7 @@ export default function ContactClient({
         },
         body: JSON.stringify({
           ...formData,
-          service: selectedServiceData?.name || formData.service
+          service: formData.service
         }),
       });
 
@@ -273,123 +274,23 @@ export default function ContactClient({
     }
   };
 
-  const handleServiceSelection = (serviceId: string) => {
-    setSelectedService(serviceId);
-    setFormData({ ...formData, service: '' }); // Reset service selection
-  };
+
 
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       
-        {/* Hero Section - Consistent with other pages */}
-        <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
-          {/* Enhanced Background Layers */}
-          <div className="absolute inset-0 gradient-hero">
-            {/* Depth Layer 1 - Furthest back */}
-            <div className="absolute inset-0 opacity-15" data-depth-layer="3" data-parallax="0.8">
-              <div className="absolute top-0 left-0 w-full h-full">
-                <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse bg-gold-500" data-float="true" data-float-amplitude="15" data-float-duration="4"></div>
-                <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000 bg-blue-500" data-float="true" data-float-amplitude="20" data-float-duration="5"></div>
-                <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500" data-float="true" data-float-amplitude="12" data-float-duration="3.5"></div>
-              </div>
-            </div>
-            
-            {/* Depth Layer 2 - Middle */}
-            <div className="absolute inset-0 opacity-25" data-depth-layer="2" data-parallax="0.5">
-              <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-blue-400/20 to-gold-400/20 filter blur-lg" data-float="true" data-float-amplitude="10" data-float-duration="6"></div>
-              <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-gradient-to-tr from-gold-400/15 to-blue-400/15 filter blur-lg" data-float="true" data-float-amplitude="18" data-float-duration="4.5"></div>
-            </div>
-            
-            {/* Depth Layer 3 - Closest */}
-            <div className="absolute inset-0 opacity-30" data-depth-layer="1" data-parallax="0.2">
-              <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-white/10 filter blur-sm" data-float="true" data-float-amplitude="8" data-float-duration="3" data-mouse-parallax="0.3"></div>
-              <div className="absolute top-1/4 right-1/2 w-24 h-24 rounded-full bg-gold-300/20 filter blur-sm" data-float="true" data-float-amplitude="12" data-float-duration="4" data-mouse-parallax="0.2"></div>
-              <div className="absolute bottom-1/2 right-1/4 w-40 h-40 rounded-full bg-blue-300/15 filter blur-sm" data-float="true" data-float-amplitude="15" data-float-duration="5.5" data-mouse-parallax="0.25"></div>
-            </div>
-            
-            {/* Morphing Gradient Overlay */}
-            <div className="absolute inset-0 morphing-gradient opacity-60"></div>
-          </div>
+        {/* Hero Section */}
+        <SimpleHero
+          title={hero.title}
+          subtitle={hero.subtitle}
+          description={hero.description}
+          breadcrumb={[
+            { label: 'Home', href: '/' },
+            { label: 'Kontak', href: '/contact' }
+          ]}
+        />
 
-          {/* Content */}
-          <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
-            {/* Breadcrumb */}
-            <nav className="mb-6 scroll-animate" data-element="breadcrumb" data-text-animation="fade-in" data-delay="0.05" data-duration="0.3">
-              <ol className="flex items-center justify-center space-x-2 text-sm text-gray-300">
-                <li className="flex items-center">
-                  <Link href="/" className="hover:text-gold-400 transition-colors duration-200">Home</Link>
-                </li>
-                <li className="flex items-center">
-                  <span className="mx-2 text-gray-500">/</span>
-                  <span className="text-gold-400">Kontak</span>
-                </li>
-              </ol>
-            </nav>
 
-            <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
-              <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
-                <span className="block transform-3d break-words" data-tilt="8">{hero.title}</span>
-                <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{hero.subtitle}</span>
-              </h1>
-              <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth">
-                {hero.description}
-              </p>
-            </div>
-          </div>
-
-          {/* Scroll Indicator */}
-          <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-              <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
-            </div>
-          </div>
-        </section>
-
-        {/* Service Selection Section */}
-        <section className="section-padding bg-gradient-to-br from-white via-blue-50 to-white scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
-          <div className="absolute inset-0 overflow-hidden pointer-events-none">
-            <div className="absolute top-1/3 right-1/4 w-40 h-40 bg-gold-200/10 rounded-full filter blur-2xl" data-parallax="0.6" data-float="true" data-float-amplitude="25" data-float-duration="10"></div>
-            <div className="absolute bottom-1/4 left-1/3 w-32 h-32 bg-blue-200/15 rounded-full filter blur-xl" data-parallax="0.4" data-float="true" data-float-amplitude="18" data-float-duration="7"></div>
-          </div>
-          
-          <div className="relative container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl">
-            
-            <div className="max-w-4xl mx-auto text-center mb-8 sm:mb-12 lg:mb-16 scroll-animate">
-              <h2 className="heading-2 mb-4 sm:mb-6 lg:mb-8 bg-gradient-to-r from-blue-900 via-blue-700 to-blue-900 bg-clip-text text-transparent" data-element="heading" data-text-animation="wave" data-delay="0.1" data-duration="0.4" data-stagger="0.025">
-                Pilih Layanan yang Dibutuhkan
-              </h2>
-              <p className="body-large text-gray-contrast-700 leading-relaxed px-4" data-element="content" data-text-animation="fade-in" data-delay="0.15" data-duration="0.25" data-stagger="0.01">
-                Pilih kategori layanan yang sesuai dengan kebutuhan proyek Anda untuk mendapatkan informasi kontak yang tepat.
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-12 sm:mb-16 stagger-children">
-              {serviceCards.map((service) => (
-                <div 
-                  key={service.id}
-                  className={`service-card p-4 sm:p-6 rounded-2xl cursor-pointer transition-all duration-300 glass-morphism backdrop-blur-sm hover-depth-subtle ${
-                    selectedService === service.id 
-                      ? 'bg-blue-900 text-white shadow-blue-depth scale-105 border-blue-500/30' 
-                      : 'bg-white/90 text-blue-900 shadow-md hover:shadow-lg border-white/50'
-                  }`}
-                  onClick={() => handleServiceSelection(service.id)}
-                  data-element="service-card"
-                  data-animation="slide-up"
-                  data-delay="0.1"
-                  data-duration="0.35"
-                >
-                  <div className={`w-12 h-12 sm:w-16 sm:h-16 ${selectedService === service.id ? 'bg-gold-500' : service.color || 'bg-blue-500'} rounded-2xl flex items-center justify-center mb-4 sm:mb-6 transition-all duration-300 shadow-depth-2 mx-auto`}>
-                    <span className="text-white text-xl sm:text-2xl">{service.icon}</span>
-                  </div>
-                  <h3 className="heading-4 mb-2 sm:mb-3 text-center">{service.name || 'Service Title'}</h3>
-                  <p className={`body-normal text-center leading-relaxed ${selectedService === service.id ? 'text-blue-100' : 'text-gray-contrast-600'}`}>
-                    {service.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
 
         {/* Contact Form and Information Section */}
         <section className="section-padding bg-gradient-to-br from-gray-50 via-white to-gray-100 scroll-snap-section morphing-bg-section layered-bg perspective-1500 parallax-container">
@@ -405,7 +306,7 @@ export default function ContactClient({
               <Card variant="service" className="contact-card glass-morphism depth-4 bg-white/90 backdrop-blur-sm border-white/50">
                 <CardContent className="p-6 sm:p-8">
                   <div className="mb-6 sm:mb-8 scroll-animate" data-element="form-header" data-text-animation="fade-in" data-delay="0.2">
-                    <h3 className="heading-3 mb-3 text-blue-900">{contactForm.title} {selectedServiceData?.name}</h3>
+                    <h3 className="heading-3 mb-3 text-blue-900">{contactForm.title}</h3>
                     <p className="body-normal text-gray-contrast-600">{contactForm.description}</p>
                   </div>
                   
@@ -494,7 +395,7 @@ export default function ContactClient({
                           className="w-full px-3 sm:px-4 py-3 border border-gray-300 rounded-xl focus:border-gold-500 focus:outline-none transition-all duration-300 hover:border-blue-300 bg-white/80 backdrop-blur-sm focus:ring-2 focus:ring-gold-500/20 text-sm sm:text-base"
                         >
                           <option value="">Pilih layanan yang dibutuhkan</option>
-                          {selectedServiceData?.services.map((service, idx) => (
+                          {serviceCards.flatMap(card => card.services).map((service, idx) => (
                             <option key={idx} value={service}>{service}</option>
                           ))}
                         </select>
@@ -572,34 +473,34 @@ export default function ContactClient({
 
               {/* Service Information and Location */}
               <div className="space-y-6 sm:space-y-8">
-                {/* Selected Service Information */}
+                {/* General Contact Information */}
                 <Card variant="service" className="contact-card glass-morphism depth-3 bg-white/90 backdrop-blur-sm border-white/50">
-                        <CardContent className="p-6 sm:p-8">
-                          <div className={`w-12 h-12 sm:w-16 sm:h-16 ${selectedServiceData?.color || 'bg-blue-500'} rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-depth-2`}>
-                            <span className="text-white text-xl sm:text-2xl">{selectedServiceData?.icon || '🎨'}</span>
-                          </div>
-                          <h3 className="heading-3 mb-3 text-blue-900">{selectedServiceData?.name || 'Service Information'}</h3>
-                    <p className="body-normal text-gray-contrast-600 mb-4 sm:mb-6">{selectedServiceData?.description}</p>
+                  <CardContent className="p-6 sm:p-8">
+                    <div className="w-12 h-12 sm:w-16 sm:h-16 bg-blue-500 rounded-2xl flex items-center justify-center mb-4 sm:mb-6 shadow-depth-2">
+                      <span className="text-white text-xl sm:text-2xl">📞</span>
+                    </div>
+                    <h3 className="heading-3 mb-3 text-blue-900">Informasi Kontak</h3>
+                    <p className="body-normal text-gray-contrast-600 mb-4 sm:mb-6">Hubungi kami untuk konsultasi dan informasi lebih lanjut tentang layanan kami.</p>
                     
                     <div className="space-y-3 sm:space-y-4 mb-4 sm:mb-6">
                       <div className="flex items-center">
                         <Phone className="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-gold-500 flex-shrink-0" />
-                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{selectedServiceData?.contact.phone}</span>
+                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{finalContactInfo.contact.phone}</span>
                       </div>
                       <div className="flex items-center">
                         <Mail className="w-4 h-4 sm:w-5 sm:h-5 mr-3 text-gold-500 flex-shrink-0" />
-                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{selectedServiceData?.contact.email}</span>
+                        <span className="text-gray-contrast-700 text-sm sm:text-base break-all">{finalContactInfo.contact.email}</span>
                       </div>
                       <div className="flex items-center">
                         <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 mr-3 flex-shrink-0" />
-                        <span className="text-gray-contrast-700 text-sm sm:text-base">WhatsApp: {selectedServiceData?.contact.whatsapp}</span>
+                        <span className="text-gray-contrast-700 text-sm sm:text-base">WhatsApp: {finalContactInfo.contact.whatsapp}</span>
                       </div>
                     </div>
                     
                     <div className="pt-4 sm:pt-6 border-t border-gray-200">
                       <h4 className="font-semibold mb-3 sm:mb-4 text-blue-900 text-sm sm:text-base">Layanan Tersedia:</h4>
                       <div className="space-y-2 sm:space-y-3">
-                        {selectedServiceData?.services.map((service, idx) => (
+                        {serviceCards.flatMap(card => card.services).map((service, idx) => (
                           <div key={idx} className="flex items-start">
                             <div className="w-2 h-2 rounded-full mr-3 bg-gold-500 flex-shrink-0 mt-2"></div>
                             <span className="text-gray-contrast-700 text-xs sm:text-sm leading-relaxed">{service}</span>

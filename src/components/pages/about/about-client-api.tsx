@@ -16,6 +16,7 @@ import LegalDocument from '@/components/ui/LegalDocument';
 import TeamMembers from '@/components/ui/TeamMembers';
 import Award from '@/components/ui/Award';
 import CompanyCulture from '@/components/ui/CompanyCulture';
+import SimpleHero from '@/components/ui/SimpleHero';
 
 interface AboutPageClientProps {
   aboutData: AboutPageData;
@@ -102,68 +103,15 @@ export default function AboutPageClient({ aboutData }: AboutPageClientProps) {
   return (
     <div className="min-h-screen scroll-snap-container overflow-x-hidden">
       {/* Hero Section */}
-      <section className="hero-section relative min-h-screen flex items-center justify-center overflow-hidden scroll-snap-section floating-container layered-bg perspective-2000">
-        {/* Enhanced Background Layers */}
-        <div className="absolute inset-0 gradient-hero">
-          {/* Depth Layer 1 - Furthest back */}
-          <div className="absolute inset-0 opacity-15" data-depth-layer="3" data-parallax="0.8">
-            <div className="absolute top-0 left-0 w-full h-full">
-              <div className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse bg-gold-500" data-float="true" data-float-amplitude="15" data-float-duration="4"></div>
-              <div className="absolute top-3/4 right-1/4 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-2000 bg-blue-500" data-float="true" data-float-amplitude="20" data-float-duration="5"></div>
-              <div className="absolute bottom-1/4 left-1/2 w-96 h-96 rounded-full mix-blend-multiply filter blur-xl opacity-40 animate-pulse animation-delay-4000 bg-gold-500" data-float="true" data-float-amplitude="12" data-float-duration="3.5"></div>
-            </div>
-          </div>
-          
-          {/* Depth Layer 2 - Middle */}
-          <div className="absolute inset-0 opacity-25" data-depth-layer="2" data-parallax="0.5">
-            <div className="absolute top-1/3 right-1/3 w-64 h-64 rounded-full bg-gradient-to-br from-blue-400/20 to-gold-400/20 filter blur-lg" data-float="true" data-float-amplitude="10" data-float-duration="6"></div>
-            <div className="absolute bottom-1/3 left-1/3 w-80 h-80 rounded-full bg-gradient-to-tr from-gold-400/15 to-blue-400/15 filter blur-lg" data-float="true" data-float-amplitude="18" data-float-duration="4.5"></div>
-          </div>
-          
-          {/* Depth Layer 3 - Closest */}
-          <div className="absolute inset-0 opacity-30" data-depth-layer="1" data-parallax="0.2">
-            <div className="absolute top-1/2 left-1/4 w-32 h-32 rounded-full bg-white/10 filter blur-sm" data-float="true" data-float-amplitude="8" data-float-duration="3" data-mouse-parallax="0.3"></div>
-            <div className="absolute top-1/4 right-1/2 w-24 h-24 rounded-full bg-gold-300/20 filter blur-sm" data-float="true" data-float-amplitude="12" data-float-duration="4" data-mouse-parallax="0.2"></div>
-            <div className="absolute bottom-1/2 right-1/4 w-40 h-40 rounded-full bg-blue-300/15 filter blur-sm" data-float="true" data-float-amplitude="15" data-float-duration="5.5" data-mouse-parallax="0.25"></div>
-          </div>
-          
-          {/* Morphing Gradient Overlay */}
-          <div className="absolute inset-0 morphing-gradient opacity-60"></div>
-        </div>
-
-        {/* Content */}
-        <div className="relative z-depth-3 container mx-auto px-4 sm:px-6 lg:px-8 max-w-7xl transform-3d text-center">
-          <div className="max-w-4xl mx-auto depth-layer-2" data-mouse-parallax="0.1">
-            <h1 className="hero-title text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-bold text-white mb-4 sm:mb-6 text-depth-lg leading-tight" data-element="title" data-text-animation="wave" data-delay="0.1" data-duration="0.5" data-stagger="0.03">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(heroComponent as any)?.title ? (
-                <>
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  <span className="block transform-3d break-words" data-tilt="8">{(heroComponent as any).title.split(' ').slice(0, 1).join(' ')}</span>
-                  {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">{(heroComponent as any).title.split(' ').slice(1).join(' ')}</span>
-                </>
-              ) : (
-                <>
-                  <span className="block transform-3d break-words" data-tilt="8">Tentang</span>
-                  <span className="block text-gold-500 transform-3d break-words" data-tilt="10">Narvex</span>
-                </>
-              )}
-            </h1>
-            <p className="hero-subtitle text-lg sm:text-xl md:text-2xl text-gray-200 mb-6 sm:mb-8 max-w-3xl mx-auto text-depth">
-              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-              {(heroComponent as any)?.description || 'CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing'}
-            </p>
-          </div>
-        </div>
-
-        {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-1/2 transform -translate-x-1/2 animate-bounce">
-          <div className="w-6 h-10 border-2 border-white/30 rounded-full flex justify-center">
-            <div className="w-1 h-3 bg-white/50 rounded-full mt-2 animate-pulse"></div>
-          </div>
-        </div>
-      </section>
+      <SimpleHero
+        title={(heroComponent as any)?.title || "Tentang Narvex"}
+        subtitle={(heroComponent as any)?.subtitle}
+        description={(heroComponent as any)?.description || "CV. Nara Exhibition Indonesia - Partner Terpercaya untuk Creative Services, Event Production, dan Digital Marketing"}
+        breadcrumb={[
+          { label: 'Home', href: '/' },
+          { label: 'About' }
+        ]}
+      />
 
       {/* Company History */}
       {aspectComponent && (
